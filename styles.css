@@ -111,6 +111,7 @@ body {
 }
 
 .grid-item img {
+    cursor: pointer;
     width: 200px; /* Adjust this value as needed */
     height: auto; /* To maintain the image's aspect ratio */
     border-radius: 10px; /* Rounded corners */
@@ -149,4 +150,43 @@ h1.move-to-top {
     .coffee-details {
         grid-template-columns: repeat(4, 1fr); /* 4 grid items in a row */
     }
+}
+
+/* Styles for Modal Image */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Black w/ opacity */
+    background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover, .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
 }
