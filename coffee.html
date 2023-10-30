@@ -10,10 +10,35 @@
 
 <body>
     <div class="container">
-        <h1>Coffee is beauty</h1>
+        <h1 class="hoverCursor">Coffee is beauty</h1>
+        <div class="coffee-details">
+            <!-- Sample content for demonstration purposes -->
+            <div class="grid-item"><img src="images/cortado.jpg" alt="Coffee Image 1"></div>
+            <div class="grid-item">
+                <h2>Oct 20, 2023</h2>
+                <p class="entryText">The stillness of coffee allows us to understand a little of ourselves. 
+                We are complexity in all forms. Yet, this delicious drink is something better.
+            </p>
+            </div>
+            <div class="grid-item"><img src="images/coffee_3.jpg" alt="Coffee Image 2"></div>
+            <div class="grid-item">
+                <h2>Oct 28, 2023</h2>
+                <p class="entryText">This one was good. That's all I can say.
+                </p>
+            </div>
+            <!-- Add more content as required -->
+        </div>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
-
+<script>
+    document.querySelector("h1").addEventListener("click", function() {
+    // Show the coffee-details div
+    document.querySelector(".coffee-details").style.display = "grid";
+    
+    // Add animation class to h1
+    this.classList.add("move-to-top");
+});
+</script>
 </html>
