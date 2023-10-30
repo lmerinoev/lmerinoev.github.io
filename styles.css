@@ -116,6 +116,10 @@ body {
     border-radius: 10px; /* Rounded corners */
 }
 
+.grid-item:nth-child(even) {
+    margin-right: 40px; /* You can adjust this value as needed */
+}
+
 
 /* Animation for h1 element */
 @keyframes slideToTop {
@@ -139,4 +143,10 @@ h1.move-to-top {
 
 .entryText {
     text-align: justify;
+}
+
+@media screen and (min-width: 768px) { /* This is a common breakpoint for tablets and up */
+    .coffee-details {
+        grid-template-columns: repeat(4, 1fr); /* 4 grid items in a row */
+    }
 }
