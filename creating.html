@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cards Design</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Person detector </title>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Creating is essence.</h1>
-    </div>
-
-    <script src="script.js"></script>
+    <label for="videoOptions">Choose a video:</label>
+    <select id="videoOptions">
+        <option value="">Select a video...</option>
+        <option value="luke.mp4">Video 1</option>
+        <option value="sam.mp4">Video 2</option>
+        <option value="upload">Upload Video</option>
+    </select>
+    <input type="file" id="fileInput" accept="video/*" style="display: none;"><br/>
+    <video controls style="display:none"></video><br/>
+    <canvas></canvas><br/>
+    <button id="process">Process</button>&nbsp;
+  
+    <script src="object_detector.js" defer></script>
 </body>
-
 </html>
+
