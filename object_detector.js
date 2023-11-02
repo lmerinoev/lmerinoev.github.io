@@ -10,6 +10,9 @@ videoOptions.addEventListener("change", function() {
     if (this.value === "upload") {
         fileInput.style.display = "block";
         fileInput.click();
+    } else if (this.value === "webcam") { // Handle webcam option
+        fileInput.style.display = "none";
+        startWebcam(); 
     } else if (this.value) {
         video.src = this.value;
         // video.style.display = ""; // Keep the video hidden
@@ -19,6 +22,43 @@ videoOptions.addEventListener("change", function() {
         fileInput.style.display = "none";
     }
 });
+
+// Assume the initial state is using the front camera
+let useBackCamera = false;
+
+document.getElementById("toggleCamera").addEventListener("click", function() {
+    // Toggle the state
+    useBackCamera = !useBackCamera;
+    // Restart the webcam with the new state
+    stopWebcam(); // Stop the current stream before switching
+    startWebcam(useBackCamera);
+});
+
+function stopWebcam() {
+    if (video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+    }
+    video.srcObject = null;
+    video.style.display = "none"; // Optionally hide the video element
+}
+
+function startWebcam(useBackCamera) {
+    const constraints = {
+        video: {
+            facingMode: useBackCamera ? "environment" : "user"
+        }
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.style.display = "block";
+            video.play();
+        })
+        .catch(function(error) {
+            console.error("Error accessing the webcam", error);
+        });
+}
 
 fileInput.addEventListener("change", function(event) {
     if (event.target.files.length > 0) {
