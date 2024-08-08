@@ -15,19 +15,19 @@
 
       <!-- Initially hidden image entity -->
       <a-image id="arImage" src="#subjectImage" width="1" height="1" position="0 0 -2" visible="false" rotation="90 0 0"></a-image>
+      <a-sphere id="arSphere" color="red" radius="0.1" position="0 0 -2" visible="false"></a-sphere>
     </a-scene>
 
     <script>
       document.querySelector('a-scene').addEventListener('click', function (event) {
-        var image = document.getElementById('arImage');
-        var scene = document.querySelector('a-scene');
+        var sphere = document.getElementById('arSphere');
         
-        // Calculate the position for the image to be placed
-        var touchPoint = event.detail.intersection.point;
-        image.setAttribute('position', touchPoint);
+        // Get the touch point from the click event
+        var touchPoint = event.detail.intersection ? event.detail.intersection.point : {x: 0, y: 0, z: -2};
+        sphere.setAttribute('position', touchPoint);
 
-        // Make the image visible
-        image.setAttribute('visible', 'true');
+        // Make the sphere visible
+        sphere.setAttribute('visible', 'true');
       });
     </script>
   </body>
