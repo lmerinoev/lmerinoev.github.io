@@ -22,8 +22,7 @@
                position="0 0 -2" 
                rotation="0 0 0" 
                visible="false"
-               gesture-detector
-               event-set__move="_event: dragmove; _target: #arImage; position: drag">
+               gesture-detector>
       </a-image>
     </a-scene>
 
@@ -64,6 +63,14 @@
 
       image.addEventListener('dragstart', function (evt) {
         this.setAttribute('gesture-detector', 'enabled', true);
+      });
+
+      image.addEventListener('dragmove', function (evt) {
+        var position = this.getAttribute('position');
+        position.x += evt.detail.positionChange.x;
+        position.y += evt.detail.positionChange.y;
+        position.z += evt.detail.positionChange.z;
+        this.setAttribute('position', position);
       });
 
       image.addEventListener('dragend', function (evt) {
