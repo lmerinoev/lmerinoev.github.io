@@ -4,6 +4,8 @@
     <title>Crayons AR :)</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawcdn.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-gesture-detector-component@latest/dist/aframe-gesture-detector-component.min.js"></script>
   </head>
   <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs="sourceType: webcam;">
@@ -13,8 +15,16 @@
       
       <a-entity camera></a-entity>
 
-      <!-- Initially hidden image entity -->
-      <a-image id="arImage" src="#subjectImage" width="1" height="1" position="0 0 -2" visible="false" rotation="0 0 0"></a-image>
+      <a-image id="arImage" 
+               src="#subjectImage" 
+               width="1" 
+               height="1" 
+               position="0 0 -2" 
+               rotation="0 0 0" 
+               visible="false"
+               gesture-detector
+               event-set__move="_event: dragmove; _target: #arImage; position: drag">
+      </a-image>
     </a-scene>
 
     <script>
@@ -34,6 +44,30 @@
         // Set the new position and make the image visible
         image.setAttribute('position', newPos);
         image.setAttribute('visible', 'true');
+      });
+
+      var image = document.getElementById('arImage');
+
+      image.addEventListener('pinchstarted', function (evt) {
+        this.initialScale = this.getAttribute('scale');
+      });
+
+      image.addEventListener('pinchmoved', function (evt) {
+        var scaleFactor = evt.detail.scale / evt.detail.previousScale;
+        var currentScale = this.getAttribute('scale');
+        this.setAttribute('scale', {
+          x: currentScale.x * scaleFactor,
+          y: currentScale.y * scaleFactor,
+          z: currentScale.z * scaleFactor
+        });
+      });
+
+      image.addEventListener('dragstart', function (evt) {
+        this.setAttribute('gesture-detector', 'enabled', true);
+      });
+
+      image.addEventListener('dragend', function (evt) {
+        this.setAttribute('gesture-detector', 'enabled', false);
       });
     </script>
   </body>
