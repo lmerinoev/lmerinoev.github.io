@@ -14,13 +14,14 @@
       <a-entity camera></a-entity>
 
       <!-- Initially hidden image entity -->
-      <a-image id="arImage" src="#subjectImage" width="1" height="1" position="0 0 -2" visible="false" rotation="90 0 0"></a-image>
+      <a-image id="arImage" src="#subjectImage" width="1" height="1" position="0 0 -2" visible="false" rotation="0 0 0"></a-image>
       <a-sphere id="arSphere" color="red" radius="0.1" position="0 0 -2" visible="false"></a-sphere>
     </a-scene>
 
     <script>
       document.querySelector('a-scene').addEventListener('click', function (event) {
         var sphere = document.getElementById('arSphere');
+        var image = document.getElementById('arImage');
         var camera = document.querySelector('[camera]');
         var camPos = camera.getAttribute('position');
 
@@ -31,9 +32,11 @@
           z: camPos.z - 2
         };
         sphere.setAttribute('position', newPos);
+        image.setAttribute('position', newPos);
 
-        // Make the sphere visible
+        // Make the sphere and image visible
         sphere.setAttribute('visible', 'true');
+        image.setAttribute('visible', 'true');
       });
     </script>
   </body>
