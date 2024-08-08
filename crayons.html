@@ -7,10 +7,28 @@
   </head>
   <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs="sourceType: webcam;">
-      <a-marker preset="hiro">
-        <a-image src="images/subject_ar.png" position="0 0.5 0" width="1" height="1"></a-image>
-      </a-marker>
+      <a-assets>
+        <img id="subjectImage" src="images/subject_ar.png">
+      </a-assets>
+      
       <a-entity camera></a-entity>
+
+      <!-- Initially hidden image entity -->
+      <a-image id="arImage" src="#subjectImage" width="1" height="1" position="0 0 -2" visible="false" rotation="90 0 0"></a-image>
     </a-scene>
+
+    <script>
+      document.querySelector('a-scene').addEventListener('click', function (event) {
+        var image = document.getElementById('arImage');
+        var scene = document.querySelector('a-scene');
+        
+        // Calculate the position for the image to be placed
+        var touchPoint = event.detail.intersection.point;
+        image.setAttribute('position', touchPoint);
+
+        // Make the image visible
+        image.setAttribute('visible', 'true');
+      });
+    </script>
   </body>
 </html>
