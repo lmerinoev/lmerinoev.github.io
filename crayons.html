@@ -4,8 +4,8 @@
     <title>Crayons AR :)</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawcdn.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-gesture-detector-component@latest/dist/aframe-gesture-detector-component.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-event-set-component@latest/dist/aframe-event-set-component.min.js"></script>
   </head>
   <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs="sourceType: webcam;">
@@ -46,19 +46,20 @@
       });
 
       var image = document.getElementById('arImage');
+      var initialScale = {x: 1, y: 1, z: 1};
 
       image.addEventListener('pinchstarted', function (evt) {
-        this.initialScale = this.getAttribute('scale');
+        initialScale = this.getAttribute('scale');
       });
 
       image.addEventListener('pinchmoved', function (evt) {
         var scaleFactor = evt.detail.scale / evt.detail.previousScale;
-        var currentScale = this.getAttribute('scale');
-        this.setAttribute('scale', {
-          x: currentScale.x * scaleFactor,
-          y: currentScale.y * scaleFactor,
-          z: currentScale.z * scaleFactor
-        });
+        var newScale = {
+          x: initialScale.x * scaleFactor,
+          y: initialScale.y * scaleFactor,
+          z: initialScale.z * scaleFactor
+        };
+        this.setAttribute('scale', newScale);
       });
 
       image.addEventListener('dragstart', function (evt) {
