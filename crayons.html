@@ -21,10 +21,16 @@
     <script>
       document.querySelector('a-scene').addEventListener('click', function (event) {
         var sphere = document.getElementById('arSphere');
-        
-        // Get the touch point from the click event
-        var touchPoint = event.detail.intersection ? event.detail.intersection.point : {x: 0, y: 0, z: -2};
-        sphere.setAttribute('position', touchPoint);
+        var camera = document.querySelector('[camera]');
+        var camPos = camera.getAttribute('position');
+
+        // Place the sphere in front of the camera
+        var newPos = {
+          x: camPos.x,
+          y: camPos.y,
+          z: camPos.z - 2
+        };
+        sphere.setAttribute('position', newPos);
 
         // Make the sphere visible
         sphere.setAttribute('visible', 'true');
