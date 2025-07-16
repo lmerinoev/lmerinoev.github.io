@@ -14,28 +14,26 @@
   <style>body{margin:0;overflow:hidden}</style>
 </head>
 <body>
-  <a-scene
-      embedded
-      vr-mode-ui="enabled:false"
-      renderer="logarithmicDepthBuffer:true"
-      arjs="sourceType:webcam; detectionMode:mono_and_matrix; matrixCodeType:3x3; debugUIEnabled:false">
+<a-scene
+    embedded
+    vr-mode-ui="enabled:false"
+    renderer="logarithmicDepthBuffer:true"
+    arjs="sourceType:webcam; detectionMode:mono_and_matrix; matrixCodeType:6x6; debugUIEnabled:false">
 
-    <!-- preload your overlay asset -->
-    <a-assets>
-      <img id="coffeeLabel" src="images/IMG_1541.jpeg">
-    </a-assets>
+  <a-assets>
+    <img id="label" src="images/kenya-aa-label.png">
+  </a-assets>
 
-    <!-- AprilTag ID 5 -->
-    <a-marker type="barcode" value="5">
-      <a-image src="#coffeeLabel"
-               width="0.08" height="0.08"
-               position="0 0.01 0"
-               rotation="-90 0 0"
-               gesture-detector>
-      </a-image>
-    </a-marker>
+  <!-- AprilTag tag36h11, ID 5 -->
+  <a-marker type="barcode" value="5">
+    <a-image src="#label"
+             width="0.08" height="0.08"
+             position="0 0.01 0"
+             rotation="-90 0 0"></a-image>
+  </a-marker>
 
-    <a-entity camera></a-entity>
-  </a-scene>
+  <a-entity camera></a-entity>
+</a-scene>
+
 </body>
 </html>
