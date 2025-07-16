@@ -6,34 +6,29 @@
 
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-
-  <!-- (optional) gesture components -->
-  <script src="https://unpkg.com/aframe-gesture-detector-component@4.0.3/dist/aframe-gesture-detector-component.min.js"></script>
-  <script src="https://unpkg.com/aframe-event-set-component@5.1.0/dist/aframe-event-set-component.min.js"></script>
-
   <style>body{margin:0;overflow:hidden}</style>
 </head>
 <body>
-<a-scene
-    embedded
-    vr-mode-ui="enabled:false"
-    renderer="logarithmicDepthBuffer:true"
-    arjs="sourceType:webcam; detectionMode:mono_and_matrix; matrixCodeType:6x6; debugUIEnabled:false">
+  <a-scene
+      embedded
+      vr-mode-ui="enabled:false"
+      renderer="logarithmicDepthBuffer:true"
+      arjs="sourceType:webcam; detectionMode:mono_and_matrix; matrixCodeType:4x4; debugUIEnabled:false">
 
-  <a-assets>
-    <img id="label" src="images/IMG_1541.jpeg">
-  </a-assets>
+    <a-assets>
+      <img id="coffeeLabel" src="images/IMG_1541.jpeg" crossorigin="anonymous">
+    </a-assets>
 
-  <!-- AprilTag tag36h11, ID 5 -->
-  <a-marker type="barcode" value="5">
-    <a-image src="#label"
-             width="0.08" height="0.08"
-             position="0 0.01 0"
-             rotation="-90 0 0"></a-image>
-  </a-marker>
+    <!-- AprilTag tag25h9 (4×4), ID 5 -->
+    <a-marker type="barcode" value="5">
+      <a-image src="#coffeeLabel"
+               width="0.08" height="0.08"
+               position="0 0.01 0"
+               rotation="-90 0 0">
+      </a-image>
+    </a-marker>
 
-  <a-entity camera></a-entity>
-</a-scene>
-
+    <a-entity camera></a-entity>
+  </a-scene>
 </body>
 </html>
