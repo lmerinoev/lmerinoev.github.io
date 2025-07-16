@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Coffee-Bag AR Demo</title>
+
+  <!-- A-Frame + AR.js (latest stable builds) -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+
+  <!-- Optional: pinch / drag gestures (remove if you don’t need them) -->
+  <script src="https://unpkg.com/aframe-gesture-detector-component@4.0.3/dist/aframe-gesture-detector-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-event-set-component@5.1.0/dist/aframe-event-set-component.min.js"></script>
+
+  <style>body { margin:0; overflow:hidden; }</style>
+</head>
+
+<body>
+  <!-- Main AR scene -->
+  <a-scene
+      embedded                           <!-- fits the phone screen -->
+      vr-mode-ui="enabled: false"        <!-- hide VR button -->
+      renderer="logarithmicDepthBuffer: true"
+      arjs="
+        sourceType: webcam;              /* rear camera */
+        detectionMode: mono_and_matrix;  /* square + barcode tags */
+        matrixCodeType: 3x3;             /* AprilTag family tag36h11 */
+        debugUIEnabled: false;">
+
+    <!-- 1. Preload assets -->
+    <a-assets>
+      <!-- Replace with your label art / 3-D model -->
+      <img id="coffeeLabel" src="images/kenya.png">
+    </a-assets>
+
+    <!-- 2. Barcode marker: value=5 matches your printed tag -->
+    <!--    Everything inside is locked to that physical square -->
+    <a-marker type="barcode" value="5">
+      <!-- Hover the image 1 cm above the bag so it “floats” -->
+      <a-image
+          src="#coffeeLabel"
+          width="0.08" height="0.08"         <!-- 8 cm square -->
+          position="0 0.01 0"                <!-- y = 1 cm up -->
+          rotation="-90 0 0"                 <!-- lie flat -->
+          gesture-detector>                  <!-- pinch / drag -->
+      </a-image>
+    </a-marker>
+
+    <!-- 3. Required camera entity -->
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
+</html>
