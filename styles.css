@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: center; /* This will center the content vertically */
     min-height: 100vh; /* This ensures the flex container takes the full viewport height */
-    background-color: #e1e1e1;
+    background-color: #F8F8F8;
 }
 
 .container {
