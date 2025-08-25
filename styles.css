@@ -6,6 +6,10 @@ body {
     align-items: center; /* This will center the content vertically */
     min-height: 100vh; /* This ensures the flex container takes the full viewport height */
     background-color: #F8F8F8;
+
+    /* Fade-in animation */
+    opacity: 0; /* Start invisible */
+    animation: fadeIn 1.5s ease-in forwards;
 }
 
 .container {
@@ -190,3 +194,13 @@ h1.move-to-top {
     text-decoration: none;
     cursor: pointer;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
