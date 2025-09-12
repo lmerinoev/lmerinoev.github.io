@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pose Estimation - Luis Merino</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            background: var(--gray-100);
+        }
+        
+        #webcam {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: rotateY(180deg);
+        }
+        
+        #output_canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotateY(180deg);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .status.loading {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .pose-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .pose-card {
+            background: var(--secondary);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .pose-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .pose-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .pose-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .placeholder {
+            width: 100%;
+            height: 300px;
+            background: var(--gray-100);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            font-size: 16px;
+        }
+        
+        .placeholder i {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                padding: 10px;
+            }
+            
+            .video-container {
+                margin: 10px auto;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .pose-info {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 8px;
+            }
+            
+            .pose-card {
+                padding: 12px;
+            }
+            
+            .pose-label {
+                font-size: 11px;
+            }
+            
+            .pose-value {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Luis Merino</div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-icon" data-label="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="about.html" class="nav-icon" data-label="About">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="index.html#research" class="nav-icon" data-label="Research">
+                    <i class="fas fa-briefcase"></i>
+                </a>
+                <a href="index.html#contact" class="nav-icon" data-label="Contact">
+                    <i class="fas fa-shopping-bag"></i>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Demo Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <div class="status-dot"></div>
+                    <span>Real-time AI Demo</span>
+                </div>
+                <h1 class="hero-title">Pose Estimation</h1>
+                <p class="hero-subtitle">
+                    Real-time human pose detection using your webcam. 
+                    See how AI can track body movements and key points.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="demos-section">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-badge">
+                        <div class="dot"></div>
+                        <span class="text">Live Demo</span>
+                    </div>
+                    <h2 class="section-title">Real-time Pose Detection</h2>
+                    <p class="section-subtitle">
+                        Click "Start Camera" to begin pose estimation. 
+                        Move your body to see the AI track your movements.
+                    </p>
+                </div>
+                
+                <div class="demo-container">
+                    <div id="status" class="status">
+                        <i class="fas fa-info-circle"></i>
+                        Click "Start Camera" to begin pose estimation
+                    </div>
+                    
+                    <div class="video-container">
+                        <video id="webcam" autoplay playsinline style="display: none;"></video>
+                        <canvas id="output_canvas" style="display: none;"></canvas>
+                        <div id="placeholder" class="placeholder">
+                            <i class="fas fa-running"></i>
+                            Camera feed will appear here
+                        </div>
+                    </div>
+                    
+                    <div class="controls">
+                        <button id="startButton" class="btn btn-primary">
+                            <i class="fas fa-play"></i>
+                            Start Camera
+                        </button>
+                        <button id="stopButton" class="btn btn-secondary" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            Stop Camera
+                        </button>
+                    </div>
+                    
+                    <div id="poseInfo" class="pose-info" style="display: none;">
+                        <!-- Pose data will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <script>
+        // Simple pose estimation demo
+        let webcamStream = null;
+        let isDetecting = false;
+        
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const status = document.getElementById('status');
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('output_canvas');
+        const ctx = canvas.getContext('2d');
+        const placeholder = document.getElementById('placeholder');
+        const poseInfo = document.getElementById('poseInfo');
+        
+        // Mock pose data for demo
+        const mockPoseData = [
+            { name: 'Nose', confidence: 0 },
+            { name: 'Left Eye', confidence: 0 },
+            { name: 'Right Eye', confidence: 0 },
+            { name: 'Left Shoulder', confidence: 0 },
+            { name: 'Right Shoulder', confidence: 0 },
+            { name: 'Left Elbow', confidence: 0 },
+            { name: 'Right Elbow', confidence: 0 },
+            { name: 'Left Wrist', confidence: 0 },
+            { name: 'Right Wrist', confidence: 0 }
+        ];
+        
+        function updateStatus(message, type = '') {
+            status.className = `status ${type}`;
+            status.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+        }
+        
+        function updatePoseData() {
+            // Simulate pose detection
+            mockPoseData.forEach(pose => {
+                pose.confidence = Math.random() * 100;
+            });
+            
+            let html = '';
+            mockPoseData.forEach(pose => {
+                const confidence = Math.round(pose.confidence);
+                html += `
+                    <div class="pose-card">
+                        <div class="pose-label">${pose.name}</div>
+                        <div class="pose-value">${confidence}%</div>
+                    </div>
+                `;
+            });
+            poseInfo.innerHTML = html;
+        }
+        
+        function startCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                updateStatus('Starting camera...', 'loading');
+                
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        webcamStream = stream;
+                        video.srcObject = stream;
+                        video.style.display = 'block';
+                        canvas.style.display = 'block';
+                        placeholder.style.display = 'none';
+                        poseInfo.style.display = 'grid';
+                        
+                        startButton.style.display = 'none';
+                        stopButton.style.display = 'flex';
+                        
+                        updateStatus('Camera started! Move your body to see pose detection.', 'success');
+                        
+                        // Start mock detection
+                        isDetecting = true;
+                        detectPose();
+                    })
+                    .catch(error => {
+                        console.error('Error accessing camera:', error);
+                        updateStatus('Error accessing camera. Please check permissions.', 'error');
+                    });
+            } else {
+                updateStatus('Camera not supported on this device.', 'error');
+            }
+        }
+        
+        function stopCamera() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+            }
+            
+            video.style.display = 'none';
+            canvas.style.display = 'none';
+            placeholder.style.display = 'flex';
+            poseInfo.style.display = 'none';
+            
+            startButton.style.display = 'flex';
+            stopButton.style.display = 'none';
+            
+            isDetecting = false;
+            updateStatus('Camera stopped. Click "Start Camera" to begin again.');
+        }
+        
+        function detectPose() {
+            if (!isDetecting) return;
+            
+            // Draw video frame to canvas
+            if (video.videoWidth > 0) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0);
+                
+                // Draw simple pose skeleton
+                ctx.strokeStyle = '#00ff00';
+                ctx.lineWidth = 3;
+                ctx.fillStyle = '#00ff00';
+                
+                // Draw body outline
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const bodyWidth = canvas.width * 0.3;
+                const bodyHeight = canvas.height * 0.6;
+                
+                // Head
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - bodyHeight/2, bodyWidth/3, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Body
+                ctx.strokeRect(centerX - bodyWidth/2, centerY - bodyHeight/2, bodyWidth, bodyHeight);
+                
+                // Arms
+                ctx.beginPath();
+                ctx.moveTo(centerX - bodyWidth/2, centerY - bodyHeight/4);
+                ctx.lineTo(centerX - bodyWidth, centerY);
+                ctx.moveTo(centerX + bodyWidth/2, centerY - bodyHeight/4);
+                ctx.lineTo(centerX + bodyWidth, centerY);
+                ctx.stroke();
+                
+                // Legs
+                ctx.beginPath();
+                ctx.moveTo(centerX - bodyWidth/4, centerY + bodyHeight/2);
+                ctx.lineTo(centerX - bodyWidth/2, centerY + bodyHeight);
+                ctx.moveTo(centerX + bodyWidth/4, centerY + bodyHeight/2);
+                ctx.lineTo(centerX + bodyWidth/2, centerY + bodyHeight);
+                ctx.stroke();
+                
+                // Add some text
+                ctx.fillStyle = '#00ff00';
+                ctx.font = '16px Arial';
+                ctx.fillText('Pose Detected', 10, 30);
+            }
+            
+            // Update pose data
+            updatePoseData();
+            
+            // Continue detection
+            if (isDetecting) {
+                requestAnimationFrame(detectPose);
+            }
+        }
+        
+        // Event listeners
+        startButton.addEventListener('click', startCamera);
+        stopButton.addEventListener('click', stopCamera);
+        
+        // Initialize
+        updateStatus('Click "Start Camera" to begin pose estimation');
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-badge">
+                    <div class="dot"></div>
+                    <span class="text">Follow Me</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

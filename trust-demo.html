@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust in AI Demo - Luis Merino</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 50px;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .demo-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-description {
+            font-size: 1.1rem;
+            color: #4a5568;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .demo-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .scenario-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .scenario-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .scenario-description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .ai-recommendation {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .ai-text {
+            font-style: italic;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ai-confidence {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .trust-slider {
+            margin-bottom: 1.5rem;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .decision-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .decision-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-accept {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-accept:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+        
+        .btn-reject {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-reject:hover {
+            background: #e53e3e;
+            transform: translateY(-2px);
+        }
+        
+        .results-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            margin-top: 2rem;
+        }
+        
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .trust-factors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .trust-factor {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .factor-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .factor-score {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .personality-insights {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .insights-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .insight-item {
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #5a67d8;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .decision-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Portfolio
+        </a>
+        
+        <div class="demo-header">
+            <h1 class="demo-title">Trust in AI Decision Making</h1>
+            <p class="demo-description">
+                Based on research in human-robot interaction and trust, this demo explores how individual 
+                differences influence trust in AI recommendations. Experience different scenarios and see 
+                how your personality traits affect your trust levels.
+            </p>
+        </div>
+        
+        <div class="demo-area">
+            <div class="scenario-card">
+                <h3 class="scenario-title">Medical Diagnosis Scenario</h3>
+                <p class="scenario-description">
+                    An AI system has analyzed your medical symptoms and test results. 
+                    It recommends a specific treatment plan with high confidence.
+                </p>
+                
+                <div class="ai-recommendation">
+                    <div class="ai-text">
+                        "Based on your symptoms and test results, I recommend starting 
+                        treatment with medication X. This approach has a 92% success rate 
+                        for similar cases."
+                    </div>
+                    <div class="ai-confidence">AI Confidence: 92%</div>
+                </div>
+                
+                <div class="trust-slider">
+                    <div class="slider-label">
+                        <span>Low Trust</span>
+                        <span>High Trust</span>
+                    </div>
+                    <input type="range" class="slider" id="medicalTrust" min="0" max="100" value="50">
+                </div>
+                
+                <div class="decision-buttons">
+                    <button class="decision-btn btn-accept" onclick="makeDecision('medical', 'accept')">
+                        Accept Recommendation
+                    </button>
+                    <button class="decision-btn btn-reject" onclick="makeDecision('medical', 'reject')">
+                        Seek Second Opinion
+                    </button>
+                </div>
+            </div>
+            
+            <div class="scenario-card">
+                <h3 class="scenario-title">Financial Investment Scenario</h3>
+                <p class="scenario-description">
+                    An AI financial advisor suggests investing in a specific portfolio 
+                    based on market analysis and your risk profile.
+                </p>
+                
+                <div class="ai-recommendation">
+                    <div class="ai-text">
+                        "I recommend investing 60% in stocks and 40% in bonds. This 
+                        allocation matches your risk tolerance and has historically 
+                        provided 8% annual returns."
+                    </div>
+                    <div class="ai-confidence">AI Confidence: 87%</div>
+                </div>
+                
+                <div class="trust-slider">
+                    <div class="slider-label">
+                        <span>Low Trust</span>
+                        <span>High Trust</span>
+                    </div>
+                    <input type="range" class="slider" id="financialTrust" min="0" max="100" value="50">
+                </div>
+                
+                <div class="decision-buttons">
+                    <button class="decision-btn btn-accept" onclick="makeDecision('financial', 'accept')">
+                        Follow Recommendation
+                    </button>
+                    <button class="decision-btn btn-reject" onclick="makeDecision('financial', 'reject')">
+                        Consult Human Advisor
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <h3 class="results-title">Your Trust Profile Analysis</h3>
+            
+            <div class="trust-factors">
+                <div class="trust-factor">
+                    <div class="factor-name">Overall Trust Score</div>
+                    <div class="factor-score" id="overallTrust">0%</div>
+                </div>
+                <div class="trust-factor">
+                    <div class="factor-name">Openness to Experience</div>
+                    <div class="factor-score" id="opennessScore">0%</div>
+                </div>
+                <div class="trust-factor">
+                    <div class="factor-name">Risk Tolerance</div>
+                    <div class="factor-score" id="riskTolerance">0%</div>
+                </div>
+                <div class="trust-factor">
+                    <div class="factor-name">AI Familiarity</div>
+                    <div class="factor-score" id="aiFamiliarity">0%</div>
+                </div>
+            </div>
+            
+            <div class="personality-insights">
+                <div class="insights-title">Research-Based Insights</div>
+                <div id="insightsList">
+                    <!-- Insights will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let trustData = {
+            medical: 50,
+            financial: 50,
+            decisions: []
+        };
+
+        // Initialize sliders
+        document.getElementById('medicalTrust').addEventListener('input', function() {
+            trustData.medical = parseInt(this.value);
+        });
+
+        document.getElementById('financialTrust').addEventListener('input', function() {
+            trustData.financial = parseInt(this.value);
+        });
+
+        // Make decision function
+        function makeDecision(scenario, decision) {
+            trustData.decisions.push({
+                scenario: scenario,
+                decision: decision,
+                trustLevel: trustData[scenario],
+                timestamp: new Date()
+            });
+            
+            // Show results after both decisions
+            if (trustData.decisions.length >= 2) {
+                showResults();
+            }
+        }
+
+        // Show results
+        function showResults() {
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.style.display = 'block';
+            
+            // Calculate overall trust score
+            const overallTrust = Math.round((trustData.medical + trustData.financial) / 2);
+            document.getElementById('overallTrust').textContent = overallTrust + '%';
+            
+            // Calculate personality-based scores (simplified)
+            const opennessScore = Math.min(100, Math.round(overallTrust * 1.2));
+            const riskTolerance = Math.min(100, Math.round((100 - overallTrust) * 0.8 + 20));
+            const aiFamiliarity = Math.min(100, Math.round(overallTrust * 0.9));
+            
+            document.getElementById('opennessScore').textContent = opennessScore + '%';
+            document.getElementById('riskTolerance').textContent = riskTolerance + '%';
+            document.getElementById('aiFamiliarity').textContent = aiFamiliarity + '%';
+            
+            // Generate insights based on research
+            generateInsights(overallTrust, opennessScore, riskTolerance);
+        }
+
+        // Generate research-based insights
+        function generateInsights(overallTrust, opennessScore, riskTolerance) {
+            const insights = [];
+            
+            // Based on the research paper about openness and trust
+            if (opennessScore > 70) {
+                insights.push("Your high openness score suggests you're more likely to trust AI systems, which aligns with research findings on personality and trust in human-robot interaction.");
+            } else if (opennessScore < 40) {
+                insights.push("Your lower openness score indicates you may be more cautious with AI recommendations, which is a common pattern in trust research.");
+            }
+            
+            // Risk tolerance insights
+            if (riskTolerance > 70) {
+                insights.push("Your high risk tolerance suggests you're comfortable with uncertainty in AI decision-making, which can increase trust levels.");
+            } else {
+                insights.push("Your risk-averse nature may lead to more careful evaluation of AI recommendations before accepting them.");
+            }
+            
+            // Overall trust insights
+            if (overallTrust > 70) {
+                insights.push("Your high trust in AI aligns with research showing that individual differences in personality significantly impact trust in intelligent systems.");
+            } else if (overallTrust < 40) {
+                insights.push("Your cautious approach to AI trust reflects the importance of building confidence through transparency and reliability in AI systems.");
+            }
+            
+            // Add general research insights
+            insights.push("Research shows that the 'Openness to Experience' personality trait is a significant predictor of trust in humanoid robot partners.");
+            insights.push("Individual differences in trust propensity play a crucial role in human-machine collaboration and decision-making.");
+            
+            // Display insights
+            const insightsList = document.getElementById('insightsList');
+            insightsList.innerHTML = insights.map(insight => 
+                `<div class="insight-item">• ${insight}</div>`
+            ).join('');
+        }
+    </script>
+</body>
+</html>
+

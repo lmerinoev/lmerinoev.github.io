@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Augmented Reality Demo - Luis Merino</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://rawcdn.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
+    <script src="https://unpkg.com/aframe-gesture-detector-component@4.0.3/dist/aframe-gesture-detector-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.1.0/dist/aframe-event-set-component.min.js"></script>
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 50px;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .demo-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-description {
+            font-size: 1.1rem;
+            color: #4a5568;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .ar-instructions {
+            background: #f0f4ff;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .instructions-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .instructions-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .instructions-list li {
+            margin-bottom: 0.8rem;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .instructions-list li i {
+            color: #667eea;
+            width: 20px;
+        }
+        
+        .ar-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 2rem;
+        }
+        
+        .ar-scene {
+            width: 100%;
+            height: 500px;
+        }
+        
+        .ar-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 2rem;
+        }
+        
+        .controls-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .ar-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-description {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #5a67d8;
+        }
+        
+        .mobile-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #856404;
+        }
+        
+        .mobile-warning i {
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .ar-scene {
+                height: 400px;
+            }
+            
+            .control-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Portfolio
+        </a>
+        
+        <div class="demo-header">
+            <h1 class="demo-title">Augmented Reality Experience</h1>
+            <p class="demo-description">
+                Experience interactive augmented reality with gesture controls. This demo uses AR.js 
+                to create immersive 3D experiences that respond to touch and gesture interactions.
+            </p>
+        </div>
+        
+        <div class="mobile-warning">
+            <i class="fas fa-mobile-alt"></i>
+            <strong>Mobile Recommended:</strong> This AR experience works best on mobile devices with cameras. 
+            Please use your phone or tablet for the full experience.
+        </div>
+        
+        <div class="ar-instructions">
+            <div class="instructions-title">How to Use the AR Demo</div>
+            <ul class="instructions-list">
+                <li><i class="fas fa-camera"></i> Allow camera access when prompted</li>
+                <li><i class="fas fa-hand-pointer"></i> Tap anywhere on the screen to place 3D objects</li>
+                <li><i class="fas fa-expand-arrows-alt"></i> Use pinch gestures to scale objects</li>
+                <li><i class="fas fa-arrows-alt"></i> Drag to move objects around</li>
+                <li><i class="fas fa-undo"></i> Use the reset button to clear all objects</li>
+            </ul>
+        </div>
+        
+        <div class="ar-container">
+            <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+                <a-assets>
+                    <img id="subjectImage" src="images/subject_ar.png">
+                </a-assets>
+                
+                <a-entity camera></a-entity>
+                
+                <!-- Interactive 3D objects -->
+                <a-box id="arBox" 
+                       position="0 0 -2" 
+                       rotation="0 0 0" 
+                       scale="0.5 0.5 0.5"
+                       color="#667eea"
+                       visible="false"
+                       gesture-detector>
+                </a-box>
+                
+                <a-sphere id="arSphere" 
+                          position="0 0 -2" 
+                          rotation="0 0 0" 
+                          scale="0.3 0.3 0.3"
+                          color="#764ba2"
+                          visible="false"
+                          gesture-detector>
+                </a-sphere>
+                
+                <a-cylinder id="arCylinder" 
+                            position="0 0 -2" 
+                            rotation="0 0 0" 
+                            scale="0.4 0.6 0.4"
+                            color="#48bb78"
+                            visible="false"
+                            gesture-detector>
+                </a-cylinder>
+                
+                <!-- AR marker for reference -->
+                <a-marker-camera preset="hiro">
+                    <a-box position="0 0.5 0" material="color: yellow;"></a-box>
+                </a-marker-camera>
+            </a-scene>
+        </div>
+        
+        <div class="ar-controls">
+            <div class="controls-title">AR Controls</div>
+            <div class="control-buttons">
+                <button class="control-btn btn-primary" onclick="addBox()">
+                    <i class="fas fa-cube"></i> Add Box
+                </button>
+                <button class="control-btn btn-primary" onclick="addSphere()">
+                    <i class="fas fa-circle"></i> Add Sphere
+                </button>
+                <button class="control-btn btn-primary" onclick="addCylinder()">
+                    <i class="fas fa-cylinder"></i> Add Cylinder
+                </button>
+                <button class="control-btn btn-secondary" onclick="resetObjects()">
+                    <i class="fas fa-undo"></i> Reset All
+                </button>
+            </div>
+        </div>
+        
+        <div class="ar-features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-hand-paper"></i>
+                </div>
+                <div class="feature-title">Gesture Controls</div>
+                <div class="feature-description">
+                    Interact with 3D objects using natural touch gestures for scaling, rotation, and movement.
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div class="feature-title">3D Objects</div>
+                <div class="feature-description">
+                    Place and manipulate various 3D shapes in your real-world environment.
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="feature-title">Mobile Optimized</div>
+                <div class="feature-description">
+                    Designed for mobile devices with camera access for the best AR experience.
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="feature-title">Real-time Tracking</div>
+                <div class="feature-description">
+                    Objects stay anchored in 3D space as you move your device around.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let objectCount = 0;
+        const maxObjects = 10;
+        
+        // Add box to scene
+        function addBox() {
+            if (objectCount >= maxObjects) {
+                alert('Maximum number of objects reached!');
+                return;
+            }
+            
+            const scene = document.querySelector('a-scene');
+            const box = document.createElement('a-box');
+            box.setAttribute('position', {
+                x: (Math.random() - 0.5) * 4,
+                y: Math.random() * 2,
+                z: -2 - Math.random() * 2
+            });
+            box.setAttribute('scale', '0.3 0.3 0.3');
+            box.setAttribute('color', getRandomColor());
+            box.setAttribute('gesture-detector', '');
+            box.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 10000');
+            
+            // Add interaction events
+            box.addEventListener('click', function() {
+                this.setAttribute('color', getRandomColor());
+            });
+            
+            scene.appendChild(box);
+            objectCount++;
+        }
+        
+        // Add sphere to scene
+        function addSphere() {
+            if (objectCount >= maxObjects) {
+                alert('Maximum number of objects reached!');
+                return;
+            }
+            
+            const scene = document.querySelector('a-scene');
+            const sphere = document.createElement('a-sphere');
+            sphere.setAttribute('position', {
+                x: (Math.random() - 0.5) * 4,
+                y: Math.random() * 2,
+                z: -2 - Math.random() * 2
+            });
+            sphere.setAttribute('scale', '0.2 0.2 0.2');
+            sphere.setAttribute('color', getRandomColor());
+            sphere.setAttribute('gesture-detector', '');
+            sphere.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 8000');
+            
+            // Add interaction events
+            sphere.addEventListener('click', function() {
+                this.setAttribute('color', getRandomColor());
+            });
+            
+            scene.appendChild(sphere);
+            objectCount++;
+        }
+        
+        // Add cylinder to scene
+        function addCylinder() {
+            if (objectCount >= maxObjects) {
+                alert('Maximum number of objects reached!');
+                return;
+            }
+            
+            const scene = document.querySelector('a-scene');
+            const cylinder = document.createElement('a-cylinder');
+            cylinder.setAttribute('position', {
+                x: (Math.random() - 0.5) * 4,
+                y: Math.random() * 2,
+                z: -2 - Math.random() * 2
+            });
+            cylinder.setAttribute('scale', '0.2 0.4 0.2');
+            cylinder.setAttribute('color', getRandomColor());
+            cylinder.setAttribute('gesture-detector', '');
+            cylinder.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 12000');
+            
+            // Add interaction events
+            cylinder.addEventListener('click', function() {
+                this.setAttribute('color', getRandomColor());
+            });
+            
+            scene.appendChild(cylinder);
+            objectCount++;
+        }
+        
+        // Reset all objects
+        function resetObjects() {
+            const scene = document.querySelector('a-scene');
+            const objects = scene.querySelectorAll('a-box, a-sphere, a-cylinder');
+            objects.forEach(obj => {
+                if (obj.id === 'arBox' || obj.id === 'arSphere' || obj.id === 'arCylinder') {
+                    // Keep the original objects but hide them
+                    obj.setAttribute('visible', 'false');
+                } else {
+                    // Remove dynamically added objects
+                    obj.remove();
+                }
+            });
+            objectCount = 0;
+        }
+        
+        // Get random color
+        function getRandomColor() {
+            const colors = ['#667eea', '#764ba2', '#48bb78', '#f56565', '#ed8936', '#9f7aea', '#38b2ac', '#e53e3e'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Add click to place functionality
+        document.querySelector('a-scene').addEventListener('click', function(event) {
+            // This will be handled by the individual object click events
+        });
+        
+        // Initialize the AR scene
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some initial instructions
+            console.log('AR Scene initialized. Tap the control buttons to add 3D objects!');
+        });
+    </script>
+</body>
+</html>
+

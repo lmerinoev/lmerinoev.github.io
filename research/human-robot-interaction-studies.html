@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human-Robot Interaction Studies - Luis Merino</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .research-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 20px 80px;
+            background: var(--secondary);
+            color: var(--primary);
+        }
+        
+        .research-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .research-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        .research-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+        
+        .research-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+        
+        .meta-item i {
+            color: var(--primary);
+        }
+        
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        
+        .main-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--primary);
+        }
+        
+        .main-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 3rem 0 1.5rem;
+            letter-spacing: -0.01em;
+        }
+        
+        .main-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 2rem 0 1rem;
+        }
+        
+        .main-content p {
+            margin-bottom: 1.5rem;
+            color: var(--gray-600);
+        }
+        
+        .highlight-box {
+            background: var(--gray-100);
+            border-left: 4px solid var(--primary);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .highlight-box p {
+            margin: 0;
+            font-style: italic;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .sidebar {
+            background: var(--gray-100);
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+        
+        .sidebar h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .sidebar a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+        
+        .sidebar a:hover {
+            color: var(--primary);
+        }
+        
+        .paper-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background: #424245;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--secondary);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary);
+        }
+        
+        .key-findings {
+            background: var(--gray-100);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+        }
+        
+        .key-findings h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .findings-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .findings-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--gray-600);
+        }
+        
+        .findings-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .interaction-domains {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+        }
+        
+        .interaction-domains h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .domains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .domain-item {
+            padding: 1.5rem;
+            background: var(--gray-100);
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .domain-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .domain-item p {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .research-title {
+                font-size: 2.5rem;
+            }
+            
+            .research-meta {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Luis Merino</div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-icon" data-label="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="../about.html" class="nav-icon" data-label="About">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="../index.html#research" class="nav-icon active" data-label="Research">
+                    <i class="fas fa-briefcase"></i>
+                </a>
+                <a href="../index.html#contact" class="nav-icon" data-label="Contact">
+                    <i class="fas fa-shopping-bag"></i>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="dark-mode-toggle" id="darkModeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="research-page">
+        <a href="../index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Portfolio
+        </a>
+        
+        <div class="research-header">
+            <h1 class="research-title">Human-Robot Interaction Studies</h1>
+            <p class="research-subtitle">Investigating Psychological Factors in Human-Robot Collaboration</p>
+            
+            <div class="research-meta">
+                <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>2021</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-users"></i>
+                    <span>Luis Merino, Research Team</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-university"></i>
+                    <span>University of Nebraska at Omaha</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-tag"></i>
+                    <span>HRI, Psychology, Collaboration</span>
+                </div>
+            </div>
+        </div>
+        
+        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+             alt="Human-robot interaction and psychology research" 
+             class="hero-image">
+        
+        <div class="content-grid">
+            <div class="main-content">
+                <h2>Research Overview</h2>
+                <p>
+                    This comprehensive study investigates the psychological factors that influence human trust and 
+                    collaboration with robotic systems in decision-making contexts. As robots become increasingly 
+                    sophisticated and integrated into various aspects of human life, understanding the psychological 
+                    foundations of human-robot interaction becomes essential for designing effective and trustworthy 
+                    robotic systems.
+                </p>
+                
+                <div class="highlight-box">
+                    <p>
+                        "Understanding the psychological factors that influence human trust and collaboration with 
+                        robotic systems is crucial for the successful integration of robots into human environments."
+                    </p>
+                </div>
+                
+                <h2>Research Scope & Objectives</h2>
+                <p>
+                    The study examines how individual psychological characteristics, situational factors, and robot 
+                    design features interact to influence human-robot collaboration effectiveness. The research aims 
+                    to identify key psychological predictors of successful human-robot interaction and develop 
+                    evidence-based guidelines for robot design and deployment.
+                </p>
+                
+                <div class="interaction-domains">
+                    <h3>Key Interaction Domains</h3>
+                    <div class="domains-grid">
+                        <div class="domain-item">
+                            <h4>Trust Formation</h4>
+                            <p>How humans develop trust in robotic systems</p>
+                        </div>
+                        <div class="domain-item">
+                            <h4>Decision Making</h4>
+                            <p>Collaborative decision processes between humans and robots</p>
+                        </div>
+                        <div class="domain-item">
+                            <h4>Communication</h4>
+                            <p>Effective communication patterns in human-robot teams</p>
+                        </div>
+                        <div class="domain-item">
+                            <h4>Task Performance</h4>
+                            <p>Impact of psychological factors on collaborative task success</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2>Methodological Approach</h2>
+                <p>
+                    The research employed a multi-method approach combining laboratory experiments, field studies, 
+                    and longitudinal assessments of human-robot interaction. Participants engaged in various 
+                    collaborative tasks with different types of robotic systems while their psychological responses, 
+                    trust levels, and performance outcomes were systematically measured and analyzed.
+                </p>
+                
+                <h2>Key Psychological Factors</h2>
+                <p>
+                    The study identified several critical psychological factors that influence human-robot interaction:
+                </p>
+                
+                <h3>Individual Characteristics</h3>
+                <p>
+                    Personality traits, cognitive styles, and individual differences in technology acceptance 
+                    significantly impact how humans interact with and trust robotic systems. The research found 
+                    that certain personality profiles are more conducive to successful human-robot collaboration.
+                </p>
+                
+                <h3>Situational Context</h3>
+                <p>
+                    Environmental factors, task complexity, and social context play crucial roles in shaping 
+                    human-robot interaction dynamics. The study revealed that situational cues can either enhance 
+                    or diminish trust and collaboration effectiveness.
+                </p>
+                
+                <h3>Robot Design Features</h3>
+                <p>
+                    Physical appearance, communication style, and behavioral patterns of robots significantly 
+                    influence human psychological responses. The research identified specific design features that 
+                    promote trust and effective collaboration.
+                </p>
+                
+                <div class="key-findings">
+                    <h3>Key Research Insights</h3>
+                    <ul class="findings-list">
+                        <li>Individual personality traits are strong predictors of human-robot interaction success</li>
+                        <li>Situational context significantly influences trust formation and maintenance</li>
+                        <li>Robot design features can be optimized to match human psychological preferences</li>
+                        <li>Communication patterns are crucial for effective human-robot collaboration</li>
+                        <li>Trust in robots develops differently than trust in human partners</li>
+                        <li>Cultural and demographic factors influence human-robot interaction patterns</li>
+                    </ul>
+                </div>
+                
+                <h2>Implications for Robot Design</h2>
+                <p>
+                    The findings have significant implications for the design and development of robotic systems. 
+                    By understanding the psychological factors that influence human-robot interaction, designers 
+                    can create robots that are more effective, trustworthy, and acceptable to human users.
+                </p>
+                
+                <h2>Applications Across Domains</h2>
+                <p>
+                    The research findings apply across various domains where human-robot interaction is important, 
+                    including healthcare, manufacturing, service industries, and domestic applications. Understanding 
+                    psychological factors can help optimize robot deployment in these diverse contexts.
+                </p>
+                
+                <h2>Future Research Directions</h2>
+                <p>
+                    The study opens several promising avenues for future research, including investigating 
+                    long-term human-robot relationships, developing adaptive robot behaviors based on psychological 
+                    profiles, and exploring cultural variations in human-robot interaction patterns.
+                </p>
+            </div>
+            
+            <div class="sidebar">
+                <h3>Quick Navigation</h3>
+                <ul>
+                    <li><a href="#overview">Research Overview</a></li>
+                    <li><a href="#scope">Research Scope</a></li>
+                    <li><a href="#methodology">Methodology</a></li>
+                    <li><a href="#factors">Psychological Factors</a></li>
+                    <li><a href="#findings">Key Findings</a></li>
+                    <li><a href="#implications">Design Implications</a></li>
+                    <li><a href="#applications">Applications</a></li>
+                    <li><a href="#future">Future Research</a></li>
+                </ul>
+                
+                <h3>Related Research</h3>
+                <ul>
+                    <li><a href="decision-making-humanoid-robot.html">Decision-making with Humanoid Robots</a></li>
+                    <li><a href="trust-human-machine-teams.html">Trust in Human-Machine Teams</a></li>
+                </ul>
+                
+                <div class="paper-actions">
+                    <a href="https://scholarspace.manoa.hawaii.edu/bitstream/10125/79411/1/0066.pdf" target="_blank" class="action-btn btn-primary">
+                        <i class="fas fa-file-pdf"></i>
+                        View Full Paper
+                    </a>
+                    <a href="../pose-estimation.html" class="action-btn btn-secondary">
+                        <i class="fas fa-running"></i>
+                        Try HRI Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // Dark mode functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Apply theme on load
+        if (isDarkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', function() {
+            isDarkMode = !isDarkMode;
+            if (isDarkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                this.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                this.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('darkMode', 'false');
+            }
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-badge">
+                    <div class="dot"></div>
+                    <span class="text">Follow Me</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

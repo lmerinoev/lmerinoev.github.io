@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality & AI Trust Assessment - Luis Merino</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 20px 50px;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .demo-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-description {
+            font-size: 1.1rem;
+            color: #4a5568;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .test-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 2rem;
+        }
+        
+        .question-card {
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+        }
+        
+        .question-number {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .option-radio {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .option.selected .option-radio {
+            border-color: #667eea;
+            background: #667eea;
+        }
+        
+        .option.selected .option-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .option-text {
+            flex: 1;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .test-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .results-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            display: none;
+        }
+        
+        .results-section.show {
+            display: block;
+        }
+        
+        .results-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .personality-traits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .trait-card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .trait-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trait-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trait-description {
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+        
+        .trust-prediction {
+            background: #f0f4ff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .prediction-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .prediction-text {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .research-insights {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .insights-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .insight-item {
+            margin-bottom: 0.8rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #5a67d8;
+        }
+        
+        @media (max-width: 768px) {
+            .test-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .personality-traits {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Portfolio
+        </a>
+        
+        <div class="demo-header">
+            <h1 class="demo-title">Personality & AI Trust Assessment</h1>
+            <p class="demo-description">
+                Based on research in human-robot interaction, this assessment evaluates your personality traits 
+                and predicts your likely trust levels in AI systems. The test is based on the Big Five personality 
+                model and trust research findings.
+            </p>
+        </div>
+        
+        <div class="test-container" id="testContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            
+            <div id="questionsContainer">
+                <!-- Questions will be populated by JavaScript -->
+            </div>
+            
+            <div class="test-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <span id="questionCounter">Question 1 of 20</span>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <h2 class="results-title">Your Personality & AI Trust Profile</h2>
+            
+            <div class="personality-traits" id="personalityTraits">
+                <!-- Traits will be populated by JavaScript -->
+            </div>
+            
+            <div class="trust-prediction" id="trustPrediction">
+                <!-- Trust prediction will be populated by JavaScript -->
+            </div>
+            
+            <div class="research-insights">
+                <div class="insights-title">Research-Based Insights</div>
+                <div id="insightsList">
+                    <!-- Insights will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Questions based on Big Five personality traits
+        const questions = [
+            // Openness to Experience
+            { trait: 'openness', text: 'I enjoy trying new and unusual foods.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'openness', text: 'I have a vivid imagination.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'openness', text: 'I enjoy learning about new technologies.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'openness', text: 'I like to think about abstract concepts.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            
+            // Conscientiousness
+            { trait: 'conscientiousness', text: 'I always keep my promises.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'conscientiousness', text: 'I pay attention to details.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'conscientiousness', text: 'I like to be organized.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'conscientiousness', text: 'I follow a schedule.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            
+            // Extraversion
+            { trait: 'extraversion', text: 'I feel comfortable around people.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'extraversion', text: 'I start conversations.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'extraversion', text: 'I talk to a lot of different people at parties.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'extraversion', text: 'I am the life of the party.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            
+            // Agreeableness
+            { trait: 'agreeableness', text: 'I am interested in people.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'agreeableness', text: 'I feel others\' emotions.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'agreeableness', text: 'I am concerned about others.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'agreeableness', text: 'I have a soft heart.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            
+            // Neuroticism
+            { trait: 'neuroticism', text: 'I get stressed out easily.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'neuroticism', text: 'I worry about things.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'neuroticism', text: 'I am easily disturbed.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] },
+            { trait: 'neuroticism', text: 'I get upset easily.', options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let scores = {
+            openness: 0,
+            conscientiousness: 0,
+            extraversion: 0,
+            agreeableness: 0,
+            neuroticism: 0
+        };
+
+        // Initialize test
+        function initTest() {
+            renderQuestion();
+            updateProgress();
+        }
+
+        // Render current question
+        function renderQuestion() {
+            const container = document.getElementById('questionsContainer');
+            const question = questions[currentQuestion];
+            
+            container.innerHTML = `
+                <div class="question-card active">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${questions.length}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options-container">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})">
+                                <div class="option-radio"></div>
+                                <div class="option-text">${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            updateControls();
+        }
+
+        // Select option
+        function selectOption(optionIndex) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            event.currentTarget.classList.add('selected');
+            
+            // Store answer
+            answers[currentQuestion] = optionIndex;
+            
+            // Update controls
+            updateControls();
+        }
+
+        // Update navigation controls
+        function updateControls() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const questionCounter = document.getElementById('questionCounter');
+            
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = answers[currentQuestion] === undefined;
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerHTML = 'Finish <i class="fas fa-check"></i>';
+                nextBtn.onclick = finishTest;
+            } else {
+                nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+                nextBtn.onclick = nextQuestion;
+            }
+            
+            questionCounter.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        // Next question
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                updateProgress();
+            }
+        }
+
+        // Previous question
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                updateProgress();
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Finish test
+        function finishTest() {
+            calculateScores();
+            showResults();
+        }
+
+        // Calculate personality scores
+        function calculateScores() {
+            // Reset scores
+            Object.keys(scores).forEach(trait => {
+                scores[trait] = 0;
+            });
+            
+            // Calculate scores for each trait
+            questions.forEach((question, index) => {
+                const answer = answers[index];
+                if (answer !== undefined) {
+                    // Convert 0-4 scale to 1-5 scale
+                    const score = answer + 1;
+                    scores[question.trait] += score;
+                }
+            });
+            
+            // Average scores (4 questions per trait)
+            Object.keys(scores).forEach(trait => {
+                scores[trait] = Math.round((scores[trait] / 4) * 20); // Convert to percentage
+            });
+        }
+
+        // Show results
+        function showResults() {
+            document.getElementById('testContainer').style.display = 'none';
+            document.getElementById('resultsSection').classList.add('show');
+            
+            renderPersonalityTraits();
+            renderTrustPrediction();
+            renderInsights();
+        }
+
+        // Render personality traits
+        function renderPersonalityTraits() {
+            const container = document.getElementById('personalityTraits');
+            const traitDescriptions = {
+                openness: 'Openness to Experience',
+                conscientiousness: 'Conscientiousness',
+                extraversion: 'Extraversion',
+                agreeableness: 'Agreeableness',
+                neuroticism: 'Neuroticism'
+            };
+            
+            container.innerHTML = Object.keys(scores).map(trait => `
+                <div class="trait-card">
+                    <div class="trait-name">${traitDescriptions[trait]}</div>
+                    <div class="trait-score">${scores[trait]}%</div>
+                    <div class="trait-description">${getTraitDescription(trait, scores[trait])}</div>
+                </div>
+            `).join('');
+        }
+
+        // Get trait description
+        function getTraitDescription(trait, score) {
+            const descriptions = {
+                openness: score > 60 ? 'High: Creative, curious, open to new ideas' : 
+                         score < 40 ? 'Low: Prefer routine, practical, conventional' : 'Moderate: Balanced approach to new experiences',
+                conscientiousness: score > 60 ? 'High: Organized, disciplined, goal-oriented' : 
+                                 score < 40 ? 'Low: Flexible, spontaneous, adaptable' : 'Moderate: Balanced organization and flexibility',
+                extraversion: score > 60 ? 'High: Outgoing, energetic, social' : 
+                            score < 40 ? 'Low: Reserved, quiet, independent' : 'Moderate: Balanced social energy',
+                agreeableness: score > 60 ? 'High: Cooperative, trusting, helpful' : 
+                             score < 40 ? 'Low: Competitive, skeptical, direct' : 'Moderate: Balanced cooperation and assertiveness',
+                neuroticism: score > 60 ? 'High: Sensitive, anxious, emotional' : 
+                           score < 40 ? 'Low: Calm, stable, resilient' : 'Moderate: Balanced emotional stability'
+            };
+            return descriptions[trait];
+        }
+
+        // Render trust prediction
+        function renderTrustPrediction() {
+            const container = document.getElementById('trustPrediction');
+            const trustScore = calculateTrustScore();
+            const prediction = getTrustPrediction(trustScore);
+            
+            container.innerHTML = `
+                <div class="prediction-title">AI Trust Prediction</div>
+                <div class="prediction-text">
+                    Based on your personality profile, you are predicted to have a <strong>${trustScore}% trust level</strong> 
+                    in AI systems. ${prediction}
+                </div>
+            `;
+        }
+
+        // Calculate trust score based on research
+        function calculateTrustScore() {
+            // Based on research showing openness is a significant predictor
+            let trustScore = scores.openness * 0.4; // Openness has highest weight
+            trustScore += scores.conscientiousness * 0.2; // Conscientiousness affects trust
+            trustScore += (100 - scores.neuroticism) * 0.2; // Lower neuroticism = higher trust
+            trustScore += scores.agreeableness * 0.2; // Agreeableness affects trust
+            
+            return Math.round(Math.max(0, Math.min(100, trustScore)));
+        }
+
+        // Get trust prediction text
+        function getTrustPrediction(score) {
+            if (score > 70) {
+                return "You are likely to trust AI recommendations and feel comfortable collaborating with intelligent systems. Your high openness to experience makes you more receptive to new technologies and AI assistance.";
+            } else if (score > 40) {
+                return "You have a moderate level of trust in AI systems. You may evaluate AI recommendations carefully before accepting them, which is a healthy approach to human-AI collaboration.";
+            } else {
+                return "You may be more cautious with AI systems and prefer human oversight. This cautious approach can be valuable in ensuring AI systems are used appropriately and safely.";
+            }
+        }
+
+        // Render research insights
+        function renderInsights() {
+            const container = document.getElementById('insightsList');
+            const insights = [
+                "Research shows that the 'Openness to Experience' personality trait is the most significant predictor of trust in humanoid robot partners.",
+                "Individual differences in personality play a crucial role in human-machine collaboration and decision-making processes.",
+                "People with higher openness scores are more likely to trust AI recommendations and adapt to new technological systems.",
+                "Conscientiousness affects how people evaluate AI system reliability and follow through on AI-generated recommendations.",
+                "Lower neuroticism levels are associated with higher trust in automated systems and reduced anxiety about AI decision-making.",
+                "Understanding personality traits can help design AI systems that better match individual user preferences and trust levels."
+            ];
+            
+            container.innerHTML = insights.map(insight => 
+                `<div class="insight-item">• ${insight}</div>`
+            ).join('');
+        }
+
+        // Initialize test when page loads
+        initTest();
+    </script>
+</body>
+</html>
+

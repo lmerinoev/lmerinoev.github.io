@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Expression Detection - Luis Merino</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            background: var(--gray-100);
+        }
+        
+        #webcam {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: rotateY(180deg);
+        }
+        
+        #output_canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotateY(180deg);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .status.loading {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .expression-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .expression-card {
+            background: var(--secondary);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .expression-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .expression-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .expression-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .expression-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .expression-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        /* Blend Shapes Display (MediaPipe Style) */
+        .expression-group {
+            margin-bottom: 24px;
+            background: var(--secondary);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .group-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .group-expressions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .blend-shapes-item {
+            display: flex;
+            align-items: center;
+            height: 20px;
+            font-size: 12px;
+        }
+
+        .blend-shapes-label {
+            display: flex;
+            width: 120px;
+            justify-content: flex-end;
+            align-items: center;
+            margin-right: 8px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .blend-shapes-value {
+            display: flex;
+            height: 16px;
+            align-items: center;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            padding: 0 8px;
+            border-radius: 4px;
+            min-width: 60px;
+            justify-content: center;
+            transition: width 0.3s ease;
+        }
+        
+        .placeholder {
+            width: 100%;
+            height: 300px;
+            background: var(--gray-100);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            font-size: 16px;
+        }
+        
+        .placeholder i {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                padding: 10px;
+            }
+            
+            .video-container {
+                margin: 10px auto;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .expression-display {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 8px;
+            }
+            
+            .expression-card {
+                padding: 12px;
+            }
+            
+            .expression-label {
+                font-size: 11px;
+            }
+            
+            .expression-value {
+                font-size: 18px;
+            }
+
+            /* Mobile styles for blend shapes */
+            .expression-group {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+
+            .group-title {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+
+            .blend-shapes-item {
+                height: 18px;
+                font-size: 11px;
+            }
+
+            .blend-shapes-label {
+                width: 100px;
+                margin-right: 6px;
+            }
+
+            .blend-shapes-value {
+                height: 14px;
+                padding: 0 6px;
+                min-width: 50px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Luis Merino</div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-icon" data-label="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="about.html" class="nav-icon" data-label="About">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="index.html#research" class="nav-icon" data-label="Research">
+                    <i class="fas fa-briefcase"></i>
+                </a>
+                <a href="index.html#contact" class="nav-icon" data-label="Contact">
+                    <i class="fas fa-shopping-bag"></i>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Demo Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <div class="status-dot"></div>
+                    <span>Real-time AI Demo</span>
+                </div>
+                <h1 class="hero-title">Facial Expression Detection</h1>
+                <p class="hero-subtitle">
+                    Simple, real-time facial expression analysis using your webcam. 
+                    Perfect for demonstrating computer vision technology.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="demos-section">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-badge">
+                        <div class="dot"></div>
+                        <span class="text">Live Demo</span>
+                    </div>
+                    <h2 class="section-title">Real-time Expression Analysis</h2>
+                    <p class="section-subtitle">
+                        Click "Start Camera" to begin facial expression detection. 
+                        The demo will analyze your expressions in real-time.
+                    </p>
+                </div>
+                
+                <div class="demo-container">
+                    <div id="status" class="status">
+                        <i class="fas fa-info-circle"></i>
+                        Click "Start Camera" to begin facial expression detection
+                    </div>
+                    
+                    <div class="video-container">
+                        <video id="webcam" autoplay playsinline style="display: none;"></video>
+                        <canvas id="output_canvas" style="display: none;"></canvas>
+                        <div id="placeholder" class="placeholder">
+                            <i class="fas fa-camera"></i>
+                            Camera feed will appear here
+                        </div>
+                    </div>
+                    
+                    <div class="controls">
+                        <button id="startButton" class="btn btn-primary">
+                            <i class="fas fa-play"></i>
+                            Start Camera
+                        </button>
+                        <button id="stopButton" class="btn btn-secondary" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            Stop Camera
+                        </button>
+                    </div>
+                    
+                    <div id="expressionDisplay" class="expression-display" style="display: none;">
+                        <!-- Facial movement data will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <script type="module">
+        import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
+        const { FaceLandmarker, FilesetResolver, DrawingUtils } = vision;
+
+        let faceLandmarker;
+        let webcamStream = null;
+        let isDetecting = false;
+        let lastVideoTime = -1;
+        let results = undefined;
+
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const status = document.getElementById('status');
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('output_canvas');
+        const ctx = canvas.getContext('2d');
+        const placeholder = document.getElementById('placeholder');
+        const expressionDisplay = document.getElementById('expressionDisplay');
+
+        // Initialize FaceLandmarker
+        async function createFaceLandmarker() {
+            try {
+                updateStatus('Loading AI model...', 'loading');
+                
+                const filesetResolver = await FilesetResolver.forVisionTasks(
+                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+                );
+                
+                faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
+                    baseOptions: {
+                        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+                        delegate: "GPU"
+                    },
+                    outputFaceBlendshapes: true,
+                    runningMode: "VIDEO",
+                    numFaces: 1,
+                    minFaceDetectionConfidence: 0.5,
+                    minFacePresenceConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+                
+                updateStatus('AI model loaded! Click "Start Camera" to begin.', 'success');
+                startButton.disabled = false;
+            } catch (error) {
+                console.error("Error loading FaceLandmarker:", error);
+                updateStatus('Error loading AI model. Please refresh the page.', 'error');
+            }
+        }
+
+        function updateStatus(message, type = '') {
+            status.className = `status ${type}`;
+            status.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+        }
+
+        function updateExpressions(blendShapes) {
+            console.log('updateExpressions called with:', blendShapes);
+            
+            // Fix: blendShapes is an object, not an array
+            if (!blendShapes || !blendShapes.categories) {
+                console.log('No blend shapes data available');
+                return;
+            }
+
+            // blendShapes is already the data object, not an array
+            const blendShapeData = blendShapes;
+            console.log('Blend shape data:', blendShapeData);
+
+            if (!blendShapeData.categories || !blendShapeData.categories.length) {
+                console.log('No categories in blend shape data');
+                return;
+            }
+
+            // Group expressions by category for better organization
+            const expressionGroups = {
+                'Eye Movements': [
+                    'eyeBlinkLeft', 'eyeBlinkRight', 'eyeLookDownLeft', 'eyeLookDownRight',
+                    'eyeLookInLeft', 'eyeLookInRight', 'eyeLookOutLeft', 'eyeLookOutRight',
+                    'eyeLookUpLeft', 'eyeLookUpRight', 'eyeSquintLeft', 'eyeSquintRight',
+                    'eyeWideLeft', 'eyeWideRight'
+                ],
+                'Jaw & Mouth': [
+                    'jawForward', 'jawLeft', 'jawOpen', 'jawRight', 'mouthClose',
+                    'mouthDimpleLeft', 'mouthDimpleRight', 'mouthFrownLeft', 'mouthFrownRight',
+                    'mouthFunnel', 'mouthLeft', 'mouthLowerDownLeft', 'mouthLowerDownRight',
+                    'mouthPressLeft', 'mouthPressRight', 'mouthPucker', 'mouthRight',
+                    'mouthRollLower', 'mouthRollUpper', 'mouthShrugLower', 'mouthShrugUpper',
+                    'mouthSmileLeft', 'mouthSmileRight', 'mouthStretchLeft', 'mouthStretchRight',
+                    'mouthUpperUpLeft', 'mouthUpperUpRight'
+                ],
+                'Brow & Nose': [
+                    'browDownLeft', 'browDownRight', 'browInnerUp', 'browOuterUpLeft',
+                    'browOuterUpRight', 'noseSneerLeft', 'noseSneerRight'
+                ]
+            };
+
+            let html = '';
+            let hasData = false;
+            
+            // Create sections for each group
+            Object.entries(expressionGroups).forEach(([groupName, expressions]) => {
+                let groupHtml = `<div class="expression-group">
+                    <h4 class="group-title">${groupName}</h4>
+                    <div class="group-expressions">`;
+                
+                let groupHasData = false;
+                
+                expressions.forEach(expression => {
+                    const shape = blendShapeData.categories.find(cat => cat.categoryName === expression);
+                    if (shape) {
+                        const value = Math.round(shape.score * 100);
+                        const displayName = expression.replace(/([A-Z])/g, ' $1').trim()
+                            .replace(/\b\w/g, l => l.toUpperCase());
+                        
+                        groupHtml += `
+                            <div class="blend-shapes-item">
+                                <span class="blend-shapes-label">${displayName}</span>
+                                <span class="blend-shapes-value" style="width: calc(${value}% - 120px)">${(+shape.score).toFixed(4)}</span>
+                            </div>
+                        `;
+                        groupHasData = true;
+                        hasData = true;
+                    }
+                });
+                
+                groupHtml += `</div></div>`;
+                
+                if (groupHasData) {
+                    html += groupHtml;
+                }
+            });
+            
+            if (hasData) {
+                expressionDisplay.innerHTML = html;
+                console.log('Updated expression display with data');
+            } else {
+                console.log('No expression data found in blend shapes');
+                // Show all available blend shapes for debugging
+                let debugHtml = `<div class="expression-group">
+                    <h4 class="group-title">All Available Expressions (Debug)</h4>
+                    <div class="group-expressions">`;
+                
+                blendShapeData.categories.forEach(shape => {
+                    const value = Math.round(shape.score * 100);
+                    const displayName = shape.categoryName.replace(/([A-Z])/g, ' $1').trim()
+                        .replace(/\b\w/g, l => l.toUpperCase());
+                    
+                    debugHtml += `
+                        <div class="blend-shapes-item">
+                            <span class="blend-shapes-label">${displayName}</span>
+                            <span class="blend-shapes-value" style="width: calc(${value}% - 120px)">${(+shape.score).toFixed(4)}</span>
+                        </div>
+                    `;
+                });
+                
+                debugHtml += `</div></div>`;
+                expressionDisplay.innerHTML = debugHtml;
+            }
+        }
+
+        function startCamera() {
+            if (!faceLandmarker) {
+                updateStatus('AI model not loaded yet. Please wait.', 'error');
+                return;
+            }
+
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                updateStatus('Starting camera...', 'loading');
+                
+                navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    } 
+                })
+                    .then(stream => {
+                        webcamStream = stream;
+                        video.srcObject = stream;
+                        video.style.display = 'block';
+                        canvas.style.display = 'block';
+                        placeholder.style.display = 'none';
+                        expressionDisplay.style.display = 'grid';
+                        
+                        startButton.style.display = 'none';
+                        stopButton.style.display = 'flex';
+                        
+                        // Wait for video to be loaded and ready
+                        video.addEventListener('loadedmetadata', () => {
+                            updateStatus('Camera started! Making expressions will be detected.', 'success');
+                            
+                            // Make sure expression display is visible
+                            expressionDisplay.style.display = 'block';
+                            
+                            // Start detection only after video is ready
+                            isDetecting = true;
+                            detectExpressions();
+                        }, { once: true });
+                        
+                        // Fallback in case loadedmetadata doesn't fire
+                        setTimeout(() => {
+                            if (video.videoWidth > 0 && video.videoHeight > 0) {
+                                updateStatus('Camera started! Making expressions will be detected.', 'success');
+                                
+                                // Make sure expression display is visible
+                                expressionDisplay.style.display = 'block';
+                                
+                                isDetecting = true;
+                                detectExpressions();
+                            }
+                        }, 1000);
+                    })
+                    .catch(error => {
+                        console.error('Error accessing camera:', error);
+                        updateStatus('Error accessing camera. Please check permissions.', 'error');
+                    });
+            } else {
+                updateStatus('Camera not supported on this device.', 'error');
+            }
+        }
+
+        function stopCamera() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+            }
+            
+            video.style.display = 'none';
+            canvas.style.display = 'none';
+            placeholder.style.display = 'flex';
+            expressionDisplay.style.display = 'none';
+            
+            startButton.style.display = 'flex';
+            stopButton.style.display = 'none';
+            
+            isDetecting = false;
+            updateStatus('Camera stopped. Click "Start Camera" to begin again.');
+        }
+
+        async function detectExpressions() {
+            if (!isDetecting) return;
+
+            // Check if video has valid dimensions
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                if (isDetecting) {
+                    requestAnimationFrame(detectExpressions);
+                }
+                return;
+            }
+
+            const radio = video.videoHeight / video.videoWidth;
+            const videoWidth = 640;
+            video.style.width = videoWidth + "px";
+            video.style.height = videoWidth * radio + "px";
+            canvas.style.width = videoWidth + "px";
+            canvas.style.height = videoWidth * radio + "px";
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            let startTimeMs = performance.now();
+            if (lastVideoTime !== video.currentTime) {
+                lastVideoTime = video.currentTime;
+                try {
+                    results = faceLandmarker.detectForVideo(video, startTimeMs);
+                } catch (error) {
+                    console.error("Detection error:", error);
+                    if (isDetecting) {
+                        requestAnimationFrame(detectExpressions);
+                    }
+                    return;
+                }
+            }
+
+            // Clear canvas
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (results && results.faceLandmarks && results.faceLandmarks.length > 0) {
+                const drawingUtils = new DrawingUtils(ctx);
+                
+                for (const landmarks of results.faceLandmarks) {
+                    // Draw face mesh (tesselation)
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_TESSELATION,
+                        { color: "#C0C0C070", lineWidth: 1 }
+                    );
+                    
+                    // Draw eyes
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE,
+                        { color: "#FF3030", lineWidth: 2 }
+                    );
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_LEFT_EYE,
+                        { color: "#30FF30", lineWidth: 2 }
+                    );
+                    
+                    // Draw eyebrows
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW,
+                        { color: "#FF3030", lineWidth: 2 }
+                    );
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW,
+                        { color: "#30FF30", lineWidth: 2 }
+                    );
+                    
+                    // Draw face oval
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_FACE_OVAL,
+                        { color: "#E0E0E0", lineWidth: 2 }
+                    );
+                    
+                    // Draw lips
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_LIPS,
+                        { color: "#E0E0E0", lineWidth: 2 }
+                    );
+                    
+                    // Draw irises
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS,
+                        { color: "#FF3030", lineWidth: 2 }
+                    );
+                    drawingUtils.drawConnectors(
+                        landmarks,
+                        FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS,
+                        { color: "#30FF30", lineWidth: 2 }
+                    );
+                }
+                
+                // Update expression data
+                if (results.faceBlendshapes && results.faceBlendshapes.length > 0) {
+                    console.log('Face blendshapes found:', results.faceBlendshapes[0]);
+                    updateExpressions(results.faceBlendshapes[0]);
+                } else {
+                    console.log('No face blendshapes in results:', results);
+                }
+            }
+
+            ctx.restore();
+
+            if (isDetecting) {
+                requestAnimationFrame(detectExpressions);
+            }
+        }
+
+        // Event listeners
+        startButton.addEventListener('click', startCamera);
+        stopButton.addEventListener('click', stopCamera);
+
+        // Initialize
+        createFaceLandmarker();
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-badge">
+                    <div class="dot"></div>
+                    <span class="text">Follow Me</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
