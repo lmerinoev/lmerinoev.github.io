@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What to Replicate — Alexandr Wang</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e5e5e5;
+            padding: 2.5rem 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 1.75rem 1.75rem;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 1.25rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: #86868b;
+            margin-top: 0.2rem;
+            font-weight: 400;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 0.5rem 1.75rem;
+            color: #86868b;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            transition: color 0.2s ease;
+            letter-spacing: -0.005em;
+        }
+
+        .sidebar nav a:hover {
+            color: #1d1d1f;
+        }
+
+        .sidebar nav a.active {
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .sidebar nav a.back-link {
+            font-size: 0.8rem;
+            color: #aeaeb2;
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar nav a.back-link:hover {
+            color: #1d1d1f;
+        }
+
+        /* Mobile nav toggle */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 200;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #1d1d1f;
+        }
+
+        /* Main content */
+        .main {
+            margin-left: 240px;
+            padding: 5rem 4rem 8rem;
+            max-width: 920px;
+        }
+
+        .page-title {
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: #1d1d1f;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.6rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.05rem;
+            color: #86868b;
+            margin-bottom: 5rem;
+            max-width: 560px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 70px;
+        }
+
+        .section-numeral {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: #aeaeb2;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+
+        .section h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .section .explanation {
+            font-size: 0.95rem;
+            color: #1d1d1f;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+        }
+
+        .section blockquote {
+            border-left: 2px solid #d2d2d7;
+            padding: 0.75rem 0 0.75rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #86868b;
+            font-style: italic;
+            line-height: 1.7;
+            max-width: 560px;
+        }
+
+        .section .apply {
+            font-size: 0.88rem;
+            color: #86868b;
+            line-height: 1.75;
+            max-width: 560px;
+        }
+
+        .section .apply-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #aeaeb2;
+            margin-bottom: 0.4rem;
+        }
+
+        .section-divider {
+            width: 40px;
+            height: 1px;
+            background: #e5e5e5;
+            margin-top: 70px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                left: -260px;
+                width: 260px;
+                transition: left 0.25s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+                box-shadow: 4px 0 24px rgba(0,0,0,0.08);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 4.5rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .section-numeral {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                margin-bottom: 50px;
+            }
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 90;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<button class="mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">&#9776;</button>
+
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>Alexandr Wang</h2>
+        <p>CEO, Scale AI</p>
+    </div>
+    <nav>
+        <a href="../index.html" class="back-link">&larr; All Profiles</a>
+        <a href="index.html">Overview</a>
+        <a href="vision.html">AI Vision</a>
+        <a href="strategy.html">Strategic Frameworks</a>
+        <a href="strengths.html">Strengths &amp; Weaknesses</a>
+        <a href="personality.html">Personality Profile</a>
+        <a href="leadership.html">Leadership Style</a>
+        <a href="replicate.html" class="active">What to Replicate</a>
+        <a href="improve.html">What to Improve</a>
+        <a href="quotes.html">Key Quotes</a>
+        <a href="playbook.html">Action Playbook</a>
+    </nav>
+</aside>
+
+<main class="main">
+    <h1 class="page-title">What to Replicate</h1>
+    <p class="page-subtitle">Patterns from Wang's approach worth adopting</p>
+
+    <div class="section">
+        <div class="section-numeral">01</div>
+        <h3>The Research-Product Flywheel</h3>
+        <p class="explanation">Build a virtuous cycle where R&amp;D improvements directly improve your product, which grows users, which generates data and revenue, which funds more R&amp;D. The critical insight is to never separate research from product. When your best researchers work on abstract problems disconnected from what customers touch, you lose the compounding effect. The flywheel only spins when every node feeds the next.</p>
+        <blockquote>&ldquo;By building frontier models&hellip; that enables us to build incredible products.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">Put your strongest technical people on product-facing problems. Measure research output by product impact, not paper count. Give product managers regular exposure to research so they can identify what is becoming possible.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">02</div>
+        <h3>Top-Down Mandate + Bottom-Up Proof</h3>
+        <p class="explanation">AI adoption requires both a clear mandate from leadership and visible proof from the ground. Leadership declares AI adoption mandatory &mdash; not optional, not exploratory. Simultaneously, cultivate visible 10&ndash;100x productivity wins from early adopters. Neither prong works alone: top-down without proof creates cynicism, bottom-up without mandate stays marginal.</p>
+        <blockquote>&ldquo;The success or failure of the organization actually entirely rests on its ability to properly embrace AI.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">The CEO explicitly states that AI-first is mandatory. Find the early adopters already using AI effectively and make their stories visible org-wide. Document their wins quantitatively, then use those proof points to convert the skeptics.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">03</div>
+        <h3>Quality is Fractal</h3>
+        <p class="explanation">Quality standards in an organization are strictly top-down &mdash; they flow downward from leadership but never upward from the ranks. Each layer of the organization reproduces the quality orientation of the layer above it, for better or worse. Mediocrity at the top creates mediocrity everywhere. The bar must be set and held at the very top.</p>
+        <blockquote>&ldquo;It&rsquo;s very rare that you see an organization where standards increase as you get lower and lower down.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">Leadership must visibly demonstrate quality obsession in everything they touch. Review work product at every level, not just the final output. Make quality a first-class hiring criterion &mdash; ask candidates to show their best work and probe whether they notice the details that separate good from great.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">04</div>
+        <h3>Data as Strategic Moat</h3>
+        <p class="explanation">Your most defensible competitive advantage is not your model architecture or your engineering team &mdash; it is your data. The future of differentiated IP will be your fine-tuned model, and that model is only as unique as the data it was trained on. Companies that treat data as a byproduct rather than a strategic asset are building on sand.</p>
+        <blockquote>&ldquo;Alpha in the modern world will be determined by to what degree you&rsquo;re able to encapsulate your business problems into data sets.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">Audit your proprietary data assets with the same rigor you audit your financials. Build pipelines to systematically capture domain-specific data that competitors cannot access. Create unique benchmarks and evaluation sets for your vertical.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">05</div>
+        <h3>Foundation-Before-Speed</h3>
+        <p class="explanation">Wang deliberately spent 7 months building foundations before shipping any product. This is counterintuitive in a world that worships speed, but the pattern holds: the companies with true staying power invested early in foundations so difficult to replicate that they compound in value over decades. The discipline is resisting the pressure to ship prematurely.</p>
+        <blockquote>&ldquo;The ones with true staying power have built some sort of foundation that is actually very difficult to replicate.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">Invest meaningful time in organizational structure, talent acquisition, and technical foundations first. Define what &ldquo;foundation&rdquo; means for your context and defend the timeline against pressure to ship. The compound returns will justify the upfront investment.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">06</div>
+        <h3>Trust-First Product Design</h3>
+        <p class="explanation">Trust is a bigger bottleneck than technology for AI adoption. The technology can be 10x better, but if users do not trust it, diffusion stalls. Wang studies platforms like WhatsApp that explicitly optimized for trust and privacy over short-term business metrics. Sometimes the right strategic move is to sacrifice near-term growth to build the trust infrastructure that enables long-term dominance.</p>
+        <blockquote>&ldquo;This is one of the most important questions and perhaps even more so than the technology.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">Make privacy and transparency first-class features, not afterthoughts. Build trust before optimizing for engagement. For every product decision, ask: does this increase or decrease trust? When trust and growth metrics conflict, trust wins.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">07</div>
+        <h3>Hire for Soul Investment</h3>
+        <p class="explanation">Hire people whose identity is tied to the quality of their work. Not people with the best resumes or the most prestigious credentials &mdash; people who lose sleep over a bug, who rewrite a paragraph four times, who cannot ship something they are not proud of. They are intrinsically motivated, and intrinsic motivation is the only kind that scales.</p>
+        <blockquote>&ldquo;Hire people who give a damn.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">In interviews, look beyond credentials and algorithmic assessments. Ask candidates about the work they are proudest of and why. Probe for genuine passion versus performative answers &mdash; the difference is unmistakable when you are looking for it.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">08</div>
+        <h3>Walk the Complexity Curve</h3>
+        <p class="explanation">Every AI company needs a deliberate strategy for how its product improves as underlying models improve. Prompting gets you to a certain level, reinforcement learning pushes you beyond that, and each successive technique requires different infrastructure, data, and expertise. Companies that rely solely on prompting will be commoditized as models improve and everyone can prompt equally well.</p>
+        <blockquote>&ldquo;Prompting gets you to a certain level and then reinforcement learning gets you beyond that level.&rdquo;</blockquote>
+        <div class="apply-label">How to apply</div>
+        <p class="apply">Map your AI complexity roadmap explicitly. What does your product look like with 2x better models? With 10x better models? Build your architecture to benefit from model improvements rather than being made redundant by them.</p>
+    </div>
+
+</main>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            document.querySelector('.sidebar').classList.remove('open');
+            document.querySelector('.sidebar-overlay').classList.remove('active');
+        }
+    });
+</script>
+
+</body>
+</html>

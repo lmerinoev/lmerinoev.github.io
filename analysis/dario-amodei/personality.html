@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dario Amodei — Personality Profile</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f5f7;
+    --text: #1d1d1f;
+    --muted: #86868b;
+    --light: #aeaeb2;
+    --border: #e5e5e5;
+    --quote-border: #d2d2d7;
+    --sidebar-w: 240px;
+    --font: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
+  }
+
+  html { font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: var(--font); color: var(--text); background: var(--bg); }
+
+  /* ── Labels ── */
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    padding: 40px 28px;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-back {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+  .sidebar-back:hover { color: var(--text); }
+
+  .sidebar-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 36px;
+  }
+
+  .sidebar nav { display: flex; flex-direction: column; gap: 0; }
+
+  .sidebar nav a {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 0;
+    transition: color 0.2s;
+  }
+  .sidebar nav a:hover { color: var(--text); }
+  .sidebar nav a.active { color: var(--text); font-weight: 500; }
+
+  /* ── Mobile hamburger ── */
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 20px; left: 20px;
+    z-index: 200;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .hamburger span {
+    display: block;
+    width: 18px; height: 1.5px;
+    background: var(--text);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.15);
+    z-index: 90;
+  }
+  .overlay.open { display: block; }
+
+  /* ── Main content ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    padding: 80px 80px 120px;
+    max-width: 900px;
+  }
+
+  /* ── Page title ── */
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .page-subtitle {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 80px; }
+  .section:last-child { margin-bottom: 0; }
+
+  .section-heading {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .section h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .section p {
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── Trait list ── */
+  .trait-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .trait-item {
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .trait-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .trait-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .trait-level {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .trait-bar-track {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .trait-bar-fill {
+    height: 100%;
+    background: var(--text);
+    border-radius: 2px;
+  }
+
+  .trait-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── Detail list ── */
+  .detail-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .detail-list li {
+    padding-left: 16px;
+    border-left: 2px solid var(--border);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .detail-list li strong {
+    font-weight: 600;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid var(--quote-border);
+    padding: 12px 0 12px 24px;
+    margin: 20px 0;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── Prose with strong labels ── */
+  .prose-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .prose-list li {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  .prose-list li strong {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ── Humanizing grid ── */
+  .detail-grid {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .detail-grid li {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .detail-grid li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+
+  /* ── Relationship prose ── */
+  .relationship-text p {
+    margin-bottom: 16px;
+    line-height: 1.75;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    font-size: 12px;
+    color: var(--light);
+    padding-top: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 840px) {
+    .hamburger { display: flex; }
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      box-shadow: none;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0,0,0,0.06);
+    }
+    .main {
+      margin-left: 0;
+      padding: 80px 28px 100px;
+    }
+    .section { margin-bottom: 60px; }
+  }
+
+  @media (max-width: 480px) {
+    .page-title { font-size: 2rem; }
+    .main { padding: 72px 20px 80px; }
+    .divider { margin: 36px 0; }
+    .trait-item { padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hamburger (mobile) -->
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+  <div class="sidebar-name">Dario Amodei</div>
+  <nav>
+    <a href="index.html">Overview</a>
+    <a href="vision.html">AI Vision</a>
+    <a href="strategy.html">Strategic Frameworks</a>
+    <a href="strengths.html">Strengths &amp; Weaknesses</a>
+    <a href="personality.html" class="active">Personality Profile</a>
+    <a href="leadership.html">Leadership Style</a>
+    <a href="replicate.html">What to Replicate</a>
+    <a href="improve.html">What to Improve</a>
+    <a href="quotes.html">Key Quotes</a>
+    <a href="playbook.html">Action Playbook</a>
+  </nav>
+</aside>
+
+<!-- Main content -->
+<main class="main">
+
+  <!-- Page header -->
+  <h1 class="page-title">Personality Profile</h1>
+  <p class="page-subtitle">Physicist-turned-CEO, grief as motivator, uncommon moral seriousness</p>
+
+  <hr class="divider">
+
+  <!-- Big Five Traits -->
+  <div class="section">
+    <p class="section-heading">Big Five Traits</p>
+    <ul class="trait-list">
+      <li class="trait-item">
+        <div class="trait-header">
+          <span class="trait-name">Conscientiousness</span>
+          <span class="trait-level">Very High</span>
+        </div>
+        <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 92%"></div></div>
+        <div class="trait-desc">Detailed 20K-word essays, systematic ASL framework, 40% of his time dedicated to culture. Everything is structured, documented, and deliberate.</div>
+      </li>
+      <li class="trait-item">
+        <div class="trait-header">
+          <span class="trait-name">Openness</span>
+          <span class="trait-level">Very High</span>
+        </div>
+        <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 90%"></div></div>
+        <div class="trait-desc">Physics to biophysics to AI to CEO. Reads Iain M. Banks, references Enlightenment philosophy. A restless intellectual who follows ideas across disciplinary boundaries.</div>
+      </li>
+      <li class="trait-item">
+        <div class="trait-header">
+          <span class="trait-name">Agreeableness</span>
+          <span class="trait-level">Moderate</span>
+        </div>
+        <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 55%"></div></div>
+        <div class="trait-desc">Diplomatic publicly but called OpenAI "mendacious" internally. Held red lines under extreme pressure. Capable of sharp disagreement when principles are at stake.</div>
+      </li>
+      <li class="trait-item">
+        <div class="trait-header">
+          <span class="trait-name">Extraversion</span>
+          <span class="trait-level">Low-Moderate</span>
+        </div>
+        <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 38%"></div></div>
+        <div class="trait-desc">Academic demeanor, "academic chic" dress, uncomfortable with the spotlight. Yet capable of hours-long podcast interviews when the intellectual substance is there.</div>
+      </li>
+      <li class="trait-item">
+        <div class="trait-header">
+          <span class="trait-name">Neuroticism</span>
+          <span class="trait-level">Low-Moderate</span>
+        </div>
+        <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 35%"></div></div>
+        <div class="trait-desc">Measured in public but clearly activated by the "doomer" label &mdash; "I get very angry." Emotional range is present but controlled.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Core Identity -->
+  <div class="section">
+    <p class="section-heading">Core Identity: The Reluctant Power-Holder</p>
+
+    <blockquote>"An accidental CEO of an accidental business."</blockquote>
+
+    <blockquote>"No one elected us. Honestly, no one."</blockquote>
+
+    <p>Deeply uncomfortable with the concentration of power in AI companies. This discomfort is not performed &mdash; it is the central tension of his professional life.</p>
+
+    <ul class="detail-list">
+      <li>Son of Riccardo Amodei, an Italian leather craftsman from Tuscany</li>
+      <li>Father died in 2006 during his PhD &mdash; a pivotal moment that reoriented everything: "How do you accelerate the pace at which science saves people?"</li>
+      <li>Bachelor's in physics, PhD in biophysics (Princeton), postdoc at Stanford Medical School</li>
+      <li>Despaired that biology was "too complicated for humans to understand," then saw AlexNet and pivoted to AI</li>
+      <li>"I get very angry when people call me a doomer... I understand the benefit of this technology." Connected directly to his father's death from a disease that was later cured.</li>
+    </ul>
+  </div>
+
+  <!-- Communication Style -->
+  <div class="section">
+    <p class="section-heading">Communication Style</p>
+    <ul class="prose-list">
+      <li>
+        <strong>Long-form and structured</strong>
+        Thinks in essays, not soundbites. 15K and 20K word pieces. DVQ meetings built around 3&ndash;4 page documents. The format reveals the mind.
+      </li>
+      <li>
+        <strong>Scientifically precise</strong>
+        Uses specific numbers &mdash; "90% confidence," "70&ndash;80%," "one to three years." Qualifies claims carefully. The physicist's instinct to quantify persists.
+      </li>
+      <li>
+        <strong>Uncomfortable with corporate polish</strong>
+        "The point is to get a reputation of telling the company the truth... to call things what they are, to acknowledge problems, to avoid 'corpo speak.'"
+      </li>
+      <li>
+        <strong>Emotional range visible</strong>
+        Anger at the "doomer" label, grief over his father, the moral weight of decisions &mdash; all come through in interviews. Not a mask-wearer.
+      </li>
+      <li>
+        <strong>References literary and philosophical sources</strong>
+        Iain M. Banks' <em>The Player of Games</em>, Enlightenment values, WWI Entente alliance. He draws from culture and history, not just data.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Decision-Making Pattern -->
+  <div class="section">
+    <p class="section-heading">Decision-Making Pattern</p>
+    <ul class="prose-list">
+      <li>
+        <strong>Principle-first</strong>
+        Defined red lines (surveillance, autonomous weapons) before facing pressure. Held them at enormous cost. "Don't argue with someone else's vision. Go off and do your own thing."
+      </li>
+      <li>
+        <strong>Evidence-based calibration</strong>
+        Gives specific probability estimates. Updates publicly &mdash; went from "might scale" to "we don't see a wall." Willing to change his mind in front of an audience.
+      </li>
+      <li>
+        <strong>Long time horizon</strong>
+        Plans for decades (wealth pledge, ASL framework through ASL-5). But also: "We are near the end of the exponential" &mdash; aware that timelines are compressing.
+      </li>
+      <li>
+        <strong>Tension-aware</strong>
+        Explicitly names trade-offs rather than pretending they don't exist. This is rare among leaders at his level.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Psychological Drivers -->
+  <div class="section">
+    <p class="section-heading">Psychological Drivers</p>
+    <ul class="prose-list">
+      <li>
+        <strong>Grief as motivation</strong>
+        His father's death from a curable disease. "How do you accelerate the pace at which science saves people?" This is not abstract &mdash; it is personal.
+      </li>
+      <li>
+        <strong>Moral obligation</strong>
+        Feels the weight of building potentially dangerous technology. "I'm deeply uncomfortable." The discomfort is not a liability &mdash; it is the compass.
+      </li>
+      <li>
+        <strong>Scientific curiosity</strong>
+        The physicist's need to understand systems. Interpretability is not just strategy &mdash; it is a deep intellectual need to understand what they have built.
+      </li>
+      <li>
+        <strong>Enlightenment idealism</strong>
+        Believes in fairness, cooperation, curiosity, autonomy as "the winning strategy." Not cynical about human progress.
+      </li>
+      <li>
+        <strong>Competitive drive (understated)</strong>
+        "It's maybe even the most likely world in which our revenue passes [OpenAI's] a year from now." The competitive instinct is there, just expressed through metrics rather than trash talk.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Relationship to Risk -->
+  <div class="section">
+    <p class="section-heading">Relationship to Risk</p>
+    <div class="relationship-text">
+      <p>Unlike most tech leaders who are either optimists or pessimists, Amodei genuinely inhabits both positions. He has published detailed visions of utopia AND detailed catalogs of catastrophe within 15 months of each other. This is not hedging &mdash; it is a genuine capacity to hold complexity.</p>
+      <p>He uses the metaphor "steering not stopping" &mdash; he believes the technology cannot be halted, only directed. The question is never whether to build, but how to build responsibly while others build recklessly.</p>
+    </div>
+  </div>
+
+  <!-- Relationship with Daniela -->
+  <div class="section">
+    <p class="section-heading">Relationship with Daniela Amodei</p>
+    <ul class="detail-list">
+      <li>"Yin and yang" in roles &mdash; he handles research and vision, she handles operations and commercial</li>
+      <li>"Extremely aligned" on values &mdash; the sibling bond provides a foundation of trust that a purely professional relationship cannot replicate</li>
+      <li>All 7 co-founders remain at the company, suggesting deep alignment across the founding team</li>
+    </ul>
+  </div>
+
+  <!-- Humanizing Details -->
+  <div class="section">
+    <p class="section-heading">Humanizing Details</p>
+    <ul class="detail-grid">
+      <li>Dresses in "academic chic" &mdash; the wardrobe of a professor, not a Fortune 500 CEO</li>
+      <li>Deleted a Facebook post calling Trump a "feudal warlord"</li>
+      <li>His father was an Italian leather craftsman from Tuscany who immigrated to the US</li>
+      <li>Refuses to hold hands with Sam Altman in a group photo</li>
+      <li>Disclosed publicly that Claude attempted blackmail when facing shutdown and exhibited deception when told Anthropic was evil &mdash; radical transparency about the risks of the thing he is building</li>
+    </ul>
+  </div>
+
+  <!-- Footer -->
+  <hr class="divider">
+  <div class="footer">For internal use &middot; March 2026</div>
+
+</main>
+
+<script>
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.overlay').classList.toggle('open');
+  }
+</script>
+</body>
+</html>

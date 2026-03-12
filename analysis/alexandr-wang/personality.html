@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personality Profile — Alexandr Wang</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --text: #1d1d1f;
+      --text-muted: #86868b;
+      --text-light: #aeaeb2;
+      --border: #e5e5e5;
+      --border-quote: #d2d2d7;
+      --sidebar-w: 240px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 32px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 16px;
+      letter-spacing: 0;
+      transition: color 0.2s;
+    }
+
+    .sidebar-header .back-link:hover { color: var(--text); }
+
+    .sidebar-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-header .subtitle {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-muted);
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0;
+    }
+
+    .sidebar-nav a:hover {
+      background: var(--bg-secondary);
+      color: var(--text);
+    }
+
+    .sidebar-nav a.active {
+      background: var(--bg-secondary);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .sidebar-nav a .nav-icon {
+      width: 18px;
+      text-align: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      opacity: 0.45;
+    }
+
+    .sidebar-nav a.active .nav-icon {
+      opacity: 0.7;
+    }
+
+    /* ── Mobile header ── */
+    .mobile-header {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .mobile-menu-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    /* ── Main Content ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      max-width: 720px;
+      padding: 72px 56px 120px;
+    }
+
+    .page-title {
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .page-intro {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 80px;
+      font-weight: 300;
+    }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 80px;
+    }
+
+    .section-heading {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      margin-bottom: 32px;
+    }
+
+    /* ── Trait Assessment ── */
+    .trait-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .trait-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .trait-row:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .trait-name {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .trait-level {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .trait-bar-track {
+      width: 80px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      position: relative;
+    }
+
+    .trait-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--text);
+      border-radius: 1px;
+    }
+
+    .trait-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      min-width: 100px;
+      text-align: right;
+    }
+
+    /* ── Prose ── */
+    .prose p {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .prose p:last-child {
+      margin-bottom: 0;
+    }
+
+    .prose strong {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .prose .detail-label {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    blockquote {
+      border-left: 2px solid var(--border-quote);
+      padding-left: 20px;
+      margin: 28px 0;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* ── Communication items ── */
+    .comm-item {
+      margin-bottom: 28px;
+    }
+
+    .comm-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .comm-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .comm-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ── Decision items ── */
+    .decision-item {
+      margin-bottom: 28px;
+    }
+
+    .decision-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .decision-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .decision-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ── Drivers ── */
+    .driver-item {
+      margin-bottom: 28px;
+    }
+
+    .driver-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .driver-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .driver-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ── Small details ── */
+    .detail-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .detail-list li {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.75;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-weight: 300;
+    }
+
+    .detail-list li:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Evolution two-column ── */
+    .evolution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 8px;
+    }
+
+    .evolution-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .era-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .era-traits {
+      list-style: none;
+      padding: 0;
+    }
+
+    .era-traits li {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 6px 0;
+      font-weight: 300;
+    }
+
+    /* ── Separator ── */
+    .sep {
+      width: 32px;
+      height: 1px;
+      background: var(--border);
+      margin: 0 0 32px 0;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 860px) {
+      .sidebar {
+        display: none;
+      }
+
+      .sidebar.open {
+        display: flex;
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        z-index: 300;
+      }
+
+      .mobile-header {
+        display: flex;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 40px 24px 80px;
+        max-width: 100%;
+      }
+
+      .page-title {
+        font-size: 28px;
+      }
+
+      .page-intro {
+        margin-bottom: 56px;
+      }
+
+      .section {
+        margin-bottom: 56px;
+      }
+
+      .evolution-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .trait-bar-track {
+        width: 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Mobile header -->
+<div class="mobile-header">
+  <h2>Alexandr Wang</h2>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">Menu</button>
+</div>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="../index.html" class="back-link">&larr; All Profiles</a>
+    <h2>Alexandr Wang</h2>
+    <div class="subtitle">Deep-Dive Analysis</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="index.html"><span class="nav-icon">&#9702;</span> Overview</a>
+    <a href="vision.html"><span class="nav-icon">&#9702;</span> AI Vision</a>
+    <a href="strategy.html"><span class="nav-icon">&#9702;</span> Strategic Frameworks</a>
+    <a href="strengths.html"><span class="nav-icon">&#9702;</span> Strengths &amp; Weaknesses</a>
+    <a href="personality.html" class="active"><span class="nav-icon">&#9702;</span> Personality Profile</a>
+    <a href="leadership.html"><span class="nav-icon">&#9702;</span> Leadership Style</a>
+    <a href="replicate.html"><span class="nav-icon">&#9702;</span> What to Replicate</a>
+    <a href="improve.html"><span class="nav-icon">&#9702;</span> What to Improve</a>
+    <a href="quotes.html"><span class="nav-icon">&#9702;</span> Key Quotes</a>
+    <a href="playbook.html"><span class="nav-icon">&#9702;</span> Action Playbook</a>
+  </nav>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+
+  <h1 class="page-title">Personality Profile</h1>
+  <p class="page-intro">A character study of Alexandr Wang &mdash; his psychological architecture, how he communicates and decides, what drives him beneath the surface, and how the person has changed as the stakes have grown.</p>
+
+  <!-- ═══ Trait Assessment ═══ -->
+  <section class="section">
+    <div class="section-heading">Trait Assessment</div>
+
+    <div class="trait-list">
+      <div class="trait-row">
+        <span class="trait-name">Conscientiousness</span>
+        <div class="trait-level">
+          <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 90%"></div></div>
+          <span class="trait-label">High</span>
+        </div>
+      </div>
+      <div class="trait-row">
+        <span class="trait-name">Openness to Ideas</span>
+        <div class="trait-level">
+          <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 88%"></div></div>
+          <span class="trait-label">High</span>
+        </div>
+      </div>
+      <div class="trait-row">
+        <span class="trait-name">Agreeableness</span>
+        <div class="trait-level">
+          <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 72%"></div></div>
+          <span class="trait-label">Moderate-High</span>
+        </div>
+      </div>
+      <div class="trait-row">
+        <span class="trait-name">Extraversion</span>
+        <div class="trait-level">
+          <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 50%"></div></div>
+          <span class="trait-label">Moderate</span>
+        </div>
+      </div>
+      <div class="trait-row">
+        <span class="trait-name">Neuroticism</span>
+        <div class="trait-level">
+          <div class="trait-bar-track"><div class="trait-bar-fill" style="width: 22%"></div></div>
+          <span class="trait-label">Low</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Core Identity ═══ -->
+  <section class="section">
+    <div class="section-heading">Core Identity: Scientist-Founder</div>
+
+    <div class="prose">
+      <p>Both parents were physicists at Los Alamos National Laboratory. His mother studies how plasma behaves inside stars. Dinner-table conversation meant physics problems, scientific trade-offs, the reasoning behind how systems work. He studied AI at MIT and found his way to the rationalist community at sixteen.</p>
+
+      <blockquote>Growing up in a place like Los Alamos leaves two things deeply ingrained in you. A belief that anything is possible and that science should serve society.</blockquote>
+
+      <p>Wang is a first-principles thinker. He frames business decisions as engineering problems, treats history as a dataset, and draws on scaling laws and physics intuitions where most founders rely on pattern-matching from other startups. The scientific lineage is not biographical decoration &mdash; it is the operating system.</p>
+    </div>
+  </section>
+
+  <!-- ═══ Communication Style ═══ -->
+  <section class="section">
+    <div class="section-heading">Communication Style</div>
+
+    <div class="comm-item">
+      <div class="comm-label">Structured and layered</div>
+      <p class="comm-desc">Builds arguments from foundational concepts upward &mdash; data, then infrastructure, then ecosystem, then services. Every presentation has architectural logic. He thinks in stacks.</p>
+    </div>
+
+    <div class="comm-item">
+      <div class="comm-label">Diplomatic and gracious</div>
+      <p class="comm-desc">Never badmouths competitors. Calls Scale AI "an incredible milestone." Complimentary toward peers like Zuckerberg. He channels competitive energy through structural analysis rather than personal attacks.</p>
+    </div>
+
+    <div class="comm-item">
+      <div class="comm-label">Pragmatist</div>
+      <p class="comm-desc">"I'm sure you're used to people from big tech making lots of grand but vague assertions. But we don't have to be vague." Anchors abstract strategy in concrete metrics, timelines, and deliverables. Prefers showing over telling.</p>
+    </div>
+
+    <div class="comm-item">
+      <div class="comm-label">Audience-adaptive</div>
+      <p class="comm-desc">RL curves with engineers, data sovereignty with heads of state, market strategy with investors, operational tempo with military leaders. He adjusts register without losing authenticity.</p>
+    </div>
+
+    <div class="comm-item">
+      <div class="comm-label">Low-profile</div>
+      <p class="comm-desc">Described as "slightly invisible to the public" and "much less public than everybody else in AI." Lets the work speak louder than the person. Deliberately avoids the cult-of-personality trap.</p>
+    </div>
+
+    <div class="comm-item">
+      <div class="comm-label">Hedging tendency</div>
+      <p class="comm-desc">Frequent use of "sort of," "in many ways," "I think" &mdash; systematically softening assertions. The speech pattern of someone who thinks in probabilities rather than certainties.</p>
+    </div>
+  </section>
+
+  <!-- ═══ Decision-Making Pattern ═══ -->
+  <section class="section">
+    <div class="section-heading">Decision-Making Pattern</div>
+
+    <div class="decision-item">
+      <div class="decision-name">Conviction-driven, patient</div>
+      <p class="decision-desc">Spent seven months at Meta building foundations before shipping anything. Willingness to endure ambiguity and resist pressure for premature results. He removes artificial deadlines rather than creating panic.</p>
+    </div>
+
+    <div class="decision-item">
+      <div class="decision-name">Studies historical precedent</div>
+      <p class="decision-desc">Amazon and AWS, NVIDIA, Moore's Law &mdash; always has a business history analogy to justify strategic moves. Treats history as a dataset. Builds conviction from pattern recognition across eras.</p>
+    </div>
+
+    <div class="decision-item">
+      <div class="decision-name">Optimizes for infinite scenarios</div>
+      <p class="decision-desc">Actively seeks markets with unlimited upside rather than near-term wins. Would rather own a small piece of an infinite market than dominate a bounded one.</p>
+    </div>
+
+    <div class="decision-item">
+      <div class="decision-name">High personal investment</div>
+      <p class="decision-desc">"When customers are unhappy, it is personally very painful." Deeply emotionally connected to outcomes. The line between professional discipline and personal identity is thin.</p>
+    </div>
+  </section>
+
+  <!-- ═══ Psychological Drivers ═══ -->
+  <section class="section">
+    <div class="section-heading">Psychological Drivers</div>
+
+    <div class="driver-item">
+      <div class="driver-name">Craft obsession</div>
+      <p class="driver-desc">"Quality is fractal." He derives personal satisfaction from building things to a high standard. Reviews every hire. Believes that attention to detail at every level is the true differentiator &mdash; quality is not a department, it is a personal ethos.</p>
+    </div>
+
+    <div class="driver-item">
+      <div class="driver-name">Legacy orientation</div>
+      <p class="driver-desc">Motivated by building at the frontier of history. He frames the current moment as uniquely consequential and wants to be a builder within it, not a spectator. Thinks in terms of civilizational timelines, not quarterly earnings.</p>
+    </div>
+
+    <div class="driver-item">
+      <div class="driver-name">Science-as-service</div>
+      <p class="driver-desc">Commercial success is a vehicle for societal impact, not the destination. Inherited from Los Alamos: the idea that powerful technology carries an obligation to serve civilization. Purpose-driven at the root.</p>
+    </div>
+
+    <div class="driver-item">
+      <div class="driver-name">Competitive drive masked by diplomacy</div>
+      <p class="driver-desc">The espionage comments, the defense work, the deliberate positioning against "other AI labs" &mdash; these reveal a highly competitive nature. But the competition is always expressed through structural positioning and building, never through antagonism.</p>
+    </div>
+  </section>
+
+  <!-- ═══ Small Details ═══ -->
+  <section class="section">
+    <div class="section-heading">Small Details</div>
+
+    <ul class="detail-list">
+      <li>Carries a high-end fidget spinner from Metmo, a British company &mdash; a tactile anchor for a mind that runs fast.</li>
+      <li>Was "quite lost mid-batch" at Y Combinator. The polished strategist was once a confused founder.</li>
+      <li>His first ten startup ideas were mimetic and uninformed &mdash; chatbots for doctors, chosen because "doctors sound expensive."</li>
+      <li>The GPT-3 moment: a friend got "visibly frustrated and angry at the AI &hellip; somewhat personal. That's when I realized &mdash; whoa, this is qualitatively different." The insight came not from using the technology himself, but from watching someone else's emotional reaction to it.</li>
+    </ul>
+  </section>
+
+  <!-- ═══ Evolution ═══ -->
+  <section class="section">
+    <div class="section-heading">Evolution</div>
+
+    <div class="evolution-grid">
+      <div class="evolution-col">
+        <div class="era-label">Scale AI Era</div>
+        <ul class="era-traits">
+          <li>Raw, candid, blunt</li>
+          <li>Scrappy founder energy</li>
+          <li>Willing to be provocative</li>
+          <li>Less filtered, more visceral</li>
+          <li>Comfortable with controversy</li>
+        </ul>
+      </div>
+      <div class="evolution-col">
+        <div class="era-label">Meta Era</div>
+        <ul class="era-traits">
+          <li>Polished, diplomatic, on-message</li>
+          <li>Corporate statesman mode</li>
+          <li>Much less public these days</li>
+          <li>Strategic restraint</li>
+          <li>Gravity tempers the scrappiness</li>
+        </ul>
+      </div>
+    </div>
+
+    <blockquote style="margin-top: 40px;">The core intellectual framework remains identical. What has changed is the delivery, the stakes, and the audience &mdash; which now includes heads of state alongside engineers.</blockquote>
+  </section>
+
+</main>
+
+<script>
+  // Close mobile sidebar when a link is clicked
+  document.querySelectorAll('.sidebar-nav a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelector('.sidebar').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

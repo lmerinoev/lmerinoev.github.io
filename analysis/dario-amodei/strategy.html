@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dario Amodei — Strategic Frameworks</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f5f7;
+    --text: #1d1d1f;
+    --muted: #86868b;
+    --light: #aeaeb2;
+    --border: #e5e5e5;
+    --quote-border: #d2d2d7;
+    --sidebar-w: 240px;
+    --font: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
+  }
+
+  html { font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: var(--font); color: var(--text); background: var(--bg); }
+
+  /* ── Labels ── */
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    padding: 40px 28px;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-back {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+  .sidebar-back:hover { color: var(--text); }
+
+  .sidebar-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 36px;
+  }
+
+  .sidebar nav { display: flex; flex-direction: column; gap: 0; }
+
+  .sidebar nav a {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 0;
+    transition: color 0.2s;
+  }
+  .sidebar nav a:hover { color: var(--text); }
+  .sidebar nav a.active { color: var(--text); font-weight: 500; }
+
+  /* ── Mobile hamburger ── */
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 20px; left: 20px;
+    z-index: 200;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .hamburger span {
+    display: block;
+    width: 18px; height: 1.5px;
+    background: var(--text);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.15);
+    z-index: 90;
+  }
+  .overlay.open { display: block; }
+
+  /* ── Main content ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    padding: 80px 80px 120px;
+    max-width: 900px;
+  }
+
+  /* ── Hero ── */
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .page-subtitle {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── Section heading ── */
+  .section-heading {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  /* ── Intro ── */
+  .intro {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 0;
+  }
+
+  /* ── Framework sections ── */
+  .framework {
+    padding-top: 64px;
+  }
+
+  .framework-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .framework-number {
+    font-size: 3.5rem;
+    font-weight: 200;
+    line-height: 1;
+    color: var(--light);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+
+  .framework-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .framework-body {
+    padding-left: 0;
+  }
+
+  .framework-body p {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  .framework-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .framework-body blockquote {
+    border-left: 3px solid var(--quote-border);
+    padding: 12px 0 12px 20px;
+    margin: 20px 0;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  .framework-body blockquote p {
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+
+  .application {
+    margin-top: 20px;
+    padding: 20px 24px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+  }
+
+  .application-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .application p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  .framework-separator {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 64px 0 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    font-size: 12px;
+    color: var(--light);
+    padding-top: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 840px) {
+    .hamburger { display: flex; }
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      box-shadow: none;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0,0,0,0.06);
+    }
+    .main {
+      margin-left: 0;
+      padding: 80px 28px 100px;
+    }
+    .framework-number { font-size: 2.8rem; }
+  }
+
+  @media (max-width: 480px) {
+    .page-title { font-size: 2rem; }
+    .main { padding: 72px 20px 80px; }
+    .divider { margin: 36px 0; }
+    .framework { padding-top: 48px; }
+    .framework-separator { margin: 48px 0 0; }
+    .framework-header { gap: 14px; }
+    .framework-number { font-size: 2.2rem; }
+    .framework-title { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hamburger (mobile) -->
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+  <div class="sidebar-name">Dario Amodei</div>
+  <nav>
+    <a href="index.html">Overview</a>
+    <a href="vision.html">AI Vision</a>
+    <a href="strategy.html" class="active">Strategic Frameworks</a>
+    <a href="strengths.html">Strengths &amp; Weaknesses</a>
+    <a href="personality.html">Personality Profile</a>
+    <a href="leadership.html">Leadership Style</a>
+    <a href="replicate.html">What to Replicate</a>
+    <a href="improve.html">What to Improve</a>
+    <a href="quotes.html">Key Quotes</a>
+    <a href="playbook.html">Action Playbook</a>
+  </nav>
+</aside>
+
+<!-- Main content -->
+<main class="main">
+
+  <!-- Hero -->
+  <h1 class="page-title">Strategic Frameworks</h1>
+  <p class="page-subtitle">12 mental models that shape how Dario Amodei thinks about AI, competition, and risk</p>
+
+  <hr class="divider">
+
+  <!-- Intro -->
+  <p class="section-heading">Overview</p>
+  <p class="intro">Amodei's strategic thinking is distinctive because it draws from physics, game theory, geopolitics, and moral philosophy simultaneously. These twelve frameworks aren't abstract theory -- they are the operating system behind every major decision at Anthropic, from how to price Claude to whether to accept Pentagon contracts. Each framework includes a direct application for leaders navigating high-stakes, dual-mandate environments.</p>
+
+  <!-- ── 01 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">01</span>
+      <h2 class="framework-title">The Safety-Capability Paradox</h2>
+    </div>
+    <div class="framework-body">
+      <p>Anthropic exists inside a paradox: to do meaningful safety research on frontier AI, you must first build frontier AI. But building frontier AI is itself the source of risk. This is not an accident or a contradiction to be resolved -- it is the foundational design principle of the company.</p>
+
+      <blockquote>
+        <p>There are days when the commercial demands and the safety mandate pull in opposite directions.</p>
+      </blockquote>
+
+      <p>Amodei doesn't try to eliminate this tension. He structures around it. The commercial side funds the safety research. The safety research creates differentiation that attracts enterprise customers. The two mandates are locked in a productive feedback loop -- but only if neither side dominates the other.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>If you're in a dual-mandate business, the tension is the feature, not a bug. Don't resolve the paradox -- structure it so both sides reinforce each other.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 02 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">02</span>
+      <h2 class="framework-title">Exponential Blindness</h2>
+    </div>
+    <div class="framework-body">
+      <p>Humans are wired for linear extrapolation. When something doubles repeatedly, we consistently underestimate where it's headed. Amodei uses the classic chessboard analogy: by the 40th square of a 64-square board, the numbers are already astronomical -- but at the midpoint, it only looked like modest progress.</p>
+
+      <blockquote>
+        <p>Two years before it happens, it looks like it's only one-sixteenth of the way there.</p>
+      </blockquote>
+
+      <p>This framework explains why nearly every AI prediction from 2020 has already been surpassed. The capability curve doesn't announce itself. It compounds quietly, then overwhelms. Amodei applies this not just to model performance but to revenue growth, compute scaling, and geopolitical impact.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Plan for exponential curves, not linear projections. If your planning assumptions are linear, you will be surprised -- and surprise in high-stakes environments is expensive.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 03 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">03</span>
+      <h2 class="framework-title">The ASL Framework</h2>
+    </div>
+    <div class="framework-body">
+      <p>Anthropic's AI Safety Levels (ASL-1 through ASL-5) are a graduated risk governance system, modeled loosely on biosafety levels. Rather than making a binary safe/unsafe judgment, each level defines a threshold of capability and a corresponding set of safeguards that must be in place before proceeding.</p>
+
+      <p><strong>ASL-1:</strong> No meaningful risk. Current chatbots.<br>
+      <strong>ASL-2:</strong> Moderate risk. Current frontier models.<br>
+      <strong>ASL-3:</strong> Non-state actors meaningfully enhanced. Requires robust containment and monitoring.<br>
+      <strong>ASL-4:</strong> State-level actors enhanced. Requires extreme security and oversight.<br>
+      <strong>ASL-5:</strong> Superhuman capabilities across domains. Requires novel governance structures.</p>
+
+      <p>Each level triggers specific, pre-committed safeguards. The key insight: you decide the rules before the pressure arrives, not during it.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Build graduated risk frameworks rather than binary safe/unsafe judgments. Pre-commit to specific safeguards at each level so decisions are structural, not emotional.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 04 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">04</span>
+      <h2 class="framework-title">Capital Efficiency as Moat</h2>
+    </div>
+    <div class="framework-body">
+      <p>In a landscape where competitors burn tens of billions, Amodei has made efficiency itself a competitive weapon. Anthropic consistently achieves more output per dollar of compute than its peers -- roughly 2.1x more revenue per compute dollar than OpenAI, with projected infrastructure spend of $78B versus $235B to achieve comparable capability milestones.</p>
+
+      <blockquote>
+        <p>If we can do for 100 million what others do for a billion... 10 times more capital efficient.</p>
+      </blockquote>
+
+      <p>This isn't just frugality. Efficiency compounds. A 2x capital advantage today becomes a 4x advantage in two years when reinvested. It also creates strategic flexibility: you can survive funding droughts, pivot faster, and maintain independence from investors who might push you away from your mission.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Efficiency compounds. Being scrappy is a strategic advantage, not just frugality. In capital-intensive industries, the most efficient operator has the most optionality.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 05 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">05</span>
+      <h2 class="framework-title">The Entente Strategy</h2>
+    </div>
+    <div class="framework-body">
+      <p>Named after the WWI alliance of democratic nations, this is Amodei's framework for AI geopolitics. The core logic: democratic nations should maintain AI superiority (the stick) while distributing benefits broadly to the developing world (the carrot). The goal is to make the democratic AI ecosystem so attractive that alignment with it becomes the rational choice for every nation.</p>
+
+      <blockquote>
+        <p>Eternal 1991.</p>
+      </blockquote>
+
+      <p>The reference is pointed: 1991 was the moment when the democratic model had no serious rival. Amodei wants AI to create a similar structural advantage -- not through military dominance but through technological and economic gravity. The developing world gets access to transformative technology; authoritarian alternatives become less attractive by comparison.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Think about your competitive strategy in terms of both deterrence and attraction. The strongest moat isn't just being hard to beat -- it's making your ecosystem the obvious choice for everyone in your orbit.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 06 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">06</span>
+      <h2 class="framework-title">Constitutional AI</h2>
+    </div>
+    <div class="framework-body">
+      <p>Rather than relying on thousands of human labelers to judge model outputs case by case, Constitutional AI has models evaluate their own outputs against a written set of principles -- drawn from the UN Declaration of Human Rights, Apple's terms of service, and other normative documents. This is the RLAIF (Reinforcement Learning from AI Feedback) approach.</p>
+
+      <p>The deeper insight is philosophical: Amodei treats AI development like character formation. Just as humans develop moral character through exposure to role models and principles, models can develop consistent behavior through constitutional training. The goal is not perfect compliance with rules but internalized values.</p>
+
+      <blockquote>
+        <p>Claude almost never goes against the spirit of its constitution.</p>
+      </blockquote>
+
+      <p>The 2026 target: a model that doesn't just follow the letter of its guidelines but genuinely embodies their intent.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Embed values structurally into systems, don't rely on case-by-case enforcement. Constitutions scale; individual judgments don't.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 07 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">07</span>
+      <h2 class="framework-title">Interpretability as MRI</h2>
+    </div>
+    <div class="framework-body">
+      <p>Anthropic's interpretability research aims to create "brain scans" for AI -- the ability to look inside a model and understand what it's actually doing, not just what it outputs. The team has identified over 30 million features, creating a map of how models represent and process information internally.</p>
+
+      <p>The practical applications are immediate: detecting when a model is lying, identifying power-seeking behavior before deployment, finding security vulnerabilities that aren't visible from outputs alone. But there's an existential dimension too.</p>
+
+      <blockquote>
+        <p>A race between interpretability and model intelligence.</p>
+      </blockquote>
+
+      <p>If models become vastly more capable before we can understand them, we're flying blind. Interpretability is the instrument panel. Without it, every deployment is an act of faith.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Build understanding of your systems, not just capabilities. The ability to diagnose and explain is as important as the ability to perform.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 08 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">08</span>
+      <h2 class="framework-title">Oligopoly Dynamics</h2>
+    </div>
+    <div class="framework-body">
+      <p>Amodei predicts the AI industry will consolidate to 3-4 major players, following the pattern of cloud computing (AWS, Azure, GCP) rather than social media (winner-take-all). The structural reason: extreme capital requirements combined with a lack of network effects.</p>
+
+      <blockquote>
+        <p>Lack of network effects combined with high fixed costs.</p>
+      </blockquote>
+
+      <p>Unlike social platforms where users attract more users, AI models compete on raw capability and specialization. Claude, GPT, and Gemini are demonstrably good at different things. This differentiation is durable because it stems from different training approaches, data strategies, and organizational cultures -- not just scale.</p>
+
+      <p>The implication: this is not a race to one winner. It's a race to be one of the survivors. That changes every strategic calculation.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>In high-capital industries, position for oligopoly, not winner-take-all. Differentiation matters more than dominance. Being distinctly excellent beats being marginally first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 09 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">09</span>
+      <h2 class="framework-title">The Seven Factors</h2>
+    </div>
+    <div class="framework-body">
+      <p>When asked what actually drives AI progress, Amodei strips it down to seven variables: raw compute, data quantity, data quality and distribution, training duration, scalable objective functions, and numerical stability. Everything else is noise.</p>
+
+      <blockquote>
+        <p>All the cleverness, all the techniques... that doesn't matter very much.</p>
+      </blockquote>
+
+      <p>This is a physicist's view of AI development. It's reductive by design. Amodei argues that the field has a tendency to overvalue clever tricks and undervalue the brute fundamentals. The Transformer architecture matters, but the scaling laws matter more. The insight is that progress is more predictable than it appears -- if you're watching the right variables.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Identify the actual drivers of progress in your domain and strip away what doesn't matter. Most complexity is noise. Find the small number of variables that explain most of the variance.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 10 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">10</span>
+      <h2 class="framework-title">Steering Not Stopping</h2>
+    </div>
+    <div class="framework-body">
+      <p>Amodei rejects the idea that AI development can be paused or halted. The incentives are too strong, the actors too numerous, the technology too diffuse. Calling for a moratorium is not just impractical -- it's counterproductive, because it cedes influence to those who will build regardless.</p>
+
+      <blockquote>
+        <p>We can't stop the bus, but we can steer it.</p>
+      </blockquote>
+
+      <p>This is why Anthropic builds. Not because building is safe, but because not building means having no voice in how the technology develops. The alternative to responsible development isn't no development -- it's irresponsible development by others. The leverage comes from being at the frontier, not from standing outside it.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>When facing unstoppable trends, invest in steering mechanisms, not resistance. Influence comes from participation, not abstention.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 11 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">11</span>
+      <h2 class="framework-title">Two Red Lines</h2>
+    </div>
+    <div class="framework-body">
+      <p>Amodei has defined exactly two things Anthropic will not do regardless of pressure: mass domestic surveillance and fully autonomous weapons. These are not negotiable, not subject to commercial logic, and not contingent on what competitors do.</p>
+
+      <p>The cost has been real. Refusing certain Pentagon applications has triggered Trump administration retaliation, including designation as a "supply chain risk." But the red lines hold because they were defined in advance, when the thinking was clear and the pressure was abstract.</p>
+
+      <blockquote>
+        <p>Supply chain risk.</p>
+      </blockquote>
+
+      <p>The strategic insight is about timing: you set your non-negotiables before the pressure arrives. In the moment of maximum pressure, there is no time for moral philosophy. You either have pre-committed principles or you don't.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Define your non-negotiables before you face the pressure, not during. Pre-commitment is the only reliable defense against situational rationalization.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 12 ── -->
+  <hr class="framework-separator">
+  <div class="framework">
+    <div class="framework-header">
+      <span class="framework-number">12</span>
+      <h2 class="framework-title">Culture Density Over Capital</h2>
+    </div>
+    <div class="framework-body">
+      <p>In a market where Meta offers $100-500M packages to individual AI researchers, Anthropic has lost only two. All seven co-founders remain. Amodei attributes this to culture, not compensation.</p>
+
+      <blockquote>
+        <p>Technology can be bought, but culture can't.</p>
+      </blockquote>
+
+      <p>The argument is that in knowledge-intensive industries, the deepest moat is not capital, not data, not even technology -- it's the density of talent that stays because they believe in what they're building. Culture is the only asset that compounds without diminishing returns. Every great person who stays makes it more likely the next great person will join.</p>
+
+      <p>Amodei spends 40% of his time on culture and people. This is not a soft priority. It is, in his framework, the hardest strategic advantage to replicate and therefore the most durable.</p>
+
+      <div class="application">
+        <div class="application-label">Application</div>
+        <p>Invest in culture as your deepest moat. People stay for mission and environment, not just money. The asset that can't be bought is the one your competitors can't copy.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <hr class="divider" style="margin-top: 80px;">
+  <div class="footer">For internal use &middot; March 2026</div>
+
+</main>
+
+<script>
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.overlay').classList.toggle('open');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What to Improve — Alexandr Wang</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e5e5e5;
+            padding: 2.5rem 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 1.75rem 1.75rem;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 1.25rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: #86868b;
+            margin-top: 0.2rem;
+            font-weight: 400;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 0.5rem 1.75rem;
+            color: #86868b;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            transition: color 0.2s ease;
+            letter-spacing: -0.005em;
+        }
+
+        .sidebar nav a:hover {
+            color: #1d1d1f;
+        }
+
+        .sidebar nav a.active {
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .sidebar nav a.back-link {
+            font-size: 0.8rem;
+            color: #aeaeb2;
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar nav a.back-link:hover {
+            color: #1d1d1f;
+        }
+
+        /* Mobile nav toggle */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 200;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #1d1d1f;
+        }
+
+        /* Main content */
+        .main {
+            margin-left: 240px;
+            padding: 5rem 4rem 8rem;
+            max-width: 920px;
+        }
+
+        .page-title {
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: #1d1d1f;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.6rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.05rem;
+            color: #86868b;
+            margin-bottom: 5rem;
+            max-width: 560px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 70px;
+        }
+
+        .section-numeral {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: #aeaeb2;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+
+        .section h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.25rem;
+        }
+
+        .section .subsection-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #aeaeb2;
+            margin-bottom: 0.4rem;
+        }
+
+        .section .gap {
+            font-size: 0.95rem;
+            color: #1d1d1f;
+            line-height: 1.8;
+            margin-bottom: 1.75rem;
+            max-width: 600px;
+        }
+
+        .section .opportunity {
+            font-size: 0.95rem;
+            color: #86868b;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .section-divider {
+            width: 40px;
+            height: 1px;
+            background: #e5e5e5;
+            margin-top: 70px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                left: -260px;
+                width: 260px;
+                transition: left 0.25s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+                box-shadow: 4px 0 24px rgba(0,0,0,0.08);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 4.5rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .section-numeral {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                margin-bottom: 50px;
+            }
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 90;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<button class="mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">&#9776;</button>
+
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>Alexandr Wang</h2>
+        <p>CEO, Scale AI</p>
+    </div>
+    <nav>
+        <a href="../index.html" class="back-link">&larr; All Profiles</a>
+        <a href="index.html">Overview</a>
+        <a href="vision.html">AI Vision</a>
+        <a href="strategy.html">Strategic Frameworks</a>
+        <a href="strengths.html">Strengths &amp; Weaknesses</a>
+        <a href="personality.html">Personality Profile</a>
+        <a href="leadership.html">Leadership Style</a>
+        <a href="replicate.html">What to Replicate</a>
+        <a href="improve.html" class="active">What to Improve</a>
+        <a href="quotes.html">Key Quotes</a>
+        <a href="playbook.html">Action Playbook</a>
+    </nav>
+</aside>
+
+<main class="main">
+    <h1 class="page-title">What to Improve Upon</h1>
+    <p class="page-subtitle">Gaps worth addressing</p>
+
+    <div class="section">
+        <div class="section-numeral">01</div>
+        <h3>Be Specific About Execution</h3>
+        <div class="subsection-label">The gap</div>
+        <p class="gap">Wang&rsquo;s frameworks are elegant but consistently lack implementation detail. Advice like &ldquo;think about your data reserves&rdquo; is directionally correct but not actionable. He excels at identifying what matters and why but rarely descends to the operational altitude of how, when, and who. This leaves a significant translation gap between his insights and actual organizational change.</p>
+        <div class="subsection-label">The opportunity</div>
+        <p class="opportunity">Turn every framework into a specific, measurable plan with timelines, owners, and KPIs. Where Wang says &ldquo;build a data strategy,&rdquo; define exactly what data you need, how to collect it, who owns the pipeline, and how you measure whether the strategy is working. The gap between vision and execution is where most companies fail.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">02</div>
+        <h3>Take Downside Risks Seriously</h3>
+        <div class="subsection-label">The gap</div>
+        <p class="gap">Wang consistently mentions risks briefly and then pivots immediately to opportunity. He does not meaningfully engage with displacement, inequality, or concentration of power. His framing of &ldquo;take us at our incentives&rdquo; is clever but sidesteps structural power imbalances &mdash; the incentives of a multi-billion-dollar AI company are not automatically aligned with the interests of displaced workers or vulnerable communities.</p>
+        <div class="subsection-label">The opportunity</div>
+        <p class="opportunity">Build genuine scenario planning for negative outcomes. Include pre-mortems alongside the vision. Conduct red-team exercises on your own strategy. For every initiative, ask: what happens if this goes wrong, who is harmed, and what is our response plan? This is not pessimism &mdash; it is responsible engineering applied to strategy.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">03</div>
+        <h3>Differentiate Your Agent Vision</h3>
+        <div class="subsection-label">The gap</div>
+        <p class="gap">&ldquo;A personal AI that knows you deeply and can act on your behalf&rdquo; is now being pitched by every major AI lab. Wang&rsquo;s vision for AI agents is consensus, not differentiating. When your strategic vision is indistinguishable from your competitors&rsquo;, it is not a strategy &mdash; it is a shared aspiration.</p>
+        <div class="subsection-label">The opportunity</div>
+        <p class="opportunity">Own a specific vertical deeply rather than competing on a generic vision against companies with 100x your resources. Define what &ldquo;personal AI&rdquo; means for your specific users in ways that no horizontal platform would prioritize. Depth of integration in one domain is more defensible than breadth across many.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">04</div>
+        <h3>Acknowledge Past Failures</h3>
+        <div class="subsection-label">The gap</div>
+        <p class="gap">Across all four interviews, Wang&rsquo;s messaging is almost entirely forward-looking. Post the Meta acquisition, there is polished corporate narrative but no specific past failures or lessons learned acknowledged publicly. No company or leader has a perfect track record, and audiences intuitively sense when the full story is not being told.</p>
+        <div class="subsection-label">The opportunity</div>
+        <p class="opportunity">Build a culture of transparent post-mortems. Share what went wrong, what you learned, and what changed as a result. Leaders who openly discuss their mistakes create psychological safety for their teams to do the same &mdash; which accelerates learning across the entire organization. This builds deeper trust than polished vision-casting ever can.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">05</div>
+        <h3>Make &ldquo;Science Serves Society&rdquo; Concrete</h3>
+        <div class="subsection-label">The gap</div>
+        <p class="gap">Wang&rsquo;s ethos that science should serve society is genuine but remains abstract. There are no concrete mechanisms discussed for ensuring AI actually serves society versus simply creating shareholder value. &ldquo;We want AI to benefit humanity&rdquo; is a statement nearly every AI company makes &mdash; the question is what structures and accountability mechanisms make that aspiration real rather than rhetorical.</p>
+        <div class="subsection-label">The opportunity</div>
+        <p class="opportunity">Define measurable social impact metrics alongside business metrics. Create concrete feedback loops with the communities your technology serves. Establish independent oversight mechanisms. Publish impact reports with the same rigor as financial reports. The company that can demonstrate verifiable social benefit will have a significant advantage as regulation and public scrutiny increase.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section">
+        <div class="section-numeral">06</div>
+        <h3>Balance Patience with Urgency</h3>
+        <div class="subsection-label">The gap</div>
+        <p class="gap">Wang&rsquo;s evolution from impatient young founder to someone who spent 7 months building foundations before shipping may have overcorrected. In AI, speed matters &mdash; the window for establishing a position is measured in months, not years. While foundations are important, the competitive landscape punishes those who plan while others ship.</p>
+        <div class="subsection-label">The opportunity</div>
+        <p class="opportunity">Ship iteratively. Build foundations and velocity simultaneously through fast feedback loops rather than long sequential planning phases. Foundations and speed are not mutually exclusive &mdash; you can lay infrastructure while shipping MVPs, learn from real users while building scalable systems. The goal is disciplined urgency: move fast on execution while being deliberate about architecture.</p>
+    </div>
+
+</main>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            document.querySelector('.sidebar').classList.remove('open');
+            document.querySelector('.sidebar-overlay').classList.remove('active');
+        }
+    });
+</script>
+
+</body>
+</html>

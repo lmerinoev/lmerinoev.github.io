@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alexandr Wang — Strengths &amp; Weaknesses</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
+    background: #ffffff;
+    color: #1d1d1f;
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100vh;
+    background: #ffffff;
+    border-right: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 0;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-header .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #86868b;
+    text-decoration: none;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+    transition: color .2s;
+  }
+
+  .sidebar-header .back-link:hover { color: #1d1d1f; }
+
+  .sidebar-header h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.02em;
+  }
+
+  .sidebar-header .subtitle {
+    font-size: 12px;
+    color: #86868b;
+    margin-top: 2px;
+    letter-spacing: -0.01em;
+  }
+
+  .sidebar nav { flex: 1; padding: 8px 12px; }
+
+  .sidebar nav a {
+    display: block;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #86868b;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 1px;
+    letter-spacing: -0.01em;
+    transition: all .15s;
+  }
+
+  .sidebar nav a:hover {
+    background: #f5f5f7;
+    color: #1d1d1f;
+  }
+
+  .sidebar nav a.active {
+    background: #f5f5f7;
+    color: #1d1d1f;
+    font-weight: 600;
+  }
+
+  /* ── Mobile nav ── */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    z-index: 200;
+    padding: 12px 16px;
+  }
+
+  .mobile-nav-toggle {
+    background: none;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    color: #1d1d1f;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: inherit;
+  }
+
+  .mobile-nav-toggle::after { content: '\25BC'; font-size: 10px; color: #86868b; }
+
+  .mobile-nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  }
+
+  .mobile-nav-menu.open { display: block; }
+
+  .mobile-nav-menu a {
+    display: block;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #86868b;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+
+  .mobile-nav-menu a:hover { background: #f5f5f7; color: #1d1d1f; }
+  .mobile-nav-menu a.active { color: #1d1d1f; font-weight: 600; background: #f5f5f7; }
+
+  /* ── Main content ── */
+  .main {
+    margin-left: 240px;
+    flex: 1;
+    min-height: 100vh;
+    padding: 64px 64px 120px;
+    max-width: 900px;
+  }
+
+  .page-title {
+    font-size: 36px;
+    font-weight: 300;
+    color: #1d1d1f;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 80px;
+  }
+
+  /* ── Section headers ── */
+  .section { margin-bottom: 80px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #86868b;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+  }
+
+  /* ── Capability bars ── */
+  .capability-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .capability-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .capability-label {
+    width: 200px;
+    flex-shrink: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1d1d1f;
+    letter-spacing: -0.01em;
+  }
+
+  .capability-track {
+    flex: 1;
+    height: 6px;
+    background: #e5e5e5;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .capability-fill {
+    height: 100%;
+    background: #1d1d1f;
+    border-radius: 3px;
+    transition: width .8s cubic-bezier(.22,1,.36,1);
+  }
+
+  .capability-score {
+    width: 36px;
+    flex-shrink: 0;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 400;
+    color: #86868b;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── List items (strengths & weaknesses) ── */
+  .item-list {
+    list-style: none;
+  }
+
+  .item {
+    padding: 32px 0;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .item:last-child {
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .item-number {
+    font-size: 12px;
+    font-weight: 400;
+    color: #86868b;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+
+  .item-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .item-body {
+    font-size: 15px;
+    font-weight: 400;
+    color: #86868b;
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  .item-body blockquote {
+    border-left: 2px solid #d2d2d7;
+    padding: 0 0 0 16px;
+    margin: 16px 0 0;
+    font-style: italic;
+    color: #1d1d1f;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 840px) {
+    .sidebar { display: none; }
+    .mobile-nav { display: block; }
+    .main {
+      margin-left: 0;
+      padding: 80px 24px 80px;
+      max-width: 100%;
+    }
+    .capability-label { width: 140px; font-size: 13px; }
+    .page-title { font-size: 28px; }
+  }
+
+  @media (max-width: 500px) {
+    .capability-row { flex-wrap: wrap; gap: 8px; }
+    .capability-label { width: 100%; }
+    .capability-score { width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="../index.html" class="back-link">&larr; All Profiles</a>
+    <h2>Alexandr Wang</h2>
+    <div class="subtitle">CEO, Scale AI &rarr; Meta AI</div>
+  </div>
+  <nav>
+    <a href="index.html">Overview</a>
+    <a href="vision.html">AI Vision</a>
+    <a href="strategy.html">Strategic Frameworks</a>
+    <a href="strengths.html" class="active">Strengths &amp; Weaknesses</a>
+    <a href="personality.html">Personality Profile</a>
+    <a href="leadership.html">Leadership Style</a>
+    <a href="replicate.html">What to Replicate</a>
+    <a href="improve.html">What to Improve</a>
+    <a href="quotes.html">Key Quotes</a>
+    <a href="playbook.html">Action Playbook</a>
+  </nav>
+</aside>
+
+<!-- ── Mobile Nav ── -->
+<div class="mobile-nav">
+  <button class="mobile-nav-toggle" onclick="document.querySelector('.mobile-nav-menu').classList.toggle('open')">
+    Strengths &amp; Weaknesses
+  </button>
+  <div class="mobile-nav-menu">
+    <a href="../index.html">&larr; All Profiles</a>
+    <a href="index.html">Overview</a>
+    <a href="vision.html">AI Vision</a>
+    <a href="strategy.html">Strategic Frameworks</a>
+    <a href="strengths.html" class="active">Strengths &amp; Weaknesses</a>
+    <a href="personality.html">Personality Profile</a>
+    <a href="leadership.html">Leadership Style</a>
+    <a href="replicate.html">What to Replicate</a>
+    <a href="improve.html">What to Improve</a>
+    <a href="quotes.html">Key Quotes</a>
+    <a href="playbook.html">Action Playbook</a>
+  </div>
+</div>
+
+<!-- ── Main Content ── -->
+<main class="main">
+
+  <h1 class="page-title">Strengths &amp; Weaknesses</h1>
+
+  <!-- ═══ CAPABILITY ASSESSMENT ═══ -->
+  <div class="section">
+    <div class="section-title">Capability Assessment</div>
+
+    <div class="capability-grid">
+
+      <div class="capability-row">
+        <div class="capability-label">Strategic Thinking</div>
+        <div class="capability-track"><div class="capability-fill" style="width:95%"></div></div>
+        <div class="capability-score">9.5</div>
+      </div>
+
+      <div class="capability-row">
+        <div class="capability-label">Technical Depth</div>
+        <div class="capability-track"><div class="capability-fill" style="width:85%"></div></div>
+        <div class="capability-score">8.5</div>
+      </div>
+
+      <div class="capability-row">
+        <div class="capability-label">Communication</div>
+        <div class="capability-track"><div class="capability-fill" style="width:90%"></div></div>
+        <div class="capability-score">9.0</div>
+      </div>
+
+      <div class="capability-row">
+        <div class="capability-label">Geopolitical Awareness</div>
+        <div class="capability-track"><div class="capability-fill" style="width:90%"></div></div>
+        <div class="capability-score">9.0</div>
+      </div>
+
+      <div class="capability-row">
+        <div class="capability-label">Execution Discipline</div>
+        <div class="capability-track"><div class="capability-fill" style="width:88%"></div></div>
+        <div class="capability-score">8.8</div>
+      </div>
+
+      <div class="capability-row">
+        <div class="capability-label">Self-Awareness</div>
+        <div class="capability-track"><div class="capability-fill" style="width:80%"></div></div>
+        <div class="capability-score">8.0</div>
+      </div>
+
+      <div class="capability-row">
+        <div class="capability-label">Candor / Specificity</div>
+        <div class="capability-track"><div class="capability-fill" style="width:65%"></div></div>
+        <div class="capability-score">6.5</div>
+      </div>
+
+      <div class="capability-row">
+        <div class="capability-label">Downside Thinking</div>
+        <div class="capability-track"><div class="capability-fill" style="width:55%"></div></div>
+        <div class="capability-score">5.5</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ STRENGTHS ═══ -->
+  <div class="section">
+    <div class="section-title">Strengths</div>
+
+    <ol class="item-list">
+
+      <li class="item">
+        <div class="item-number">01</div>
+        <div class="item-title">Pattern Recognition Across Industries</div>
+        <div class="item-body">
+          Draws parallels between Amazon/AWS, NVIDIA, Moore's Law. Sees structural similarities before others.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">02</div>
+        <div class="item-title">Ability to Reinvent</div>
+        <div class="item-body">
+          Pivoted multiple times: chatbots &rarr; data labeling &rarr; self-driving &rarr; LLM data &rarr; enterprise AI &rarr; defense &rarr; Meta. Each pivot early and correct.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">03</div>
+        <div class="item-title">Bridges Technical and Political Audiences</div>
+        <div class="item-body">
+          Equally fluent on RL curves and sovereign data strategy with heads of state.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">04</div>
+        <div class="item-title">Deep Quality Obsession</div>
+        <div class="item-body">
+          Reviews every hire, hand-reviewed partner data.
+          <blockquote>&ldquo;Quality is fractal... high standards trickle down.&rdquo;</blockquote>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">05</div>
+        <div class="item-title">Early Trend-Spotting</div>
+        <div class="item-body">
+          Language models with OpenAI in 2019, defense AI in 2020, enterprise AI before the wave. Recognized AI at age 16.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">06</div>
+        <div class="item-title">Systems Thinking</div>
+        <div class="item-body">
+          Frameworks show interconnected thinking: Virtuous Flywheel, Stacking Waves, Four Building Blocks.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">07</div>
+        <div class="item-title">Intellectual Honesty</div>
+        <div class="item-body">
+          Admits first 10 ideas were bad, agents were overhyped, young founders lack &ldquo;sense of alpha.&rdquo;
+        </div>
+      </li>
+
+    </ol>
+  </div>
+
+  <!-- ═══ WEAKNESSES ═══ -->
+  <div class="section">
+    <div class="section-title">Weaknesses</div>
+
+    <ol class="item-list">
+
+      <li class="item">
+        <div class="item-number">01</div>
+        <div class="item-title">Vague on Execution</div>
+        <div class="item-body">
+          Frameworks elegant but lack implementation detail. &ldquo;Think about your data reserves&rdquo; is directionally correct but not actionable.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">02</div>
+        <div class="item-title">Optimism Without Downside Exploration</div>
+        <div class="item-body">
+          Mentions risks briefly then pivots to opportunity. Doesn't engage with displacement or concentration of power.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">03</div>
+        <div class="item-title">Corporate Messaging Mode</div>
+        <div class="item-body">
+          Post-Meta, noticeably more polished. Hard to distinguish personal conviction from corporate positioning.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">04</div>
+        <div class="item-title">Selective Self-Critique</div>
+        <div class="item-body">
+          Positions Meta/WhatsApp as trust exemplar without acknowledging documented trust challenges.
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">05</div>
+        <div class="item-title">Hedging Language</div>
+        <div class="item-body">
+          Frequent &ldquo;sort of,&rdquo; &ldquo;in many ways,&rdquo; &ldquo;I think.&rdquo;
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">06</div>
+        <div class="item-title">Self-Identified Impatience</div>
+        <div class="item-body">
+          <blockquote>&ldquo;When you're young you're very impatient... that's both a great strength and a great weakness.&rdquo;</blockquote>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="item-number">07</div>
+        <div class="item-title">Undifferentiated Agent Vision</div>
+        <div class="item-body">
+          &ldquo;Personal AI that knows you&rdquo; is now pitched by every major lab.
+        </div>
+      </li>
+
+    </ol>
+  </div>
+
+</main>
+
+</body>
+</html>

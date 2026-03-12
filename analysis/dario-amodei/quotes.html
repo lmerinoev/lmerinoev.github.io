@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dario Amodei — Key Quotes</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f5f7;
+    --text: #1d1d1f;
+    --muted: #86868b;
+    --light: #aeaeb2;
+    --border: #e5e5e5;
+    --sidebar-w: 240px;
+    --font: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
+  }
+
+  html { font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: var(--font); color: var(--text); background: var(--bg); }
+
+  /* ── Labels ── */
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    padding: 40px 28px;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-back {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+  .sidebar-back:hover { color: var(--text); }
+
+  .sidebar-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 36px;
+  }
+
+  .sidebar nav { display: flex; flex-direction: column; gap: 0; }
+
+  .sidebar nav a {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 0;
+    transition: color 0.2s;
+  }
+  .sidebar nav a:hover { color: var(--text); }
+  .sidebar nav a.active { color: var(--text); font-weight: 500; }
+
+  /* ── Mobile hamburger ── */
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 20px; left: 20px;
+    z-index: 200;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .hamburger span {
+    display: block;
+    width: 18px; height: 1.5px;
+    background: var(--text);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.15);
+    z-index: 90;
+  }
+  .overlay.open { display: block; }
+
+  /* ── Main content ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    padding: 80px 80px 120px;
+    max-width: 900px;
+  }
+
+  /* ── Page title ── */
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── Section heading ── */
+  .section-heading {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  /* ── Quote sections ── */
+  .quote-section { margin-bottom: 68px; }
+  .quote-section:last-child { margin-bottom: 0; }
+
+  .quote-section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .quote-block {
+    border-left: 1.5px solid #d2d2d7;
+    padding-left: 20px;
+    margin-bottom: 24px;
+  }
+  .quote-block:last-child { margin-bottom: 0; }
+
+  .quote-text {
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .quote-source {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: normal;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    font-size: 12px;
+    color: var(--light);
+    padding-top: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 840px) {
+    .hamburger { display: flex; }
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      box-shadow: none;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0,0,0,0.06);
+    }
+    .main {
+      margin-left: 0;
+      padding: 80px 28px 100px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-title { font-size: 2rem; }
+    .main { padding: 72px 20px 80px; }
+    .divider { margin: 36px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hamburger (mobile) -->
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+  <div class="sidebar-name">Dario Amodei</div>
+  <nav>
+    <a href="index.html">Overview</a>
+    <a href="vision.html">AI Vision</a>
+    <a href="strategy.html">Strategic Frameworks</a>
+    <a href="strengths.html">Strengths &amp; Weaknesses</a>
+    <a href="personality.html">Personality Profile</a>
+    <a href="leadership.html">Leadership Style</a>
+    <a href="replicate.html">What to Replicate</a>
+    <a href="improve.html">What to Improve</a>
+    <a href="quotes.html" class="active">Key Quotes</a>
+    <a href="playbook.html">Action Playbook</a>
+  </nav>
+</aside>
+
+<!-- Main content -->
+<main class="main">
+
+  <h1 class="page-title">Key Quotes</h1>
+
+  <hr class="divider">
+
+  <!-- On Vision -->
+  <div class="quote-section">
+    <p class="quote-section-title">On Vision</p>
+
+    <div class="quote-block">
+      <p class="quote-text">"A country of geniuses in a datacenter."</p>
+      <p class="quote-source">Used consistently across all interviews</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"We are now standing on the 40th square of a 64-square chessboard."</p>
+      <p class="quote-source">Morgan Stanley 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"What they see in the laboratory is far more crazy than what the outside world perceives."</p>
+      <p class="quote-source">Morgan Stanley 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Two years before it happens, it looks like it's only one-sixteenth of the way there."</p>
+      <p class="quote-source">Dwarkesh 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"No way we will not be there in one or two years in terms of end-to-end coding."</p>
+      <p class="quote-source">Hard Fork 2025</p>
+    </div>
+  </div>
+
+  <!-- On Scaling -->
+  <div class="quote-section">
+    <p class="quote-section-title">On Scaling</p>
+
+    <div class="quote-block">
+      <p class="quote-text">"All the cleverness, all the techniques... that doesn't matter very much."</p>
+      <p class="quote-source">Lex Fridman 2024</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"We do not see hitting the wall. We don't see a wall."</p>
+      <p class="quote-source">Morgan Stanley 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"We're seeing the same scaling in RL that we saw for pre-training."</p>
+      <p class="quote-source">Dwarkesh 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Radical acceleration in 2026."</p>
+      <p class="quote-source">Multiple sources</p>
+    </div>
+  </div>
+
+  <!-- On Safety -->
+  <div class="quote-section">
+    <p class="quote-section-title">On Safety</p>
+
+    <div class="quote-block">
+      <p class="quote-text">"No one elected us. Honestly, no one."</p>
+      <p class="quote-source">60 Minutes 2025</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"I'm deeply uncomfortable with these decisions being made by a few companies, by a few people."</p>
+      <p class="quote-source">60 Minutes 2025</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"We can't stop the bus, but we can steer it."</p>
+      <p class="quote-source">Adolescence of Technology 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Humanity deserves to understand our own creations before they radically transform our economy, our lives, and our future."</p>
+      <p class="quote-source">Urgency of Interpretability 2025</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"I get very angry when people call me a doomer... I understand the benefit of this technology."</p>
+      <p class="quote-source">Big Technology 2025</p>
+    </div>
+  </div>
+
+  <!-- On Business -->
+  <div class="quote-section">
+    <p class="quote-section-title">On Business</p>
+
+    <div class="quote-block">
+      <p class="quote-text">"An accidental CEO of an accidental business."</p>
+      <p class="quote-source">Multiple sources</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"If we can do for 100 million what others do for a billion... it's 10 times more capital efficient."</p>
+      <p class="quote-source">Dwarkesh 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Technology can be bought, but culture can't."</p>
+      <p class="quote-source">Fortune 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"It's maybe even the most likely world in which our revenue passes theirs a year from now."</p>
+      <p class="quote-source">Dwarkesh 2026</p>
+    </div>
+  </div>
+
+  <!-- On Values -->
+  <div class="quote-section">
+    <p class="quote-section-title">On Values</p>
+
+    <div class="quote-block">
+      <p class="quote-text">"Don't argue with someone else's vision. Go off and do your own thing."</p>
+      <p class="quote-source">On leaving OpenAI</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"How do you accelerate the pace at which science saves people?"</p>
+      <p class="quote-source">On his father's death</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"The point is to get a reputation of telling the company the truth... to call things what they are, to avoid 'corpo speak.'"</p>
+      <p class="quote-source">Fortune 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Meaning comes mostly from human relationships and connection, not from economic labor."</p>
+      <p class="quote-source">Machines of Loving Grace 2024</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"We are patriotic Americans. We believe in this country. Disagreeing with the government is the most American thing in the world."</p>
+      <p class="quote-source">CBS 2026</p>
+    </div>
+  </div>
+
+  <!-- On Competition -->
+  <div class="quote-section">
+    <p class="quote-section-title">On Competition</p>
+
+    <div class="quote-block">
+      <p class="quote-text">"I am pretty bearish on what they're trying to do."</p>
+      <p class="quote-source">On Meta/xAI, Big Technology 2025</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"I don't think open source works the same way in AI that it has worked in other areas."</p>
+      <p class="quote-source">Big Technology 2025</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"The first time a company in China has been able to go toe-to-toe."</p>
+      <p class="quote-source">On DeepSeek, CFR 2025</p>
+    </div>
+  </div>
+
+  <!-- On Work & Impact -->
+  <div class="quote-section">
+    <p class="quote-section-title">On Work &amp; Impact</p>
+
+    <div class="quote-block">
+      <p class="quote-text">"AI could wipe out half of all entry-level white-collar jobs and spike unemployment to 10-20% in the next one to five years."</p>
+      <p class="quote-source">60 Minutes 2025</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"The 5% humans contribute gets amplified directing 100% of AI output."</p>
+      <p class="quote-source">Dwarkesh 2026</p>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Coding is going away first. The broader task of software engineering will take longer."</p>
+      <p class="quote-source">Multiple sources</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <hr class="divider">
+  <div class="footer">For internal use &middot; March 2026</div>
+
+</main>
+
+<script>
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.overlay').classList.toggle('open');
+  }
+</script>
+</body>
+</html>

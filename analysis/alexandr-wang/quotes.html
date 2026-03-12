@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Quotes — Alexandr Wang</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.7;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e5e5e5;
+            padding: 2.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-header p {
+            font-size: 0.7rem;
+            color: #aeaeb2;
+            margin-top: 0.2rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5rem 0;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 0.5rem 2rem;
+            text-decoration: none;
+            font-size: 0.82rem;
+            color: #86868b;
+            transition: color 0.2s ease;
+            letter-spacing: -0.005em;
+        }
+
+        .sidebar nav a:hover {
+            color: #1d1d1f;
+        }
+
+        .sidebar nav a.active {
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .sidebar nav a.back-link {
+            color: #aeaeb2;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar nav a.back-link:hover {
+            color: #86868b;
+        }
+
+        /* Mobile nav */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 200;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 0.4rem 0.65rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #1d1d1f;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.15);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Main */
+        .main {
+            flex: 1;
+            margin-left: 240px;
+            padding: 4rem 4rem 6rem;
+            max-width: 900px;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: #1d1d1f;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 70px;
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #86868b;
+            margin-bottom: 2rem;
+        }
+
+        /* Quotes */
+        .quote {
+            margin-bottom: 2.25rem;
+        }
+
+        .quote blockquote {
+            border-left: 1.5px solid #d2d2d7;
+            padding-left: 24px;
+            font-style: italic;
+            color: #1d1d1f;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .quote .attribution {
+            padding-left: 24px;
+            margin-top: 0.6rem;
+            font-size: 0.72rem;
+            color: #86868b;
+            font-style: normal;
+            letter-spacing: 0.01em;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                width: 260px;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 2rem 1.5rem 4rem;
+                padding-top: 4rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">&#9776;</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Alexandr Wang</h2>
+            <p>Strategic Intelligence Brief</p>
+        </div>
+        <nav>
+            <a href="../index.html" class="back-link">&larr; All Profiles</a>
+            <a href="index.html">Overview</a>
+            <a href="vision.html">AI Vision</a>
+            <a href="strategy.html">Strategic Frameworks</a>
+            <a href="strengths.html">Strengths &amp; Weaknesses</a>
+            <a href="personality.html">Personality Profile</a>
+            <a href="leadership.html">Leadership Style</a>
+            <a href="replicate.html">What to Replicate</a>
+            <a href="improve.html">What to Improve</a>
+            <a href="quotes.html" class="active">Key Quotes</a>
+            <a href="playbook.html">Action Playbook</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+
+        <div class="page-header">
+            <h1>Key Quotes</h1>
+        </div>
+
+        <!-- On Vision -->
+        <div class="section">
+            <div class="section-label">On Vision</div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Our vision is personal super intelligence. AI that knows you, your goals, your interests...&rdquo;</blockquote>
+                <div class="attribution">India AI Impact 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The terminal state of the economy is just large-scale humans managing agents.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The discoveries we make over the next 5 years are going to be some of the most monumental of human civilization.&rdquo;</blockquote>
+                <div class="attribution">OnePlus 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;It won&rsquo;t just do your admin. It&rsquo;ll be an extension of you so you can be you more.&rdquo;</blockquote>
+                <div class="attribution">India AI Impact 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;It&rsquo;s not a fantasy that in a few years we&rsquo;ll have real time voice-to-voice translation for every spoken language on earth.&rdquo;</blockquote>
+                <div class="attribution">India AI Impact 2026</div>
+            </div>
+        </div>
+
+        <!-- On Strategy -->
+        <div class="section">
+            <div class="section-label">On Strategy</div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Alpha in the modern world will be determined by to what degree you encapsulate your business problems into data sets.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The crappy thing about most markets is they have a pretty shallow S-curve... you really want infinite markets.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;You don&rsquo;t have to take us at our word. Take us at our incentives.&rdquo;</blockquote>
+                <div class="attribution">India AI Impact 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;All the powers imbued to these models are actually imbued by data.&rdquo;</blockquote>
+                <div class="attribution">Rishi Sunak 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Whenever you&rsquo;re in a space and people mention a thing but it sucks, that&rsquo;s usually a pretty good sign.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+        </div>
+
+        <!-- On Quality & Culture -->
+        <div class="section">
+            <div class="section-label">On Quality &amp; Culture</div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Quality is fractal. High standards trickle down within an organization.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The biggest thing is you just have to really really really care.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;You can tell people whose soul is invested in their work... it&rsquo;s so incredibly monumental and forceful.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The ones with true staying power have built some sort of foundation very difficult to replicate.&rdquo;</blockquote>
+                <div class="attribution">OnePlus 2026</div>
+            </div>
+        </div>
+
+        <!-- On Trust & Adoption -->
+        <div class="section">
+            <div class="section-label">On Trust &amp; Adoption</div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Trust may govern how successfully the technology diffuses, more so than anything.&rdquo;</blockquote>
+                <div class="attribution">Rishi Sunak 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The success or failure of the organization entirely rests on its ability to embrace AI.&rdquo;</blockquote>
+                <div class="attribution">Rishi Sunak 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;There&rsquo;s a very clear top down direction that this transition is mandatory.&rdquo;</blockquote>
+                <div class="attribution">Rishi Sunak 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;To build that technology effectively requires a huge amount of trust from users, public, governments.&rdquo;</blockquote>
+                <div class="attribution">OnePlus 2026</div>
+            </div>
+        </div>
+
+        <!-- On Technology -->
+        <div class="section">
+            <div class="section-label">On Technology</div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The models themselves have now become instrumental in accelerating the process of producing the next AIs.&rdquo;</blockquote>
+                <div class="attribution">Rishi Sunak 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The closest thing to alchemy pre-AI is programming... the entire human workforce will soon see that leverage boost.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Prompting gets you to a certain level and then reinforcement learning gets you beyond.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;My friend got visibly frustrated and angry at the AI... somewhat personal. That&rsquo;s when I realized &mdash; whoa, this is qualitatively different.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+        </div>
+
+        <!-- On Competition -->
+        <div class="section">
+            <div class="section-label">On Competition</div>
+
+            <div class="quote">
+                <blockquote>&ldquo;The simplest explanation for why the Chinese models are so good is espionage.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Probably 60-40, 70-30 that the US has an undeniable continued advantage.&rdquo;</blockquote>
+                <div class="attribution">YC 2025</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;Growing up in Los Alamos leaves two things ingrained: a belief that anything is possible and that science should serve society.&rdquo;</blockquote>
+                <div class="attribution">India AI Impact 2026</div>
+            </div>
+        </div>
+
+        <!-- On Leadership -->
+        <div class="section">
+            <div class="section-label">On Leadership</div>
+
+            <div class="quote">
+                <blockquote>&ldquo;He [Zuckerberg] enables me and the whole team to dream bigger than we would otherwise.&rdquo;</blockquote>
+                <div class="attribution">OnePlus 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;You can&rsquo;t let your impatience drive you too far... always be thinking about what foundations you&rsquo;re building.&rdquo;</blockquote>
+                <div class="attribution">OnePlus 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;We&rsquo;re going to remove artificial deadlines so we&rsquo;re building at the best pace.&rdquo;</blockquote>
+                <div class="attribution">OnePlus 2026</div>
+            </div>
+
+            <div class="quote">
+                <blockquote>&ldquo;We have engineers who are able to use AI to be 10 to 100 times more productive.&rdquo;</blockquote>
+                <div class="attribution">Rishi Sunak 2026</div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('active');
+    }
+
+    document.querySelectorAll('.sidebar nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

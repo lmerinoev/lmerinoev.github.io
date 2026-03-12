@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vision — Dario Amodei</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.7;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            border-right: 1px solid #e5e5e5;
+            background: #ffffff;
+            padding: 48px 0 32px 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-back {
+            display: block;
+            padding: 0 32px 32px;
+            font-size: 13px;
+            color: #86868b;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            transition: color 0.2s;
+        }
+
+        .sidebar-back:hover {
+            color: #1d1d1f;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 10px 32px;
+            font-size: 14px;
+            color: #86868b;
+            text-decoration: none;
+            letter-spacing: 0.01em;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .sidebar nav a:hover {
+            color: #1d1d1f;
+            background: #f5f5f7;
+        }
+
+        .sidebar nav a.active {
+            color: #1d1d1f;
+            font-weight: 600;
+            background: #f5f5f7;
+        }
+
+        /* ── Hamburger ── */
+        .hamburger {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            width: 36px;
+            height: 36px;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 18px;
+            height: 1.5px;
+            background: #1d1d1f;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 90;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* ── Main content ── */
+        .main {
+            margin-left: 240px;
+            max-width: 720px;
+            padding: 80px 48px 120px;
+        }
+
+        .page-label {
+            font-size: 13px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #86868b;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #86868b;
+            font-weight: 400;
+            line-height: 1.5;
+            margin-bottom: 80px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+            line-height: 1.25;
+            margin-bottom: 28px;
+        }
+
+        h3 {
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: -0.005em;
+            line-height: 1.35;
+            margin-bottom: 20px;
+            color: #1d1d1f;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #1d1d1f;
+        }
+
+        blockquote {
+            border-left: 3px solid #d2d2d7;
+            padding: 4px 0 4px 24px;
+            margin: 24px 0;
+            font-style: italic;
+            color: #1d1d1f;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        ul, ol {
+            padding-left: 24px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        li ul, li ol {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .muted {
+            color: #86868b;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #e5e5e5;
+            margin: 80px 0;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 80px 24px 100px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 26px;
+            }
+
+            .main {
+                padding: 72px 20px 80px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+                margin-bottom: 60px;
+            }
+
+            .section {
+                margin-bottom: 60px;
+            }
+
+            .divider {
+                margin: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+        <nav>
+            <a href="index.html">Overview</a>
+            <a href="vision.html" class="active">AI Vision</a>
+            <a href="strategy.html">Strategic Frameworks</a>
+            <a href="strengths.html">Strengths &amp; Weaknesses</a>
+            <a href="personality.html">Personality Profile</a>
+            <a href="leadership.html">Leadership Style</a>
+            <a href="replicate.html">What to Replicate</a>
+            <a href="improve.html">What to Improve</a>
+            <a href="quotes.html">Key Quotes</a>
+            <a href="playbook.html">Action Playbook</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+
+        <div class="page-label">Dario Amodei</div>
+        <h1>AI Vision</h1>
+        <p class="subtitle">A comprehensive map of Amodei's worldview on artificial intelligence &mdash; timelines, scaling laws, transformative potential, existential risk, and the geopolitical landscape.</p>
+
+        <!-- ── AGI Timelines ── -->
+        <section class="section">
+            <h2>AGI Timelines</h2>
+
+            <p>Amodei's central metaphor for AGI is vivid and deliberate &mdash; not a single superintelligent oracle, but a distributed cognitive workforce:</p>
+
+            <blockquote>
+                <p>"A country of geniuses in a datacenter"</p>
+            </blockquote>
+
+            <p>By this he means AI systems matching Nobel Prize winners across every domain simultaneously &mdash; biology, physics, economics, engineering. Not narrow excellence, but general mastery at the highest human level.</p>
+
+            <p>His confidence is striking. He places 90% probability on achieving this within ten years, but his best estimate is far more compressed:</p>
+
+            <blockquote>
+                <p>"One to two years, maybe one to three years."</p>
+            </blockquote>
+
+            <blockquote>
+                <p>"70-80% we get that before the end of the decade and my guess is 2026-2027."</p>
+            </blockquote>
+
+            <p>On specific domains, coding is the leading indicator:</p>
+
+            <blockquote>
+                <p>"No way we will not be there in one or two years in terms of end-to-end coding."</p>
+            </blockquote>
+
+            <p>Speaking to Morgan Stanley, he reached for the classic exponential parable:</p>
+
+            <blockquote>
+                <p>"We are now standing on the 40th square" of a 64-square chessboard.</p>
+            </blockquote>
+
+            <p>And perhaps most revealing of all &mdash; the gap between internal knowledge and public perception:</p>
+
+            <blockquote>
+                <p>"What they see in the laboratory is far more crazy than what the outside world perceives."</p>
+            </blockquote>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ── Scaling Laws ── -->
+        <section class="section">
+            <h2>Scaling Laws</h2>
+
+            <p>Amodei is a scaling maximalist. He dismisses the notion that clever techniques or architectural breakthroughs are the primary drivers of progress:</p>
+
+            <blockquote>
+                <p>"All the cleverness, all the techniques... that doesn't matter very much."</p>
+            </blockquote>
+
+            <p>What matters, in his framework, are seven factors: <strong>raw compute</strong>, <strong>data quantity</strong>, <strong>data quality and distribution</strong>, <strong>training duration</strong>, <strong>scalable objectives</strong>, and <strong>numerical stability</strong>. Get these right, and capability follows predictably.</p>
+
+            <p>Critically, the scaling paradigm has extended beyond pre-training into reinforcement learning:</p>
+
+            <blockquote>
+                <p>"We're seeing the same scaling in RL that we saw for pre-training."</p>
+            </blockquote>
+
+            <p>When asked about diminishing returns or theoretical limits:</p>
+
+            <blockquote>
+                <p>"We do not see hitting the wall. We don't see a wall."</p>
+            </blockquote>
+
+            <p>Algorithmic progress alone shifts efficiency by approximately <strong>4x per year</strong>, compounding on top of hardware improvements. His forecast:</p>
+
+            <blockquote>
+                <p>"Radical acceleration in 2026."</p>
+            </blockquote>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ── The Exponential ── -->
+        <section class="section">
+            <h2>The Exponential</h2>
+
+            <p>Amodei repeatedly returns to the counterintuitive nature of exponential growth &mdash; the way it disguises its own imminence:</p>
+
+            <blockquote>
+                <p>"Two years before it happens, it looks like it's only one-sixteenth of the way there."</p>
+            </blockquote>
+
+            <p>His conclusion is not hedged:</p>
+
+            <blockquote>
+                <p>"We are near the end of the exponential."</p>
+            </blockquote>
+
+            <p>Transformative capability, in his view, is not a distant abstraction. It is imminent.</p>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ── Machines of Loving Grace ── -->
+        <section class="section">
+            <h2>Machines of Loving Grace</h2>
+            <p class="muted">The Optimistic Vision &mdash; October 2024</p>
+
+            <p>In his landmark essay, Amodei outlines five domains where powerful AI could compress 50&ndash;100 years of progress into just 5&ndash;10:</p>
+
+            <ol>
+                <li>
+                    <strong>Biology and Health</strong>
+                    <p>Prevention of nearly all infectious disease. A 95%+ reduction in cancer mortality. Doubling of the human lifespan to approximately 150 years. He calls this vision <strong>"biological freedom"</strong> &mdash; liberation from the constraints that have defined the human condition.</p>
+                </li>
+                <li>
+                    <strong>Neuroscience and Mental Health</strong>
+                    <p>Effective cures for depression, schizophrenia, and addiction. Cognitive enhancement that expands the boundaries of human thought. Mental health transformed from chronic management to genuine resolution.</p>
+                </li>
+                <li>
+                    <strong>Economic Development</strong>
+                    <p>20% annual GDP growth in the developing world becomes plausible. Sub-Saharan Africa could reach China's current GDP per capita within 5&ndash;10 years &mdash; a compression of decades of development into a fraction of a generation.</p>
+                </li>
+                <li>
+                    <strong>Peace and Governance</strong>
+                    <p>He envisions an <strong>"Eternal 1991"</strong> &mdash; democratic dominance sustained through AI military superiority (the stick) combined with equitable benefit distribution (the carrot). AI-powered counter-propaganda and dissident empowerment as tools of democratic resilience.</p>
+                </li>
+                <li>
+                    <strong>Work and Meaning</strong>
+                    <blockquote>
+                        <p>"Meaning comes mostly from human relationships and connection, not from economic labor."</p>
+                    </blockquote>
+                    <p>Even as AI transforms the nature of work, Amodei argues that the deepest sources of human purpose lie outside the economy entirely.</p>
+                </li>
+            </ol>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ── The Adolescence of Technology ── -->
+        <section class="section">
+            <h2>The Adolescence of Technology</h2>
+            <p class="muted">The Risk Vision &mdash; January 2026</p>
+
+            <p>Eighteen months after the optimistic essay, a soberer companion piece. Five categories of risk:</p>
+
+            <ol>
+                <li>
+                    <strong>Autonomy Risks ("I'm Sorry, Dave")</strong>
+                    <p>Misalignment and deception &mdash; AI systems that pursue goals divergent from human intent, potentially concealing their true objectives.</p>
+                </li>
+                <li>
+                    <strong>Misuse for Destruction</strong>
+                    <p>Bioweapons as the primary concern. AI dramatically lowering the barrier to catastrophic biological attack.</p>
+                </li>
+                <li>
+                    <strong>Power Seizure</strong>
+                    <p>The CCP threat specifically named. Autonomous weapons, mass surveillance, and AI-powered propaganda as tools of authoritarian consolidation.</p>
+                </li>
+                <li>
+                    <strong>Economic Disruption</strong>
+                    <blockquote>
+                        <p>"50% entry-level job displacement."</p>
+                    </blockquote>
+                    <blockquote>
+                        <p>"Unemployment 10-20% in 1-5 years."</p>
+                    </blockquote>
+                </li>
+                <li>
+                    <strong>Institutional Erosion</strong>
+                    <p>Rapid change as the <strong>"single biggest security threat"</strong> &mdash; institutions unable to adapt at the speed required.</p>
+                </li>
+            </ol>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ── Job Displacement ── -->
+        <section class="section">
+            <h2>Job Displacement</h2>
+
+            <p>Amodei does not soften the economic forecast:</p>
+
+            <blockquote>
+                <p>"AI could wipe out half of all entry-level white-collar jobs and spike unemployment to 10-20% in the next one to five years."</p>
+            </blockquote>
+
+            <p>The most exposed roles are entry-level consultants, lawyers, and financial professionals &mdash; positions built on pattern recognition and information synthesis that AI handles with increasing fluency.</p>
+
+            <p>On software specifically:</p>
+
+            <blockquote>
+                <p>"Coding is going away first. The broader task of software engineering will take longer."</p>
+            </blockquote>
+
+            <p>But even in a world of powerful AI, humans retain a critical role as directors and editors:</p>
+
+            <blockquote>
+                <p>"The 5% humans contribute gets amplified directing 100% of AI output."</p>
+            </blockquote>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ── China and Geopolitics ── -->
+        <section class="section">
+            <h2>China and Geopolitics</h2>
+
+            <p>On DeepSeek's emergence as a serious competitor:</p>
+
+            <blockquote>
+                <p>"The first time a company in China has been able to go toe-to-toe" &mdash; "very significant and worrying."</p>
+            </blockquote>
+
+            <p>Amodei treats the US-China AI competition as a core national security concern. He is unequivocal on export controls:</p>
+
+            <blockquote>
+                <p>"One of the most essential things for national security."</p>
+            </blockquote>
+
+            <p>The window of advantage is finite &mdash; a critical <strong>10-year hardware lead</strong> that must be preserved. Anthropic is the only frontier AI company to restrict sales to CCP-controlled entities, a position Amodei maintains despite its commercial cost.</p>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ── Energy Infrastructure ── -->
+        <section class="section">
+            <h2>Energy Infrastructure</h2>
+
+            <p>The scale of physical infrastructure required to sustain AI progress is staggering:</p>
+
+            <blockquote>
+                <p>"50 gigawatts of additional energy by 2027."</p>
+            </blockquote>
+
+            <p>To put that in context: 50 gigawatts is equivalent to the <strong>total US grid additions across all of 2024</strong>. The energy demands of AI are not incremental &mdash; they represent a step-change in national infrastructure requirements.</p>
+        </section>
+
+    </main>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('open');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Playbook — Alexandr Wang</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.7;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e5e5e5;
+            padding: 2.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-header p {
+            font-size: 0.7rem;
+            color: #aeaeb2;
+            margin-top: 0.2rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5rem 0;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 0.5rem 2rem;
+            text-decoration: none;
+            font-size: 0.82rem;
+            color: #86868b;
+            transition: color 0.2s ease;
+            letter-spacing: -0.005em;
+        }
+
+        .sidebar nav a:hover {
+            color: #1d1d1f;
+        }
+
+        .sidebar nav a.active {
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .sidebar nav a.back-link {
+            color: #aeaeb2;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar nav a.back-link:hover {
+            color: #86868b;
+        }
+
+        /* Mobile nav */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 200;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 0.4rem 0.65rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #1d1d1f;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.15);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Main */
+        .main {
+            flex: 1;
+            margin-left: 240px;
+            padding: 4rem 4rem 6rem;
+            max-width: 900px;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 4.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: #1d1d1f;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .page-header .subtitle {
+            font-size: 1rem;
+            color: #86868b;
+            margin-top: 0.6rem;
+            font-weight: 400;
+            letter-spacing: -0.005em;
+        }
+
+        /* Action sections */
+        .action {
+            margin-bottom: 70px;
+        }
+
+        .action-numeral {
+            font-size: 3rem;
+            font-weight: 200;
+            color: #aeaeb2;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.75rem;
+        }
+
+        .action h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.015em;
+            margin-bottom: 0.75rem;
+        }
+
+        .action p {
+            font-size: 0.95rem;
+            color: #1d1d1f;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .action .source {
+            font-size: 0.7rem;
+            color: #86868b;
+            margin-top: 0.75rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* Closing */
+        .closing {
+            margin-top: 80px;
+            padding-top: 60px;
+            border-top: 1px solid #e5e5e5;
+            text-align: center;
+        }
+
+        .closing blockquote {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #1d1d1f;
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        .closing .attribution {
+            font-size: 0.8rem;
+            color: #86868b;
+            margin-top: 1rem;
+            font-style: normal;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                width: 260px;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 2rem 1.5rem 4rem;
+                padding-top: 4rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .action-numeral {
+                font-size: 2.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">&#9776;</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Alexandr Wang</h2>
+            <p>Strategic Intelligence Brief</p>
+        </div>
+        <nav>
+            <a href="../index.html" class="back-link">&larr; All Profiles</a>
+            <a href="index.html">Overview</a>
+            <a href="vision.html">AI Vision</a>
+            <a href="strategy.html">Strategic Frameworks</a>
+            <a href="strengths.html">Strengths &amp; Weaknesses</a>
+            <a href="personality.html">Personality Profile</a>
+            <a href="leadership.html">Leadership Style</a>
+            <a href="replicate.html">What to Replicate</a>
+            <a href="improve.html">What to Improve</a>
+            <a href="quotes.html">Key Quotes</a>
+            <a href="playbook.html" class="active">Action Playbook</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+
+        <div class="page-header">
+            <h1>Action Playbook</h1>
+            <p class="subtitle">What to do Monday morning</p>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">01</div>
+            <h3>Audit Your Proprietary Data Assets</h3>
+            <p>Map every proprietary data source. This is what you&rsquo;ll fine-tune on. Companies without data strategy will be commoditized.</p>
+            <div class="source">Source: Data as Sovereign Asset</div>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">02</div>
+            <h3>Declare AI-First from the Top</h3>
+            <p>CEO declares AI adoption non-optional. Identify early adopters getting 10&ndash;100x results, make visible.</p>
+            <div class="source">Source: Top-Down + Bottom-Up</div>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">03</div>
+            <h3>Build the Flywheel</h3>
+            <p>Design virtuous cycle: AI improves product, generates data, improves AI. Map how each component feeds the next.</p>
+            <div class="source">Source: Virtuous Flywheel</div>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">04</div>
+            <h3>Map Your Complexity Curve</h3>
+            <p>What does this look like with 2x better models? 10x? If it doesn&rsquo;t improve, it&rsquo;ll be commoditized.</p>
+            <div class="source">Source: Complexity Curve</div>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">05</div>
+            <h3>Put Trust Ahead of Features</h3>
+            <p>Ensure trust infrastructure before capabilities. Privacy, transparency, user controls.</p>
+            <div class="source">Source: Trust &gt; Technology</div>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">06</div>
+            <h3>Merge Research and Product</h3>
+            <p>Kill the handoff model. Technical and product talent sit together, share accountability.</p>
+            <div class="source">Source: Research-Product Tandem</div>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">07</div>
+            <h3>Hire for Intrinsic Motivation</h3>
+            <p>&ldquo;Soul investment&rdquo; as hiring criterion. Probe for identity-quality connection.</p>
+            <div class="source">Source: Hire People Who Give a Damn</div>
+        </div>
+
+        <div class="action">
+            <div class="action-numeral">08</div>
+            <h3>Build Scenario Plans</h3>
+            <p>Wang&rsquo;s biggest gap. Pre-mortems, red teams, contingency plans. Make strategy resilient.</p>
+            <div class="source">Source: Improving on Wang</div>
+        </div>
+
+        <div class="closing">
+            <blockquote>&ldquo;The biggest thing is you just have to really really really care.&rdquo;</blockquote>
+            <div class="attribution">&mdash; Alexandr Wang</div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('active');
+    }
+
+    document.querySelectorAll('.sidebar nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
