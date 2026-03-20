@@ -4,423 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Vision — Alexandr Wang</title>
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
-            background: #ffffff;
-            color: #1d1d1f;
-            font-size: 15px;
-            line-height: 1.75;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Layout */
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 240px;
-            background: #ffffff;
-            border-right: 1px solid #e5e5e5;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            overflow-y: auto;
-            z-index: 100;
-            padding: 40px 0 40px;
-        }
-
-        .sidebar-back {
-            display: block;
-            padding: 0 28px 24px;
-            text-decoration: none;
-            font-size: 13px;
-            color: #86868b;
-            transition: color 0.2s;
-        }
-
-        .sidebar-back:hover {
-            color: #1d1d1f;
-        }
-
-        .sidebar-name {
-            padding: 0 28px 32px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #1d1d1f;
-            letter-spacing: -0.01em;
-        }
-
-        .sidebar nav {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar nav a {
-            display: block;
-            padding: 7px 28px;
-            text-decoration: none;
-            font-size: 14px;
-            color: #86868b;
-            transition: color 0.2s;
-        }
-
-        .sidebar nav a:hover {
-            color: #1d1d1f;
-        }
-
-        .sidebar nav a.active {
-            color: #1d1d1f;
-            font-weight: 500;
-        }
-
-        /* Mobile nav */
-        .mobile-nav-toggle {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 52px;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e5e5;
-            z-index: 200;
-            align-items: center;
-            padding: 0 20px;
-            cursor: pointer;
-        }
-
-        .mobile-nav-toggle .hamburger {
-            width: 18px;
-            height: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .mobile-nav-toggle .hamburger span {
-            display: block;
-            width: 100%;
-            height: 1.5px;
-            background: #1d1d1f;
-            border-radius: 1px;
-        }
-
-        .mobile-nav-toggle .mobile-title {
-            margin-left: 14px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #1d1d1f;
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.2);
-            z-index: 99;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        /* Main content */
-        .main {
-            flex: 1;
-            margin-left: 240px;
-            max-width: 720px;
-            padding: 80px 48px 120px;
-        }
-
-        /* Page header */
-        .page-header {
-            margin-bottom: 90px;
-        }
-
-        .page-header h1 {
-            font-size: 42px;
-            font-weight: 300;
-            color: #1d1d1f;
-            letter-spacing: -0.02em;
-            margin-bottom: 12px;
-        }
-
-        .page-header .subtitle {
-            font-size: 16px;
-            color: #86868b;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-        /* Section */
-        .section {
-            margin-bottom: 0;
-        }
-
-        .section-divider {
-            height: 1px;
-            background: #e5e5e5;
-            margin: 80px 0;
-        }
-
-        .section-label {
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #86868b;
-            margin-bottom: 16px;
-        }
-
-        .section h2 {
-            font-size: 28px;
-            font-weight: 300;
-            color: #1d1d1f;
-            letter-spacing: -0.01em;
-            margin-bottom: 24px;
-        }
-
-        .section h3 {
-            font-size: 18px;
-            font-weight: 400;
-            color: #1d1d1f;
-            margin-bottom: 16px;
-            margin-top: 48px;
-        }
-
-        .section p {
-            color: #1d1d1f;
-            margin-bottom: 16px;
-            line-height: 1.75;
-        }
-
-        .section p.muted {
-            color: #86868b;
-        }
-
-        /* Blockquotes */
-        blockquote {
-            border-left: 1px solid #d2d2d7;
-            padding-left: 24px;
-            margin: 24px 0;
-        }
-
-        blockquote p {
-            font-style: italic;
-            color: #1d1d1f;
-            margin-bottom: 0;
-        }
-
-        blockquote .source {
-            font-style: normal;
-            font-size: 13px;
-            color: #86868b;
-            margin-top: 8px;
-        }
-
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding: 8px 0 8px 32px;
-            margin: 32px 0;
-        }
-
-        .timeline::before {
-            content: "";
-            position: absolute;
-            left: 5px;
-            top: 14px;
-            bottom: 14px;
-            width: 1px;
-            background: #d2d2d7;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .timeline-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .timeline-item::before {
-            content: "";
-            position: absolute;
-            left: -32px;
-            top: 8px;
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            border: 1.5px solid #aeaeb2;
-            background: #ffffff;
-            z-index: 1;
-        }
-
-        .timeline-era {
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #86868b;
-            margin-bottom: 6px;
-        }
-
-        .timeline-item h4 {
-            font-size: 17px;
-            font-weight: 500;
-            color: #1d1d1f;
-            margin-bottom: 10px;
-        }
-
-        .timeline-item p {
-            color: #1d1d1f;
-            line-height: 1.75;
-            margin-bottom: 12px;
-        }
-
-        .timeline-item blockquote {
-            margin: 16px 0 0;
-        }
-
-        /* Lists */
-        .clean-list {
-            list-style: none;
-            padding: 0;
-            margin: 16px 0;
-        }
-
-        .clean-list li {
-            position: relative;
-            padding-left: 16px;
-            margin-bottom: 8px;
-            line-height: 1.75;
-            color: #1d1d1f;
-        }
-
-        .clean-list li::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 10px;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: #aeaeb2;
-        }
-
-        /* Progression */
-        .progression {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin: 24px 0;
-            flex-wrap: wrap;
-        }
-
-        .progression-step {
-            font-size: 14px;
-            font-weight: 500;
-            color: #1d1d1f;
-        }
-
-        .progression-arrow {
-            color: #aeaeb2;
-            font-size: 14px;
-        }
-
-        /* Responsive */
-        @media (max-width: 840px) {
-            .sidebar {
-                position: fixed;
-                top: 52px;
-                left: -260px;
-                width: 260px;
-                transition: left 0.25s ease;
-                border-right: 1px solid #e5e5e5;
-                background: #ffffff;
-                padding-top: 24px;
-                box-shadow: 2px 0 12px rgba(0,0,0,0.06);
-            }
-
-            .sidebar.open {
-                left: 0;
-            }
-
-            .mobile-nav-toggle {
-                display: flex;
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 76px 24px 80px;
-                max-width: 100%;
-            }
-
-            .page-header {
-                margin-bottom: 60px;
-            }
-
-            .page-header h1 {
-                font-size: 32px;
-            }
-
-            .section-divider {
-                margin: 60px 0;
-            }
-
-            .progression {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .progression-arrow {
-                transform: rotate(90deg);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../base.css">
 </head>
 <body>
 
-<div class="mobile-nav-toggle" onclick="toggleSidebar()">
-    <div class="hamburger"><span></span><span></span><span></span></div>
-    <span class="mobile-title">Alexandr Wang</span>
-</div>
-<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
-<div class="layout">
-    <aside class="sidebar">
-        <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
-        <div class="sidebar-name">Alexandr Wang</div>
-        <nav>
-            <a href="index.html">Overview</a>
-            <a href="vision.html" class="active">AI Vision</a>
-            <a href="strategy.html">Strategic Frameworks</a>
-            <a href="strengths.html">Strengths &amp; Weaknesses</a>
-            <a href="personality.html">Personality Profile</a>
-            <a href="leadership.html">Leadership Style</a>
-            <a href="replicate.html">What to Replicate</a>
-            <a href="improve.html">What to Improve</a>
-            <a href="quotes.html">Key Quotes</a>
-            <a href="playbook.html">Action Playbook</a>
-        </nav>
-    </aside>
+<div class="overlay"></div>
 
-    <main class="main">
+<aside class="sidebar">
+    <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+    <div class="sidebar-name">Alexandr Wang</div>
+    <nav>
+        <a href="index.html">Overview</a>
+        <a href="vision.html" class="active">AI Vision</a>
+        <a href="strategy.html">Strategic Frameworks</a>
+        <a href="strengths.html">Strengths &amp; Weaknesses</a>
+        <a href="personality.html">Personality Profile</a>
+        <a href="leadership.html">Leadership Style</a>
+        <a href="replicate.html">What to Replicate</a>
+        <a href="improve.html">What to Improve</a>
+        <a href="quotes.html">Key Quotes</a>
+        <a href="playbook.html">Action Playbook</a>
+    </nav>
+</aside>
+
+<main class="main">
+
         <div class="page-header">
             <h1>AI Vision</h1>
             <p class="subtitle">Alexandr Wang's framework for where AI is headed and how it will reshape the economy, science, defense, and the global competitive landscape.</p>
@@ -620,23 +234,10 @@
             <p>Diffusion is accelerating "two or three times faster every year" &mdash; faster development producing faster deployment producing faster adoption. This is what makes 2026 qualitatively different from every year before it.</p>
         </div>
 
-    </main>
-</div>
+    
+</main>
 
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('open');
-        document.querySelector('.sidebar-overlay').classList.toggle('active');
-    }
-
-    document.querySelectorAll('.sidebar nav a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 840) {
-                toggleSidebar();
-            }
-        });
-    });
-</script>
+<script src="../base.js"></script>
 
 </body>
 </html>

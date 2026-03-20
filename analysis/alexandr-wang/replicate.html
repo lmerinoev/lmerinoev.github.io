@@ -4,259 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>What to Replicate — Alexandr Wang</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, 'Helvetica Neue', sans-serif;
-            background: #ffffff;
-            color: #1d1d1f;
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 240px;
-            height: 100vh;
-            background: #ffffff;
-            border-right: 1px solid #e5e5e5;
-            padding: 2.5rem 0;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            padding: 0 1.75rem 1.75rem;
-            border-bottom: 1px solid #e5e5e5;
-            margin-bottom: 1.25rem;
-        }
-
-        .sidebar-header h2 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #1d1d1f;
-            letter-spacing: -0.01em;
-        }
-
-        .sidebar-header p {
-            font-size: 0.8rem;
-            color: #86868b;
-            margin-top: 0.2rem;
-            font-weight: 400;
-        }
-
-        .sidebar nav {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar nav a {
-            display: block;
-            padding: 0.5rem 1.75rem;
-            color: #86868b;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 400;
-            transition: color 0.2s ease;
-            letter-spacing: -0.005em;
-        }
-
-        .sidebar nav a:hover {
-            color: #1d1d1f;
-        }
-
-        .sidebar nav a.active {
-            color: #1d1d1f;
-            font-weight: 600;
-        }
-
-        .sidebar nav a.back-link {
-            font-size: 0.8rem;
-            color: #aeaeb2;
-            margin-bottom: 0.75rem;
-        }
-
-        .sidebar nav a.back-link:hover {
-            color: #1d1d1f;
-        }
-
-        /* Mobile nav toggle */
-        .mobile-nav-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 200;
-            background: #ffffff;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            padding: 0.5rem 0.75rem;
-            cursor: pointer;
-            font-size: 1.1rem;
-            color: #1d1d1f;
-        }
-
-        /* Main content */
-        .main {
-            margin-left: 240px;
-            padding: 5rem 4rem 8rem;
-            max-width: 920px;
-        }
-
-        .page-title {
-            font-size: 2.4rem;
-            font-weight: 300;
-            color: #1d1d1f;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.6rem;
-        }
-
-        .page-subtitle {
-            font-size: 1.05rem;
-            color: #86868b;
-            margin-bottom: 5rem;
-            max-width: 560px;
-            line-height: 1.7;
-            font-weight: 400;
-        }
-
-        /* Section */
-        .section {
-            margin-bottom: 70px;
-        }
-
-        .section-numeral {
-            font-size: 3.5rem;
-            font-weight: 300;
-            color: #aeaeb2;
-            letter-spacing: -0.04em;
-            line-height: 1;
-            margin-bottom: 0.75rem;
-        }
-
-        .section h3 {
-            font-size: 1.35rem;
-            font-weight: 600;
-            color: #1d1d1f;
-            letter-spacing: -0.02em;
-            margin-bottom: 1rem;
-        }
-
-        .section .explanation {
-            font-size: 0.95rem;
-            color: #1d1d1f;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            max-width: 600px;
-        }
-
-        .section blockquote {
-            border-left: 2px solid #d2d2d7;
-            padding: 0.75rem 0 0.75rem 1.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            color: #86868b;
-            font-style: italic;
-            line-height: 1.7;
-            max-width: 560px;
-        }
-
-        .section .apply {
-            font-size: 0.88rem;
-            color: #86868b;
-            line-height: 1.75;
-            max-width: 560px;
-        }
-
-        .section .apply-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #aeaeb2;
-            margin-bottom: 0.4rem;
-        }
-
-        .section-divider {
-            width: 40px;
-            height: 1px;
-            background: #e5e5e5;
-            margin-top: 70px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .mobile-nav-toggle {
-                display: block;
-            }
-
-            .sidebar {
-                left: -260px;
-                width: 260px;
-                transition: left 0.25s ease;
-            }
-
-            .sidebar.open {
-                left: 0;
-                box-shadow: 4px 0 24px rgba(0,0,0,0.08);
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 4.5rem 1.5rem 4rem;
-            }
-
-            .page-title {
-                font-size: 1.8rem;
-            }
-
-            .section-numeral {
-                font-size: 2.5rem;
-            }
-
-            .section {
-                margin-bottom: 50px;
-            }
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.2);
-            z-index: 90;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" href="../base.css">
 </head>
 <body>
 
-<button class="mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">&#9776;</button>
+<button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
-<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<div class="overlay"></div>
 
 <aside class="sidebar">
-    <div class="sidebar-header">
-        <h2>Alexandr Wang</h2>
-        <p>CEO, Scale AI</p>
-    </div>
+    <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+    <div class="sidebar-name">Alexandr Wang</div>
     <nav>
-        <a href="../index.html" class="back-link">&larr; All Profiles</a>
         <a href="index.html">Overview</a>
         <a href="vision.html">AI Vision</a>
         <a href="strategy.html">Strategic Frameworks</a>
@@ -271,6 +34,7 @@
 </aside>
 
 <main class="main">
+
     <h1 class="page-title">What to Replicate</h1>
     <p class="page-subtitle">Patterns from Wang's approach worth adopting</p>
 
@@ -360,23 +124,10 @@
         <p class="apply">Map your AI complexity roadmap explicitly. What does your product look like with 2x better models? With 10x better models? Build your architecture to benefit from model improvements rather than being made redundant by them.</p>
     </div>
 
+
 </main>
 
-<script>
-    function toggleSidebar() {
-        const sidebar = document.querySelector('.sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('active');
-    }
-
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            document.querySelector('.sidebar').classList.remove('open');
-            document.querySelector('.sidebar-overlay').classList.remove('active');
-        }
-    });
-</script>
+<script src="../base.js"></script>
 
 </body>
 </html>

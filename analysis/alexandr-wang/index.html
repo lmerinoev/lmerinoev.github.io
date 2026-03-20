@@ -4,340 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alexandr Wang</title>
-  <style>
-    :root {
-      --bg: #ffffff;
-      --bg2: #f5f5f7;
-      --text: #1d1d1f;
-      --text-muted: #86868b;
-      --text-light: #aeaeb2;
-      --border: #e5e5e5;
-      --divider: #d2d2d7;
-      --sidebar-w: 240px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-      font-size: 15px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: var(--sidebar-w);
-      height: 100vh;
-      background: var(--bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      z-index: 100;
-      overflow-y: auto;
-    }
-
-    .sidebar-header {
-      padding: 32px 24px 28px;
-    }
-
-    .back-link {
-      display: block;
-      font-size: 13px;
-      color: var(--text-muted);
-      text-decoration: none;
-      margin-bottom: 24px;
-      transition: color 0.2s;
-    }
-
-    .back-link:hover { color: var(--text); }
-
-    .sidebar-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      padding: 0 12px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .sidebar-nav a {
-      display: block;
-      padding: 8px 12px;
-      text-decoration: none;
-      font-size: 14px;
-      color: var(--text-muted);
-      border-radius: 6px;
-      transition: color 0.2s;
-    }
-
-    .sidebar-nav a:hover {
-      color: var(--text);
-    }
-
-    .sidebar-nav a.active {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    /* ── Mobile header ── */
-    .mobile-header {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 52px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      z-index: 200;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-    }
-
-    .mobile-header-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .menu-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      color: var(--text);
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.15);
-      z-index: 99;
-    }
-
-    .overlay.visible { display: block; }
-
-    /* ── Main content ── */
-    .main {
-      margin-left: var(--sidebar-w);
-      max-width: 820px;
-      padding: 80px 60px 120px;
-    }
-
-    /* ── Hero ── */
-    .hero-name {
-      font-size: 2.5rem;
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      color: var(--text);
-    }
-
-    .hero-role {
-      font-size: 16px;
-      color: var(--text-muted);
-      font-weight: 400;
-      margin-top: 8px;
-    }
-
-    .hero-sources {
-      font-size: 13px;
-      color: var(--text-light);
-      margin-top: 12px;
-      line-height: 1.6;
-    }
-
-    /* ── Divider ── */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--divider);
-      margin: 48px 0;
-    }
-
-    /* ── Quick facts ── */
-    .quick-facts {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .fact {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .fact-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-    }
-
-    .fact-value {
-      font-size: 16px;
-      font-weight: 400;
-      color: var(--text);
-    }
-
-    /* ── Executive summary ── */
-    .exec-heading {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .exec-text p {
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.75;
-      margin-bottom: 18px;
-    }
-
-    .exec-text p:last-child { margin-bottom: 0; }
-
-    /* ── Section index ── */
-    .section-heading {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-    }
-
-    .section-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px 48px;
-    }
-
-    .section-item {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      padding: 20px 0;
-      border-top: 1px solid var(--border);
-      transition: opacity 0.2s;
-    }
-
-    .section-item:hover {
-      opacity: 0.65;
-    }
-
-    .section-item-title {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-
-    .section-item-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ── Footer ── */
-    .footer {
-      margin-top: 100px;
-      padding-top: 24px;
-      border-top: 1px solid var(--divider);
-    }
-
-    .footer-text {
-      font-size: 12px;
-      color: var(--text-light);
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 840px) {
-      .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.25s ease;
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .mobile-header {
-        display: flex;
-      }
-
-      .main {
-        margin-left: 0;
-        padding: 76px 24px 80px;
-      }
-
-      .hero-name {
-        font-size: 2rem;
-      }
-
-      .quick-facts {
-        gap: 24px 32px;
-      }
-
-      .section-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .section-item {
-        padding: 20px 0;
-      }
-    }
-  </style>
+    <link rel="stylesheet" href="../base.css">
 </head>
 <body>
 
-  <!-- Mobile header -->
-  <div class="mobile-header">
-    <span class="mobile-header-title">Alexandr Wang</span>
-    <button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle menu">&#9776;</button>
-  </div>
-  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <a href="../index.html" class="back-link">&larr; All Profiles</a>
-      <div class="sidebar-label">Alexandr Wang</div>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="index.html" class="active">Overview</a>
-      <a href="vision.html">AI Vision</a>
-      <a href="strategy.html">Strategic Frameworks</a>
-      <a href="strengths.html">Strengths &amp; Weaknesses</a>
-      <a href="personality.html">Personality Profile</a>
-      <a href="leadership.html">Leadership Style</a>
-      <a href="replicate.html">What to Replicate</a>
-      <a href="improve.html">What to Improve</a>
-      <a href="quotes.html">Key Quotes</a>
-      <a href="playbook.html">Action Playbook</a>
+<div class="overlay"></div>
+
+<aside class="sidebar">
+    <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+    <div class="sidebar-name">Alexandr Wang</div>
+    <nav>
+        <a href="index.html" class="active">Overview</a>
+        <a href="vision.html">AI Vision</a>
+        <a href="strategy.html">Strategic Frameworks</a>
+        <a href="strengths.html">Strengths &amp; Weaknesses</a>
+        <a href="personality.html">Personality Profile</a>
+        <a href="leadership.html">Leadership Style</a>
+        <a href="replicate.html">What to Replicate</a>
+        <a href="improve.html">What to Improve</a>
+        <a href="quotes.html">Key Quotes</a>
+        <a href="playbook.html">Action Playbook</a>
     </nav>
-  </aside>
+</aside>
 
-  <!-- Main content -->
-  <div class="main">
+<main class="main">
+
 
     <!-- Hero -->
     <h1 class="hero-name">Alexandr Wang</h1>
@@ -432,16 +129,10 @@
     <!-- Footer -->
     <div class="footer">
       <span class="footer-text">For internal use &middot; March 2026</span>
-    </div>
+    
+</main>
 
-  </div>
-
-  <script>
-    function toggleMenu() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('visible');
-    }
-  </script>
+<script src="../base.js"></script>
 
 </body>
 </html>

@@ -4,350 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leadership Style — Dario Amodei</title>
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, 'Helvetica Neue', sans-serif;
-            background: #ffffff;
-            color: #1d1d1f;
-            line-height: 1.7;
-            font-size: 17px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* ── Sidebar ── */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 240px;
-            height: 100vh;
-            border-right: 1px solid #e5e5e5;
-            background: #ffffff;
-            padding: 48px 0 32px 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-            overflow-y: auto;
-        }
-
-        .sidebar-back {
-            display: block;
-            padding: 0 32px 32px;
-            font-size: 13px;
-            color: #86868b;
-            text-decoration: none;
-            letter-spacing: 0.02em;
-            border-bottom: 1px solid #e5e5e5;
-            margin-bottom: 24px;
-            padding-bottom: 24px;
-            transition: color 0.2s;
-        }
-
-        .sidebar-back:hover {
-            color: #1d1d1f;
-        }
-
-        .sidebar nav {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .sidebar nav a {
-            display: block;
-            padding: 10px 32px;
-            font-size: 14px;
-            color: #86868b;
-            text-decoration: none;
-            letter-spacing: 0.01em;
-            transition: color 0.2s, background 0.2s;
-        }
-
-        .sidebar nav a:hover {
-            color: #1d1d1f;
-            background: #f5f5f7;
-        }
-
-        .sidebar nav a.active {
-            color: #1d1d1f;
-            font-weight: 600;
-            background: #f5f5f7;
-        }
-
-        /* ── Hamburger ── */
-        .hamburger {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 200;
-            width: 36px;
-            height: 36px;
-            background: #ffffff;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            cursor: pointer;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 18px;
-            height: 1.5px;
-            background: #1d1d1f;
-            transition: transform 0.3s, opacity 0.3s;
-        }
-
-        .hamburger.open span:nth-child(1) {
-            transform: translateY(6.5px) rotate(45deg);
-        }
-
-        .hamburger.open span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.open span:nth-child(3) {
-            transform: translateY(-6.5px) rotate(-45deg);
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 90;
-        }
-
-        .overlay.show {
-            display: block;
-        }
-
-        /* ── Main content ── */
-        .main {
-            margin-left: 240px;
-            max-width: 720px;
-            padding: 80px 48px 120px;
-        }
-
-        .page-label {
-            font-size: 13px;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: #86868b;
-            margin-bottom: 16px;
-        }
-
-        h1 {
-            font-size: 48px;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            margin-bottom: 20px;
-        }
-
-        .subtitle {
-            font-size: 20px;
-            color: #86868b;
-            font-weight: 400;
-            line-height: 1.5;
-            margin-bottom: 80px;
-        }
-
-        h2 {
-            font-size: 32px;
-            font-weight: 300;
-            letter-spacing: -0.01em;
-            line-height: 1.25;
-            margin-bottom: 28px;
-        }
-
-        h3 {
-            font-size: 22px;
-            font-weight: 300;
-            letter-spacing: -0.005em;
-            line-height: 1.35;
-            margin-bottom: 20px;
-            color: #1d1d1f;
-        }
-
-        .section {
-            margin-bottom: 80px;
-        }
-
-        p {
-            margin-bottom: 20px;
-            color: #1d1d1f;
-        }
-
-        blockquote {
-            border-left: 3px solid #d2d2d7;
-            padding: 4px 0 4px 24px;
-            margin: 24px 0;
-            font-style: italic;
-            color: #1d1d1f;
-        }
-
-        blockquote p {
-            margin-bottom: 0;
-        }
-
-        ul, ol {
-            padding-left: 24px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            margin-bottom: 12px;
-            line-height: 1.7;
-        }
-
-        li ul, li ol {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .muted {
-            color: #86868b;
-        }
-
-        .divider {
-            border: none;
-            border-top: 1px solid #e5e5e5;
-            margin: 80px 0;
-        }
-
-        strong {
-            font-weight: 600;
-        }
-
-        /* ── Stakeholder grid ── */
-        .stakeholder-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0;
-        }
-
-        .stakeholder-row {
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 0 24px;
-            padding: 20px 0;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .stakeholder-row:first-child {
-            padding-top: 0;
-        }
-
-        .stakeholder-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .stakeholder-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1d1d1f;
-            padding-top: 2px;
-        }
-
-        .stakeholder-detail {
-            font-size: 15px;
-            color: #1d1d1f;
-            line-height: 1.7;
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 900px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 80px 24px 100px;
-            }
-
-            .stakeholder-row {
-                grid-template-columns: 1fr;
-                gap: 4px 0;
-            }
-        }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 36px;
-            }
-
-            h2 {
-                font-size: 26px;
-            }
-
-            .main {
-                padding: 72px 20px 80px;
-            }
-
-            .subtitle {
-                font-size: 18px;
-                margin-bottom: 60px;
-            }
-
-            .section {
-                margin-bottom: 60px;
-            }
-
-            .divider {
-                margin: 60px 0;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../base.css">
 </head>
 <body>
 
-    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+    
+<button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
-    <div class="overlay" id="overlay"></div>
+<div class="overlay"></div>
 
-    <aside class="sidebar" id="sidebar">
-        <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
-        <nav>
-            <a href="index.html">Overview</a>
-            <a href="vision.html">AI Vision</a>
-            <a href="strategy.html">Strategic Frameworks</a>
-            <a href="strengths.html">Strengths &amp; Weaknesses</a>
-            <a href="personality.html">Personality Profile</a>
-            <a href="leadership.html" class="active">Leadership Style</a>
-            <a href="replicate.html">What to Replicate</a>
-            <a href="improve.html">What to Improve</a>
-            <a href="quotes.html">Key Quotes</a>
-            <a href="playbook.html">Action Playbook</a>
-        </nav>
-    </aside>
+<aside class="sidebar">
+    <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+    <div class="sidebar-name">Dario Amodei</div>
+    <nav>
+        <a href="index.html">Overview</a>
+        <a href="vision.html">AI Vision</a>
+        <a href="strategy.html">Strategic Frameworks</a>
+        <a href="strengths.html">Strengths &amp; Weaknesses</a>
+        <a href="personality.html">Personality Profile</a>
+        <a href="leadership.html" class="active">Leadership Style</a>
+        <a href="replicate.html">What to Replicate</a>
+        <a href="improve.html">What to Improve</a>
+        <a href="quotes.html">Key Quotes</a>
+        <a href="playbook.html">Action Playbook</a>
+    </nav>
+</aside>
 
-    <main class="main">
+<main class="main">
 
         <div class="page-label">Dario Amodei</div>
         <h1>Leadership Style</h1>
@@ -516,20 +203,7 @@
 
     </main>
 
-    <script>
-        const hamburger = document.getElementById('hamburger');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-
-        function toggleMenu() {
-            hamburger.classList.toggle('open');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('show');
-        }
-
-        hamburger.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-    </script>
+    <script src="../base.js"></script>
 
 </body>
 </html>

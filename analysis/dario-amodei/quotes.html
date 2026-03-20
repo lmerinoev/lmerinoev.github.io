@@ -4,230 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dario Amodei — Key Quotes</title>
-<style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --bg: #ffffff;
-    --bg-secondary: #f5f5f7;
-    --text: #1d1d1f;
-    --muted: #86868b;
-    --light: #aeaeb2;
-    --border: #e5e5e5;
-    --sidebar-w: 240px;
-    --font: -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
-  }
-
-  html { font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  body { font-family: var(--font); color: var(--text); background: var(--bg); }
-
-  /* ── Labels ── */
-  .label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-  }
-
-  /* ── Sidebar ── */
-  .sidebar {
-    position: fixed;
-    top: 0; left: 0;
-    width: var(--sidebar-w);
-    height: 100vh;
-    background: var(--bg);
-    border-right: 1px solid var(--border);
-    padding: 40px 28px;
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
-    overflow-y: auto;
-  }
-
-  .sidebar-back {
-    font-size: 13px;
-    color: var(--muted);
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 32px;
-    transition: color 0.2s;
-  }
-  .sidebar-back:hover { color: var(--text); }
-
-  .sidebar-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 36px;
-  }
-
-  .sidebar nav { display: flex; flex-direction: column; gap: 0; }
-
-  .sidebar nav a {
-    font-size: 14px;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 8px 0;
-    transition: color 0.2s;
-  }
-  .sidebar nav a:hover { color: var(--text); }
-  .sidebar nav a.active { color: var(--text); font-weight: 500; }
-
-  /* ── Mobile hamburger ── */
-  .hamburger {
-    display: none;
-    position: fixed;
-    top: 20px; left: 20px;
-    z-index: 200;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    width: 40px; height: 40px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .hamburger span {
-    display: block;
-    width: 18px; height: 1.5px;
-    background: var(--text);
-    transition: transform 0.2s, opacity 0.2s;
-  }
-  .overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.15);
-    z-index: 90;
-  }
-  .overlay.open { display: block; }
-
-  /* ── Main content ── */
-  .main {
-    margin-left: var(--sidebar-w);
-    padding: 80px 80px 120px;
-    max-width: 900px;
-  }
-
-  /* ── Page title ── */
-  .page-title {
-    font-size: 2.5rem;
-    font-weight: 300;
-    line-height: 1.2;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-
-  /* ── Divider ── */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 48px 0;
-  }
-
-  /* ── Section heading ── */
-  .section-heading {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    margin-bottom: 28px;
-  }
-
-  /* ── Quote sections ── */
-  .quote-section { margin-bottom: 68px; }
-  .quote-section:last-child { margin-bottom: 0; }
-
-  .quote-section-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    margin-bottom: 24px;
-  }
-
-  .quote-block {
-    border-left: 1.5px solid #d2d2d7;
-    padding-left: 20px;
-    margin-bottom: 24px;
-  }
-  .quote-block:last-child { margin-bottom: 0; }
-
-  .quote-text {
-    font-style: italic;
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--text);
-  }
-
-  .quote-source {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 6px;
-    font-style: normal;
-  }
-
-  /* ── Footer ── */
-  .footer {
-    font-size: 12px;
-    color: var(--light);
-    padding-top: 0;
-  }
-
-  /* ── Responsive ── */
-  @media (max-width: 840px) {
-    .hamburger { display: flex; }
-    .sidebar {
-      transform: translateX(-100%);
-      transition: transform 0.25s ease;
-      box-shadow: none;
-    }
-    .sidebar.open {
-      transform: translateX(0);
-      box-shadow: 4px 0 24px rgba(0,0,0,0.06);
-    }
-    .main {
-      margin-left: 0;
-      padding: 80px 28px 100px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .page-title { font-size: 2rem; }
-    .main { padding: 72px 20px 80px; }
-    .divider { margin: 36px 0; }
-  }
-</style>
+<link rel="stylesheet" href="../base.css">
 </head>
 <body>
 
-<!-- Hamburger (mobile) -->
-<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
-  <span></span><span></span><span></span>
-</button>
-<div class="overlay" onclick="toggleSidebar()"></div>
 
-<!-- Sidebar -->
+<button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<div class="overlay"></div>
+
 <aside class="sidebar">
-  <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
-  <div class="sidebar-name">Dario Amodei</div>
-  <nav>
-    <a href="index.html">Overview</a>
-    <a href="vision.html">AI Vision</a>
-    <a href="strategy.html">Strategic Frameworks</a>
-    <a href="strengths.html">Strengths &amp; Weaknesses</a>
-    <a href="personality.html">Personality Profile</a>
-    <a href="leadership.html">Leadership Style</a>
-    <a href="replicate.html">What to Replicate</a>
-    <a href="improve.html">What to Improve</a>
-    <a href="quotes.html" class="active">Key Quotes</a>
-    <a href="playbook.html">Action Playbook</a>
-  </nav>
+    <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+    <div class="sidebar-name">Dario Amodei</div>
+    <nav>
+        <a href="index.html">Overview</a>
+        <a href="vision.html">AI Vision</a>
+        <a href="strategy.html">Strategic Frameworks</a>
+        <a href="strengths.html">Strengths &amp; Weaknesses</a>
+        <a href="personality.html">Personality Profile</a>
+        <a href="leadership.html">Leadership Style</a>
+        <a href="replicate.html">What to Replicate</a>
+        <a href="improve.html">What to Improve</a>
+        <a href="quotes.html" class="active">Key Quotes</a>
+        <a href="playbook.html">Action Playbook</a>
+    </nav>
 </aside>
 
-<!-- Main content -->
 <main class="main">
 
   <h1 class="page-title">Key Quotes</h1>
@@ -420,11 +226,6 @@
 
 </main>
 
-<script>
-  function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('open');
-    document.querySelector('.overlay').classList.toggle('open');
-  }
-</script>
+<script src="../base.js"></script>
 </body>
 </html>

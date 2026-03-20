@@ -4,239 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Key Quotes — Alexandr Wang</title>
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, 'Helvetica Neue', sans-serif;
-            background: #ffffff;
-            color: #1d1d1f;
-            line-height: 1.7;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 240px;
-            background: #ffffff;
-            border-right: 1px solid #e5e5e5;
-            padding: 2.5rem 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            padding: 0 2rem 2rem;
-            border-bottom: 1px solid #e5e5e5;
-            margin-bottom: 1rem;
-        }
-
-        .sidebar-header h2 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #1d1d1f;
-            letter-spacing: -0.01em;
-        }
-
-        .sidebar-header p {
-            font-size: 0.7rem;
-            color: #aeaeb2;
-            margin-top: 0.2rem;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-        }
-
-        .sidebar nav {
-            display: flex;
-            flex-direction: column;
-            padding: 0.5rem 0;
-        }
-
-        .sidebar nav a {
-            display: block;
-            padding: 0.5rem 2rem;
-            text-decoration: none;
-            font-size: 0.82rem;
-            color: #86868b;
-            transition: color 0.2s ease;
-            letter-spacing: -0.005em;
-        }
-
-        .sidebar nav a:hover {
-            color: #1d1d1f;
-        }
-
-        .sidebar nav a.active {
-            color: #1d1d1f;
-            font-weight: 600;
-        }
-
-        .sidebar nav a.back-link {
-            color: #aeaeb2;
-            font-size: 0.75rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar nav a.back-link:hover {
-            color: #86868b;
-        }
-
-        /* Mobile nav */
-        .mobile-nav-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 200;
-            background: #ffffff;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            padding: 0.4rem 0.65rem;
-            cursor: pointer;
-            font-size: 1.1rem;
-            color: #1d1d1f;
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.15);
-            z-index: 99;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        /* Main */
-        .main {
-            flex: 1;
-            margin-left: 240px;
-            padding: 4rem 4rem 6rem;
-            max-width: 900px;
-        }
-
-        /* Page header */
-        .page-header {
-            margin-bottom: 4rem;
-        }
-
-        .page-header h1 {
-            font-size: 2.4rem;
-            font-weight: 300;
-            color: #1d1d1f;
-            letter-spacing: -0.03em;
-            line-height: 1.2;
-        }
-
-        /* Sections */
-        .section {
-            margin-bottom: 70px;
-        }
-
-        .section-label {
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: #86868b;
-            margin-bottom: 2rem;
-        }
-
-        /* Quotes */
-        .quote {
-            margin-bottom: 2.25rem;
-        }
-
-        .quote blockquote {
-            border-left: 1.5px solid #d2d2d7;
-            padding-left: 24px;
-            font-style: italic;
-            color: #1d1d1f;
-            font-size: 1rem;
-            line-height: 1.8;
-        }
-
-        .quote .attribution {
-            padding-left: 24px;
-            margin-top: 0.6rem;
-            font-size: 0.72rem;
-            color: #86868b;
-            font-style: normal;
-            letter-spacing: 0.01em;
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: -260px;
-                width: 260px;
-                transition: left 0.3s ease;
-            }
-
-            .sidebar.open {
-                left: 0;
-            }
-
-            .mobile-nav-toggle {
-                display: block;
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 2rem 1.5rem 4rem;
-                padding-top: 4rem;
-            }
-
-            .page-header h1 {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../base.css">
 </head>
 <body>
 
-<button class="mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">&#9776;</button>
-<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
-<div class="layout">
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>Alexandr Wang</h2>
-            <p>Strategic Intelligence Brief</p>
-        </div>
-        <nav>
-            <a href="../index.html" class="back-link">&larr; All Profiles</a>
-            <a href="index.html">Overview</a>
-            <a href="vision.html">AI Vision</a>
-            <a href="strategy.html">Strategic Frameworks</a>
-            <a href="strengths.html">Strengths &amp; Weaknesses</a>
-            <a href="personality.html">Personality Profile</a>
-            <a href="leadership.html">Leadership Style</a>
-            <a href="replicate.html">What to Replicate</a>
-            <a href="improve.html">What to Improve</a>
-            <a href="quotes.html" class="active">Key Quotes</a>
-            <a href="playbook.html">Action Playbook</a>
-        </nav>
-    </aside>
+<div class="overlay"></div>
 
-    <main class="main">
+<aside class="sidebar">
+    <a href="../index.html" class="sidebar-back">&larr; All Profiles</a>
+    <div class="sidebar-name">Alexandr Wang</div>
+    <nav>
+        <a href="index.html">Overview</a>
+        <a href="vision.html">AI Vision</a>
+        <a href="strategy.html">Strategic Frameworks</a>
+        <a href="strengths.html">Strengths &amp; Weaknesses</a>
+        <a href="personality.html">Personality Profile</a>
+        <a href="leadership.html">Leadership Style</a>
+        <a href="replicate.html">What to Replicate</a>
+        <a href="improve.html">What to Improve</a>
+        <a href="quotes.html" class="active">Key Quotes</a>
+        <a href="playbook.html">Action Playbook</a>
+    </nav>
+</aside>
+
+<main class="main">
+
 
         <div class="page-header">
             <h1>Key Quotes</h1>
@@ -422,23 +220,10 @@
             </div>
         </div>
 
-    </main>
-</div>
+    
+</main>
 
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('open');
-        document.querySelector('.sidebar-overlay').classList.toggle('active');
-    }
-
-    document.querySelectorAll('.sidebar nav a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                toggleSidebar();
-            }
-        });
-    });
-</script>
+<script src="../base.js"></script>
 
 </body>
 </html>
