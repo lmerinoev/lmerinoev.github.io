@@ -10,60 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background: #0a0a0f !important;
-        }
-
-        .hero {
-            background: linear-gradient(180deg, #0a0a0f 0%, #0d1117 100%) !important;
-        }
-
-        .hero-title {
-            color: #00d4ff !important;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
-        }
-
-        .hero-subtitle {
-            color: #8899aa !important;
-        }
-
-        .hero-badge {
-            background: rgba(0, 212, 255, 0.1) !important;
-            border: 1px solid rgba(0, 212, 255, 0.2) !important;
-        }
-
-        .hero-badge span {
-            color: #00d4ff !important;
-        }
-
-        .status-dot {
-            background: #00d4ff !important;
-            box-shadow: 0 0 8px #00d4ff;
-        }
-
-        .demos-section {
-            background: #0d1117 !important;
-        }
-
-        .demos-section .card {
-            background: rgba(13, 17, 23, 0.8) !important;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-        }
-
-        .section-title {
-            color: #e0e6ed !important;
-        }
-
-        .section-subtitle {
-            color: #8899aa !important;
-        }
-
-        .section-badge .text {
-            color: #00d4ff !important;
-        }
-
-        .section-badge .dot {
-            background: #00d4ff !important;
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .video-container {
@@ -73,9 +23,8 @@
             margin: 20px auto;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
-            background: #000;
+            box-shadow: var(--shadow-lg);
+            background: var(--gray-100);
         }
 
         #webcam {
@@ -115,93 +64,69 @@
             font-size: 14px;
         }
 
-        .btn-jarvis {
-            background: rgba(0, 212, 255, 0.15);
-            color: #00d4ff;
-            border: 1px solid rgba(0, 212, 255, 0.3) !important;
+        .btn-primary {
+            background: var(--accent);
+            color: var(--secondary);
         }
 
-        .btn-jarvis:hover {
-            background: rgba(0, 212, 255, 0.25);
+        .btn-primary:hover {
+            background: var(--accent-light);
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
         }
 
-        .btn-stop {
-            background: rgba(255, 59, 48, 0.15);
-            color: #ff3b30;
-            border: 1px solid rgba(255, 59, 48, 0.3) !important;
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
         }
 
-        .btn-stop:hover {
-            background: rgba(255, 59, 48, 0.25);
+        .btn-secondary:hover {
+            background: var(--gray-300);
             transform: translateY(-2px);
         }
 
         .status {
             text-align: center;
-            padding: 16px 20px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             margin: 20px 0;
-            font-size: 13px;
-            font-family: 'Inter', monospace;
+            font-size: 14px;
         }
 
         .status.loading {
-            background: rgba(255, 215, 0, 0.1);
-            color: #ffd700;
-            border: 1px solid rgba(255, 215, 0, 0.2);
+            background: #fef3c7;
+            color: #92400e;
         }
 
         .status.error {
-            background: rgba(255, 59, 48, 0.1);
-            color: #ff3b30;
-            border: 1px solid rgba(255, 59, 48, 0.2);
+            background: #fee2e2;
+            color: #dc2626;
         }
 
         .status.success {
-            background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            background: #d1fae5;
+            color: #065f46;
         }
 
         .status.info {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            background: var(--gray-100);
+            color: var(--gray-600);
         }
 
         .placeholder {
             width: 100%;
             height: 300px;
-            background: #0d1117;
+            background: var(--gray-100);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #445566;
+            color: var(--gray-500);
             font-size: 16px;
         }
 
         .placeholder i {
             font-size: 48px;
             margin-bottom: 16px;
-            color: rgba(0, 212, 255, 0.3);
-        }
-
-        .footer {
-            background: #0a0a0f !important;
-            border-top: 1px solid rgba(0, 212, 255, 0.1);
-        }
-
-        .footer-bottom p, .footer-badge .text {
-            color: #445566 !important;
-        }
-
-        .demo-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
         }
 
         @media (max-width: 768px) {
@@ -227,7 +152,7 @@
                 <a href="../index.html#research" class="nav-icon" data-label="Research">
                     <i class="fas fa-briefcase"></i>
                 </a>
-                <a href="./" class="nav-icon active" data-label="Experiments">
+                <a href="./" class="nav-icon active" data-label="Labs">
                     <i class="fas fa-flask"></i>
                 </a>
                 <a href="../analysis/" class="nav-icon" data-label="Analysis">
@@ -251,7 +176,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <div class="status-dot"></div>
-                    <span>Experiment</span>
+                    <span>Interactive Lab</span>
                 </div>
                 <h1 class="hero-title">Jarvis Face HUD</h1>
                 <p class="hero-subtitle">
@@ -293,13 +218,13 @@
                     </div>
 
                     <div class="controls">
-                        <button id="startButton" class="btn btn-jarvis">
+                        <button id="startButton" class="btn btn-primary">
                             <i class="fas fa-play"></i>
-                            Initialize HUD
+                            Start Camera
                         </button>
-                        <button id="stopButton" class="btn btn-stop" style="display: none;">
-                            <i class="fas fa-power-off"></i>
-                            Shutdown
+                        <button id="stopButton" class="btn btn-secondary" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            Stop Camera
                         </button>
                     </div>
                 </div>

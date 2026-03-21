@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Drum Machine - Luis Merino</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .demo-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* TE-inspired drum machine */
+        .te-machine {
+            background: #e8e4df;
+            border-radius: 16px;
+            padding: 24px;
+            font-family: 'Inter', -apple-system, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+            border: 1px solid #d5d0ca;
+        }
+
+        .te-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .te-brand {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #8a8580;
+        }
+
+        .te-title {
+            font-size: 11px;
+            font-weight: 500;
+            color: #b0aaa4;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Display */
+        .te-display {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 44px;
+        }
+
+        .te-display-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .te-bpm {
+            font-family: 'Inter', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b35;
+            letter-spacing: -0.02em;
+        }
+
+        .te-bpm-label {
+            font-size: 9px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .te-step-indicator {
+            font-family: 'Inter', monospace;
+            font-size: 13px;
+            color: #555;
+            letter-spacing: 0.05em;
+        }
+
+        .te-step-indicator .current {
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        /* Transport controls */
+        .te-transport {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .te-btn {
+            height: 36px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+        }
+
+        .te-btn:active {
+            transform: scale(0.96);
+        }
+
+        .te-btn-play {
+            background: #ff6b35;
+            color: #fff;
+            padding: 0 20px;
+            min-width: 80px;
+        }
+
+        .te-btn-play:hover { background: #e85a28; }
+
+        .te-btn-play.playing {
+            background: #333;
+            color: #ff6b35;
+        }
+
+        .te-btn-secondary {
+            background: #d5d0ca;
+            color: #5a5550;
+            padding: 0 14px;
+        }
+
+        .te-btn-secondary:hover { background: #c8c3bc; }
+
+        .te-btn-icon {
+            background: #d5d0ca;
+            color: #5a5550;
+            width: 36px;
+            padding: 0;
+        }
+
+        .te-btn-icon:hover { background: #c8c3bc; }
+
+        .te-btn-fullscreen {
+            background: #d5d0ca;
+            color: #5a5550;
+            padding: 0 14px;
+            margin-left: auto;
+        }
+
+        .te-btn-fullscreen:hover { background: #c8c3bc; }
+
+        /* BPM control */
+        .te-bpm-control {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .te-bpm-control .te-btn-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Sequencer grid */
+        .te-grid-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .te-grid {
+            display: grid;
+            gap: 3px;
+            min-width: fit-content;
+        }
+
+        .te-row {
+            display: contents;
+        }
+
+        .te-row-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #8a8580;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            display: flex;
+            align-items: center;
+            padding-right: 10px;
+            white-space: nowrap;
+            min-width: 52px;
+        }
+
+        .te-grid {
+            grid-template-columns: 52px repeat(16, 1fr);
+            grid-template-rows: repeat(8, 36px);
+        }
+
+        .te-pad {
+            background: #d5d0ca;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.08s ease;
+            min-width: 36px;
+            position: relative;
+        }
+
+        .te-pad:hover {
+            background: #c8c3bc;
+        }
+
+        .te-pad.active {
+            background: #ff6b35;
+        }
+
+        .te-pad.active:hover {
+            background: #e85a28;
+        }
+
+        .te-pad.playing {
+            box-shadow: inset 0 0 0 2px #ff6b35;
+        }
+
+        .te-pad.beat-marker {
+            border-top: 2px solid #b0aaa4;
+        }
+
+        /* Swing & volume */
+        .te-controls-row {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #d5d0ca;
+            flex-wrap: wrap;
+        }
+
+        .te-knob-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .te-knob-label {
+            font-size: 9px;
+            font-weight: 600;
+            color: #8a8580;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .te-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 4px;
+            background: #d5d0ca;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .te-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ff6b35;
+            cursor: pointer;
+        }
+
+        .te-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ff6b35;
+            cursor: pointer;
+            border: none;
+        }
+
+        .te-slider-val {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5a5550;
+            min-width: 28px;
+            font-family: 'Inter', monospace;
+        }
+
+        /* Pattern selector */
+        .te-patterns {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .te-pattern-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 4px;
+            background: #d5d0ca;
+            color: #8a8580;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .te-pattern-btn:hover { background: #c8c3bc; }
+
+        .te-pattern-btn.active {
+            background: #ff6b35;
+            color: #fff;
+        }
+
+        /* Fullscreen mode */
+        .fullscreen-wrapper {
+            display: none;
+        }
+
+        .fullscreen-wrapper.active {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            background: #e8e4df;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .fullscreen-wrapper.active .te-machine {
+            width: 100%;
+            max-width: 1200px;
+            max-height: 100%;
+            overflow-y: auto;
+            border: none;
+            border-radius: 0;
+        }
+
+        .fullscreen-wrapper.active .te-pad {
+            min-height: 44px;
+        }
+
+        .fullscreen-wrapper.active .te-grid {
+            grid-template-rows: repeat(8, 44px);
+        }
+
+        /* Dark mode support */
+        [data-theme="dark"] .te-machine {
+            background: #2a2a2a;
+            border-color: #3a3a3a;
+        }
+
+        [data-theme="dark"] .te-brand,
+        [data-theme="dark"] .te-title {
+            color: #6a6a6a;
+        }
+
+        [data-theme="dark"] .te-row-label {
+            color: #8a8a8a;
+        }
+
+        [data-theme="dark"] .te-pad {
+            background: #3a3a3a;
+        }
+
+        [data-theme="dark"] .te-pad:hover {
+            background: #444;
+        }
+
+        [data-theme="dark"] .te-btn-secondary,
+        [data-theme="dark"] .te-btn-icon,
+        [data-theme="dark"] .te-btn-fullscreen {
+            background: #3a3a3a;
+            color: #aaa;
+        }
+
+        [data-theme="dark"] .te-btn-secondary:hover,
+        [data-theme="dark"] .te-btn-icon:hover,
+        [data-theme="dark"] .te-btn-fullscreen:hover {
+            background: #444;
+        }
+
+        [data-theme="dark"] .te-slider {
+            background: #3a3a3a;
+        }
+
+        [data-theme="dark"] .te-controls-row {
+            border-top-color: #3a3a3a;
+        }
+
+        [data-theme="dark"] .te-knob-label {
+            color: #6a6a6a;
+        }
+
+        [data-theme="dark"] .te-slider-val {
+            color: #aaa;
+        }
+
+        [data-theme="dark"] .te-pattern-btn {
+            background: #3a3a3a;
+            color: #6a6a6a;
+        }
+
+        [data-theme="dark"] .te-pattern-btn:hover {
+            background: #444;
+        }
+
+        [data-theme="dark"] .fullscreen-wrapper.active {
+            background: #2a2a2a;
+        }
+
+        [data-theme="dark"] .te-display {
+            background: #111;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container { padding: 10px; }
+            .te-machine { padding: 16px; }
+            .te-pad { min-width: 28px; }
+            .te-grid { grid-template-rows: repeat(8, 32px); }
+            .te-row-label { font-size: 8px; min-width: 40px; padding-right: 6px; }
+            .te-grid { grid-template-columns: 40px repeat(16, 1fr); }
+            .te-transport { flex-wrap: wrap; }
+            .te-controls-row { gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Luis Merino</div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-icon" data-label="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="../about.html" class="nav-icon" data-label="About">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="../index.html#research" class="nav-icon" data-label="Research">
+                    <i class="fas fa-briefcase"></i>
+                </a>
+                <a href="./" class="nav-icon active" data-label="Labs">
+                    <i class="fas fa-flask"></i>
+                </a>
+                <a href="../analysis/" class="nav-icon" data-label="Analysis">
+                    <i class="fas fa-search"></i>
+                </a>
+                <a href="../index.html#contact" class="nav-icon" data-label="Contact">
+                    <i class="fas fa-shopping-bag"></i>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <div class="status-dot"></div>
+                    <span>Interactive Lab</span>
+                </div>
+                <h1 class="hero-title">Drum Machine</h1>
+                <p class="hero-subtitle">
+                    A 16-step sequencer with 8 drum voices. Inspired by Teenage Engineering.
+                    Works on desktop and mobile.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Drum Machine Section -->
+    <section class="demos-section">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-badge">
+                        <div class="dot"></div>
+                        <span class="text">Sequencer</span>
+                    </div>
+                    <h2 class="section-title">Beat Maker</h2>
+                    <p class="section-subtitle">
+                        Click pads to program a pattern, then hit play. Use fullscreen for the best experience.
+                    </p>
+                </div>
+
+                <div class="demo-container">
+                    <div id="machine-inline">
+                        <!-- Machine rendered by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fullscreen wrapper -->
+    <div id="fullscreen-wrapper" class="fullscreen-wrapper">
+        <!-- Machine moves here in fullscreen -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-badge">
+                    <div class="dot"></div>
+                    <span class="text">Follow Me</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+    (function() {
+        // ===== AUDIO ENGINE =====
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function ensureAudio() {
+            if (!audioCtx) audioCtx = new AudioCtx();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        // Drum synthesis
+        function playKick(time) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(160, time);
+            osc.frequency.exponentialRampToValueAtTime(40, time + 0.12);
+            gain.gain.setValueAtTime(0.9, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
+            osc.start(time);
+            osc.stop(time + 0.4);
+        }
+
+        function playSnare(time) {
+            // Noise burst
+            const bufferSize = audioCtx.sampleRate * 0.15;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            const noiseGain = audioCtx.createGain();
+            const noiseFilter = audioCtx.createBiquadFilter();
+            noiseFilter.type = 'highpass';
+            noiseFilter.frequency.value = 1000;
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+            noiseGain.gain.setValueAtTime(0.6, time);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+            noise.start(time);
+            // Body
+            const osc = audioCtx.createOscillator();
+            const oscGain = audioCtx.createGain();
+            osc.connect(oscGain);
+            oscGain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(200, time);
+            osc.frequency.exponentialRampToValueAtTime(100, time + 0.05);
+            oscGain.gain.setValueAtTime(0.5, time);
+            oscGain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+            osc.start(time);
+            osc.stop(time + 0.1);
+        }
+
+        function playHihat(time, open) {
+            const bufferSize = audioCtx.sampleRate * (open ? 0.3 : 0.05);
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 5000;
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            const dur = open ? 0.3 : 0.05;
+            gain.gain.setValueAtTime(open ? 0.3 : 0.35, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
+            noise.start(time);
+        }
+
+        function playClap(time) {
+            for (let i = 0; i < 3; i++) {
+                const t = time + i * 0.01;
+                const bufSize = audioCtx.sampleRate * 0.02;
+                const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+                const d = buf.getChannelData(0);
+                for (let j = 0; j < bufSize; j++) d[j] = Math.random() * 2 - 1;
+                const src = audioCtx.createBufferSource();
+                src.buffer = buf;
+                const g = audioCtx.createGain();
+                const f = audioCtx.createBiquadFilter();
+                f.type = 'bandpass';
+                f.frequency.value = 1200;
+                src.connect(f);
+                f.connect(g);
+                g.connect(audioCtx.destination);
+                g.gain.setValueAtTime(0.5, t);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+                src.start(t);
+            }
+        }
+
+        function playTom(time, freq) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(freq, time);
+            osc.frequency.exponentialRampToValueAtTime(freq * 0.5, time + 0.15);
+            gain.gain.setValueAtTime(0.6, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+            osc.start(time);
+            osc.stop(time + 0.25);
+        }
+
+        function playRim(time) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(800, time);
+            gain.gain.setValueAtTime(0.3, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.03);
+            osc.start(time);
+            osc.stop(time + 0.03);
+        }
+
+        function playCowbell(time) {
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc1.type = 'square';
+            osc2.type = 'square';
+            osc1.frequency.value = 560;
+            osc2.frequency.value = 845;
+            gain.gain.setValueAtTime(0.3, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+            osc1.start(time);
+            osc2.start(time);
+            osc1.stop(time + 0.15);
+            osc2.stop(time + 0.15);
+        }
+
+        const drums = [
+            { name: 'KICK', play: (t) => playKick(t) },
+            { name: 'SNARE', play: (t) => playSnare(t) },
+            { name: 'HH-C', play: (t) => playHihat(t, false) },
+            { name: 'HH-O', play: (t) => playHihat(t, true) },
+            { name: 'CLAP', play: (t) => playClap(t) },
+            { name: 'TOM', play: (t) => playTom(t, 150) },
+            { name: 'RIM', play: (t) => playRim(t) },
+            { name: 'COWB', play: (t) => playCowbell(t) }
+        ];
+
+        // ===== SEQUENCER STATE =====
+        const STEPS = 16;
+        const TRACKS = drums.length;
+        let bpm = 120;
+        let swing = 0;
+        let volume = 80;
+        let playing = false;
+        let currentStep = -1;
+        let intervalId = null;
+        let currentPattern = 0;
+
+        // 4 patterns, each is TRACKS x STEPS grid
+        const patterns = Array.from({ length: 4 }, () =>
+            Array.from({ length: TRACKS }, () => new Array(STEPS).fill(false))
+        );
+
+        function getGrid() { return patterns[currentPattern]; }
+
+        // ===== UI RENDERING =====
+        function createMachineHTML() {
+            let padsHTML = '';
+            for (let t = 0; t < TRACKS; t++) {
+                padsHTML += `<div class="te-row-label">${drums[t].name}</div>`;
+                for (let s = 0; s < STEPS; s++) {
+                    const beatClass = s % 4 === 0 ? ' beat-marker' : '';
+                    padsHTML += `<button class="te-pad${beatClass}" data-track="${t}" data-step="${s}"></button>`;
+                }
+            }
+
+            return `
+            <div class="te-machine" id="te-machine">
+                <div class="te-header">
+                    <span class="te-brand">Luis Merino Labs</span>
+                    <span class="te-title">DR-16 Drum Machine</span>
+                </div>
+                <div class="te-display">
+                    <div class="te-display-left">
+                        <div>
+                            <div class="te-bpm" id="te-bpm-display">${bpm}</div>
+                            <div class="te-bpm-label">BPM</div>
+                        </div>
+                        <div class="te-bpm-control">
+                            <button class="te-btn te-btn-icon" id="bpm-down">-</button>
+                            <button class="te-btn te-btn-icon" id="bpm-up">+</button>
+                        </div>
+                    </div>
+                    <div class="te-step-indicator" id="te-step-display">
+                        STEP <span class="current">--</span> / ${STEPS}
+                    </div>
+                </div>
+                <div class="te-transport">
+                    <button class="te-btn te-btn-play" id="te-play">
+                        <i class="fas fa-play"></i> PLAY
+                    </button>
+                    <button class="te-btn te-btn-secondary" id="te-clear">CLEAR</button>
+                    <button class="te-btn te-btn-fullscreen" id="te-fullscreen">
+                        <i class="fas fa-expand"></i> FULLSCREEN
+                    </button>
+                </div>
+                <div class="te-grid-wrapper">
+                    <div class="te-grid">
+                        ${padsHTML}
+                    </div>
+                </div>
+                <div class="te-controls-row">
+                    <div class="te-knob-group">
+                        <span class="te-knob-label">SWING</span>
+                        <input type="range" class="te-slider" id="te-swing" min="0" max="75" value="${swing}">
+                        <span class="te-slider-val" id="te-swing-val">${swing}%</span>
+                    </div>
+                    <div class="te-knob-group">
+                        <span class="te-knob-label">VOL</span>
+                        <input type="range" class="te-slider" id="te-volume" min="0" max="100" value="${volume}">
+                        <span class="te-slider-val" id="te-vol-val">${volume}%</span>
+                    </div>
+                    <div class="te-patterns">
+                        ${[1,2,3,4].map((n, i) =>
+                            `<button class="te-pattern-btn${i === currentPattern ? ' active' : ''}" data-pattern="${i}">${n}</button>`
+                        ).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // Render into inline container
+        const inlineContainer = document.getElementById('machine-inline');
+        inlineContainer.innerHTML = createMachineHTML();
+
+        // ===== DOM REFERENCES =====
+        let machine = document.getElementById('te-machine');
+        const fullscreenWrapper = document.getElementById('fullscreen-wrapper');
+        let isFullscreen = false;
+
+        function $(id) { return document.getElementById(id); }
+
+        function getAllPads() { return machine.querySelectorAll('.te-pad'); }
+
+        function updatePadStates() {
+            const grid = getGrid();
+            getAllPads().forEach(pad => {
+                const t = +pad.dataset.track;
+                const s = +pad.dataset.step;
+                pad.classList.toggle('active', grid[t][s]);
+                pad.classList.toggle('playing', playing && s === currentStep);
+            });
+        }
+
+        function updateStepDisplay() {
+            const el = machine.querySelector('#te-step-display');
+            if (el) {
+                el.innerHTML = `STEP <span class="current">${playing ? String(currentStep + 1).padStart(2, '0') : '--'}</span> / ${STEPS}`;
+            }
+        }
+
+        // ===== EVENT HANDLERS =====
+        function bindEvents() {
+            // Pad clicks
+            machine.addEventListener('click', (e) => {
+                const pad = e.target.closest('.te-pad');
+                if (!pad) return;
+                const t = +pad.dataset.track;
+                const s = +pad.dataset.step;
+                getGrid()[t][s] = !getGrid()[t][s];
+                pad.classList.toggle('active', getGrid()[t][s]);
+
+                // Preview sound on toggle on
+                if (getGrid()[t][s]) {
+                    ensureAudio();
+                    drums[t].play(audioCtx.currentTime);
+                }
+            });
+
+            // Play/stop
+            machine.querySelector('#te-play').addEventListener('click', togglePlay);
+
+            // Clear
+            machine.querySelector('#te-clear').addEventListener('click', () => {
+                const grid = getGrid();
+                for (let t = 0; t < TRACKS; t++)
+                    for (let s = 0; s < STEPS; s++)
+                        grid[t][s] = false;
+                updatePadStates();
+            });
+
+            // BPM
+            machine.querySelector('#bpm-down').addEventListener('click', () => {
+                bpm = Math.max(40, bpm - 5);
+                machine.querySelector('#te-bpm-display').textContent = bpm;
+                if (playing) restartSequencer();
+            });
+
+            machine.querySelector('#bpm-up').addEventListener('click', () => {
+                bpm = Math.min(300, bpm + 5);
+                machine.querySelector('#te-bpm-display').textContent = bpm;
+                if (playing) restartSequencer();
+            });
+
+            // Swing
+            machine.querySelector('#te-swing').addEventListener('input', (e) => {
+                swing = +e.target.value;
+                machine.querySelector('#te-swing-val').textContent = swing + '%';
+            });
+
+            // Volume
+            machine.querySelector('#te-volume').addEventListener('input', (e) => {
+                volume = +e.target.value;
+                machine.querySelector('#te-vol-val').textContent = volume + '%';
+            });
+
+            // Pattern buttons
+            machine.querySelectorAll('.te-pattern-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentPattern = +btn.dataset.pattern;
+                    machine.querySelectorAll('.te-pattern-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    updatePadStates();
+                });
+            });
+
+            // Fullscreen
+            machine.querySelector('#te-fullscreen').addEventListener('click', toggleFullscreen);
+        }
+
+        bindEvents();
+
+        // ===== FULLSCREEN =====
+        function toggleFullscreen() {
+            isFullscreen = !isFullscreen;
+            if (isFullscreen) {
+                fullscreenWrapper.appendChild(machine);
+                fullscreenWrapper.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                machine.querySelector('#te-fullscreen i').className = 'fas fa-compress';
+                machine.querySelector('#te-fullscreen').lastChild.textContent = ' EXIT';
+            } else {
+                inlineContainer.appendChild(machine);
+                fullscreenWrapper.classList.remove('active');
+                document.body.style.overflow = '';
+                machine.querySelector('#te-fullscreen i').className = 'fas fa-expand';
+                machine.querySelector('#te-fullscreen').lastChild.textContent = ' FULLSCREEN';
+            }
+        }
+
+        // Escape key to exit fullscreen
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isFullscreen) toggleFullscreen();
+            if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+        });
+
+        // ===== SEQUENCER =====
+        let nextStepTime = 0;
+        let timerWorker = null;
+
+        function togglePlay() {
+            ensureAudio();
+            playing = !playing;
+            const btn = machine.querySelector('#te-play');
+            if (playing) {
+                btn.innerHTML = '<i class="fas fa-stop"></i> STOP';
+                btn.classList.add('playing');
+                currentStep = -1;
+                nextStepTime = audioCtx.currentTime;
+                scheduleAhead();
+            } else {
+                btn.innerHTML = '<i class="fas fa-play"></i> PLAY';
+                btn.classList.remove('playing');
+                currentStep = -1;
+                if (intervalId) { clearInterval(intervalId); intervalId = null; }
+                updatePadStates();
+                updateStepDisplay();
+            }
+        }
+
+        function getStepDuration(stepIndex) {
+            const baseStep = 60 / bpm / 4; // 16th note
+            if (swing === 0 || stepIndex % 2 === 0) return baseStep;
+            // Swing affects off-beat steps
+            const swingFactor = swing / 100;
+            return stepIndex % 2 === 1
+                ? baseStep * (1 + swingFactor * 0.5)
+                : baseStep * (1 - swingFactor * 0.5);
+        }
+
+        function scheduleStep() {
+            currentStep = (currentStep + 1) % STEPS;
+            const grid = getGrid();
+            const vol = volume / 100;
+
+            for (let t = 0; t < TRACKS; t++) {
+                if (grid[t][currentStep]) {
+                    // Simple volume: we modulate gain at source
+                    drums[t].play(nextStepTime);
+                }
+            }
+
+            updatePadStates();
+            updateStepDisplay();
+
+            nextStepTime += getStepDuration(currentStep);
+        }
+
+        function scheduleAhead() {
+            if (!playing) return;
+            // Schedule steps that fall within the lookahead window
+            while (nextStepTime < audioCtx.currentTime + 0.1) {
+                scheduleStep();
+            }
+            intervalId = setTimeout(scheduleAhead, 25);
+        }
+
+        function restartSequencer() {
+            if (playing) {
+                if (intervalId) { clearTimeout(intervalId); intervalId = null; }
+                nextStepTime = audioCtx.currentTime;
+                scheduleAhead();
+            }
+        }
+
+        // Load a default beat
+        const defaultKick = [0,0,0,0, 4,0,0,0, 0,0,0,0, 4,0,0,0];
+        const defaultSnare = [0,0,0,0, 0,0,0,0, 4,0,0,0, 0,0,0,0];
+        const defaultHH =   [4,0,4,0, 4,0,4,0, 4,0,4,0, 4,0,4,0];
+
+        // Set default pattern on pattern 1
+        [0,4,8,12].forEach(s => patterns[0][0][s] = true); // Kick on 1,5,9,13
+        [4,12].forEach(s => patterns[0][1][s] = true); // Snare on 5,13
+        for (let s = 0; s < 16; s += 2) patterns[0][2][s] = true; // HH every other
+        updatePadStates();
+    })();
+    </script>
+</body>
+</html>
