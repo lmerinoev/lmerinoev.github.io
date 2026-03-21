@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Face HUD - Luis Merino</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #0a0a0f !important;
+        }
+
+        .hero {
+            background: linear-gradient(180deg, #0a0a0f 0%, #0d1117 100%) !important;
+        }
+
+        .hero-title {
+            color: #00d4ff !important;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            color: #8899aa !important;
+        }
+
+        .hero-badge {
+            background: rgba(0, 212, 255, 0.1) !important;
+            border: 1px solid rgba(0, 212, 255, 0.2) !important;
+        }
+
+        .hero-badge span {
+            color: #00d4ff !important;
+        }
+
+        .status-dot {
+            background: #00d4ff !important;
+            box-shadow: 0 0 8px #00d4ff;
+        }
+
+        .demos-section {
+            background: #0d1117 !important;
+        }
+
+        .demos-section .card {
+            background: rgba(13, 17, 23, 0.8) !important;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .section-title {
+            color: #e0e6ed !important;
+        }
+
+        .section-subtitle {
+            color: #8899aa !important;
+        }
+
+        .section-badge .text {
+            color: #00d4ff !important;
+        }
+
+        .section-badge .dot {
+            background: #00d4ff !important;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
+            background: #000;
+        }
+
+        #webcam {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: rotateY(180deg);
+        }
+
+        #hud_canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotateY(180deg);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .controls .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-jarvis {
+            background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.3) !important;
+        }
+
+        .btn-jarvis:hover {
+            background: rgba(0, 212, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn-stop {
+            background: rgba(255, 59, 48, 0.15);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.3) !important;
+        }
+
+        .btn-stop:hover {
+            background: rgba(255, 59, 48, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .status {
+            text-align: center;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 13px;
+            font-family: 'Inter', monospace;
+        }
+
+        .status.loading {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .status.error {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+        }
+
+        .status.success {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .status.info {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .placeholder {
+            width: 100%;
+            height: 300px;
+            background: #0d1117;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #445566;
+            font-size: 16px;
+        }
+
+        .placeholder i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: rgba(0, 212, 255, 0.3);
+        }
+
+        .footer {
+            background: #0a0a0f !important;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-bottom p, .footer-badge .text {
+            color: #445566 !important;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container { padding: 10px; }
+            .video-container { margin: 10px auto; }
+            .controls { flex-direction: column; align-items: center; }
+            .controls .btn { width: 100%; max-width: 300px; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Luis Merino</div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-icon" data-label="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="../about.html" class="nav-icon" data-label="About">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="../index.html#research" class="nav-icon" data-label="Research">
+                    <i class="fas fa-briefcase"></i>
+                </a>
+                <a href="./" class="nav-icon active" data-label="Experiments">
+                    <i class="fas fa-flask"></i>
+                </a>
+                <a href="../analysis/" class="nav-icon" data-label="Analysis">
+                    <i class="fas fa-search"></i>
+                </a>
+                <a href="../index.html#contact" class="nav-icon" data-label="Contact">
+                    <i class="fas fa-shopping-bag"></i>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <div class="status-dot"></div>
+                    <span>Experiment</span>
+                </div>
+                <h1 class="hero-title">Jarvis Face HUD</h1>
+                <p class="hero-subtitle">
+                    Iron Man inspired heads-up display overlaid on your face in real-time
+                    using MediaPipe face landmark detection.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demos-section">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-badge">
+                        <div class="dot"></div>
+                        <span class="text">Live Demo</span>
+                    </div>
+                    <h2 class="section-title">Activate HUD</h2>
+                    <p class="section-subtitle">
+                        Click "Initialize HUD" to load the AI model and start the face tracking overlay.
+                    </p>
+                </div>
+
+                <div class="demo-container">
+                    <div id="status" class="status info">
+                        <i class="fas fa-robot"></i>
+                        Click "Initialize HUD" to begin
+                    </div>
+
+                    <div class="video-container">
+                        <video id="webcam" autoplay playsinline style="display: none;"></video>
+                        <canvas id="hud_canvas" style="display: none;"></canvas>
+                        <div id="placeholder" class="placeholder">
+                            <i class="fas fa-mask"></i>
+                            HUD feed will appear here
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <button id="startButton" class="btn btn-jarvis">
+                            <i class="fas fa-play"></i>
+                            Initialize HUD
+                        </button>
+                        <button id="stopButton" class="btn btn-stop" style="display: none;">
+                            <i class="fas fa-power-off"></i>
+                            Shutdown
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../script.js"></script>
+    <script type="module">
+        import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
+        const { FaceLandmarker, FilesetResolver } = vision;
+
+        let faceLandmarker;
+        let webcamStream = null;
+        let isDetecting = false;
+        let lastVideoTime = -1;
+        let results = undefined;
+        let frameCount = 0;
+
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const statusEl = document.getElementById('status');
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('hud_canvas');
+        const ctx = canvas.getContext('2d');
+        const placeholder = document.getElementById('placeholder');
+
+        // Jarvis color palette
+        const CYAN = '#00d4ff';
+        const GOLD = '#ffd700';
+        const GREEN = '#00ff88';
+        const CYAN_DIM = 'rgba(0, 212, 255, 0.3)';
+        const CYAN_GLOW = 'rgba(0, 212, 255, 0.6)';
+
+        // Fake HUD data
+        const sysLabels = ['SYS', 'PWR', 'SCAN', 'LINK', 'LOCK'];
+        let hudData = { sys: 94, pwr: 100, scan: 0, link: 87, lock: 0 };
+
+        async function createFaceLandmarker() {
+            try {
+                updateStatus('Loading Jarvis AI core...', 'loading');
+                const filesetResolver = await FilesetResolver.forVisionTasks(
+                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+                );
+                faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
+                    baseOptions: {
+                        modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+                        delegate: "GPU"
+                    },
+                    outputFaceBlendshapes: true,
+                    runningMode: "VIDEO",
+                    numFaces: 1,
+                    minFaceDetectionConfidence: 0.5,
+                    minFacePresenceConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+                updateStatus('Jarvis online. Click "Initialize HUD" to activate.', 'success');
+                startButton.disabled = false;
+            } catch (error) {
+                console.error("Error loading FaceLandmarker:", error);
+                updateStatus('Error loading Jarvis core. Please refresh.', 'error');
+            }
+        }
+
+        function updateStatus(message, type = 'info') {
+            statusEl.className = `status ${type}`;
+            statusEl.innerHTML = `<i class="fas fa-robot"></i> ${message}`;
+        }
+
+        function startCamera() {
+            if (!faceLandmarker) {
+                updateStatus('AI core not loaded yet. Please wait.', 'error');
+                return;
+            }
+            updateStatus('Activating sensors...', 'loading');
+            navigator.mediaDevices.getUserMedia({
+                video: { width: { ideal: 640 }, height: { ideal: 480 } }
+            }).then(stream => {
+                webcamStream = stream;
+                video.srcObject = stream;
+                video.style.display = 'block';
+                canvas.style.display = 'block';
+                placeholder.style.display = 'none';
+                startButton.style.display = 'none';
+                stopButton.style.display = 'flex';
+
+                video.addEventListener('loadedmetadata', () => {
+                    updateStatus('HUD active. Face tracking engaged.', 'success');
+                    isDetecting = true;
+                    detectLoop();
+                }, { once: true });
+
+                setTimeout(() => {
+                    if (video.videoWidth > 0 && !isDetecting) {
+                        isDetecting = true;
+                        detectLoop();
+                    }
+                }, 1000);
+            }).catch(error => {
+                console.error('Camera error:', error);
+                updateStatus('Camera access denied. Check permissions.', 'error');
+            });
+        }
+
+        function stopCamera() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(t => t.stop());
+                webcamStream = null;
+            }
+            video.style.display = 'none';
+            canvas.style.display = 'none';
+            placeholder.style.display = 'flex';
+            startButton.style.display = 'flex';
+            stopButton.style.display = 'none';
+            isDetecting = false;
+            updateStatus('HUD offline. Click "Initialize HUD" to reactivate.', 'info');
+        }
+
+        // =========================================
+        // JARVIS HUD DRAWING FUNCTIONS
+        // =========================================
+
+        function drawFaceFrame(landmarks, t) {
+            // Angular geometric frame using selected face oval points
+            const faceOvalIndices = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109];
+
+            // Sample every 3rd point for angular look
+            const selectedIndices = faceOvalIndices.filter((_, i) => i % 3 === 0);
+
+            ctx.save();
+            ctx.strokeStyle = CYAN;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = CYAN;
+            ctx.shadowBlur = 8;
+
+            ctx.beginPath();
+            for (let i = 0; i < selectedIndices.length; i++) {
+                const lm = landmarks[selectedIndices[i]];
+                const x = lm.x * canvas.width;
+                const y = lm.y * canvas.height;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            // Pulsing outer frame
+            const pulse = 0.3 + 0.2 * Math.sin(t * 0.003);
+            ctx.strokeStyle = `rgba(0, 212, 255, ${pulse})`;
+            ctx.lineWidth = 1;
+            ctx.shadowBlur = 15;
+
+            ctx.beginPath();
+            for (let i = 0; i < selectedIndices.length; i++) {
+                const lm = landmarks[selectedIndices[i]];
+                // Push points slightly outward from face center
+                const cx = landmarks[1].x * canvas.width;
+                const cy = landmarks[1].y * canvas.height;
+                const x = lm.x * canvas.width;
+                const y = lm.y * canvas.height;
+                const dx = x - cx;
+                const dy = y - cy;
+                const ox = x + dx * 0.08;
+                const oy = y + dy * 0.08;
+                if (i === 0) ctx.moveTo(ox, oy);
+                else ctx.lineTo(ox, oy);
+            }
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function drawEyeReticle(landmarks, eyeIdx, t) {
+            const eye = landmarks[eyeIdx];
+            const ex = eye.x * canvas.width;
+            const ey = eye.y * canvas.height;
+            const radius = canvas.width * 0.04;
+
+            ctx.save();
+            ctx.strokeStyle = CYAN;
+            ctx.shadowColor = CYAN;
+            ctx.shadowBlur = 6;
+            ctx.lineWidth = 1.5;
+
+            // Outer rotating circle
+            const rotation = t * 0.002;
+            ctx.beginPath();
+            for (let i = 0; i < 8; i++) {
+                const startAngle = rotation + (i * Math.PI / 4);
+                const endAngle = startAngle + Math.PI / 6;
+                ctx.arc(ex, ey, radius, startAngle, endAngle);
+                ctx.moveTo(
+                    ex + Math.cos(endAngle + 0.1) * radius,
+                    ey + Math.sin(endAngle + 0.1) * radius
+                );
+            }
+            ctx.stroke();
+
+            // Inner circle
+            ctx.strokeStyle = GOLD;
+            ctx.shadowColor = GOLD;
+            ctx.shadowBlur = 4;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(ex, ey, radius * 0.5, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Crosshair lines
+            ctx.strokeStyle = CYAN_GLOW;
+            ctx.shadowBlur = 0;
+            ctx.lineWidth = 1;
+            const ch = radius * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(ex - ch, ey); ctx.lineTo(ex + ch, ey);
+            ctx.moveTo(ex, ey - ch); ctx.lineTo(ex, ey + ch);
+            ctx.stroke();
+
+            // Corner brackets (counter-rotating)
+            const rot2 = -t * 0.001;
+            ctx.strokeStyle = GOLD;
+            ctx.lineWidth = 2;
+            const br = radius * 1.3;
+            const bl = radius * 0.3;
+            for (let i = 0; i < 4; i++) {
+                const a = rot2 + (i * Math.PI / 2);
+                const bx = ex + Math.cos(a) * br;
+                const by = ey + Math.sin(a) * br;
+                ctx.beginPath();
+                ctx.moveTo(
+                    bx + Math.cos(a + Math.PI / 2) * bl,
+                    by + Math.sin(a + Math.PI / 2) * bl
+                );
+                ctx.lineTo(bx, by);
+                ctx.lineTo(
+                    bx + Math.cos(a - Math.PI / 2) * bl,
+                    by + Math.sin(a - Math.PI / 2) * bl
+                );
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        function drawForeheadHUD(landmarks, t) {
+            const top = landmarks[10];
+            const browL = landmarks[70];
+            const browR = landmarks[300];
+
+            const cx = top.x * canvas.width;
+            const topY = top.y * canvas.height - canvas.height * 0.03;
+            const leftX = browL.x * canvas.width;
+            const rightX = browR.x * canvas.width;
+            const barW = (rightX - leftX) * 0.9;
+            const barStartX = cx - barW / 2;
+
+            ctx.save();
+            ctx.font = `${Math.max(9, canvas.width * 0.016)}px Inter, monospace`;
+
+            // Draw segmented status bars
+            const barH = 6;
+            const barY = topY - 12;
+            const segments = 5;
+            const segW = barW / segments;
+
+            for (let i = 0; i < segments; i++) {
+                const label = sysLabels[i];
+                const values = [hudData.sys, hudData.pwr, hudData.scan, hudData.link, hudData.lock];
+                const val = values[i] / 100;
+
+                // Bar background
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.1)';
+                ctx.fillRect(barStartX + i * segW + 2, barY, segW - 4, barH);
+
+                // Bar fill
+                const fillColor = val > 0.7 ? GREEN : val > 0.3 ? GOLD : 'rgba(255,59,48,0.8)';
+                ctx.fillStyle = fillColor;
+                ctx.shadowColor = fillColor;
+                ctx.shadowBlur = 4;
+                ctx.fillRect(barStartX + i * segW + 2, barY, (segW - 4) * val, barH);
+                ctx.shadowBlur = 0;
+
+                // Label
+                ctx.fillStyle = CYAN_DIM;
+                ctx.textAlign = 'center';
+                ctx.fillText(label, barStartX + i * segW + segW / 2, barY - 4);
+
+                // Value
+                ctx.fillStyle = CYAN;
+                ctx.fillText(`${Math.round(val * 100)}%`, barStartX + i * segW + segW / 2, barY + barH + 12);
+            }
+
+            // Top line decoration
+            ctx.strokeStyle = CYAN_DIM;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(barStartX, barY - 18);
+            ctx.lineTo(barStartX + barW, barY - 18);
+            ctx.stroke();
+
+            // Animated scan indicator
+            const scanX = barStartX + (barW * ((t * 0.001) % 1));
+            ctx.fillStyle = CYAN;
+            ctx.shadowColor = CYAN;
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.arc(scanX, barY - 18, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawChinFrame(landmarks, t) {
+            const chin = landmarks[152];
+            const jawL = landmarks[172];
+            const jawR = landmarks[397];
+
+            const cx = chin.x * canvas.width;
+            const cy = chin.y * canvas.height;
+            const lx = jawL.x * canvas.width;
+            const rx = jawR.x * canvas.width;
+            const ext = canvas.height * 0.04;
+
+            ctx.save();
+            ctx.strokeStyle = CYAN;
+            ctx.shadowColor = CYAN;
+            ctx.shadowBlur = 6;
+            ctx.lineWidth = 1.5;
+
+            // V-shape extending from chin
+            ctx.beginPath();
+            ctx.moveTo(lx, cy);
+            ctx.lineTo(cx - 10, cy + ext);
+            ctx.lineTo(cx, cy + ext + 8);
+            ctx.lineTo(cx + 10, cy + ext);
+            ctx.lineTo(rx, cy);
+            ctx.stroke();
+
+            // Small data text
+            ctx.font = `${Math.max(8, canvas.width * 0.014)}px Inter, monospace`;
+            ctx.fillStyle = CYAN_DIM;
+            ctx.textAlign = 'center';
+            ctx.shadowBlur = 0;
+
+            const pulse = Math.sin(t * 0.005) > 0 ? 'TRACKING' : 'LOCKED';
+            ctx.fillText(pulse, cx, cy + ext + 22);
+
+            ctx.restore();
+        }
+
+        function drawSidePanels(landmarks, t) {
+            const leftCheek = landmarks[234];
+            const rightCheek = landmarks[454];
+
+            const frame = Math.floor(t / 150);
+            ctx.save();
+            ctx.font = `${Math.max(8, canvas.width * 0.013)}px Inter, monospace`;
+            ctx.shadowBlur = 0;
+
+            // Left panel
+            const lx = leftCheek.x * canvas.width - canvas.width * 0.1;
+            const ly = leftCheek.y * canvas.height - canvas.height * 0.06;
+
+            ctx.fillStyle = CYAN_DIM;
+            ctx.textAlign = 'right';
+            const leftLines = [
+                `X: ${(leftCheek.x * 100).toFixed(1)}`,
+                `Y: ${(leftCheek.y * 100).toFixed(1)}`,
+                `Z: ${((leftCheek.z || 0) * 100).toFixed(1)}`,
+                `0x${((frame * 7 + 42) % 256).toString(16).toUpperCase().padStart(2, '0')}F${((frame * 3 + 17) % 256).toString(16).toUpperCase().padStart(2, '0')}`,
+                `DIST: ${(0.45 + Math.sin(t * 0.001) * 0.05).toFixed(2)}m`
+            ];
+
+            leftLines.forEach((line, i) => {
+                ctx.fillStyle = i === 0 ? CYAN : CYAN_DIM;
+                ctx.fillText(line, lx, ly + i * 13);
+            });
+
+            // Right panel
+            const rx = rightCheek.x * canvas.width + canvas.width * 0.1;
+            const ry = rightCheek.y * canvas.height - canvas.height * 0.06;
+
+            ctx.textAlign = 'left';
+            const rightLines = [
+                `FPS: ${(28 + Math.floor(Math.sin(t * 0.002) * 4)).toFixed(0)}`,
+                `CONF: ${(92 + Math.sin(t * 0.003) * 5).toFixed(1)}%`,
+                `MESH: 468pt`,
+                `LAT: ${(12 + Math.sin(t * 0.001) * 3).toFixed(1)}ms`,
+                `MODE: ACTIVE`
+            ];
+
+            rightLines.forEach((line, i) => {
+                ctx.fillStyle = i === 4 ? GREEN : CYAN_DIM;
+                ctx.fillText(line, rx, ry + i * 13);
+            });
+
+            ctx.restore();
+        }
+
+        function drawScanLines(landmarks, t) {
+            // Get face bounding box
+            let minY = Infinity, maxY = -Infinity;
+            let minX = Infinity, maxX = -Infinity;
+            for (const lm of landmarks) {
+                const y = lm.y * canvas.height;
+                const x = lm.x * canvas.width;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+            }
+
+            ctx.save();
+            const scanY = minY + ((t * 0.1) % (maxY - minY));
+            ctx.strokeStyle = 'rgba(0, 212, 255, 0.08)';
+            ctx.lineWidth = 1;
+
+            // Multiple subtle scan lines
+            for (let i = 0; i < 3; i++) {
+                const y = scanY + i * 3;
+                if (y >= minY && y <= maxY) {
+                    ctx.globalAlpha = 0.15 - i * 0.04;
+                    ctx.beginPath();
+                    ctx.moveTo(minX - 10, y);
+                    ctx.lineTo(maxX + 10, y);
+                    ctx.stroke();
+                }
+            }
+            ctx.restore();
+        }
+
+        function drawCornerBrackets(landmarks, t) {
+            let minY = Infinity, maxY = -Infinity;
+            let minX = Infinity, maxX = -Infinity;
+            for (const lm of landmarks) {
+                const y = lm.y * canvas.height;
+                const x = lm.x * canvas.width;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+            }
+
+            const pad = 15;
+            const bLen = 20;
+            minX -= pad; minY -= pad; maxX += pad; maxY += pad;
+
+            ctx.save();
+            ctx.strokeStyle = GOLD;
+            ctx.shadowColor = GOLD;
+            ctx.shadowBlur = 4;
+            ctx.lineWidth = 2;
+
+            // Top-left
+            ctx.beginPath();
+            ctx.moveTo(minX + bLen, minY); ctx.lineTo(minX, minY); ctx.lineTo(minX, minY + bLen);
+            ctx.stroke();
+            // Top-right
+            ctx.beginPath();
+            ctx.moveTo(maxX - bLen, minY); ctx.lineTo(maxX, minY); ctx.lineTo(maxX, minY + bLen);
+            ctx.stroke();
+            // Bottom-left
+            ctx.beginPath();
+            ctx.moveTo(minX + bLen, maxY); ctx.lineTo(minX, maxY); ctx.lineTo(minX, maxY - bLen);
+            ctx.stroke();
+            // Bottom-right
+            ctx.beginPath();
+            ctx.moveTo(maxX - bLen, maxY); ctx.lineTo(maxX, maxY); ctx.lineTo(maxX, maxY - bLen);
+            ctx.stroke();
+
+            // Corner labels
+            ctx.font = `${Math.max(8, canvas.width * 0.013)}px Inter, monospace`;
+            ctx.fillStyle = GOLD;
+            ctx.shadowBlur = 0;
+            ctx.textAlign = 'left';
+            ctx.fillText('TGT-01', minX + bLen + 4, minY + 10);
+            ctx.textAlign = 'right';
+            ctx.fillText('FACE', maxX - bLen - 4, maxY - 6);
+
+            ctx.restore();
+        }
+
+        function drawNoseBridge(landmarks, t) {
+            // Draw angular lines along the nose bridge
+            const noseTop = landmarks[6];
+            const noseTip = landmarks[1];
+            const noseL = landmarks[129];
+            const noseR = landmarks[358];
+
+            const tx = noseTop.x * canvas.width;
+            const ty = noseTop.y * canvas.height;
+            const bx = noseTip.x * canvas.width;
+            const by = noseTip.y * canvas.height;
+
+            ctx.save();
+            ctx.strokeStyle = CYAN_DIM;
+            ctx.lineWidth = 1;
+
+            // Vertical line down nose
+            ctx.beginPath();
+            ctx.setLineDash([4, 4]);
+            ctx.moveTo(tx, ty);
+            ctx.lineTo(bx, by);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Small diamond at nose tip
+            const d = 5;
+            ctx.strokeStyle = GOLD;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(bx, by - d);
+            ctx.lineTo(bx + d, by);
+            ctx.lineTo(bx, by + d);
+            ctx.lineTo(bx - d, by);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // Update fake HUD data
+        function updateHUDData(t) {
+            hudData.sys = 90 + Math.sin(t * 0.001) * 8;
+            hudData.pwr = 95 + Math.sin(t * 0.0005) * 5;
+            hudData.scan = ((t * 0.05) % 100);
+            hudData.link = 85 + Math.sin(t * 0.002) * 10;
+            hudData.lock = Math.min(100, hudData.scan > 80 ? 100 : hudData.scan * 1.2);
+        }
+
+        // =========================================
+        // MAIN DETECTION LOOP
+        // =========================================
+
+        function detectLoop() {
+            if (!isDetecting) return;
+
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                requestAnimationFrame(detectLoop);
+                return;
+            }
+
+            const ratio = video.videoHeight / video.videoWidth;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const startTimeMs = performance.now();
+            if (lastVideoTime !== video.currentTime) {
+                lastVideoTime = video.currentTime;
+                try {
+                    results = faceLandmarker.detectForVideo(video, startTimeMs);
+                } catch (error) {
+                    console.error("Detection error:", error);
+                    requestAnimationFrame(detectLoop);
+                    return;
+                }
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const t = performance.now();
+
+            if (results && results.faceLandmarks && results.faceLandmarks.length > 0) {
+                const landmarks = results.faceLandmarks[0];
+
+                updateHUDData(t);
+
+                // Draw all HUD elements
+                drawScanLines(landmarks, t);
+                drawFaceFrame(landmarks, t);
+                drawEyeReticle(landmarks, 468, t);  // Right iris
+                drawEyeReticle(landmarks, 473, t);  // Left iris
+                drawForeheadHUD(landmarks, t);
+                drawChinFrame(landmarks, t);
+                drawNoseBridge(landmarks, t);
+                drawSidePanels(landmarks, t);
+                drawCornerBrackets(landmarks, t);
+            }
+
+            frameCount++;
+            requestAnimationFrame(detectLoop);
+        }
+
+        // Event listeners
+        startButton.addEventListener('click', startCamera);
+        stopButton.addEventListener('click', stopCamera);
+
+        // Initialize
+        createFaceLandmarker();
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-badge">
+                    <div class="dot"></div>
+                    <span class="text">Follow Me</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

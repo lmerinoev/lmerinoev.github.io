@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiments - Luis Merino</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Luis Merino</div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-icon" data-label="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="../about.html" class="nav-icon" data-label="About">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="../index.html#research" class="nav-icon" data-label="Research">
+                    <i class="fas fa-briefcase"></i>
+                </a>
+                <a href="./" class="nav-icon active" data-label="Experiments">
+                    <i class="fas fa-flask"></i>
+                </a>
+                <a href="../analysis/" class="nav-icon" data-label="Analysis">
+                    <i class="fas fa-search"></i>
+                </a>
+                <a href="../index.html#contact" class="nav-icon" data-label="Contact">
+                    <i class="fas fa-shopping-bag"></i>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <div class="status-dot"></div>
+                    <span>Interactive Experiments</span>
+                </div>
+                <h1 class="hero-title">Experiments</h1>
+                <p class="hero-subtitle">
+                    Hands-on experiments exploring computer vision, augmented reality,
+                    and AI technologies in the browser.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiments Grid -->
+    <section class="demos-section">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <div class="section-badge">
+                        <div class="dot"></div>
+                        <span class="text">Lab</span>
+                    </div>
+                    <h2 class="section-title">Face & Vision Experiments</h2>
+                    <p class="section-subtitle">
+                        Real-time computer vision experiments powered by MediaPipe and machine learning.
+                    </p>
+                </div>
+
+                <div class="demos-grid">
+                    <a href="jarvis-hud.html" class="demo-item">
+                        <div class="demo-image">
+                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=100&h=100&fit=crop&crop=center" alt="Iron Man Jarvis HUD" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div style="display:none; width:100%; height:100%; background:var(--gray-200); align-items:center; justify-content:center; color:var(--gray-500); font-weight:700; font-size:18px;">J</div>
+                        </div>
+                        <div class="demo-content">
+                            <div class="demo-title">Jarvis Face HUD</div>
+                            <div class="demo-description">Iron Man style AR mask, MediaPipe</div>
+                        </div>
+                        <i class="fas fa-arrow-right demo-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-badge">
+                    <div class="dot"></div>
+                    <span class="text">Follow Me</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
