@@ -414,8 +414,8 @@ button {
 
 .hero-feature-art svg,
 .hero-feature-art img {
-    width: 150%;
-    height: 150%;
+    width: 130%;
+    height: 130%;
     display: block;
     object-fit: cover;
 }
