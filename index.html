@@ -44,7 +44,11 @@
                 </div>
             </a>
 
-            <div class="hero-carousel-dots" id="carouselDots"></div>
+            <div class="hero-carousel-nav">
+                <button class="hero-carousel-arrow" id="carouselPrev" aria-label="Previous">&#8592;</button>
+                <div class="hero-carousel-dots" id="carouselDots"></div>
+                <button class="hero-carousel-arrow" id="carouselNext" aria-label="Next">&#8594;</button>
+            </div>
         </div>
     </section>
 
@@ -282,6 +286,7 @@
             var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
         }
 
+        var maxVisible = Math.min(items.length, 6);
         var current = 0;
         var link = document.getElementById('carouselLink');
         var artEl = document.getElementById('carouselArt');
@@ -289,16 +294,19 @@
         var titleEl = document.getElementById('carouselTitle');
         var metaEl = document.getElementById('carouselMeta');
         var dotsEl = document.getElementById('carouselDots');
+        var prevBtn = document.getElementById('carouselPrev');
+        var nextBtn = document.getElementById('carouselNext');
+        var autoTimer = null;
+        var isTransitioning = false;
 
         // Build dots
-        for (var d = 0; d < Math.min(items.length, 6); d++) {
+        for (var d = 0; d < maxVisible; d++) {
             var dot = document.createElement('button');
             dot.className = 'hero-carousel-dot';
             dot.setAttribute('aria-label', 'Show item ' + (d + 1));
             dot.dataset.index = d;
             dot.addEventListener('click', function () {
-                current = parseInt(this.dataset.index);
-                show(current);
+                goTo(parseInt(this.dataset.index));
             });
             dotsEl.appendChild(dot);
         }
@@ -306,28 +314,151 @@
         function show(idx) {
             var item = items[idx];
             var art = new GenerativeArt(item.seed);
-            link.classList.add('fade-out');
-            setTimeout(function () {
-                artEl.innerHTML = art.toSVG();
-                labelEl.textContent = item.label;
-                titleEl.textContent = item.title;
-                metaEl.textContent = item.meta;
-                link.href = item.href;
-                link.classList.remove('fade-out');
-                dotsEl.querySelectorAll('.hero-carousel-dot').forEach(function (d, i) {
-                    d.classList.toggle('active', i === idx);
-                });
-            }, 200);
+            artEl.innerHTML = art.toSVG();
+            labelEl.textContent = item.label;
+            titleEl.textContent = item.title;
+            metaEl.textContent = item.meta;
+            link.href = item.href;
+            dotsEl.querySelectorAll('.hero-carousel-dot').forEach(function (d, i) {
+                d.classList.toggle('active', i === idx);
+            });
         }
 
-        show(0);
+        function goTo(idx) {
+            if (isTransitioning || idx === current) return;
+            isTransitioning = true;
+            link.classList.add('fade-out');
+            setTimeout(function () {
+                current = idx;
+                show(current);
+                link.classList.remove('fade-out');
+                isTransitioning = false;
+            }, 200);
+            resetAutoRotate();
+        }
 
-        // Auto-rotate every 6 seconds
-        setInterval(function () {
-            current = (current + 1) % items.length;
-            if (current >= 6) current = 0;
-            show(current);
-        }, 6000);
+        function goNext() {
+            goTo((current + 1) % maxVisible);
+        }
+
+        function goPrev() {
+            goTo((current - 1 + maxVisible) % maxVisible);
+        }
+
+        // Arrow buttons
+        prevBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            goPrev();
+        });
+        nextBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            goNext();
+        });
+
+        // Keyboard navigation
+        link.setAttribute('tabindex', '0');
+        link.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
+            else if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
+        });
+
+        // Swipe / drag support via pointer events
+        var pointerStartX = 0;
+        var pointerStartY = 0;
+        var pointerStartTime = 0;
+        var isDragging = false;
+        var dragDeltaX = 0;
+        var swipeThreshold = 50;
+        var velocityThreshold = 0.3;
+
+        link.addEventListener('pointerdown', function (e) {
+            if (isTransitioning) return;
+            isDragging = true;
+            dragDeltaX = 0;
+            pointerStartX = e.clientX;
+            pointerStartY = e.clientY;
+            pointerStartTime = Date.now();
+            link.setPointerCapture(e.pointerId);
+            link.classList.add('dragging');
+            pauseAutoRotate();
+        });
+
+        link.addEventListener('pointermove', function (e) {
+            if (!isDragging) return;
+            dragDeltaX = e.clientX - pointerStartX;
+            var dragDeltaY = e.clientY - pointerStartY;
+
+            // If vertical movement dominates, release and let page scroll
+            if (Math.abs(dragDeltaY) > Math.abs(dragDeltaX) + 10 && Math.abs(dragDeltaX) < 15) {
+                isDragging = false;
+                link.classList.remove('dragging');
+                link.style.transform = '';
+                resetAutoRotate();
+                return;
+            }
+
+            // Visual drag feedback — capped at 120px
+            var capped = Math.max(-120, Math.min(120, dragDeltaX));
+            link.style.transform = 'translateX(' + capped + 'px)';
+        });
+
+        link.addEventListener('pointerup', function (e) {
+            if (!isDragging) return;
+            isDragging = false;
+            link.classList.remove('dragging');
+            link.style.transform = '';
+
+            var distance = Math.abs(dragDeltaX);
+            var duration = Date.now() - pointerStartTime;
+            var velocity = duration > 0 ? distance / duration : 0;
+
+            if (distance > swipeThreshold || velocity > velocityThreshold) {
+                if (dragDeltaX < 0) goNext();
+                else goPrev();
+            } else {
+                resetAutoRotate();
+            }
+        });
+
+        link.addEventListener('pointercancel', function () {
+            isDragging = false;
+            link.classList.remove('dragging');
+            link.style.transform = '';
+            resetAutoRotate();
+        });
+
+        // Prevent link navigation when swiping
+        link.addEventListener('click', function (e) {
+            if (Math.abs(dragDeltaX) > 10) {
+                e.preventDefault();
+            }
+        });
+
+        // Auto-rotate
+        function startAutoRotate() {
+            autoTimer = setInterval(function () {
+                goTo((current + 1) % maxVisible);
+            }, 6000);
+        }
+
+        function pauseAutoRotate() {
+            if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+        }
+
+        function resetAutoRotate() {
+            pauseAutoRotate();
+            startAutoRotate();
+        }
+
+        // Pause on hover / focus
+        link.addEventListener('mouseenter', pauseAutoRotate);
+        link.addEventListener('mouseleave', resetAutoRotate);
+        link.addEventListener('focus', pauseAutoRotate);
+        link.addEventListener('blur', resetAutoRotate);
+
+        // Init
+        show(0);
+        startAutoRotate();
     })();
     </script>
 </body>

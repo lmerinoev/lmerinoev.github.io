@@ -387,7 +387,11 @@ button {
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: opacity var(--duration-slow) var(--ease),
+                transform var(--duration-slow) var(--ease),
                 border-color var(--duration-normal) var(--ease);
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .hero-feature:hover {
@@ -498,6 +502,41 @@ button {
 
 .hero-carousel-dot.active {
     background: var(--brand);
+}
+
+.hero-carousel-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.hero-carousel-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--gray-400);
+    transition: border-color var(--duration-normal) var(--ease),
+                color var(--duration-normal) var(--ease);
+    flex-shrink: 0;
+}
+
+.hero-carousel-arrow:hover {
+    border-color: var(--gray-300);
+    color: var(--gray-600);
+}
+
+.hero-feature.dragging {
+    transition: none;
+    cursor: grabbing;
 }
 
 @media (max-width: 768px) {
