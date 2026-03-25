@@ -3,285 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strategic Intelligence Briefs</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, 'Helvetica Neue', sans-serif;
-            background: #FAFAF8;
-            color: #1C1C19;
-            line-height: 1.7;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Header */
-        header {
-            padding: 8rem 2rem 6rem;
-            text-align: center;
-            max-width: 680px;
-            margin: 0 auto;
-        }
-
-        header h1 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            color: #1C1C19;
-        }
-
-        header p {
-            margin-top: 1rem;
-            font-size: 15px;
-            color: #787873;
-            font-weight: 400;
-            letter-spacing: 0.01em;
-        }
-
-        /* Back link */
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4em;
-            font-size: 13px;
-            color: #787873;
-            text-decoration: none;
-            letter-spacing: 0.01em;
-            margin-bottom: 2rem;
-            transition: color 0.2s;
-        }
-
-        .back-link:hover {
-            color: #1C1C19;
-        }
-
-        /* Brand dot */
-        .brand-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: #E8B931;
-            border-radius: 50%;
-            margin-right: 0.35em;
-            vertical-align: middle;
-            position: relative;
-            top: -0.05em;
-        }
-
-        /* Main */
-        main {
-            flex: 1;
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 2rem 8rem;
-        }
-
-        .divider {
-            height: 1px;
-            background: #EBEBE7;
-            margin-bottom: 4rem;
-        }
-
-        /* Section labels */
-        .section-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #A8A8A3;
-            font-weight: 500;
-            margin-bottom: 2rem;
-        }
-
-        .section-break {
-            margin-top: 5rem;
-        }
-
-        /* Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        /* Card link */
-        a.card {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            background: #F5F5F3;
-            border-radius: 16px;
-            padding: 2.5rem 2rem;
-            transition: opacity 0.3s ease;
-            min-height: 220px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        a.card:hover {
-            opacity: 0.6;
-        }
-
-        .card-name {
-            font-size: 1.25rem;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            margin-bottom: 0.4rem;
-            color: #1C1C19;
-        }
-
-        .card-role {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #787873;
-            font-weight: 400;
-            margin-bottom: 1.25rem;
-        }
-
-        .card-desc {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #1C1C19;
-            margin-bottom: auto;
-        }
-
-        .card-link {
-            margin-top: 2rem;
-            font-size: 15px;
-            color: #1C1C19;
-            font-weight: 400;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35em;
-        }
-
-        /* Placeholder card */
-        .card.placeholder {
-            background: transparent;
-            border: 1px dashed #EBEBE7;
-            border-radius: 16px;
-            padding: 2.5rem 2rem;
-            min-height: 220px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .placeholder-text {
-            font-size: 15px;
-            color: #787873;
-            font-weight: 400;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 3rem 2rem 4rem;
-        }
-
-        footer p {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #787873;
-            font-weight: 400;
-        }
-
-        /* Responsive */
-        @media (max-width: 760px) {
-            header {
-                padding: 5rem 1.5rem 3.5rem;
-            }
-
-            main {
-                padding: 0 1.5rem 5rem;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 1.25rem;
-            }
-
-            a.card,
-            .card.placeholder {
-                min-height: auto;
-            }
-        }
-    </style>
+    <title>Strategic Intelligence Briefs - Luis Merino</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" href="../images/art/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header>
-        <a href="../index.html" class="back-link">&larr; Back to Portfolio</a>
-        <h1><span class="brand-dot"></span>Strategic Intelligence Briefs</h1>
-        <p>Leadership profiles and strategic analysis</p>
-    </header>
-
-    <main>
-        <div class="divider"></div>
-
-        <div class="section-label">Artificial Intelligence</div>
-        <div class="grid">
-
-            <a href="./alexandr-wang/index.html" class="card">
-                <div class="card-name">Alexandr Wang</div>
-                <div class="card-role">Scale AI &rarr; Meta Super Intelligence Labs</div>
-                <div class="card-desc">The youngest self-made billionaire who bet everything on the AI infrastructure layer.</div>
-                <span class="card-link">Read brief &rarr;</span>
-            </a>
-
-            <a href="./dario-amodei/index.html" class="card">
-                <div class="card-name">Dario Amodei</div>
-                <div class="card-role">Co-founder &amp; CEO, Anthropic</div>
-                <div class="card-desc">Navigating the tension between building frontier AI and ensuring it never escapes human control.</div>
-                <span class="card-link">Read brief &rarr;</span>
-            </a>
-
-            <a href="./jensen-huang/index.html" class="card">
-                <div class="card-name">Jensen Huang</div>
-                <div class="card-role">Co-founder &amp; CEO, NVIDIA</div>
-                <div class="card-desc">The 33-year CEO who bet everything on accelerated computing and built the foundational layer of the AI revolution.</div>
-                <span class="card-link">Read brief &rarr;</span>
-            </a>
-
-        </div>
-
-        <div class="section-break">
-            <div class="section-label">Design</div>
-            <div class="grid">
-
-                <a href="./jony-ive/index.html" class="card">
-                    <div class="card-name">Jony Ive</div>
-                    <div class="card-role">Co-founder, LoveFrom &middot; Former CDO, Apple</div>
-                    <div class="card-desc">The philosophy of care, inevitability, and taste formation behind the most influential product design career of the century.</div>
-                    <span class="card-link">Read brief &rarr;</span>
-                </a>
-
-                <a href="./rick-rubin/index.html" class="card">
-                    <div class="card-name">Rick Rubin</div>
-                    <div class="card-role">Co-founder, Def Jam &middot; Music Producer &middot; Author</div>
-                    <div class="card-desc">The philosophy of perception, reduction, and taste that produced career-defining albums across every genre for four decades.</div>
-                    <span class="card-link">Read brief &rarr;</span>
-                </a>
-
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Luis Merino</a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../index.html#research" class="nav-link">Research</a>
+                <a href="../index.html#writing" class="nav-link">Writing</a>
+                <a href="../labs/" class="nav-link">Labs</a>
+                <a href="./" class="nav-link active">Analysis</a>
+                <a href="../about.html" class="nav-link">About</a>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+                <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">&#9776;</button>
             </div>
         </div>
-    </main>
+    </nav>
 
-    <footer>
-        <p>For internal use</p>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-label">
+                <span class="hero-label-dot"></span>
+                Analysis
+            </div>
+            <h1 class="hero-title">Strategic Intelligence Briefs</h1>
+            <p class="hero-subtitle">Leadership profiles and strategic analysis of people I study and learn from.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label"><span class="section-label-dot"></span>Artificial Intelligence</div>
+            </div>
+            <div class="card-grid reveal">
+                <a href="./alexandr-wang/index.html" class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Alexandr Wang</h3>
+                        <p class="card-role">Scale AI &#8594; Meta Super Intelligence Labs</p>
+                        <p class="card-desc">The youngest self-made billionaire who bet everything on the AI infrastructure layer.</p>
+                        <span class="card-link">Read brief &#8594;</span>
+                    </div>
+                </a>
+                <a href="./dario-amodei/index.html" class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Dario Amodei</h3>
+                        <p class="card-role">Co-founder &amp; CEO, Anthropic</p>
+                        <p class="card-desc">Building frontier AI while trying to ensure it stays under human control.</p>
+                        <span class="card-link">Read brief &#8594;</span>
+                    </div>
+                </a>
+                <a href="./jensen-huang/index.html" class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Jensen Huang</h3>
+                        <p class="card-role">Co-founder &amp; CEO, NVIDIA</p>
+                        <p class="card-desc">A 33-year CEO who bet on accelerated computing and built the foundational layer of AI.</p>
+                        <span class="card-link">Read brief &#8594;</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label"><span class="section-label-dot"></span>Design</div>
+            </div>
+            <div class="card-grid reveal">
+                <a href="./jony-ive/index.html" class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Jony Ive</h3>
+                        <p class="card-role">Co-founder, LoveFrom &middot; Former CDO, Apple</p>
+                        <p class="card-desc">The philosophy of care, inevitability, and taste behind the most influential product design career of the century.</p>
+                        <span class="card-link">Read brief &#8594;</span>
+                    </div>
+                </a>
+                <a href="./rick-rubin/index.html" class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Rick Rubin</h3>
+                        <p class="card-role">Co-founder, Def Jam &middot; Music Producer &middot; Author</p>
+                        <p class="card-desc">The philosophy of perception, reduction, and taste that produced career-defining albums across every genre for four decades.</p>
+                        <span class="card-link">Read brief &#8594;</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="footer-link">X / Twitter</a>
+                    <a href="#" class="footer-link">Instagram</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
+                </div>
+                <p class="footer-copy">&copy; 2025 Luis Merino</p>
+            </div>
+        </div>
     </footer>
 
+    <script src="../script.js"></script>
 </body>
 </html>

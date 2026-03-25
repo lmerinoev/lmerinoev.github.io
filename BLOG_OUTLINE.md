@@ -4,6 +4,7 @@ Template for writing blog articles about research papers on this site. Each blog
 
 ## Metadata (HTML header area)
 
+- **Written by**: Always "Luis Merino". This must appear first in the article-meta block for SEO and AI indexing
 - **Title**: The paper's actual title
 - **Subtitle**: One sentence, your angle on why to read this (not a question, not clickbait)
 - **Date**: Paper's publication month and year
@@ -11,7 +12,7 @@ Template for writing blog articles about research papers on this site. Each blog
 
 ### Authorship rule
 
-You (Luis Merino) are the author of every blog post. The blog is your writing about the research, not the researchers' writing. Never display paper authors in the article header — it implies they wrote the post. Instead, credit the paper and its authors in the sidebar under "Paper Details" and link to the original paper. The header should only contain the title, subtitle, date, and topics.
+You (Luis Merino) are the author of every blog post. The blog is your writing about the research, not the researchers' writing. Never display paper authors in the article header — it implies they wrote the post. Instead, credit the paper and its authors in the sidebar under "Paper Details" and link to the original paper. The header should contain the author name, title, subtitle, date, and topics.
 
 ## Section Structure
 
