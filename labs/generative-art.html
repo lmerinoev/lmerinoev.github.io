@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative Art - Luis Merino</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .art-workspace {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-8);
+            margin-top: var(--space-8);
+        }
+        @media (min-width: 768px) {
+            .art-workspace {
+                grid-template-columns: 1fr 320px;
+            }
+        }
+        .art-preview {
+            aspect-ratio: 1;
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid var(--gray-100);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--gray-50);
+        }
+        .art-preview svg {
+            width: 100%;
+            height: 100%;
+        }
+        .art-controls {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+        .art-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        .art-input-group label {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--gray-300);
+        }
+        .art-input {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            padding: var(--space-3) var(--space-4);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            background: var(--white);
+            color: var(--gray-800);
+            outline: none;
+            transition: border-color var(--duration-normal) var(--ease);
+        }
+        .art-input:focus {
+            border-color: var(--brand);
+        }
+        .art-btn-row {
+            display: flex;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+        .art-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: var(--space-4);
+            margin-top: var(--space-8);
+        }
+        .art-gallery-item {
+            aspect-ratio: 1;
+            border: 1px solid var(--gray-100);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color var(--duration-normal) var(--ease);
+        }
+        .art-gallery-item:hover {
+            border-color: var(--brand-muted);
+        }
+        .art-gallery-item.active {
+            border-color: var(--brand);
+            border-width: 2px;
+        }
+        .art-gallery-item svg {
+            width: 100%;
+            height: 100%;
+        }
+        .art-gallery-label {
+            font-size: 0.6875rem;
+            color: var(--gray-300);
+            text-align: center;
+            margin-top: var(--space-1);
+            font-family: var(--font-mono);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .art-seed-display {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--gray-300);
+            margin-top: var(--space-2);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Luis Merino</a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../index.html#research" class="nav-link">Research</a>
+                <a href="../index.html#writing" class="nav-link">Writing</a>
+                <a href="./" class="nav-link active">Labs</a>
+                <a href="../analysis/" class="nav-link">Analysis</a>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+                <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">&#9776;</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-label">
+                <span class="hero-label-dot"></span>
+                Lab
+            </div>
+            <h1 class="hero-title">Generative Art</h1>
+            <p class="hero-subtitle">
+                Minimal geometric compositions from a seed string. Type anything to generate a unique piece.
+                Every image on this site was made with this tool.
+            </p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="art-workspace">
+                <div>
+                    <div class="art-preview" id="artPreview"></div>
+                    <div class="art-seed-display" id="seedDisplay">seed: default</div>
+                </div>
+                <div class="art-controls">
+                    <div class="art-input-group">
+                        <label for="seedInput">Seed</label>
+                        <input type="text" class="art-input" id="seedInput" placeholder="Type any word or phrase..." value="">
+                    </div>
+                    <div class="art-btn-row">
+                        <button class="btn btn--brand" onclick="generateFromInput()">Generate</button>
+                        <button class="btn btn--secondary" onclick="randomSeed()">Random</button>
+                        <button class="btn btn--secondary" onclick="downloadSVG()">Download SVG</button>
+                    </div>
+                    <div class="art-input-group" style="margin-top: var(--space-4);">
+                        <label>Presets</label>
+                        <div class="art-btn-row">
+                            <button class="btn btn--tactile" onclick="useSeed('research-decision-making')">Research</button>
+                            <button class="btn btn--tactile" onclick="useSeed('blog-sleeper-agents')">Blog</button>
+                            <button class="btn btn--tactile" onclick="useSeed('demo-drum')">Demo</button>
+                            <button class="btn btn--tactile" onclick="useSeed('project-coffee')">Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label"><span class="section-label-dot"></span>Gallery</div>
+                <h2 class="section-title">Site Collection</h2>
+                <p class="section-desc">All generated cover images used across the site. Click any to preview.</p>
+            </div>
+            <div class="art-gallery" id="artGallery"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="footer-link">X / Twitter</a>
+                    <a href="#" class="footer-link">Instagram</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
+                </div>
+                <p class="footer-copy">&copy; 2025 Luis Merino</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script src="../generate-art.js"></script>
+    <script>
+        var currentSeed = 'generative-art';
+        var currentArt = null;
+
+        function render(seed) {
+            currentSeed = seed;
+            currentArt = new GenerativeArt(seed);
+            document.getElementById('artPreview').innerHTML = currentArt.toSVG();
+            document.getElementById('seedDisplay').textContent = 'seed: ' + seed;
+            document.getElementById('seedInput').value = seed;
+
+            // Update active state in gallery
+            document.querySelectorAll('.art-gallery-item').forEach(function (el) {
+                el.classList.toggle('active', el.dataset.seed === seed);
+            });
+        }
+
+        function generateFromInput() {
+            var val = document.getElementById('seedInput').value.trim();
+            if (val) render(val);
+        }
+
+        function randomSeed() {
+            var chars = 'abcdefghijklmnopqrstuvwxyz';
+            var s = '';
+            for (var i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
+            render(s);
+        }
+
+        function useSeed(seed) {
+            render(seed);
+        }
+
+        function downloadSVG() {
+            if (!currentArt) return;
+            var blob = new Blob([currentArt.toSVG()], { type: 'image/svg+xml' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = currentSeed + '.svg';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Enter key support
+        document.getElementById('seedInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') generateFromInput();
+        });
+
+        // Build gallery
+        var gallery = document.getElementById('artGallery');
+        GenerativeArt.SEEDS.forEach(function (seed) {
+            var art = new GenerativeArt(seed);
+            var wrapper = document.createElement('div');
+            var item = document.createElement('div');
+            item.className = 'art-gallery-item';
+            item.dataset.seed = seed;
+            item.innerHTML = art.toSVG();
+            item.addEventListener('click', function () { render(seed); });
+            wrapper.appendChild(item);
+            var label = document.createElement('div');
+            label.className = 'art-gallery-label';
+            label.textContent = seed;
+            wrapper.appendChild(label);
+            gallery.appendChild(wrapper);
+        });
+
+        // Initial render
+        render('generative-art');
+    </script>
+</body>
+</html>
