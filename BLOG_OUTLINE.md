@@ -7,9 +7,11 @@ Template for writing blog articles about research papers on this site. Each blog
 - **Title**: The paper's actual title
 - **Subtitle**: One sentence, your angle on why to read this (not a question, not clickbait)
 - **Date**: Paper's publication month and year
-- **Authors**: Lead authors + "et al." if more than three
-- **Institution**: Where the work was done
-- **Tags**: 3-4 topic keywords
+- **Topics**: 3-4 topic keywords
+
+### Authorship rule
+
+You (Luis Merino) are the author of every blog post. The blog is your writing about the research, not the researchers' writing. Never display paper authors in the article header — it implies they wrote the post. Instead, credit the paper and its authors in the sidebar under "Paper Details" and link to the original paper. The header should only contain the title, subtitle, date, and topics.
 
 ## Section Structure
 
@@ -36,7 +38,7 @@ What does this work leave unresolved? What should come next? This section acknow
 ## Sidebar
 
 - **Quick Navigation**: Links to each h2 section
-- **Paper Details**: Author count, date, arXiv ID
+- **Paper Details**: Paper authors, author count, date, arXiv ID (this is where paper authors belong, not the header)
 - **Actions**: Link to the original paper
 
 ## Key Findings Box
