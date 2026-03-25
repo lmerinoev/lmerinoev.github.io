@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luis Merino</title>
+    <link rel="icon" href="images/art/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,32 +30,21 @@
         </div>
     </nav>
 
-    <section id="home" class="hero">
+    <section id="home" class="hero hero--featured">
         <div class="container">
-            <div class="hero-label">
-                <span class="hero-label-dot"></span>
-                Researcher &amp; Builder
-            </div>
-            <h1 class="hero-title">Human-AI interaction researcher exploring trust in collaborative systems.</h1>
-            <p class="hero-subtitle">
-                Building the future of human-machine partnerships. Based at the intersection of psychology, AI, and design.
-            </p>
-            <div class="hero-actions">
-                <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="btn btn--secondary">Let's connect &#8599;</a>
-            </div>
+            <p class="hero-greeting" id="heroGreeting">Welcome</p>
 
-            <div class="hero-carousel">
-                <a href="#" class="hero-carousel-inner" id="carouselLink">
-                    <div class="hero-carousel-art" id="carouselArt"></div>
-                    <div class="hero-carousel-body">
-                        <div class="hero-carousel-label" id="carouselLabel"></div>
-                        <div class="hero-carousel-title" id="carouselTitle"></div>
-                        <div class="hero-carousel-meta" id="carouselMeta"></div>
-                    </div>
-                    <span class="hero-carousel-arrow">&#8594;</span>
-                </a>
-                <div class="hero-carousel-dots" id="carouselDots"></div>
-            </div>
+            <a href="#" class="hero-feature" id="carouselLink">
+                <div class="hero-feature-art" id="carouselArt"></div>
+                <div class="hero-feature-content">
+                    <div class="hero-feature-label" id="carouselLabel"></div>
+                    <h1 class="hero-feature-title" id="carouselTitle"></h1>
+                    <p class="hero-feature-meta" id="carouselMeta"></p>
+                    <span class="hero-feature-cta">Read &#8594;</span>
+                </div>
+            </a>
+
+            <div class="hero-carousel-dots" id="carouselDots"></div>
         </div>
     </section>
 
@@ -263,6 +253,16 @@
     <script src="generate-art.js"></script>
     <script>
     (function () {
+        // Dynamic greeting based on time of day
+        var greetingEl = document.getElementById('heroGreeting');
+        var hour = new Date().getHours();
+        var greeting = hour < 6 ? 'Up late? Here\u2019s something good.'
+            : hour < 12 ? 'Good morning. Something new for you.'
+            : hour < 17 ? 'Good afternoon. Take a look around.'
+            : hour < 21 ? 'Good evening. Glad you\u2019re here.'
+            : 'Winding down? Browse a bit.';
+        if (greetingEl) greetingEl.textContent = greeting;
+
         var items = [
             { seed: 'research-decision-making', label: 'Research', title: 'Decision-making with Robots', meta: 'Human-robot interaction, Trust', href: 'research/decision-making-humanoid-robot.html' },
             { seed: 'research-trust-teams', label: 'Research', title: 'Trust in AI Teams', meta: 'Personality traits, Collaboration', href: 'research/trust-human-machine-teams.html' },
