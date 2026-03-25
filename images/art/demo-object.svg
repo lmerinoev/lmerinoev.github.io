@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
-<rect width="600" height="600" fill="#FAFAF8"/>
-<rect x="175" y="200" width="250" height="200" fill="none" stroke="#1C1C19" stroke-width="1.5"/>
-<circle cx="300" cy="300" r="25" fill="#1C1C19"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600"><rect width="600" height="600" fill="#FAFAF8"/><rect x="200" y="187.5" width="200" height="225" fill="none" stroke="#1C1C19" stroke-width="1.5"/><line x1="200" y1="187.5" x2="400" y2="412.5" stroke="#1C1C19" stroke-width="1.5"/><polygon points="300.0,391.1 275.0,434.4 325.0,434.4" fill="#E8B931" transform="rotate(0 300 420)"/></svg>

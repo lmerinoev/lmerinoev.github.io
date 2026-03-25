@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
-<rect width="600" height="600" fill="#FAFAF8"/>
-<circle cx="300" cy="175" r="18" fill="#1C1C19"/>
-<line x1="300" y1="193" x2="300" y2="320" stroke="#1C1C19" stroke-width="1.5"/>
-<line x1="300" y1="230" x2="240" y2="280" stroke="#1C1C19" stroke-width="1.5"/>
-<line x1="300" y1="230" x2="360" y2="270" stroke="#1C1C19" stroke-width="1.5"/>
-<line x1="300" y1="320" x2="250" y2="420" stroke="#1C1C19" stroke-width="1.5"/>
-<line x1="300" y1="320" x2="350" y2="420" stroke="#1C1C19" stroke-width="1.5"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600"><rect width="600" height="600" fill="#FAFAF8"/><polygon points="420.0,79.0 332.5,230.5 507.5,230.5" fill="#1C1C19" transform="rotate(120 420 180)"/><circle cx="220" cy="140" r="50" fill="#1C1C19"/></svg>
