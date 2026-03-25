@@ -1,6 +1,6 @@
 # How to Build a Person Analysis
 
-Step-by-step guide for creating new person profiles in the Strategic Intelligence Briefs project. Follow this process and the [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) to ensure consistency.
+Step-by-step guide for creating new person profiles in the Strategic Intelligence Briefs project. Follow this process and the [parent DESIGN_SYSTEM.md](../DESIGN_SYSTEM.md) to ensure consistency.
 
 ---
 
@@ -63,7 +63,7 @@ Every profile has exactly 10 pages with the same filenames. The **nav labels can
 ### Setup
 
 1. Create the folder: `analysis/{firstname-lastname}/` (kebab-case)
-2. Reference `DESIGN_SYSTEM.md` for the exact HTML shell, component patterns, and class names
+2. Reference the parent `DESIGN_SYSTEM.md` in the repo root for design tokens and principles
 3. Every page links to `../base.css` and `../base.js` — no inline styles or scripts
 
 ### Page-by-page content guide

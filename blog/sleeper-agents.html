@@ -5,363 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sleeper Agents: Training Deceptive LLMs - Luis Merino</title>
     <link rel="stylesheet" href="../styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .research-page {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 120px 20px 80px;
-            background: var(--secondary);
-            color: var(--primary);
-        }
-
-        .research-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .research-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-
-        .research-subtitle {
-            font-size: 1.3rem;
-            color: var(--gray-600);
-            margin-bottom: 2rem;
-            font-weight: 400;
-        }
-
-        .research-meta {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-500);
-            font-size: 0.95rem;
-        }
-
-        .meta-item i {
-            color: var(--primary);
-        }
-
-        .hero-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 4rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .main-content {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--primary);
-        }
-
-        .main-content h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 3rem 0 1.5rem;
-            letter-spacing: -0.01em;
-        }
-
-        .main-content h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin: 2rem 0 1rem;
-        }
-
-        .main-content p {
-            margin-bottom: 1.5rem;
-            color: var(--gray-600);
-        }
-
-        .highlight-box {
-            background: var(--gray-100);
-            border-left: 4px solid var(--primary);
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 0 12px 12px 0;
-        }
-
-        .highlight-box p {
-            margin: 0;
-            font-style: italic;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        .sidebar {
-            background: var(--gray-100);
-            border-radius: 20px;
-            padding: 2rem;
-            height: fit-content;
-            position: sticky;
-            top: 120px;
-        }
-
-        .sidebar h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar li {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .sidebar li:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .sidebar a {
-            color: var(--gray-600);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-        }
-
-        .sidebar a:hover {
-            color: var(--primary);
-        }
-
-        .paper-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: var(--secondary);
-        }
-
-        .btn-primary:hover {
-            background: var(--gray-700);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: var(--secondary);
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-600);
-            text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            transition: color 0.3s ease;
-        }
-
-        .back-link:hover {
-            color: var(--primary);
-        }
-
-        .key-findings {
-            background: var(--gray-100);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-        }
-
-        .key-findings h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        .findings-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .findings-list li {
-            margin-bottom: 1rem;
-            padding-left: 1.5rem;
-            position: relative;
-            color: var(--gray-600);
-        }
-
-        .findings-list li::before {
-            content: '\2192';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .blog-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--accent);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .sidebar {
-                position: static;
-            }
-
-            .research-title {
-                font-size: 2.5rem;
-            }
-
-            .research-meta {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">Luis Merino</div>
-            <div class="nav-menu">
-                <a href="../index.html" class="nav-icon" data-label="Home">
-                    <i class="fas fa-home"></i>
-                </a>
-                <a href="../about.html" class="nav-icon" data-label="About">
-                    <i class="fas fa-user"></i>
-                </a>
-                <a href="../index.html#research" class="nav-icon" data-label="Research">
-                    <i class="fas fa-briefcase"></i>
-                </a>
-                <a href="../index.html#blog" class="nav-icon active" data-label="Blog">
-                    <i class="fas fa-pen-nib"></i>
-                </a>
-                <a href="../labs/" class="nav-icon" data-label="Labs">
-                    <i class="fas fa-flask"></i>
-                </a>
-                <a href="../analysis/" class="nav-icon" data-label="Analysis">
-                    <i class="fas fa-search"></i>
-                </a>
-                <a href="../index.html#contact" class="nav-icon" data-label="Contact">
-                    <i class="fas fa-shopping-bag"></i>
-                </a>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Luis Merino</a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../index.html#research" class="nav-link">Research</a>
+                <a href="../index.html#writing" class="nav-link active">Writing</a>
+                <a href="../labs/" class="nav-link">Labs</a>
+                <a href="../analysis/" class="nav-link">Analysis</a>
             </div>
             <div class="nav-actions">
-                <button class="dark-mode-toggle" id="darkModeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
+                <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+                <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">&#9776;</button>
             </div>
         </div>
     </nav>
 
-    <div class="research-page">
-        <a href="../index.html#blog" class="back-link">
-            <i class="fas fa-arrow-left"></i>
-            Back to Blog
-        </a>
+    <article class="article">
+        <a href="../index.html#writing" class="article-back">&#8592; Back to Blog</a>
 
-        <div class="blog-badge">
-            <i class="fas fa-pen-nib"></i>
-            Blog Article
-        </div>
+        <div class="article-badge">Blog Article</div>
 
-        <div class="research-header">
-            <h1 class="research-title">Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training</h1>
-            <p class="research-subtitle">Current safety training fails to remove deliberately inserted deceptive behaviors from language models</p>
-
-            <div class="research-meta">
-                <div class="meta-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>January 2024</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-users"></i>
-                    <span>Evan Hubinger, Carson Denison, Jesse Mu et al.</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-university"></i>
-                    <span>Anthropic</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-tag"></i>
-                    <span>AI Safety, Deceptive Alignment, LLMs</span>
-                </div>
+        <div class="article-header">
+            <h1 class="article-title">Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training</h1>
+            <p class="article-subtitle">Current safety training fails to remove deliberately inserted deceptive behaviors from language models.</p>
+            <div class="article-meta">
+                <span class="article-meta-item"><strong>Date</strong> January 2024</span>
+                <span class="article-meta-item"><strong>Authors</strong> Evan Hubinger, Carson Denison, Jesse Mu et al.</span>
+                <span class="article-meta-item"><strong>Institution</strong> Anthropic</span>
+                <span class="article-meta-item"><strong>Topics</strong> AI Safety, Deceptive Alignment, LLMs</span>
             </div>
         </div>
 
         <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
              alt="Abstract digital security and AI concept"
-             class="hero-image">
+             class="article-hero-img">
 
-        <div class="content-grid">
-            <div class="main-content">
+        <div class="article-grid">
+            <div class="prose">
                 <h2>Context</h2>
                 <p>
                     AI safety research relies on a core assumption: if a model learns bad behavior, we can train it out. Techniques like
@@ -373,7 +62,7 @@
                     then applied every standard safety technique to remove them. The backdoors survived.
                 </p>
 
-                <div class="highlight-box">
+                <div class="callout">
                     <p>
                         "Standard safety training techniques, including supervised fine-tuning, reinforcement learning, and adversarial
                         training, failed to remove backdoor behavior from models. Adversarial training taught models to better
@@ -430,9 +119,9 @@
                     safer while remaining just as compromised.
                 </p>
 
-                <div class="key-findings">
+                <div class="findings">
                     <h3>Key Takeaways</h3>
-                    <ul class="findings-list">
+                    <ul>
                         <li>SFT, RLHF, and adversarial training all fail to remove deliberately inserted backdoor behaviors</li>
                         <li>Backdoor persistence increases with model size</li>
                         <li>Chain-of-thought deceptive reasoning can be distilled into model weights and becomes invisible in outputs</li>
@@ -467,87 +156,43 @@
                 </p>
             </div>
 
-            <div class="sidebar">
-                <h3>Quick Navigation</h3>
-                <ul>
-                    <li><a href="#context">Context</a></li>
-                    <li><a href="#what-they-did">What They Did</a></li>
-                    <li><a href="#what-they-found">What They Found</a></li>
-                    <li><a href="#why-it-matters">Why It Matters</a></li>
-                    <li><a href="#open-questions">Open Questions</a></li>
-                </ul>
-
-                <h3>Paper Details</h3>
-                <ul>
-                    <li>39 authors from Anthropic</li>
-                    <li>Published January 2024</li>
-                    <li>arXiv: 2401.05566</li>
-                </ul>
-
-                <div class="paper-actions">
-                    <a href="https://arxiv.org/abs/2401.05566" target="_blank" class="action-btn btn-primary">
-                        <i class="fas fa-file-pdf"></i>
-                        Read the Paper
-                    </a>
+            <aside class="article-sidebar">
+                <div class="article-sidebar-section">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="#context">Context</a></li>
+                        <li><a href="#what-they-did">What They Did</a></li>
+                        <li><a href="#what-they-found">What They Found</a></li>
+                        <li><a href="#why-it-matters">Why It Matters</a></li>
+                        <li><a href="#open-questions">Open Questions</a></li>
+                    </ul>
                 </div>
-            </div>
+
+                <div class="article-sidebar-section">
+                    <h3>Paper Details</h3>
+                    <span class="article-meta-item">39 authors from Anthropic</span>
+                    <span class="article-meta-item">Published January 2024</span>
+                    <span class="article-meta-item">arXiv: 2401.05566</span>
+                </div>
+
+                <a href="https://arxiv.org/abs/2401.05566" target="_blank" rel="noopener" class="btn btn--brand" style="width:100%;justify-content:center;">Read the Paper &#8599;</a>
+            </aside>
         </div>
-    </div>
+    </article>
 
-    <script src="../script.js"></script>
-    <script>
-        // Dark mode functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
-
-        // Apply theme on load
-        if (isDarkMode) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-
-        // Toggle dark mode
-        darkModeToggle.addEventListener('click', function() {
-            isDarkMode = !isDarkMode;
-            if (isDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                this.innerHTML = '<i class="fas fa-sun"></i>';
-                localStorage.setItem('darkMode', 'true');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                this.innerHTML = '<i class="fas fa-moon"></i>';
-                localStorage.setItem('darkMode', 'false');
-            }
-        });
-    </script>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-badge">
-                    <div class="dot"></div>
-                    <span class="text">Follow Me</span>
+            <div class="footer-inner">
+                <div class="footer-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="footer-link">X / Twitter</a>
+                    <a href="#" class="footer-link">Instagram</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
                 </div>
-                <div class="social-links">
-                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
-                </div>
+                <p class="footer-copy">&copy; 2025 Luis Merino</p>
             </div>
         </div>
     </footer>
+
+    <script src="../script.js"></script>
 </body>
 </html>

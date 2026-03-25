@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strategic Intelligence Briefs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after {
             margin: 0;
@@ -12,9 +13,9 @@
         }
 
         body {
-            font-family: -apple-system, 'Helvetica Neue', 'Helvetica', sans-serif;
-            background: #ffffff;
-            color: #1d1d1f;
+            font-family: 'Inter', -apple-system, 'Helvetica Neue', sans-serif;
+            background: #FAFAF8;
+            color: #1C1C19;
             line-height: 1.7;
             min-height: 100vh;
             display: flex;
@@ -36,15 +37,45 @@
             font-weight: 300;
             letter-spacing: -0.02em;
             line-height: 1.15;
-            color: #1d1d1f;
+            color: #1C1C19;
         }
 
         header p {
             margin-top: 1rem;
             font-size: 15px;
-            color: #86868b;
+            color: #787873;
             font-weight: 400;
             letter-spacing: 0.01em;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4em;
+            font-size: 13px;
+            color: #787873;
+            text-decoration: none;
+            letter-spacing: 0.01em;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #1C1C19;
+        }
+
+        /* Brand dot */
+        .brand-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #E8B931;
+            border-radius: 50%;
+            margin-right: 0.35em;
+            vertical-align: middle;
+            position: relative;
+            top: -0.05em;
         }
 
         /* Main */
@@ -58,7 +89,7 @@
 
         .divider {
             height: 1px;
-            background: #e5e5e5;
+            background: #EBEBE7;
             margin-bottom: 4rem;
         }
 
@@ -67,7 +98,7 @@
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #86868b;
+            color: #A8A8A3;
             font-weight: 500;
             margin-bottom: 2rem;
         }
@@ -88,7 +119,7 @@
             display: block;
             text-decoration: none;
             color: inherit;
-            background: #f5f5f7;
+            background: #F5F5F3;
             border-radius: 16px;
             padding: 2.5rem 2rem;
             transition: opacity 0.3s ease;
@@ -106,14 +137,14 @@
             font-weight: 500;
             letter-spacing: -0.01em;
             margin-bottom: 0.4rem;
-            color: #1d1d1f;
+            color: #1C1C19;
         }
 
         .card-role {
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            color: #86868b;
+            color: #787873;
             font-weight: 400;
             margin-bottom: 1.25rem;
         }
@@ -121,14 +152,14 @@
         .card-desc {
             font-size: 15px;
             line-height: 1.6;
-            color: #1d1d1f;
+            color: #1C1C19;
             margin-bottom: auto;
         }
 
         .card-link {
             margin-top: 2rem;
             font-size: 15px;
-            color: #1d1d1f;
+            color: #1C1C19;
             font-weight: 400;
             display: inline-flex;
             align-items: center;
@@ -138,7 +169,7 @@
         /* Placeholder card */
         .card.placeholder {
             background: transparent;
-            border: 1px dashed #e5e5e5;
+            border: 1px dashed #EBEBE7;
             border-radius: 16px;
             padding: 2.5rem 2rem;
             min-height: 220px;
@@ -149,7 +180,7 @@
 
         .placeholder-text {
             font-size: 15px;
-            color: #86868b;
+            color: #787873;
             font-weight: 400;
         }
 
@@ -163,7 +194,7 @@
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #86868b;
+            color: #787873;
             font-weight: 400;
         }
 
@@ -192,8 +223,8 @@
 <body>
 
     <header>
-        <a href="../index.html" style="display:inline-flex;align-items:center;gap:0.4em;font-size:13px;color:#86868b;text-decoration:none;letter-spacing:0.01em;margin-bottom:2rem;">&larr; Back to Portfolio</a>
-        <h1>Strategic Intelligence Briefs</h1>
+        <a href="../index.html" class="back-link">&larr; Back to Portfolio</a>
+        <h1><span class="brand-dot"></span>Strategic Intelligence Briefs</h1>
         <p>Leadership profiles and strategic analysis</p>
     </header>
 
