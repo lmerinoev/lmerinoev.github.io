@@ -3,387 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luis Merino - Human-Robot Interaction Researcher</title>
+    <title>Luis Merino</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">Luis Merino</div>
-            <div class="nav-menu">
-                <a href="#home" class="nav-icon active" data-label="Home">
-                    <i class="fas fa-home"></i>
-                </a>
-                <a href="about.html" class="nav-icon" data-label="About">
-                    <i class="fas fa-user"></i>
-                </a>
-                <a href="#research" class="nav-icon" data-label="Research">
-                    <i class="fas fa-briefcase"></i>
-                </a>
-                <a href="#blog" class="nav-icon" data-label="Blog">
-                    <i class="fas fa-pen-nib"></i>
-                </a>
-                <a href="labs/" class="nav-icon" data-label="Labs">
-                    <i class="fas fa-flask"></i>
-                </a>
-                <a href="analysis/" class="nav-icon" data-label="Analysis">
-                    <i class="fas fa-search"></i>
-                </a>
-                <a href="#contact" class="nav-icon" data-label="Contact">
-                    <i class="fas fa-shopping-bag"></i>
-                </a>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Luis Merino</a>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="#research" class="nav-link">Research</a>
+                <a href="#writing" class="nav-link">Writing</a>
+                <a href="labs/" class="nav-link">Labs</a>
+                <a href="analysis/" class="nav-link">Analysis</a>
             </div>
             <div class="nav-actions">
-                <button class="dark-mode-toggle">
-                    <i class="fas fa-moon"></i>
-                </button>
+                <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+                <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">&#9776;</button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <div class="status-dot"></div>
-                    <span>Researcher & AI Enthusiast</span>
-                </div>
-                <h1 class="hero-title">I'm Luis Merino</h1>
-                <p class="hero-subtitle">
-                    Human-AI interaction researcher exploring trust formation in collaborative systems. 
-                    Building the future of human-machine partnerships.
-                </p>
-                <div class="hero-actions">
-                    <a href="https://x.com/HipsterCow" target="_blank" class="btn btn-secondary">
-                        <i class="fab fa-twitter"></i>
-                        Let's connect
-                    </a>
-                </div>
+            <div class="hero-label">
+                <span class="hero-label-dot"></span>
+                Researcher &amp; Builder
             </div>
-        </div>
-    </section>
-
-    <!-- Research Section -->
-    <section id="research" class="research-section">
-        <div class="container">
-            <div class="card">
-                <div class="section-header">
-                    <div class="section-badge">
-                        <div class="dot"></div>
-                        <span class="text">Research</span>
-                    </div>
-                    <h2 class="section-title">My Research</h2>
-                    <p class="section-subtitle">
-                        Discover my research portfolio, where human psychology meets artificial intelligence. 
-                        My work strives to understand trust formation in human-AI collaboration.
-                    </p>
-                </div>
-                
-                <div class="research-grid">
-                    <a href="research/decision-making-humanoid-robot.html" class="research-item">
-                        <div class="research-image">
-                            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=100&h=100&fit=crop&crop=center" alt="Pepper humanoid robot for decision making">
-                        </div>
-                        <div class="research-content">
-                            <div class="research-title">Decision-making with Robots</div>
-                            <div class="research-description">Human-robot interaction, Trust formation</div>
-                        </div>
-                        <i class="fas fa-arrow-right research-arrow"></i>
-                    </a>
-                    
-                    <a href="research/trust-human-machine-teams.html" class="research-item">
-                        <div class="research-image">
-                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=100&h=100&fit=crop&crop=center" alt="Team collaboration and trust in human-machine systems">
-                        </div>
-                        <div class="research-content">
-                            <div class="research-title">Trust in AI Teams</div>
-                            <div class="research-description">Personality traits, Collaborative systems</div>
-                        </div>
-                        <i class="fas fa-arrow-right research-arrow"></i>
-                    </a>
-
-                    <a href="research/human-robot-interaction-studies.html" class="research-item">
-                        <div class="research-image">
-                            <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=100&h=100&fit=crop&crop=center" alt="Human-robot interaction and psychology research">
-                        </div>
-                        <div class="research-content">
-                            <div class="research-title">HRI Studies</div>
-                            <div class="research-description">Psychology, Decision-making contexts</div>
-                        </div>
-                        <i class="fas fa-arrow-right research-arrow"></i>
-                    </a>
-
-                    <a href="research/trust-formation-ai-systems.html" class="research-item">
-                        <div class="research-image">
-                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=100&h=100&fit=crop&crop=center" alt="Conformity and decision making with robot peers">
-                        </div>
-                        <div class="research-content">
-                            <div class="research-title">Conformity with Robot Peers</div>
-                            <div class="research-description">Decision-making, Personality, HRI</div>
-                        </div>
-                        <i class="fas fa-arrow-right research-arrow"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section id="blog" class="blog-section">
-        <div class="container">
-            <div class="card">
-                <div class="section-header">
-                    <div class="section-badge">
-                        <div class="dot"></div>
-                        <span class="text">Blog</span>
-                    </div>
-                    <h2 class="section-title">Blog Articles</h2>
-                    <p class="section-subtitle">
-                        Thoughts and deep dives on AI safety, alignment research, and the papers
-                        shaping the future of artificial intelligence.
-                    </p>
-                </div>
-
-                <div class="blog-grid">
-                    <a href="blog/sleeper-agents.html" class="blog-item">
-                        <div class="blog-image">
-                            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=100&h=100&fit=crop&crop=center" alt="AI safety and sleeper agents research">
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-title">Sleeper Agents: Deceptive LLMs</div>
-                            <div class="blog-description">AI Safety, Deceptive Alignment, Anthropic 2024</div>
-                        </div>
-                        <i class="fas fa-arrow-right blog-arrow"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demos Section -->
-    <section id="demos" class="demos-section">
-        <div class="container">
-            <div class="card">
-                <div class="section-header">
-                    <div class="section-badge">
-                        <div class="dot"></div>
-                        <span class="text">Demos</span>
-                    </div>
-                    <h2 class="section-title">Interactive Demos</h2>
-                    <p class="section-subtitle">
-                        Hands-on demonstrations of computer vision and AI technologies 
-                        that showcase the future of human-machine interaction.
-                    </p>
-                </div>
-                
-                <div class="demos-grid">
-                    <a href="trust-demo.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=100&h=100&fit=crop&crop=center" alt="Trust and handshake concept">
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Trust in AI Demo</div>
-                            <div class="demo-description">Interactive demonstration, Research-based</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-
-                    <a href="emotion-detection.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=100&h=100&fit=crop&crop=center" alt="Facial expression analysis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div style="display:none; width:100%; height:100%; background:var(--gray-200); align-items:center; justify-content:center; color:var(--gray-500); font-weight:700; font-size:18px;">E</div>
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Emotion Detection</div>
-                            <div class="demo-description">Real-time recognition, Computer Vision</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-
-                    <a href="pose-estimation.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=100&h=100&fit=crop&crop=center" alt="Human pose and movement tracking" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div style="display:none; width:100%; height:100%; background:var(--gray-200); align-items:center; justify-content:center; color:var(--gray-500); font-weight:700; font-size:18px;">P</div>
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Pose Estimation</div>
-                            <div class="demo-description">Live detection, ML5.js</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-
-                    <a href="object-tracking.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100&h=100&fit=crop&crop=center" alt="Computer vision and object detection">
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Object Tracking</div>
-                            <div class="demo-description">Real-time detection, YOLO</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-
-                    <a href="ar-demo.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=center" alt="Augmented reality technology" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div style="display:none; width:100%; height:100%; background:var(--gray-200); align-items:center; justify-content:center; color:var(--gray-500); font-weight:700; font-size:18px;">A</div>
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Augmented Reality</div>
-                            <div class="demo-description">Interactive experience, AR.js</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-
-                    <a href="personality-test.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=center" alt="Personality assessment and psychology">
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Personality & AI Trust</div>
-                            <div class="demo-description">Interactive assessment, Psychology</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-
-                    <a href="labs/drum-machine.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=100&h=100&fit=crop&crop=center" alt="Drum machine sequencer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div style="display:none; width:100%; height:100%; background:var(--gray-200); align-items:center; justify-content:center; color:var(--gray-500); font-weight:700; font-size:18px;">D</div>
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Drum Machine</div>
-                            <div class="demo-description">16-step sequencer, Web Audio API</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-
-                    <a href="labs/jarvis-hud.html" class="demo-item">
-                        <div class="demo-image">
-                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=100&h=100&fit=crop&crop=center" alt="Iron Man Jarvis HUD" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div style="display:none; width:100%; height:100%; background:var(--gray-200); align-items:center; justify-content:center; color:var(--gray-500); font-weight:700; font-size:18px;">J</div>
-                        </div>
-                        <div class="demo-content">
-                            <div class="demo-title">Jarvis Face HUD</div>
-                            <div class="demo-description">Iron Man style AR mask, MediaPipe</div>
-                        </div>
-                        <i class="fas fa-arrow-right demo-arrow"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects-section">
-        <div class="container">
-            <div class="card">
-                <div class="section-header">
-                    <div class="section-badge">
-                        <div class="dot"></div>
-                        <span class="text">Projects</span>
-                    </div>
-                    <h2 class="section-title">Personal Projects</h2>
-                    <p class="section-subtitle">
-                        Personal projects that explore the intersection of technology, 
-                        creativity, and human expression.
-                    </p>
-                </div>
-                
-                <div class="projects-grid">
-                    <a href="coffee.html" class="project-item">
-                        <div class="project-image">
-                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=100&h=100&fit=crop&crop=center" alt="Coffee culture and photography">
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title">Coffee Photography</div>
-                            <div class="project-description">Documenting coffee culture</div>
-                        </div>
-                        <i class="fas fa-arrow-right project-arrow"></i>
-                    </a>
-
-                    <a href="photography.html" class="project-item">
-                        <div class="project-image">
-                            <img src="https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=100&h=100&fit=crop&crop=center" alt="Photography and visual storytelling">
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title">Photography</div>
-                            <div class="project-description">Visual storytelling</div>
-                        </div>
-                        <i class="fas fa-arrow-right project-arrow"></i>
-                    </a>
-
-                    <a href="creating.html" class="project-item">
-                        <div class="project-image">
-                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop&crop=center" alt="Creative design and visual communication">
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title">Creative Design</div>
-                            <div class="project-description">Visual communication</div>
-                        </div>
-                        <i class="fas fa-arrow-right project-arrow"></i>
-                    </a>
-
-                    <a href="crayons.html" class="project-item">
-                        <div class="project-image">
-                            <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=100&h=100&fit=crop&crop=center" alt="Color studies and art experiments">
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title">Color Studies</div>
-                            <div class="project-description">Experiments with color</div>
-                        </div>
-                        <i class="fas fa-arrow-right project-arrow"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2 class="cta-title">Let's work together.</h2>
-            <p class="cta-description">Creating user experience and visually appealing design</p>
+            <h1 class="hero-title">Human-AI interaction researcher exploring trust in collaborative systems.</h1>
+            <p class="hero-subtitle">
+                Building the future of human-machine partnerships. Based at the intersection of psychology, AI, and design.
+            </p>
             <div class="hero-actions">
-                <a href="https://x.com/HipsterCow" target="_blank" class="btn btn-secondary">
-                    <i class="fab fa-twitter"></i>
-                    Let's connect
+                <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="btn btn--secondary">Let's connect &#8599;</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="research" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label"><span class="section-label-dot"></span>Research</div>
+                <h2 class="section-title">Research</h2>
+                <p class="section-desc">Trust formation in human-AI collaboration. How personality and context shape the way we work with machines.</p>
+            </div>
+            <div class="list-grid reveal">
+                <a href="research/decision-making-humanoid-robot.html" class="list-item">
+                    <div class="list-item-icon">01</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Decision-making with Robots</div>
+                        <div class="list-item-meta">Human-robot interaction, Trust formation</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="research/trust-human-machine-teams.html" class="list-item">
+                    <div class="list-item-icon">02</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Trust in AI Teams</div>
+                        <div class="list-item-meta">Personality traits, Collaborative systems</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="research/human-robot-interaction-studies.html" class="list-item">
+                    <div class="list-item-icon">03</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">HRI Studies</div>
+                        <div class="list-item-meta">Psychology, Decision-making contexts</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="research/trust-formation-ai-systems.html" class="list-item">
+                    <div class="list-item-icon">04</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Conformity with Robot Peers</div>
+                        <div class="list-item-meta">Decision-making, Personality, HRI</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer id="contact" class="footer">
+    <section id="writing" class="section">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-badge">
-                    <div class="dot"></div>
-                    <span class="text">Follow Me</span>
+            <div class="section-header">
+                <div class="section-label"><span class="section-label-dot"></span>Writing</div>
+                <h2 class="section-title">Blog</h2>
+                <p class="section-desc">Deep dives on AI safety, alignment research, and the papers shaping the field.</p>
+            </div>
+            <div class="list-grid reveal">
+                <a href="blog/sleeper-agents.html" class="list-item">
+                    <div class="list-item-icon">SA</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Sleeper Agents: Deceptive LLMs</div>
+                        <div class="list-item-meta">AI Safety, Deceptive Alignment &middot; Anthropic 2024</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="demos" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label"><span class="section-label-dot"></span>Demos</div>
+                <h2 class="section-title">Interactive Experiments</h2>
+                <p class="section-desc">Computer vision, audio, and AI demonstrations built for the browser.</p>
+            </div>
+            <div class="list-grid list-grid--2col reveal">
+                <a href="trust-demo.html" class="list-item">
+                    <div class="list-item-icon">T</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Trust in AI Demo</div>
+                        <div class="list-item-meta">Interactive, Research-based</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="emotion-detection.html" class="list-item">
+                    <div class="list-item-icon">E</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Emotion Detection</div>
+                        <div class="list-item-meta">Real-time, Computer Vision</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="pose-estimation.html" class="list-item">
+                    <div class="list-item-icon">P</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Pose Estimation</div>
+                        <div class="list-item-meta">Live detection, ML5.js</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="object-tracking.html" class="list-item">
+                    <div class="list-item-icon">O</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Object Tracking</div>
+                        <div class="list-item-meta">Real-time, YOLO</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="ar-demo.html" class="list-item">
+                    <div class="list-item-icon">AR</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Augmented Reality</div>
+                        <div class="list-item-meta">Interactive, AR.js</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="personality-test.html" class="list-item">
+                    <div class="list-item-icon">PT</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Personality &amp; AI Trust</div>
+                        <div class="list-item-meta">Assessment, Psychology</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="labs/drum-machine.html" class="list-item">
+                    <div class="list-item-icon">DM</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Drum Machine</div>
+                        <div class="list-item-meta">16-step sequencer, Web Audio</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+                <a href="labs/jarvis-hud.html" class="list-item">
+                    <div class="list-item-icon">JH</div>
+                    <div class="list-item-body">
+                        <div class="list-item-title">Jarvis Face HUD</div>
+                        <div class="list-item-meta">AR mask, MediaPipe</div>
+                    </div>
+                    <span class="list-item-arrow">&#8594;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label"><span class="section-label-dot"></span>Projects</div>
+                <h2 class="section-title">Personal Projects</h2>
+                <p class="section-desc">Technology, creativity, and process.</p>
+            </div>
+            <div class="card-grid reveal">
+                <a href="coffee.html" class="card">
+                    <div class="card-title">Coffee Photography</div>
+                    <div class="card-desc">Documenting specialty coffee culture, process, and the people behind the cup.</div>
+                    <span class="card-link">View project &#8594;</span>
+                </a>
+                <a href="photography.html" class="card">
+                    <div class="card-title">Photography</div>
+                    <div class="card-desc">Visual storytelling through light, composition, and quiet observation.</div>
+                    <span class="card-link">View project &#8594;</span>
+                </a>
+                <a href="creating.html" class="card">
+                    <div class="card-title">Creative Design</div>
+                    <div class="card-desc">Visual communication experiments and design explorations.</div>
+                    <span class="card-link">View project &#8594;</span>
+                </a>
+                <a href="crayons.html" class="card">
+                    <div class="card-title">Color Studies</div>
+                    <div class="card-desc">Experiments with color theory, palette, and material interaction.</div>
+                    <span class="card-link">View project &#8594;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Let's work together.</h2>
+            <p class="cta-desc">Always interested in thoughtful collaborations.</p>
+            <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="btn btn--brand">Connect &#8599;</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="footer-link">X / Twitter</a>
+                    <a href="#" class="footer-link">Instagram</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
                 </div>
-                <div class="social-links">
-                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
-                </div>
+                <p class="footer-copy">&copy; 2025 Luis Merino</p>
             </div>
         </div>
     </footer>

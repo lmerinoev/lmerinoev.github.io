@@ -5,382 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decision-making with a Humanoid Robot Partner - Luis Merino</title>
     <link rel="stylesheet" href="../styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .research-page {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 120px 20px 80px;
-            background: var(--secondary);
-            color: var(--primary);
-        }
-        
-        .research-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .research-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-        
-        .research-subtitle {
-            font-size: 1.3rem;
-            color: var(--gray-600);
-            margin-bottom: 2rem;
-            font-weight: 400;
-        }
-        
-        .research-meta {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-500);
-            font-size: 0.95rem;
-        }
-        
-        .meta-item i {
-            color: var(--primary);
-        }
-        
-        .hero-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 4rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 4rem;
-            margin-bottom: 4rem;
-        }
-        
-        .main-content {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--primary);
-        }
-        
-        .main-content h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 3rem 0 1.5rem;
-            letter-spacing: -0.01em;
-        }
-        
-        .main-content h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin: 2rem 0 1rem;
-        }
-        
-        .main-content p {
-            margin-bottom: 1.5rem;
-            color: var(--gray-600);
-        }
-        
-        .highlight-box {
-            background: var(--gray-100);
-            border-left: 4px solid var(--primary);
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 0 12px 12px 0;
-        }
-        
-        .highlight-box p {
-            margin: 0;
-            font-style: italic;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-        
-        .sidebar {
-            background: var(--gray-100);
-            border-radius: 20px;
-            padding: 2rem;
-            height: fit-content;
-            position: sticky;
-            top: 120px;
-        }
-        
-        .sidebar h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .sidebar li {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-        
-        .sidebar li:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .sidebar a {
-            color: var(--gray-600);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-        }
-        
-        .sidebar a:hover {
-            color: var(--primary);
-        }
-        
-        .paper-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: var(--secondary);
-        }
-        
-        .btn-primary:hover {
-            background: var(--gray-700);
-            transform: translateY(-1px);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: var(--secondary);
-        }
-        
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-600);
-            text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            transition: color 0.3s ease;
-        }
-        
-        .back-link:hover {
-            color: var(--primary);
-        }
-        
-        .key-findings {
-            background: var(--gray-100);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-        }
-        
-        .key-findings h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .findings-list {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .findings-list li {
-            margin-bottom: 1rem;
-            padding-left: 1.5rem;
-            position: relative;
-            color: var(--gray-600);
-        }
-        
-        .findings-list li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        @media (max-width: 768px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .sidebar {
-                position: static;
-            }
-            
-            .research-title {
-                font-size: 2.5rem;
-            }
-            
-            .research-meta {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">Luis Merino</div>
-            <div class="nav-menu">
-                <a href="../index.html" class="nav-icon" data-label="Home">
-                    <i class="fas fa-home"></i>
-                </a>
-                <a href="../about.html" class="nav-icon" data-label="About">
-                    <i class="fas fa-user"></i>
-                </a>
-                <a href="../index.html#research" class="nav-icon active" data-label="Research">
-                    <i class="fas fa-briefcase"></i>
-                </a>
-                <a href="../labs/" class="nav-icon" data-label="Labs">
-                    <i class="fas fa-flask"></i>
-                </a>
-                <a href="../analysis/" class="nav-icon" data-label="Analysis">
-                    <i class="fas fa-search"></i>
-                </a>
-                <a href="../index.html#contact" class="nav-icon" data-label="Contact">
-                    <i class="fas fa-shopping-bag"></i>
-                </a>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Luis Merino</a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../index.html#research" class="nav-link active">Research</a>
+                <a href="../index.html#writing" class="nav-link">Writing</a>
+                <a href="../labs/" class="nav-link">Labs</a>
+                <a href="../analysis/" class="nav-link">Analysis</a>
             </div>
             <div class="nav-actions">
-                <button class="dark-mode-toggle" id="darkModeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
+                <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+                <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">&#9776;</button>
             </div>
         </div>
     </nav>
 
-    <div class="research-page">
-        <a href="../index.html" class="back-link">
-            <i class="fas fa-arrow-left"></i>
-            Back to Portfolio
-        </a>
-        
-        <div class="research-header">
-            <h1 class="research-title">Decision-making with a Humanoid Robot Partner</h1>
-            <p class="research-subtitle">Individual Differences Impacting Trust in Human-Robot Collaboration</p>
-            
-            <div class="research-meta">
-                <div class="meta-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>2021</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-users"></i>
-                    <span>Joel Elson, Luis Merino, Douglas Derrick</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-university"></i>
-                    <span>University of Nebraska at Omaha</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-tag"></i>
-                    <span>Trust, Personality, Humanoid Robot</span>
-                </div>
+    <article class="article">
+        <a href="../index.html#research" class="article-back">&#8592; Back to Research</a>
+        <div class="article-header">
+            <h1 class="article-title">Decision-making with a Humanoid Robot Partner</h1>
+            <p class="article-subtitle">Individual Differences Impacting Trust in Human-Robot Collaboration</p>
+            <div class="article-meta">
+                <span class="article-meta-item"><strong>Date</strong> 2021</span>
+                <span class="article-meta-item"><strong>Authors</strong> Joel Elson, Luis Merino, Douglas Derrick</span>
+                <span class="article-meta-item"><strong>Institution</strong> University of Nebraska at Omaha</span>
+                <span class="article-meta-item"><strong>Topics</strong> Trust, Personality, Humanoid Robot</span>
             </div>
         </div>
-        
-        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-             alt="Pepper humanoid robot for decision making research" 
-             class="hero-image">
-        
-        <div class="content-grid">
-            <div class="main-content">
+
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+             alt="Pepper humanoid robot for decision making research"
+             class="article-hero-img">
+
+        <div class="article-grid">
+            <div class="prose">
                 <h2>Research Overview</h2>
                 <p>
-                    This groundbreaking study explores the critical role of individual personality differences in shaping trust 
-                    relationships between humans and humanoid robots during collaborative decision-making processes. As artificial 
-                    intelligence systems become increasingly sophisticated and integrated into our daily lives, understanding 
+                    This groundbreaking study explores the critical role of individual personality differences in shaping trust
+                    relationships between humans and humanoid robots during collaborative decision-making processes. As artificial
+                    intelligence systems become increasingly sophisticated and integrated into our daily lives, understanding
                     the psychological factors that influence human-robot trust becomes paramount for successful human-machine partnerships.
                 </p>
-                
-                <div class="highlight-box">
+
+                <div class="callout">
                     <p>
-                        "The openness personality trait is a significant predictor of trust in a humanoid robot partner, 
+                        "The openness personality trait is a significant predictor of trust in a humanoid robot partner,
                         above and beyond the individual difference propensity to trust."
                     </p>
                 </div>
-                
+
                 <h2>Key Research Questions</h2>
                 <p>
-                    The study addresses fundamental questions about human-robot interaction: How do individual personality 
-                    traits influence trust in AI systems? What role does the "Openness to Experience" personality dimension 
-                    play in human-robot collaboration? How can we design AI systems that better match individual user 
+                    The study addresses fundamental questions about human-robot interaction: How do individual personality
+                    traits influence trust in AI systems? What role does the "Openness to Experience" personality dimension
+                    play in human-robot collaboration? How can we design AI systems that better match individual user
                     preferences and trust levels?
                 </p>
-                
-                <h2>Methodology & Approach</h2>
+
+                <h2>Methodology &amp; Approach</h2>
                 <p>
-                    The research employed a comprehensive empirical study examining the role of the Big-Five personality 
-                    traits on trust in humanoid-robot partnerships. Using established psychological frameworks including 
-                    Trait Activation Theory, the study investigated how situational cues activate characteristic personality 
+                    The research employed a comprehensive empirical study examining the role of the Big-Five personality
+                    traits on trust in humanoid-robot partnerships. Using established psychological frameworks including
+                    Trait Activation Theory, the study investigated how situational cues activate characteristic personality
                     responses that ultimately influence an individual's perceptions and trust in AI systems.
                 </p>
-                
+
                 <h2>Major Findings</h2>
                 <p>
-                    The study revealed that individuals scoring high on the openness personality trait demonstrate significantly 
-                    greater trust in humanoid robot partners compared to those with lower openness scores. This finding has 
-                    profound implications for the design and deployment of AI systems, suggesting that personality-aware 
+                    The study revealed that individuals scoring high on the openness personality trait demonstrate significantly
+                    greater trust in humanoid robot partners compared to those with lower openness scores. This finding has
+                    profound implications for the design and deployment of AI systems, suggesting that personality-aware
                     interfaces could enhance human-robot collaboration effectiveness.
                 </p>
-                
-                <div class="key-findings">
+
+                <div class="findings">
                     <h3>Key Research Insights</h3>
-                    <ul class="findings-list">
+                    <ul>
                         <li>Openness to Experience is the most significant personality predictor of AI trust</li>
                         <li>Individual differences play a crucial role in human-machine collaboration</li>
                         <li>Personality traits can be activated by specific situational cues in AI interactions</li>
@@ -388,110 +96,62 @@
                         <li>Designing personality-aware AI systems could improve user experience and adoption</li>
                     </ul>
                 </div>
-                
+
                 <h2>Implications for AI Design</h2>
                 <p>
-                    These findings have significant implications for the future of human-AI interaction design. By understanding 
-                    how personality traits influence trust, we can develop more personalized AI systems that adapt to individual 
-                    user preferences and communication styles. This research opens new avenues for creating more effective and 
+                    These findings have significant implications for the future of human-AI interaction design. By understanding
+                    how personality traits influence trust, we can develop more personalized AI systems that adapt to individual
+                    user preferences and communication styles. This research opens new avenues for creating more effective and
                     trustworthy human-robot partnerships in various domains, from healthcare to autonomous vehicles.
                 </p>
-                
+
                 <h2>Future Research Directions</h2>
                 <p>
-                    The study suggests several promising directions for future research, including investigating other trait 
-                    activating factors related to Openness in human-machine trusting relationships, developing personality-based 
-                    AI adaptation strategies, and exploring how these findings apply across different cultural contexts and 
+                    The study suggests several promising directions for future research, including investigating other trait
+                    activating factors related to Openness in human-machine trusting relationships, developing personality-based
+                    AI adaptation strategies, and exploring how these findings apply across different cultural contexts and
                     AI system types.
                 </p>
             </div>
-            
-            <div class="sidebar">
-                <h3>Quick Navigation</h3>
-                <ul>
-                    <li><a href="#overview">Research Overview</a></li>
-                    <li><a href="#questions">Key Questions</a></li>
-                    <li><a href="#methodology">Methodology</a></li>
-                    <li><a href="#findings">Major Findings</a></li>
-                    <li><a href="#implications">AI Design Implications</a></li>
-                    <li><a href="#future">Future Research</a></li>
-                </ul>
-                
-                <h3>Related Research</h3>
-                <ul>
-                    <li><a href="trust-human-machine-teams.html">Trust in Human-Machine Teams</a></li>
-                    <li><a href="human-robot-interaction-studies.html">Human-Robot Interaction Studies</a></li>
-                </ul>
-                
-                <div class="paper-actions">
-                    <a href="https://www.scitepress.org/PublishedPapers/2021/107224/107224.pdf" target="_blank" class="action-btn btn-primary">
-                        <i class="fas fa-file-pdf"></i>
-                        View Full Paper
-                    </a>
-                    <a href="../trust-demo.html" class="action-btn btn-secondary">
-                        <i class="fas fa-play"></i>
-                        Try Interactive Demo
-                    </a>
+
+            <aside class="article-sidebar">
+                <div class="article-sidebar-section">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="#overview">Research Overview</a></li>
+                        <li><a href="#questions">Key Questions</a></li>
+                        <li><a href="#methodology">Methodology</a></li>
+                        <li><a href="#findings">Major Findings</a></li>
+                        <li><a href="#implications">AI Design Implications</a></li>
+                        <li><a href="#future">Future Research</a></li>
+                    </ul>
                 </div>
-            </div>
+                <div class="article-sidebar-section">
+                    <h3>Related</h3>
+                    <ul>
+                        <li><a href="trust-human-machine-teams.html">Trust in Human-Machine Teams</a></li>
+                        <li><a href="human-robot-interaction-studies.html">Human-Robot Interaction Studies</a></li>
+                    </ul>
+                </div>
+                <a href="https://www.scitepress.org/PublishedPapers/2021/107224/107224.pdf" target="_blank" class="btn btn--brand">View Full Paper &#8599;</a>
+                <a href="../trust-demo.html" class="btn btn--brand">Try Interactive Demo &#8594;</a>
+            </aside>
         </div>
-    </div>
+    </article>
 
-    <script src="../script.js"></script>
-    <script>
-        // Dark mode functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
-
-        // Apply theme on load
-        if (isDarkMode) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-
-        // Toggle dark mode
-        darkModeToggle.addEventListener('click', function() {
-            isDarkMode = !isDarkMode;
-            if (isDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                this.innerHTML = '<i class="fas fa-sun"></i>';
-                localStorage.setItem('darkMode', 'true');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                this.innerHTML = '<i class="fas fa-moon"></i>';
-                localStorage.setItem('darkMode', 'false');
-            }
-        });
-    </script>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-badge">
-                    <div class="dot"></div>
-                    <span class="text">Follow Me</span>
+            <div class="footer-inner">
+                <div class="footer-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="footer-link">X / Twitter</a>
+                    <a href="#" class="footer-link">Instagram</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
                 </div>
-                <div class="social-links">
-                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
-                </div>
+                <p class="footer-copy">&copy; 2025 Luis Merino</p>
             </div>
         </div>
     </footer>
+
+    <script src="../script.js"></script>
 </body>
 </html>
-

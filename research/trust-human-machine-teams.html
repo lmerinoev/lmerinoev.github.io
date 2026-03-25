@@ -5,451 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trust in Human-Machine Teams - Luis Merino</title>
     <link rel="stylesheet" href="../styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .research-page {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 120px 20px 80px;
-            background: var(--secondary);
-            color: var(--primary);
-        }
-        
-        .research-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .research-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-        
-        .research-subtitle {
-            font-size: 1.3rem;
-            color: var(--gray-600);
-            margin-bottom: 2rem;
-            font-weight: 400;
-        }
-        
-        .research-meta {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-500);
-            font-size: 0.95rem;
-        }
-        
-        .meta-item i {
-            color: var(--primary);
-        }
-        
-        .hero-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 4rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 4rem;
-            margin-bottom: 4rem;
-        }
-        
-        .main-content {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--primary);
-        }
-        
-        .main-content h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 3rem 0 1.5rem;
-            letter-spacing: -0.01em;
-        }
-        
-        .main-content h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin: 2rem 0 1rem;
-        }
-        
-        .main-content p {
-            margin-bottom: 1.5rem;
-            color: var(--gray-600);
-        }
-        
-        .highlight-box {
-            background: var(--gray-100);
-            border-left: 4px solid var(--primary);
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 0 12px 12px 0;
-        }
-        
-        .highlight-box p {
-            margin: 0;
-            font-style: italic;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-        
-        .sidebar {
-            background: var(--gray-100);
-            border-radius: 20px;
-            padding: 2rem;
-            height: fit-content;
-            position: sticky;
-            top: 120px;
-        }
-        
-        .sidebar h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .sidebar li {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .sidebar li:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .sidebar a {
-            color: var(--gray-600);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-        }
-        
-        .sidebar a:hover {
-            color: var(--primary);
-        }
-        
-        .paper-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: var(--secondary);
-        }
-        
-        .btn-primary:hover {
-            background: #424245;
-            transform: translateY(-1px);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: var(--secondary);
-        }
-        
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-600);
-            text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            transition: color 0.3s ease;
-        }
-        
-        .back-link:hover {
-            color: var(--primary);
-        }
-        
-        .key-findings {
-            background: var(--gray-100);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-        }
-        
-        .key-findings h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .findings-list {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .findings-list li {
-            margin-bottom: 1rem;
-            padding-left: 1.5rem;
-            position: relative;
-            color: var(--gray-600);
-        }
-        
-        .findings-list li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .trust-framework {
-            background: #ffffff;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-        }
-        
-        .trust-framework h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .framework-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .framework-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: var(--gray-100);
-            border-radius: 12px;
-        }
-        
-        .framework-item h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .framework-item p {
-            font-size: 0.9rem;
-            color: var(--gray-600);
-            margin: 0;
-        }
-        
-        @media (max-width: 768px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .sidebar {
-                position: static;
-            }
-            
-            .research-title {
-                font-size: 2.5rem;
-            }
-            
-            .research-meta {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">Luis Merino</div>
-            <div class="nav-menu">
-                <a href="../index.html" class="nav-icon" data-label="Home">
-                    <i class="fas fa-home"></i>
-                </a>
-                <a href="../about.html" class="nav-icon" data-label="About">
-                    <i class="fas fa-user"></i>
-                </a>
-                <a href="../index.html#research" class="nav-icon active" data-label="Research">
-                    <i class="fas fa-briefcase"></i>
-                </a>
-                <a href="../labs/" class="nav-icon" data-label="Labs">
-                    <i class="fas fa-flask"></i>
-                </a>
-                <a href="../analysis/" class="nav-icon" data-label="Analysis">
-                    <i class="fas fa-search"></i>
-                </a>
-                <a href="../index.html#contact" class="nav-icon" data-label="Contact">
-                    <i class="fas fa-shopping-bag"></i>
-                </a>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Luis Merino</a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../index.html#research" class="nav-link active">Research</a>
+                <a href="../index.html#writing" class="nav-link">Writing</a>
+                <a href="../labs/" class="nav-link">Labs</a>
+                <a href="../analysis/" class="nav-link">Analysis</a>
             </div>
             <div class="nav-actions">
-                <button class="dark-mode-toggle" id="darkModeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
+                <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+                <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">&#9776;</button>
             </div>
         </div>
     </nav>
 
-    <div class="research-page">
-        <a href="../index.html" class="back-link">
-            <i class="fas fa-arrow-left"></i>
-            Back to Portfolio
-        </a>
-        
-        <div class="research-header">
-            <h1 class="research-title">Trust in Human-Machine Teams</h1>
-            <p class="research-subtitle">Examining Individual Differences and Personality Traits in AI Collaboration</p>
-            
-            <div class="research-meta">
-                <div class="meta-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>2021</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-users"></i>
-                    <span>Luis Merino, Research Team</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-university"></i>
-                    <span>University of Nebraska at Omaha</span>
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-tag"></i>
-                    <span>Trust, Individual Differences, AI Teams</span>
-                </div>
+    <article class="article">
+        <a href="../index.html#research" class="article-back">&#8592; Back to Research</a>
+        <div class="article-header">
+            <h1 class="article-title">Trust in Human-Machine Teams</h1>
+            <p class="article-subtitle">Examining Individual Differences and Personality Traits in AI Collaboration</p>
+            <div class="article-meta">
+                <span class="article-meta-item"><strong>Date</strong> 2021</span>
+                <span class="article-meta-item"><strong>Authors</strong> Luis Merino, Research Team</span>
+                <span class="article-meta-item"><strong>Institution</strong> University of Nebraska at Omaha</span>
+                <span class="article-meta-item"><strong>Topics</strong> Trust, Individual Differences, AI Teams</span>
             </div>
         </div>
-        
-        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-             alt="Team collaboration and trust in human-machine systems" 
-             class="hero-image">
-        
-        <div class="content-grid">
-            <div class="main-content">
+
+        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+             alt="Team collaboration and trust in human-machine systems"
+             class="article-hero-img">
+
+        <div class="article-grid">
+            <div class="prose">
                 <h2>Research Overview</h2>
                 <p>
-                    This comprehensive study delves into the complex dynamics of trust formation in human-machine teams, 
-                    focusing on how individual personality differences shape collaborative relationships with artificial 
-                    intelligence systems. As organizations increasingly integrate AI into team-based workflows, understanding 
+                    This comprehensive study delves into the complex dynamics of trust formation in human-machine teams,
+                    focusing on how individual personality differences shape collaborative relationships with artificial
+                    intelligence systems. As organizations increasingly integrate AI into team-based workflows, understanding
                     the psychological foundations of human-AI trust becomes critical for successful implementation and adoption.
                 </p>
-                
-                <div class="highlight-box">
+
+                <div class="callout">
                     <p>
-                        "Individual differences and personality traits play a crucial role in building trust between 
+                        "Individual differences and personality traits play a crucial role in building trust between
                         humans and intelligent systems, with significant implications for team performance and collaboration effectiveness."
                     </p>
                 </div>
-                
+
                 <h2>Theoretical Framework</h2>
                 <p>
-                    The research builds upon established psychological theories, particularly Trait Activation Theory, 
-                    to understand how situational cues in human-AI interactions activate characteristic personality 
-                    responses. This framework provides a comprehensive lens for examining the multifaceted nature of 
+                    The research builds upon established psychological theories, particularly Trait Activation Theory,
+                    to understand how situational cues in human-AI interactions activate characteristic personality
+                    responses. This framework provides a comprehensive lens for examining the multifaceted nature of
                     trust in technological contexts.
                 </p>
-                
-                <div class="trust-framework">
-                    <h3>Trust Framework Components</h3>
-                    <div class="framework-grid">
-                        <div class="framework-item">
-                            <h4>Individual Traits</h4>
-                            <p>Personality characteristics that influence trust propensity</p>
-                        </div>
-                        <div class="framework-item">
-                            <h4>Situational Cues</h4>
-                            <p>Environmental factors that activate personality responses</p>
-                        </div>
-                        <div class="framework-item">
-                            <h4>System Characteristics</h4>
-                            <p>AI system features that impact trust formation</p>
-                        </div>
-                        <div class="framework-item">
-                            <h4>Collaborative Context</h4>
-                            <p>Team dynamics and shared decision-making processes</p>
-                        </div>
-                    </div>
-                </div>
-                
+
+                <h3>Trust Framework Components</h3>
+                <p>
+                    <strong>Individual Traits</strong> &mdash; Personality characteristics that influence trust propensity.
+                    <strong>Situational Cues</strong> &mdash; Environmental factors that activate personality responses.
+                    <strong>System Characteristics</strong> &mdash; AI system features that impact trust formation.
+                    <strong>Collaborative Context</strong> &mdash; Team dynamics and shared decision-making processes.
+                </p>
+
                 <h2>Key Research Questions</h2>
                 <p>
-                    The study addresses several critical questions: How do individual personality differences influence 
-                    trust formation in human-AI teams? What role do situational factors play in activating personality-based 
+                    The study addresses several critical questions: How do individual personality differences influence
+                    trust formation in human-AI teams? What role do situational factors play in activating personality-based
                     trust responses? How can understanding these dynamics improve AI system design and team collaboration?
                 </p>
-                
-                <h2>Methodology & Approach</h2>
+
+                <h2>Methodology &amp; Approach</h2>
                 <p>
-                    The research employed a multi-method approach combining quantitative personality assessments with 
-                    behavioral trust measures in controlled human-AI collaboration scenarios. Participants engaged in 
-                    decision-making tasks with AI systems while their trust levels and personality traits were systematically 
+                    The research employed a multi-method approach combining quantitative personality assessments with
+                    behavioral trust measures in controlled human-AI collaboration scenarios. Participants engaged in
+                    decision-making tasks with AI systems while their trust levels and personality traits were systematically
                     measured and analyzed.
                 </p>
-                
+
                 <h2>Major Findings</h2>
                 <p>
-                    The study revealed that individual differences significantly impact trust formation in human-AI teams, 
-                    with certain personality traits showing stronger correlations with trust levels than others. The research 
+                    The study revealed that individual differences significantly impact trust formation in human-AI teams,
+                    with certain personality traits showing stronger correlations with trust levels than others. The research
                     also identified specific situational factors that can enhance or diminish trust in AI systems.
                 </p>
-                
-                <div class="key-findings">
+
+                <div class="findings">
                     <h3>Key Research Insights</h3>
-                    <ul class="findings-list">
+                    <ul>
                         <li>Personality traits are significant predictors of AI trust in team contexts</li>
                         <li>Situational factors can amplify or reduce personality-based trust responses</li>
                         <li>Individual differences affect both initial trust formation and trust maintenance</li>
@@ -457,110 +110,62 @@
                         <li>Trust dynamics differ between individual and team-based AI interactions</li>
                     </ul>
                 </div>
-                
+
                 <h2>Implications for Team Design</h2>
                 <p>
-                    These findings have profound implications for how organizations structure human-AI teams and design 
-                    AI systems for collaborative contexts. Understanding individual differences can help create more 
-                    effective team compositions and develop AI systems that better match team member preferences and 
+                    These findings have profound implications for how organizations structure human-AI teams and design
+                    AI systems for collaborative contexts. Understanding individual differences can help create more
+                    effective team compositions and develop AI systems that better match team member preferences and
                     trust profiles.
                 </p>
-                
+
                 <h2>Future Research Directions</h2>
                 <p>
-                    The study opens several promising avenues for future research, including investigating cultural 
-                    variations in human-AI trust, developing personality-aware AI systems, and exploring how these 
+                    The study opens several promising avenues for future research, including investigating cultural
+                    variations in human-AI trust, developing personality-aware AI systems, and exploring how these
                     findings apply to different types of AI technologies and team structures.
                 </p>
             </div>
-            
-            <div class="sidebar">
-                <h3>Quick Navigation</h3>
-                <ul>
-                    <li><a href="#overview">Research Overview</a></li>
-                    <li><a href="#framework">Theoretical Framework</a></li>
-                    <li><a href="#questions">Key Questions</a></li>
-                    <li><a href="#methodology">Methodology</a></li>
-                    <li><a href="#findings">Major Findings</a></li>
-                    <li><a href="#implications">Team Design Implications</a></li>
-                    <li><a href="#future">Future Research</a></li>
-                </ul>
-                
-                <h3>Related Research</h3>
-                <ul>
-                    <li><a href="decision-making-humanoid-robot.html">Decision-making with Humanoid Robots</a></li>
-                    <li><a href="human-robot-interaction-studies.html">Human-Robot Interaction Studies</a></li>
-                </ul>
-                
-                <div class="paper-actions">
-                    <a href="https://scholarspace.manoa.hawaii.edu/bitstream/10125/70627/1/0014.pdf" target="_blank" class="action-btn btn-primary">
-                        <i class="fas fa-file-pdf"></i>
-                        View Full Paper
-                    </a>
-                    <a href="../personality-test.html" class="action-btn btn-secondary">
-                        <i class="fas fa-user-astronaut"></i>
-                        Take Personality Test
-                    </a>
+
+            <aside class="article-sidebar">
+                <div class="article-sidebar-section">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="#overview">Research Overview</a></li>
+                        <li><a href="#framework">Theoretical Framework</a></li>
+                        <li><a href="#questions">Key Questions</a></li>
+                        <li><a href="#methodology">Methodology</a></li>
+                        <li><a href="#findings">Major Findings</a></li>
+                        <li><a href="#implications">Team Design Implications</a></li>
+                        <li><a href="#future">Future Research</a></li>
+                    </ul>
                 </div>
-            </div>
+                <div class="article-sidebar-section">
+                    <h3>Related</h3>
+                    <ul>
+                        <li><a href="decision-making-humanoid-robot.html">Decision-making with Humanoid Robots</a></li>
+                        <li><a href="human-robot-interaction-studies.html">Human-Robot Interaction Studies</a></li>
+                    </ul>
+                </div>
+                <a href="https://scholarspace.manoa.hawaii.edu/bitstream/10125/70627/1/0014.pdf" target="_blank" class="btn btn--brand">View Full Paper &#8599;</a>
+                <a href="../personality-test.html" class="btn btn--brand">Take Personality Test &#8594;</a>
+            </aside>
         </div>
-    </div>
+    </article>
 
-    <script src="../script.js"></script>
-    <script>
-        // Dark mode functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
-
-        // Apply theme on load
-        if (isDarkMode) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-
-        // Toggle dark mode
-        darkModeToggle.addEventListener('click', function() {
-            isDarkMode = !isDarkMode;
-            if (isDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                this.innerHTML = '<i class="fas fa-sun"></i>';
-                localStorage.setItem('darkMode', 'true');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                this.innerHTML = '<i class="fas fa-moon"></i>';
-                localStorage.setItem('darkMode', 'false');
-            }
-        });
-    </script>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-badge">
-                    <div class="dot"></div>
-                    <span class="text">Follow Me</span>
+            <div class="footer-inner">
+                <div class="footer-links">
+                    <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="footer-link">X / Twitter</a>
+                    <a href="#" class="footer-link">Instagram</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
                 </div>
-                <div class="social-links">
-                    <a href="https://x.com/HipsterCow" target="_blank" class="social-link">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2024 Luis Merino. All rights reserved.</p>
-                </div>
+                <p class="footer-copy">&copy; 2025 Luis Merino</p>
             </div>
         </div>
     </footer>
+
+    <script src="../script.js"></script>
 </body>
 </html>
-
