@@ -1,12 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
-<rect width="600" height="600" fill="#FAFAF8"/>
-<circle cx="200" cy="200" r="12" fill="#1C1C19"/>
-<circle cx="300" cy="200" r="12" fill="#1C1C19"/>
-<circle cx="400" cy="200" r="12" fill="#1C1C19"/>
-<circle cx="200" cy="300" r="12" fill="#1C1C19"/>
-<circle cx="320" cy="280" r="12" fill="#E8B931"/>
-<circle cx="400" cy="300" r="12" fill="#1C1C19"/>
-<circle cx="200" cy="400" r="12" fill="#1C1C19"/>
-<circle cx="300" cy="400" r="12" fill="#1C1C19"/>
-<circle cx="400" cy="400" r="12" fill="#1C1C19"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600"><rect width="600" height="600" fill="#FAFAF8"/><rect x="422.5" y="102.5" width="75" height="75" fill="#1C1C19"/><rect x="195" y="355" width="50" height="50" fill="#1C1C19"/><rect x="435" y="435" width="50" height="50" fill="#1C1C19"/><rect x="170" y="410" width="100" height="100" fill="none" stroke="#1C1C19" stroke-width="1.5"/><rect x="102.5" y="342.5" width="75" height="75" fill="none" stroke="#1C1C19" stroke-width="1.5"/></svg>
