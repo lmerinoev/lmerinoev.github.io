@@ -83,7 +83,7 @@ darkModeToggle.addEventListener('click', function() {
 
 
 // Card hover effects
-document.querySelectorAll('.research-item, .demo-item, .project-item').forEach(item => {
+document.querySelectorAll('.research-item, .demo-item, .project-item, .blog-item').forEach(item => {
     item.addEventListener('mouseenter', function() {
         this.style.transform = 'translateY(-2px)';
         this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
     
     // Observe elements for animation (only once)
-    const animatedElements = document.querySelectorAll('.card, .research-item, .demo-item, .project-item');
+    const animatedElements = document.querySelectorAll('.card, .research-item, .demo-item, .project-item, .blog-item');
     animatedElements.forEach(element => {
         observer.observe(element);
     });
