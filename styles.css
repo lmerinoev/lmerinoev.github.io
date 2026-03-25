@@ -508,25 +508,31 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-4);
+    gap: var(--space-3);
     margin-top: var(--space-6);
 }
 
 .hero-carousel-arrow {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     border: 1px solid var(--gray-200);
     background: var(--white);
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: var(--gray-400);
     transition: border-color var(--duration-normal) var(--ease),
                 color var(--duration-normal) var(--ease);
     flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+    .hero-carousel-arrow {
+        display: flex;
+    }
 }
 
 .hero-carousel-arrow:hover {
