@@ -54,6 +54,16 @@
         return (lo + Math.floor(rng() * (hi - lo + 1))) * step;
     }
 
+    // Generate a position near a focal point (within drift range), clamped to safe zone
+    function nearby(rng, focusX, focusY, drift) {
+        drift = drift || 120;
+        var nx = focusX + (rng() - 0.5) * drift * 2;
+        var ny = focusY + (rng() - 0.5) * drift * 2;
+        nx = Math.max(MARGIN, Math.min(SIZE - MARGIN, nx));
+        ny = Math.max(MARGIN, Math.min(SIZE - MARGIN, ny));
+        return { x: nx, y: ny };
+    }
+
     // Clamp a circle so it stays within bounds
     function clampCircle(cx, cy, r) {
         var minC = MARGIN + r;
@@ -149,45 +159,42 @@
 
     // Composition strategies
     var compositions = [
-        // 0: Circle + square overlap
+        // 0: Circle + square overlap (clustered around focal point)
         function (rng, accent) {
             var els = [];
+            var fx = snapInner(rng, 4);
+            var fy = snapInner(rng, 4);
             var r = snapSize(rng, 60, 120);
-            var cx = snapInner(rng, 6);
-            var cy = snapInner(rng, 6);
-            els.push(shapes.filledCircle(cx, cy, r, FG));
+            els.push(shapes.filledCircle(fx, fy, r, FG));
             var s = snapSize(rng, 80, 180);
-            var sx = snapInner(rng, 6) - s/2;
-            var sy = snapInner(rng, 6) - s/2;
-            els.push(shapes.strokedRect(sx, sy, s, s, accent ? ACCENT : FG));
+            var n = nearby(rng, fx, fy, 80);
+            els.push(shapes.strokedRect(n.x - s/2, n.y - s/2, s, s, accent ? ACCENT : FG));
             return els;
         },
-        // 1: Triangle + circle
+        // 1: Triangle + circle (clustered)
         function (rng, accent) {
             var els = [];
+            var fx = snapInner(rng, 4);
+            var fy = snapInner(rng, 4);
             var size = snapSize(rng, 100, 200);
-            var cx = snapInner(rng, 4);
-            var cy = snapInner(rng, 4);
             var rot = [0, 60, 120, 180][Math.floor(rng() * 4)];
-            els.push(shapes.filledTriangle(cx, cy, size, rot, FG));
+            els.push(shapes.filledTriangle(fx, fy, size, rot, FG));
             var r = snapSize(rng, 25, 60);
-            var cx2 = snapInner(rng, 6);
-            var cy2 = snapInner(rng, 6);
-            els.push(shapes.filledCircle(cx2, cy2, r, accent ? ACCENT : FG));
+            var n = nearby(rng, fx, fy, 100);
+            els.push(shapes.filledCircle(n.x, n.y, r, accent ? ACCENT : FG));
             return els;
         },
-        // 2: Rect + circle intersection
+        // 2: Rect + circle intersection (clustered)
         function (rng, accent) {
             var els = [];
+            var fx = snapInner(rng, 4);
+            var fy = snapInner(rng, 4);
             var w = snapSize(rng, 120, 250);
             var h = snapSize(rng, 120, 250);
-            var x = snapInner(rng, 6) - w/2;
-            var y = snapInner(rng, 6) - h/2;
-            els.push(shapes.strokedRect(x, y, w, h, FG));
+            els.push(shapes.strokedRect(fx - w/2, fy - h/2, w, h, FG));
             var r = snapSize(rng, 40, 100);
-            var cx = snapInner(rng, 6);
-            var cy = snapInner(rng, 6);
-            els.push(shapes.filledCircle(cx, cy, r, accent ? ACCENT : FG));
+            var n = nearby(rng, fx, fy, 80);
+            els.push(shapes.filledCircle(n.x, n.y, r, accent ? ACCENT : FG));
             return els;
         },
         // 3: Rhythm lines (vertical or horizontal)
@@ -265,10 +272,9 @@
             var rot1 = Math.floor(rng() * 4) * 90;
             els.push(shapes.filledTriangle(cx1, cy1, s1, rot1, FG));
             var s2 = snapSize(rng, 60, 120);
-            var cx2 = snapInner(rng, 4);
-            var cy2 = snapInner(rng, 4);
+            var n = nearby(rng, cx1, cy1, 100);
             var rot2 = Math.floor(rng() * 4) * 90;
-            els.push(shapes.strokedTriangle(cx2, cy2, s2, rot2, accent ? ACCENT : FG));
+            els.push(shapes.strokedTriangle(n.x, n.y, s2, rot2, accent ? ACCENT : FG));
             return els;
         },
         // 7: Concentric shapes (centered)
@@ -342,10 +348,11 @@
             } else {
                 els.push(shapes.line(rx, ry, rx + w, ry + h, FG));
             }
-            // Small accent shape
+            // Small accent shape near the rect center
             var pick = rng();
-            var scx = snapInner(rng, 4);
-            var scy = snapInner(rng, 4);
+            var center = nearby(rng, SIZE / 2, SIZE / 2, w / 3);
+            var scx = center.x;
+            var scy = center.y;
             var ss = snapSize(rng, 25, 50);
             if (pick < 0.33) {
                 els.push(shapes.filledCircle(scx, scy, ss, accent ? ACCENT : FG));
@@ -356,14 +363,17 @@
             }
             return els;
         },
-        // 10: Scattered squares
+        // 10: Clustered squares
         function (rng, accent) {
             var els = [];
+            var fx = snapInner(rng, 4);
+            var fy = snapInner(rng, 4);
             var count = 3 + Math.floor(rng() * 3);
             for (var i = 0; i < count; i++) {
                 var s = snapSize(rng, 40, 120);
-                var x = snapInner(rng, 6) - s/2;
-                var y = snapInner(rng, 6) - s/2;
+                var n = nearby(rng, fx, fy, 120);
+                var x = n.x - s/2;
+                var y = n.y - s/2;
                 var col = (accent && i === count - 1) ? ACCENT : FG;
                 if (rng() > 0.5) {
                     els.push(shapes.filledRect(x, y, s, s, col));
@@ -382,10 +392,9 @@
             var rot = [0, 90, 180, 270][Math.floor(rng() * 4)];
             els.push(shapes.halfCircle(cx, cy, r, rot, FG));
             var ts = snapSize(rng, 50, 100);
-            var tx = snapInner(rng, 4);
-            var ty = snapInner(rng, 4);
+            var n = nearby(rng, cx, cy, 100);
             var trot = Math.floor(rng() * 4) * 90;
-            els.push(shapes.filledTriangle(tx, ty, ts, trot, accent ? ACCENT : FG));
+            els.push(shapes.filledTriangle(n.x, n.y, ts, trot, accent ? ACCENT : FG));
             return els;
         }
     ];
