@@ -34,71 +34,135 @@
         <div class="container">
             <div class="hero-label">
                 <span class="hero-label-dot"></span>
-                Interactive Labs
+                Labs
             </div>
             <h1 class="hero-title">Labs</h1>
             <p class="hero-subtitle">
-                Computer vision, augmented reality, and audio experiments built for the browser.
+                Browser experiments in computer vision, audio, AI, and generative systems. Everything runs client-side.
             </p>
         </div>
     </section>
 
     <section class="section">
         <div class="container">
-            <div class="section-header">
-                <div class="section-label"><span class="section-label-dot"></span>Vision</div>
-                <h2 class="section-title">Face &amp; Vision</h2>
-                <p class="section-desc">Real-time computer vision powered by MediaPipe and machine learning.</p>
+            <div class="lab-filters">
+                <button class="lab-filter active" data-filter="all">All</button>
+                <button class="lab-filter" data-filter="vision">Vision</button>
+                <button class="lab-filter" data-filter="audio">Audio</button>
+                <button class="lab-filter" data-filter="ai">AI</button>
+                <button class="lab-filter" data-filter="generative">Generative</button>
             </div>
-            <div class="list-grid reveal">
-                <a href="jarvis-hud.html" class="list-item">
-                    <div class="list-item-icon">JH</div>
-                    <div class="list-item-body">
-                        <div class="list-item-title">Jarvis Face HUD</div>
-                        <div class="list-item-meta">Iron Man style AR mask, MediaPipe</div>
-                    </div>
-                    <span class="list-item-arrow">&#8594;</span>
-                </a>
-            </div>
-        </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-label"><span class="section-label-dot"></span>Audio</div>
-                <h2 class="section-title">Audio &amp; Interactive</h2>
-                <p class="section-desc">Interactive audio experiments with the Web Audio API.</p>
-            </div>
-            <div class="list-grid reveal">
-                <a href="drum-machine.html" class="list-item">
-                    <div class="list-item-icon">DM</div>
-                    <div class="list-item-body">
-                        <div class="list-item-title">Drum Machine</div>
-                        <div class="list-item-meta">16-step sequencer, Web Audio API</div>
-                    </div>
-                    <span class="list-item-arrow">&#8594;</span>
-                </a>
-            </div>
-        </div>
-    </section>
+            <div class="lab-gallery" id="labGallery">
 
-    <section class="section">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-label"><span class="section-label-dot"></span>Generative</div>
-                <h2 class="section-title">Art &amp; Generative</h2>
-                <p class="section-desc">Procedural art generation from seed strings.</p>
-            </div>
-            <div class="list-grid reveal">
-                <a href="generative-art.html" class="list-item">
-                    <div class="list-item-icon"><img src="../images/art/demo-generative-art.svg" alt=""></div>
-                    <div class="list-item-body">
-                        <div class="list-item-title">Generative Art</div>
-                        <div class="list-item-meta">Minimal geometric compositions, Seed-based</div>
+                <a href="generative-art.html" class="lab-card lab-card--featured reveal" data-tags="generative">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-generative-art.svg" alt="">
                     </div>
-                    <span class="list-item-arrow">&#8594;</span>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">Generative</div>
+                        <div class="lab-card-title">Generative Art</div>
+                        <div class="lab-card-meta">Seed-based minimal geometric compositions. Type any word to generate a unique piece. Every image on this site was made with this tool.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
                 </a>
+
+                <a href="../trust-demo.html" class="lab-card reveal" data-tags="ai">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-trust.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">AI</div>
+                        <div class="lab-card-title">Trust in AI</div>
+                        <div class="lab-card-meta">Interactive research-based experiment on human-AI trust dynamics.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
+                <a href="drum-machine.html" class="lab-card reveal" data-tags="audio">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-drum.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">Audio</div>
+                        <div class="lab-card-title">Drum Machine</div>
+                        <div class="lab-card-meta">16-step sequencer built with the Web Audio API.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
+                <a href="jarvis-hud.html" class="lab-card reveal" data-tags="vision">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-jarvis.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">Vision</div>
+                        <div class="lab-card-title">Jarvis Face HUD</div>
+                        <div class="lab-card-meta">Iron Man style AR face overlay powered by MediaPipe.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
+                <a href="../emotion-detection.html" class="lab-card reveal" data-tags="vision ai">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-emotion.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">Vision</div>
+                        <div class="lab-card-title">Emotion Detection</div>
+                        <div class="lab-card-meta">Real-time facial emotion recognition using computer vision.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
+                <a href="../pose-estimation.html" class="lab-card reveal" data-tags="vision">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-pose.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">Vision</div>
+                        <div class="lab-card-title">Pose Estimation</div>
+                        <div class="lab-card-meta">Live body pose detection with ML5.js and PoseNet.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
+                <a href="../object-tracking.html" class="lab-card reveal" data-tags="vision ai">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-object.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">Vision</div>
+                        <div class="lab-card-title">Object Tracking</div>
+                        <div class="lab-card-meta">Real-time object detection and tracking with YOLO.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
+                <a href="../ar-demo.html" class="lab-card reveal" data-tags="vision">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-ar.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">Vision</div>
+                        <div class="lab-card-title">Augmented Reality</div>
+                        <div class="lab-card-meta">Marker-based AR rendering with AR.js.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
+                <a href="../personality-test.html" class="lab-card reveal" data-tags="ai">
+                    <div class="lab-card-art">
+                        <img src="../images/art/demo-personality.svg" alt="">
+                    </div>
+                    <div class="lab-card-body">
+                        <div class="lab-card-tag">AI</div>
+                        <div class="lab-card-title">Personality &amp; AI Trust</div>
+                        <div class="lab-card-meta">Psychology-based assessment of personality traits and trust tendencies.</div>
+                        <div class="lab-card-status">Live</div>
+                    </div>
+                </a>
+
             </div>
         </div>
     </section>
@@ -117,5 +181,28 @@
     </footer>
 
     <script src="../script.js"></script>
+    <script>
+    (function () {
+        var filters = document.querySelectorAll('.lab-filter');
+        var cards = document.querySelectorAll('.lab-card');
+
+        filters.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var tag = this.dataset.filter;
+
+                filters.forEach(function (f) { f.classList.remove('active'); });
+                this.classList.add('active');
+
+                cards.forEach(function (card) {
+                    if (tag === 'all' || (card.dataset.tags && card.dataset.tags.indexOf(tag) !== -1)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    })();
+    </script>
 </body>
 </html>
