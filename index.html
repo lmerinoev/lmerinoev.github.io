@@ -4,11 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luis Merino</title>
+    <meta name="description" content="Human-AI interaction researcher exploring trust, collaboration, and decision-making between humans and machines.">
+    <meta name="author" content="Luis Merino">
+    <meta property="og:title" content="Luis Merino">
+    <meta property="og:description" content="Human-AI interaction researcher exploring trust, collaboration, and decision-making between humans and machines.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lmerinoev.github.io/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@HipsterCow">
+    <meta name="twitter:creator" content="@HipsterCow">
     <link rel="icon" href="images/art/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Luis Merino",
+        "url": "https://lmerinoev.github.io",
+        "sameAs": ["https://x.com/HipsterCow"],
+        "jobTitle": "Human-AI Interaction Researcher",
+        "knowsAbout": ["Human-Robot Interaction", "Trust in AI", "Collaborative Decision-Making"]
+    }
+    </script>
 </head>
 <body>
 
@@ -17,11 +37,11 @@
             <a href="/" class="nav-logo">Luis Merino</a>
             <div class="nav-links">
                 <a href="#home" class="nav-link active">Home</a>
-                <a href="about.html" class="nav-link">About</a>
                 <a href="#research" class="nav-link">Research</a>
                 <a href="#writing" class="nav-link">Writing</a>
                 <a href="labs/" class="nav-link">Labs</a>
                 <a href="analysis/" class="nav-link">Analysis</a>
+                <a href="about.html" class="nav-link">About</a>
             </div>
             <div class="nav-actions">
                 <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
@@ -116,18 +136,18 @@
         </div>
     </section>
 
-    <section id="demos" class="section">
+    <section id="labs" class="section">
         <div class="container">
             <div class="section-header">
-                <div class="section-label"><span class="section-label-dot"></span>Demos</div>
-                <h2 class="section-title">Interactive Experiments</h2>
-                <p class="section-desc">Computer vision, audio, and AI demonstrations built for the browser.</p>
+                <div class="section-label"><span class="section-label-dot"></span>Labs</div>
+                <h2 class="section-title">Labs</h2>
+                <p class="section-desc">Computer vision, audio, and AI experiments built for the browser.</p>
             </div>
             <div class="list-grid list-grid--2col reveal">
                 <a href="trust-demo.html" class="list-item">
                     <div class="list-item-icon"><img src="images/art/demo-trust.svg" alt=""></div>
                     <div class="list-item-body">
-                        <div class="list-item-title">Trust in AI Demo</div>
+                        <div class="list-item-title">Trust in AI</div>
                         <div class="list-item-meta">Interactive, Research-based</div>
                     </div>
                     <span class="list-item-arrow">&#8594;</span>
@@ -273,9 +293,9 @@
             { seed: 'research-hri-studies', label: 'Research', title: 'HRI Studies', meta: 'Psychology, Decision-making', href: 'research/human-robot-interaction-studies.html' },
             { seed: 'research-conformity', label: 'Research', title: 'Conformity with Robot Peers', meta: 'Decision-making, Personality', href: 'research/trust-formation-ai-systems.html' },
             { seed: 'blog-sleeper-agents', label: 'Blog', title: 'Sleeper Agents: Deceptive LLMs', meta: 'AI Safety, Anthropic 2024', href: 'blog/sleeper-agents.html' },
-            { seed: 'demo-trust', label: 'Demo', title: 'Trust in AI Demo', meta: 'Interactive, Research-based', href: 'trust-demo.html' },
-            { seed: 'demo-drum', label: 'Demo', title: 'Drum Machine', meta: '16-step sequencer, Web Audio', href: 'labs/drum-machine.html' },
-            { seed: 'demo-jarvis', label: 'Demo', title: 'Jarvis Face HUD', meta: 'AR mask, MediaPipe', href: 'labs/jarvis-hud.html' },
+            { seed: 'demo-trust', label: 'Lab', title: 'Trust in AI', meta: 'Interactive, Research-based', href: 'trust-demo.html' },
+            { seed: 'demo-drum', label: 'Lab', title: 'Drum Machine', meta: '16-step sequencer, Web Audio', href: 'labs/drum-machine.html' },
+            { seed: 'demo-jarvis', label: 'Lab', title: 'Jarvis Face HUD', meta: 'AR mask, MediaPipe', href: 'labs/jarvis-hud.html' },
             { seed: 'project-coffee', label: 'Project', title: 'Coffee Photography', meta: 'Specialty coffee culture', href: 'coffee.html' },
             { seed: 'project-photography', label: 'Project', title: 'Photography', meta: 'Visual storytelling', href: 'photography.html' }
         ];

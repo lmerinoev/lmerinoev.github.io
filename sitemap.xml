@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://lmerinoev.github.io/</loc><priority>1.0</priority></url>
+  <url><loc>https://lmerinoev.github.io/about.html</loc><priority>0.8</priority></url>
+  <url><loc>https://lmerinoev.github.io/labs/</loc><priority>0.8</priority></url>
+  <url><loc>https://lmerinoev.github.io/analysis/</loc><priority>0.8</priority></url>
+  <url><loc>https://lmerinoev.github.io/blog/sleeper-agents.html</loc><priority>0.9</priority></url>
+  <url><loc>https://lmerinoev.github.io/research/decision-making-humanoid-robot.html</loc><priority>0.9</priority></url>
+  <url><loc>https://lmerinoev.github.io/research/trust-human-machine-teams.html</loc><priority>0.9</priority></url>
+  <url><loc>https://lmerinoev.github.io/research/human-robot-interaction-studies.html</loc><priority>0.9</priority></url>
+  <url><loc>https://lmerinoev.github.io/research/trust-formation-ai-systems.html</loc><priority>0.9</priority></url>
+  <url><loc>https://lmerinoev.github.io/labs/generative-art.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/labs/drum-machine.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/labs/jarvis-hud.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/trust-demo.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/emotion-detection.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/pose-estimation.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/object-tracking.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/ar-demo.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/analysis/alexandr-wang/index.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/analysis/dario-amodei/index.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/analysis/jensen-huang/index.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/analysis/jony-ive/index.html</loc><priority>0.7</priority></url>
+  <url><loc>https://lmerinoev.github.io/analysis/rick-rubin/index.html</loc><priority>0.7</priority></url>
+</urlset>

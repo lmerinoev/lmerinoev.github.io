@@ -120,11 +120,11 @@
             <a href="/" class="nav-logo">Luis Merino</a>
             <div class="nav-links">
                 <a href="../index.html" class="nav-link">Home</a>
-                <a href="../about.html" class="nav-link">About</a>
                 <a href="../index.html#research" class="nav-link">Research</a>
                 <a href="../index.html#writing" class="nav-link">Writing</a>
                 <a href="./" class="nav-link active">Labs</a>
                 <a href="../analysis/" class="nav-link">Analysis</a>
+                <a href="../about.html" class="nav-link">About</a>
             </div>
             <div class="nav-actions">
                 <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
@@ -162,7 +162,8 @@
                     <div class="art-btn-row">
                         <button class="btn btn--brand" onclick="generateFromInput()">Generate</button>
                         <button class="btn btn--secondary" onclick="randomSeed()">Random</button>
-                        <button class="btn btn--secondary" onclick="downloadSVG()">Download SVG</button>
+                        <button class="btn btn--secondary" onclick="downloadSVG()">SVG</button>
+                        <button class="btn btn--secondary" onclick="downloadPNG()">PNG</button>
                     </div>
                     <div class="art-input-group" style="margin-top: var(--space-4);">
                         <label>Presets</label>
@@ -246,6 +247,27 @@
             a.download = currentSeed + '.svg';
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        function downloadPNG() {
+            if (!currentArt) return;
+            var svgStr = currentArt.toSVG();
+            var canvas = document.createElement('canvas');
+            canvas.width = 1200;
+            canvas.height = 1200;
+            var ctx = canvas.getContext('2d');
+            var img = new Image();
+            var blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+            var url = URL.createObjectURL(blob);
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0, 1200, 1200);
+                URL.revokeObjectURL(url);
+                var a = document.createElement('a');
+                a.href = canvas.toDataURL('image/png');
+                a.download = currentSeed + '.png';
+                a.click();
+            };
+            img.src = url;
         }
 
         // Enter key support

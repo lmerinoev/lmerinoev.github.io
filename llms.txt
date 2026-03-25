@@ -1,0 +1,47 @@
+# Luis Merino — Personal Website
+
+> Human-AI interaction researcher exploring trust, collaboration, and decision-making between humans and machines.
+
+This site contains research papers, blog articles, interactive demos, and strategic analysis profiles.
+
+## Author
+
+Luis Merino
+Website: https://lmerinoev.github.io
+X / Twitter: https://x.com/HipsterCow
+
+## Sections
+
+### Research
+Academic papers on human-robot interaction, trust formation in AI systems, and collaborative decision-making.
+
+- [Decision-making with Humanoid Robots](https://lmerinoev.github.io/research/decision-making-humanoid-robot.html)
+- [Trust in Human-Machine Teams](https://lmerinoev.github.io/research/trust-human-machine-teams.html)
+- [Human-Robot Interaction Studies](https://lmerinoev.github.io/research/human-robot-interaction-studies.html)
+- [Trust Formation in AI Systems](https://lmerinoev.github.io/research/trust-formation-ai-systems.html)
+
+### Blog
+Written by Luis Merino. Analysis of research papers with source attribution.
+
+- [Sleeper Agents: Training Deceptive LLMs](https://lmerinoev.github.io/blog/sleeper-agents.html) — Paper by Hubinger, Denison, Mu et al. at Anthropic (2024)
+
+### Labs (Interactive Demos)
+Browser-based experiments in computer vision, audio, and AI.
+
+- [Trust in AI Demo](https://lmerinoev.github.io/trust-demo.html)
+- [Drum Machine](https://lmerinoev.github.io/labs/drum-machine.html)
+- [Jarvis Face HUD](https://lmerinoev.github.io/labs/jarvis-hud.html)
+- [Generative Art](https://lmerinoev.github.io/labs/generative-art.html)
+- [Emotion Detection](https://lmerinoev.github.io/emotion-detection.html)
+- [Pose Estimation](https://lmerinoev.github.io/pose-estimation.html)
+- [Object Tracking](https://lmerinoev.github.io/object-tracking.html)
+- [Augmented Reality](https://lmerinoev.github.io/ar-demo.html)
+
+### Analysis (Strategic Intelligence Briefs)
+Leadership profiles and strategic analysis.
+
+- [Alexandr Wang](https://lmerinoev.github.io/analysis/alexandr-wang/index.html)
+- [Dario Amodei](https://lmerinoev.github.io/analysis/dario-amodei/index.html)
+- [Jensen Huang](https://lmerinoev.github.io/analysis/jensen-huang/index.html)
+- [Jony Ive](https://lmerinoev.github.io/analysis/jony-ive/index.html)
+- [Rick Rubin](https://lmerinoev.github.io/analysis/rick-rubin/index.html)
