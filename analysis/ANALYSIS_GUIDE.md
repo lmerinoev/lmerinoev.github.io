@@ -157,6 +157,7 @@ Every profile has exactly 10 pages with the same filenames. The **nav labels can
 - No inline `<style>` or `<script>` blocks
 - Sidebar nav is identical across all 10 pages (except the `class="active"` link)
 - Landing page card links correctly
+- Every page includes Open Graph and Twitter Card meta tags (see `DESIGN_SYSTEM.md` > Social Meta Tags). Set `og:type` to `article` and `twitter:card` to `summary_large_image`
 - Clean up any research working files
 
 ---
