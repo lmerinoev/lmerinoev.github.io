@@ -54,6 +54,10 @@ One pull quote per post, placed in the "Context" or "What They Found" section. U
 
 Follow `WRITING_STYLE.md` for all prose. Refer to that file for tone, banned patterns, and self-check steps.
 
+## Social Meta Tags
+
+Every blog post must include Open Graph and Twitter Card meta tags. See `DESIGN_SYSTEM.md` > Social Meta Tags for the full spec. Use the post's hero image as the `og:image` and `twitter:image` value. Set `og:type` to `article` and `twitter:card` to `summary_large_image`.
+
 ## File Naming
 
 Use kebab-case based on the short paper name: `blog/sleeper-agents.html`, `blog/scaling-laws.html`, etc.

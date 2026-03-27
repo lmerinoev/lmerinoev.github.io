@@ -391,3 +391,44 @@ Subsystem guidelines reference this document as the source of truth.
 - BEM-style naming: `.component`, `.component-element`, `.component--modifier`.
 - Mobile-first media queries: `@media (min-width: ...)`.
 - Prefer `rem` for sizing, `em` for component-internal relative sizing.
+
+---
+
+## Social Meta Tags
+
+Every HTML page must include Open Graph and Twitter Card meta tags in the `<head>`. These control how links appear when shared on Twitter/X, LinkedIn, Slack, iMessage, and other platforms.
+
+### Required tags
+
+```html
+<meta property="og:title" content="Page Title">
+<meta property="og:description" content="One-sentence description.">
+<meta property="og:image" content="https://full-url-to-image.jpg">
+<meta property="og:type" content="article">  <!-- or "website" for index/landing pages -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@HipsterCow">
+<meta name="twitter:image" content="https://full-url-to-image.jpg">
+```
+
+### Rules
+
+- `og:title`: Use the page's `<title>` content (without the " - Luis Merino" suffix).
+- `og:description`: One sentence. Match the existing `<meta name="description">` if present.
+- `og:image` and `twitter:image`: Must be an absolute URL (not a relative path). Use the page's hero image if it has one. For pages without a hero image, use a relevant Unsplash image at `w=1200&q=80`.
+- `twitter:card`: Always `summary_large_image`. Never `summary`.
+- `og:type`: Use `article` for blog posts, research, and analysis pages. Use `website` for index pages, landing pages, and labs.
+- Place these tags after `<meta name="author">` and before stylesheet links.
+
+### Image guidelines for social cards
+
+- Minimum 1200x630px for best rendering across platforms.
+- Unsplash images work well. Append `&w=1200&q=80` to the URL.
+- Do not use SVGs. Social platforms do not render them as card images.
+
+### Checklist for new pages
+
+Before publishing any new page, verify:
+1. All seven meta tags are present in `<head>`.
+2. `og:image` and `twitter:image` URLs load correctly in a browser.
+3. `twitter:card` is set to `summary_large_image`.
+4. Test with the Twitter Card Validator if possible.

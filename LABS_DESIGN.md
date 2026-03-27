@@ -79,6 +79,7 @@ Each lab page follows this structure:
 7. Add the lab to `labs/index.html` gallery with appropriate tags
 8. Add the lab to the main page Labs section
 9. Add the lab to `sitemap.xml` and `llms.txt`
+10. Include Open Graph and Twitter Card meta tags (see `DESIGN_SYSTEM.md` > Social Meta Tags). Set `og:type` to `website` and `twitter:card` to `summary_large_image`
 
 ### Art icon
 
