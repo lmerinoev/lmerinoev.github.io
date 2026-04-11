@@ -211,7 +211,8 @@ function openFolder(id) {
     });
     html += '</div>';
 
-    WM.open('folder-' + id, 'Agent Docs', html, {
+    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research' };
+    WM.open('folder-' + id, folderNames[id] || id, html, {
         icon: FOLDER_ICON_SMALL,
         width: 420, height: 320,
         menuBar: '<span>File</span><span>Edit</span><span>View</span><span>Help</span>',
@@ -265,6 +266,9 @@ const FOLDER_CONTENTS = {
         { id: 'what-are-agents', name: 'What Are Agents.txt', icon: FILE_ICON_32 },
         { id: 'claude-ecosystem', name: 'Claude & the SDK.txt', icon: FILE_ICON_32 },
         { id: 'agent-history', name: 'History of Agents.txt', icon: FILE_ICON_32 },
+    ],
+    'trust-research': [
+        { id: 'trust-state', name: 'Where We Stand on Trust.txt', icon: FILE_ICON_32 },
     ]
 };
 
@@ -293,6 +297,7 @@ document.querySelectorAll('.start-item').forEach(item => {
         startBtn.classList.remove('active');
         if (action === 'about') showAbout();
         if (action === 'docs') openFolder('agent-docs');
+        if (action === 'trust') openFolder('trust-research');
         if (action === 'readme') openFile('readme');
         if (action === 'image') openImage('vaporwave');
         if (action === 'shutdown') showShutdown();
@@ -356,13 +361,3 @@ updateClock();
 setInterval(updateClock, 10000);
 
 
-// ---- WELCOME DIALOG ----
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        showDialog('Welcome', '🖥️',
-            `<strong>Welcome to Desktop 95</strong>
-            Double-click icons to open them. Folders have files inside. The palm tree is just for the vibes.<br><br>
-            On mobile, tap twice to open.`
-        );
-    }, 300);
-});

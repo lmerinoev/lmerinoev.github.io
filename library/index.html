@@ -22,6 +22,11 @@
             <span class="icon-label">Agent Docs</span>
         </div>
 
+        <div class="desktop-icon" data-action="open-folder" data-target="trust-research">
+            <svg viewBox="0 0 32 32" class="icon-img"><path d="M2 7h28v21H2z" fill="#FFD442" stroke="#BF9900" stroke-width="1"/><path d="M2 4h11l2 3H2z" fill="#FFD442" stroke="#BF9900" stroke-width="1"/></svg>
+            <span class="icon-label">Trust Research</span>
+        </div>
+
         <div class="desktop-icon" data-action="open-file" data-target="readme">
             <svg viewBox="0 0 32 32" class="icon-img"><path d="M6 2h12l8 8v20H6z" fill="#fff" stroke="#808080" stroke-width="1"/><path d="M18 2v8h8" fill="#ddd" stroke="#808080" stroke-width="1"/><line x1="10" y1="14" x2="22" y2="14" stroke="#ccc"/><line x1="10" y1="18" x2="22" y2="18" stroke="#ccc"/><line x1="10" y1="22" x2="18" y2="22" stroke="#ccc"/></svg>
             <span class="icon-label">README.txt</span>
@@ -64,6 +69,7 @@
     <div class="start-sidebar"><span>Desktop 95</span></div>
     <div class="start-items">
         <div class="start-item" data-action="docs"><span class="si-icon">📁</span> Agent Docs</div>
+        <div class="start-item" data-action="trust"><span class="si-icon">📁</span> Trust Research</div>
         <div class="start-item" data-action="readme"><span class="si-icon">📄</span> README</div>
         <div class="start-item" data-action="image"><span class="si-icon">🌴</span> Palm Tree</div>
         <div class="start-divider"></div>
@@ -166,12 +172,13 @@
 <div id="content-what-are-agents" data-title="What Are Agents">
 <div class="notepad-body">
 
-<h2>A Chatbot Answers. An Agent Acts.</h2>
-<p>When you talk to ChatGPT or Claude in a browser, you type a message, get a response, and repeat. The model has no ability to go do things on your behalf. It can only generate text.</p>
-<p>An agent is different because it has <strong>tools</strong>. It can read files, run shell commands, search the web, create pull requests, send Slack messages, query databases. It looks at the result of those actions and decides what to do next. That loop of thinking, acting, and observing is what makes something an agent rather than a chatbot.</p>
+<h2>What Makes an Agent an Agent</h2>
+<p>Wooldridge and Jennings defined the properties of an intelligent agent in their 1995 survey: autonomy, reactivity, pro-activeness, and social ability. Thirty years later, those properties still hold. But the implementation looks nothing like what they imagined.</p>
+<p>A chatbot generates text. You give it a prompt, it gives you a response, and the interaction ends. An agent does something different. It has <strong>tools</strong>, which are functions it can call to interact with the outside world. Read a file. Run a shell command. Search the web. Create a pull request. Query a database. The agent calls a tool, reads the result, decides what to do next, and repeats until the task is done.</p>
+<p>That loop is the defining feature. The model reasons, acts, observes the outcome, and reasons again. Without it, you have a chatbot. With it, you have an agent.</p>
 
-<h2>The Agent Loop</h2>
-<p>Every agent, regardless of which framework built it, runs the same basic cycle:</p>
+<h2>The ReAct Loop</h2>
+<p>Yao et al. formalized this pattern in their 2022 paper "ReAct: Synergizing Reasoning and Acting in Language Models." The name combines Reasoning and Acting. The structure is simple:</p>
 
 <div class="svg-diagram">
 <svg viewBox="0 0 310 295" style="max-width:310px" xmlns="http://www.w3.org/2000/svg">
@@ -198,51 +205,52 @@
 </svg>
 </div>
 
-<p>This is called the <strong>ReAct pattern</strong> (Reasoning + Acting). The model reasons about what it needs to do, picks a tool, executes it, looks at the result, and reasons again. Each cycle is called a "turn."</p>
-<p>The number of turns matters. A chatbot always takes exactly one turn. An agent might take 3 turns to answer a question (search, read, summarize) or 500 turns to implement an entire feature (read code, write code, run tests, fix errors, commit, push).</p>
+<p>Each cycle through the loop is called a "turn." The number of turns varies with the task. A simple question might take 3 turns: search, read, summarize. A complex feature implementation might take 500: read code, write code, run tests, see failures, fix the failures, commit, push. A chatbot always takes exactly one turn. The agent's ability to take many is what gives it the capacity to handle work that requires sustained effort.</p>
 
-<h2>Tools: The Hands of an Agent</h2>
-<p>A tool is a function the agent can call. Some examples:</p>
+<h2>Tools</h2>
+<p>A <strong>tool</strong> is a function the agent can call. The term is specific. It refers to a discrete capability with a defined input and output that the agent invokes during its reasoning loop. Some common examples:</p>
 <ul>
-    <li><strong>Read</strong> &ndash; read a file from disk</li>
-    <li><strong>Edit</strong> &ndash; modify a file with a precise diff</li>
-    <li><strong>Bash</strong> &ndash; run a shell command</li>
-    <li><strong>Grep</strong> &ndash; search for patterns in code</li>
-    <li><strong>WebSearch</strong> &ndash; search the internet</li>
-    <li><strong>WebFetch</strong> &ndash; load and parse a web page</li>
+    <li><strong>Read</strong> reads a file from disk</li>
+    <li><strong>Edit</strong> modifies a file with a precise diff</li>
+    <li><strong>Bash</strong> runs a shell command</li>
+    <li><strong>Grep</strong> searches for patterns across a codebase</li>
+    <li><strong>WebSearch</strong> queries a search engine</li>
+    <li><strong>WebFetch</strong> loads and parses a web page</li>
 </ul>
-<p>The agent sees a list of available tools and their descriptions. When it decides to use one, it formats the input as JSON, the tool executes, and the output goes back into the conversation. The model never runs code directly. The tool execution happens in a separate runtime that the agent framework manages. Tools are what separate an agent from a chatbot. Without tools, a model can only generate text. With tools, it can change the world.</p>
+<p>The agent sees a list of available tools and their descriptions at the start of a session. When it decides to use one, it formats the input as structured JSON. A separate runtime executes the tool and returns the output into the conversation context. The model never runs code directly. This separation between reasoning and execution is a deliberate design choice that makes the system easier to control and audit.</p>
 
-<h2>Permissions and Safety</h2>
-<p>Because agents can do real things (delete files, push code, send messages), they need guardrails. Most agent frameworks have a permission system that controls which tools the agent can use and under what conditions.</p>
-<p>Some tools are "safe" and get auto-approved, like reading files. Others are risky, like running arbitrary shell commands, and require explicit approval. You can configure this per-agent, per-tool, or per-context.</p>
+<h2>Permissions</h2>
+<p>Because agents act on the real world, they need constraints. Reading a file is low-risk. Deleting one is not. Running arbitrary shell commands sits somewhere in between, depending on the command.</p>
+<p>Most agent frameworks implement a <strong>permission system</strong> that determines which tools the agent can use, under what conditions, and whether human approval is required. Some tools get auto-approved. Others require explicit confirmation before each use. The specifics vary by framework, but the principle is consistent: the agent's autonomy should be proportional to the risk of the action it wants to take.</p>
 
 <h2>Context and Memory</h2>
-<p>Agents have a context window, the same as any LLM conversation. Every tool call, every result, every piece of reasoning takes up space in that window. Long-running agents can fill it up, which is why most frameworks support "compaction," where older parts of the conversation get summarized to free up space.</p>
-<p>Some agents also have persistent memory that survives across conversations. This might be a file on disk, a database, or a structured memory system.</p>
+<p>Every agent operates within a <strong>context window</strong>, the same token limit that constrains any LLM conversation. Every tool call, every result, every piece of reasoning takes up space. Long-running agents can exhaust this limit, which is why most frameworks support <strong>compaction</strong>, a process where older parts of the conversation are summarized to free up room for new information.</p>
+<p>Some agents also maintain <strong>persistent memory</strong> that survives across sessions. This might be a JSON file on disk, a database, or a structured memory system with different scopes (per-user, per-project, global). The distinction matters: context is what the agent knows during a single conversation, memory is what it retains between conversations.</p>
 
 <h2>Multi-Agent Systems</h2>
-<p>Sometimes one agent hands off work to another. A "coordinator" agent decides what needs to happen, then spawns specialized agents to do parts of the work.</p>
-<p>For example, a code review agent might spawn a "security reviewer" subagent and a "performance reviewer" subagent in parallel. Each one has its own context, its own tools, and its own focus. The coordinator collects their reports and synthesizes a final review.</p>
+<p>Complex tasks sometimes benefit from multiple agents working together. A coordinator agent decides what needs to happen and spawns specialized <strong>subagents</strong> to handle parts of the work. Each subagent gets its own context, its own tool set, and its own focus. Results flow back to the coordinator for synthesis.</p>
+<p>This pattern has roots in the multi-agent systems research of the 1990s and 2000s, particularly the FIPA standards for inter-agent communication. The modern version is simpler. Subagents are typically defined by a system prompt, a list of allowed tools, and optionally a different model. They run in isolation and return a single result.</p>
+<p>The practical benefit is separation of concerns. A code review task might spawn a security reviewer and a performance reviewer in parallel. Each one stays focused on its own domain without the conversation getting muddled.</p>
 
-<h2>Common Frameworks</h2>
+<h2>Frameworks</h2>
+<p>There are several ways to build agents today. The choice depends on how much control you need over the agent loop and how tightly the agent integrates with your existing systems.</p>
 <ul>
-    <li><strong>Claude Agent SDK</strong> &ndash; Anthropic's framework for agents powered by Claude. Built-in tools, session management, permission controls.</li>
-    <li><strong>LangChain / LangGraph</strong> &ndash; Popular open-source framework supporting multiple LLMs with a large integration ecosystem.</li>
-    <li><strong>OpenAI Agents SDK</strong> &ndash; OpenAI's framework for GPT-powered agents with tool use and handoffs.</li>
-    <li><strong>CrewAI</strong> &ndash; Focused on multi-agent workflows with role-based agents.</li>
-    <li><strong>Custom wrappers</strong> &ndash; Many teams build thin wrappers around an LLM's CLI or API, skipping the framework entirely.</li>
+    <li><strong>Claude Agent SDK</strong> (Anthropic) provides the same agent loop and tools that power Claude Code, exposed as a Python and TypeScript library. Built-in session management and permission controls.</li>
+    <li><strong>LangChain / LangGraph</strong> is the most widely adopted open-source framework. It supports multiple LLMs and has a large ecosystem of integrations.</li>
+    <li><strong>OpenAI Agents SDK</strong> provides GPT-powered agents with structured tool use and inter-agent handoffs.</li>
+    <li><strong>CrewAI</strong> focuses on multi-agent workflows where each agent has a defined role.</li>
+    <li><strong>Custom wrappers</strong> are what many teams build when they want minimal dependencies. You call an LLM's CLI or API as a subprocess, parse the output, and manage the loop yourself.</li>
 </ul>
+<p>None of these is universally best. The right choice depends on your constraints.</p>
 
 <div class="takeaways">
     <h3>Takeaways</h3>
     <ul>
-        <li>An agent is an LLM that can use tools and loop until a task is done</li>
-        <li>The ReAct pattern (think, act, observe, repeat) is the core of every agent</li>
-        <li>Tools are functions the agent can call: file I/O, shell commands, APIs, web searches</li>
-        <li>Permission systems control what the agent is allowed to do</li>
-        <li>Subagents let you split complex tasks across specialized workers</li>
-        <li>You can build agents with a framework or by wrapping a CLI/API directly</li>
+        <li>An agent is an LLM with tools and a reasoning loop (ReAct pattern, Yao et al. 2022)</li>
+        <li>Tools are discrete functions: file I/O, shell commands, web access, API calls</li>
+        <li>Permissions control which tools the agent can use and when</li>
+        <li>Context is per-session, memory is persistent across sessions</li>
+        <li>Subagents split complex tasks across specialized workers</li>
     </ul>
 </div>
 </div>
@@ -254,8 +262,8 @@
 <div id="content-claude-ecosystem" data-title="Claude & the SDK">
 <div class="notepad-body">
 
-<h2>Three Layers</h2>
-<p>There are three main pieces to understand: <strong>Claude</strong> (the model), <strong>Claude Code</strong> (the interactive tool), and the <strong>Claude Agent SDK</strong> (the library for building your own agents). On top of all that sits <strong>MCP</strong>, a protocol that lets agents connect to external tools and data sources.</p>
+<h2>Anthropic's Agent Stack</h2>
+<p>Anthropic ships three things that matter for building agents: the <strong>Claude model</strong> (the LLM itself), <strong>Claude Code</strong> (an interactive agent product), and the <strong>Claude Agent SDK</strong> (a library for building your own agents in Python or TypeScript). A fourth piece, <strong>MCP</strong> (Model Context Protocol), is an open standard that lets agents connect to external tools. These pieces layer on top of each other.</p>
 
 <div class="svg-diagram">
 <svg viewBox="0 0 380 270" style="max-width:380px" xmlns="http://www.w3.org/2000/svg">
@@ -284,22 +292,20 @@
 </svg>
 </div>
 
-<h2>Claude: The Model</h2>
-<p>Claude is the large language model that Anthropic builds. The current generation includes three sizes: <strong>Opus</strong> (the most capable), <strong>Sonnet</strong> (balanced), and <strong>Haiku</strong> (fast and lightweight). When any Claude-based agent runs, one of these models is doing the reasoning.</p>
-<p>You access Claude through the Anthropic API. You send it messages, it generates responses. If you give it tool definitions, it can also generate "tool use" blocks, structured requests to call a specific tool with specific arguments. Your code executes the tool and sends the result back. That back-and-forth is the agent loop.</p>
+<h2>The Model</h2>
+<p>Claude is the large language model. The current generation has three sizes: <strong>Opus</strong> (the most capable and most expensive), <strong>Sonnet</strong> (balanced between capability and speed), and <strong>Haiku</strong> (fast, lightweight, cheap). All three support tool use, which means they can generate structured requests to call external functions as part of their response.</p>
+<p>You access Claude through the Anthropic API. You send messages, the model generates responses. If you include tool definitions in the request, Claude can produce "tool use" blocks alongside its text. Your code executes the tool and sends the result back. That exchange, repeated in a loop, is how agents work. But managing that loop yourself is tedious. That's where the SDK comes in.</p>
 
-<h2>Claude Code: The Product</h2>
-<p>Claude Code is Anthropic's interactive coding agent. You can use it as a CLI in your terminal (<code>claude</code> command), as a VS Code or JetBrains extension, as a desktop app, or through the web.</p>
-<p>It has a built-in set of tools (Read, Edit, Write, Bash, Glob, Grep, WebSearch, WebFetch, and others) and a permission system that controls what it's allowed to do without asking.</p>
-
-<h3>Headless Mode</h3>
-<p>Claude Code supports a "headless" mode where you pass a prompt via the <code>-p</code> flag and get structured output:</p>
+<h2>Claude Code</h2>
+<p>Claude Code is the product most people interact with directly. It runs as a CLI (<code>claude</code> command), a VS Code extension, a JetBrains plugin, a desktop app, or through the web. It comes with a built-in set of tools: Read, Edit, Write, Bash, Glob, Grep, WebSearch, WebFetch, and several others. It manages its own agent loop, permission system, and session persistence.</p>
+<p>For automation, Claude Code has a headless mode. You pass a prompt via <code>-p</code> and get structured output back:</p>
 <pre><code>claude -p "Fix the login bug in auth.ts" \
     --output-format stream-json \
     --max-turns 50</code></pre>
+<p>This is how many custom agents call Claude. You spawn the CLI as a subprocess, parse the JSON stream, and extract the results. It works well for systems where you want the full agent capability without managing the loop yourself.</p>
 
-<h2>The Claude Agent SDK</h2>
-<p>The Agent SDK is a Python and TypeScript library that gives you programmatic access to the same agent loop that powers Claude Code. You import it, configure tools and permissions, pass a prompt, and get back a stream of messages as Claude works through the task.</p>
+<h2>The Agent SDK</h2>
+<p>The Agent SDK gives you the same agent loop and tools as Claude Code, exposed as a Python or TypeScript library. You import it, configure your tools and permissions, pass a prompt, and receive a stream of messages as Claude works through the task.</p>
 <pre><code>from claude_agent_sdk import query, ClaudeAgentOptions
 
 async for message in query(
@@ -310,45 +316,49 @@ async for message in query(
     )
 ):
     print(message)</code></pre>
-<p>The SDK handles tool execution automatically. You tell it which tools are available, Claude decides when to use them, and the SDK runs the tool and feeds the result back.</p>
+<p>The SDK handles tool execution for you. You declare which tools are available, Claude decides when to call them, and the SDK executes the call and feeds the result back into the conversation. You never write the tool loop manually.</p>
 
 <h3>Sessions</h3>
-<p>Every agent conversation is persisted as a "session" on disk (JSONL files). You can resume a session later with full context, meaning the agent picks up exactly where it left off.</p>
+<p>Every conversation is persisted as a <strong>session</strong> on disk (JSONL files at <code>~/.claude/projects/</code>). You can resume a session later with full context, which means the agent picks up where it left off with complete memory of what it did and found. This is useful for long-running tasks and for maintaining conversation continuity across multiple interactions.</p>
 
 <h3>Subagents</h3>
-<p>The SDK supports spawning subagents for subtasks with their own system prompts, tool sets, and model preferences. Each subagent runs in its own context and can run in parallel.</p>
+<p>The SDK supports spawning <strong>subagents</strong> for subtasks. You define named agents with their own system prompts, tool access, and model preferences. Each subagent runs in isolation with its own context. They can run in parallel, and their results return to the parent as a single message. This keeps the parent context clean and prevents different subtasks from interfering with each other.</p>
 
 <h3>Hooks</h3>
-<p>Hooks let you intercept events during the agent loop. You can run code before a tool executes (to block dangerous operations), after a tool returns (to log results), or at various other points. Common uses: audit logging, blocking writes to production paths, injecting extra context, or forwarding notifications to Slack.</p>
+<p><strong>Hooks</strong> are callbacks that fire at specific points in the agent loop: before a tool executes, after it returns, when a subagent starts or stops, before context compaction. They give you control over the agent's behavior without modifying the loop itself. Typical uses include audit logging, blocking writes to production paths, injecting extra context, and forwarding status updates to external systems.</p>
 
-<h2>Model Context Protocol (MCP)</h2>
-<p>MCP is an open standard for connecting agents to external tools and data. It works like a plugin system. An MCP server exposes tools (like "list GitHub issues" or "query the database"), and any MCP-compatible agent can discover and call those tools. Think of MCP the same way you think of USB for hardware: a universal interface that lets any agent talk to any tool, as long as both sides speak the protocol.</p>
+<h2>Model Context Protocol</h2>
+<p><strong>MCP</strong> is an open standard for connecting agents to external tools and data sources. An MCP server exposes a set of tools (like "list GitHub issues" or "query a database"), and any MCP-compatible agent can discover and call them. The naming convention follows the pattern <code>mcp__&lt;server&gt;__&lt;tool&gt;</code>.</p>
+<p>Three transport methods are supported:</p>
 <ul>
-    <li><strong>Stdio</strong> &ndash; local processes, communication over stdin/stdout</li>
-    <li><strong>HTTP/SSE</strong> &ndash; remote servers with server-sent events</li>
-    <li><strong>In-process</strong> &ndash; tools defined directly in your code</li>
+    <li><strong>Stdio</strong> for local processes. The agent spawns the MCP server as a child process and communicates over stdin/stdout.</li>
+    <li><strong>HTTP/SSE</strong> for remote servers. The agent connects over HTTP with server-sent events for streaming.</li>
+    <li><strong>In-process</strong> for tools defined directly in your application code.</li>
 </ul>
+<p>MCP tools require explicit permission, the same as built-in tools. You can allow all tools from a server with a wildcard (<code>mcp__github__*</code>) or grant access individually.</p>
 
 <h2>The Permission Model</h2>
-<p>Safety is layered. The SDK evaluates permissions in this order:</p>
+<p>The SDK evaluates permissions in a specific order, and each layer can override the ones below it:</p>
 <ol>
-    <li><strong>Hooks</strong> &ndash; can block or modify any tool call before it runs</li>
-    <li><strong>Deny rules</strong> &ndash; always block, regardless of other settings</li>
-    <li><strong>Permission mode</strong> &ndash; global behavior (prompt, auto-deny, auto-approve)</li>
-    <li><strong>Allow rules</strong> &ndash; pre-approve specific tools</li>
+    <li><strong>Hooks</strong> can block or modify any tool call before execution</li>
+    <li><strong>Deny rules</strong> always block, regardless of other settings</li>
+    <li><strong>Permission mode</strong> sets the global default (prompt user, auto-deny, auto-approve)</li>
+    <li><strong>Allow rules</strong> pre-approve specific tools</li>
 </ol>
+<p>This layered design lets you set restrictive defaults and selectively open things up, or set permissive defaults and block the dangerous operations with deny rules and hooks. Most production agents use a combination.</p>
 
-<h2>SDK vs. CLI</h2>
-<p>The CLI is great for interactive use, one-off scripts, and simple automations. The SDK is better when you need fine-grained control, custom tool definitions, hooks, or tight integration with an existing application. Many teams start with the CLI and move to the SDK as their needs grow.</p>
+<h2>Choosing Between the SDK and the CLI</h2>
+<p>The SDK and CLI access the same underlying agent. The choice depends on what you need. The CLI is well-suited for interactive use, one-off scripts, and automations where you want to call Claude as a subprocess and parse the output. The SDK is better when you need programmatic control over sessions, custom tool definitions, hook-based interception, or tight integration with an existing application.</p>
+<p>Many teams start with the CLI and move to the SDK as their requirements grow. Both approaches are valid, and the concepts transfer directly between them.</p>
 
 <div class="takeaways">
     <h3>Takeaways</h3>
     <ul>
-        <li>Claude is the model. Claude Code is the product. The Agent SDK is the library.</li>
-        <li>Claude Code can run headless with <code>-p</code> and <code>--output-format stream-json</code></li>
-        <li>The Agent SDK manages the tool loop, sessions, permissions, and hooks for you</li>
-        <li>MCP is a plugin protocol that lets agents connect to external tools and data</li>
-        <li>Permissions are layered: hooks, deny rules, permission mode, allow rules</li>
+        <li>Claude is the model, Claude Code is the product, the Agent SDK is the library</li>
+        <li>Claude Code headless mode (<code>-p</code> flag) is how many custom agents call Claude</li>
+        <li>The SDK manages the tool loop, sessions, permissions, and hooks</li>
+        <li>MCP connects agents to external tools via a standard protocol (stdio, HTTP/SSE, in-process)</li>
+        <li>Permissions are layered: hooks > deny rules > permission mode > allow rules</li>
     </ul>
 </div>
 </div>
@@ -360,56 +370,128 @@ async for message in query(
 <div id="content-agent-history" data-title="History of Agents">
 <div class="notepad-body">
 
-<h2>A Brief History of AI Agents</h2>
-<p>The idea of autonomous software agents is older than most people realize. The current wave of LLM-powered agents draws from nearly 70 years of research. Here's how we got here.</p>
+<h2>Nearly 70 Years of Agent Research</h2>
+<p>The concept of an autonomous software agent predates most of the technology we associate with AI today. What we now call "AI agents" draws on work from automated planning, behavior-based robotics, multi-agent coordination, reinforcement learning, and natural language processing. Each era contributed ideas that the next one absorbed, often without acknowledging the debt.</p>
 
-<h2>Symbolic AI and Planners (1958 - 1980s)</h2>
-<p>The earliest agent-like systems were symbolic. They reasoned about the world using logical rules and planned sequences of actions to reach goals.</p>
-<p><strong>1958</strong> saw John McCarthy propose the Advice Taker, one of the first descriptions of a program that could take in knowledge and decide what to do with it. It never became a real system, but it outlined what an agent should be: something that receives information, reasons about it, and acts.</p>
-<p><strong>STRIPS</strong> (1971, Stanford Research Institute) was the first practical automated planner. You described a goal and a set of possible actions with preconditions and effects, and STRIPS would figure out a sequence of steps to reach that goal. Its action representation became the foundation for planning research for decades.</p>
-<p><strong>SHRDLU</strong> (1972, Terry Winograd at MIT) could understand natural language commands and manipulate blocks in a simulated world. It was impressive in its narrow domain but completely brittle outside of it. This brittleness became the defining limitation of the entire symbolic era.</p>
-<p>Through the late 1970s and 1980s, expert systems like MYCIN (medical diagnosis, 1976) and R1/XCON (computer hardware configuration, 1980) showed that rule-based agents could be commercially useful. But every rule had to be hand-coded. Scaling was painful, and the systems broke in unexpected ways when they encountered situations their authors hadn't anticipated.</p>
+<h2>Symbolic Planners (1958 - 1980s)</h2>
+<p>John McCarthy proposed the <strong>Advice Taker</strong> in 1958, describing a program that could receive knowledge, reason about it, and decide what to do. The system was never built, but the proposal established what an agent should look like: goal-directed, knowledge-driven, and capable of acting on its own conclusions.</p>
+<p>The first working planner was <strong>STRIPS</strong>, developed at the Stanford Research Institute in 1971 by Fikes and Nilsson. STRIPS took a goal and a set of possible actions, each defined by preconditions and effects, and produced a plan to achieve the goal. Its action representation became the standard for planning research and influenced agent design for the next three decades.</p>
+<p>Terry Winograd's <strong>SHRDLU</strong> (1972, MIT) demonstrated natural language understanding within a simulated blocks world. You could tell it to move objects and it would comply. The system worked well within its narrow domain. Outside that domain, it failed completely. This brittleness, the inability to generalize beyond hand-coded rules, became the defining limitation of the symbolic era.</p>
+<p>Expert systems followed in the late 1970s and 1980s. <strong>MYCIN</strong> (Stanford, 1976) diagnosed bacterial infections. <strong>R1/XCON</strong> (DEC, 1980) configured computer hardware orders. Both were commercially successful. Both required extensive manual rule authoring to build and maintain. Scaling them to new domains was expensive and error-prone, which is a large part of why the field eventually moved on.</p>
 
-<h2>Reactive Agents and BDI (1986 - 1995)</h2>
-<p>The 1980s brought a backlash against the symbolic approach.</p>
-<p>In <strong>1986</strong>, Rodney Brooks at MIT published his work on subsumption architecture. His argument: forget internal world models. Build agents as layered sets of simple reactive behaviors, where each layer handles a specific concern (avoid obstacles, wander, explore). Complex behavior emerges from the interaction of simple rules, without any central planner. He proved this worked on real robots.</p>
-<p>At the same time, the <strong>BDI model</strong> (Belief-Desire-Intention) emerged from philosophy (Michael Bratman, 1987) and was formalized computationally by Rao and Georgeff in 1991. BDI agents maintain beliefs about the world, desires they want to achieve, and intentions they've committed to. This framework is still used in multi-agent system design today.</p>
-<p>In <strong>1995</strong>, Wooldridge and Jennings published "Intelligent Agents: Theory and Practice," a survey that defined the vocabulary the field still uses: autonomy, reactivity, pro-activeness, social ability. If you've heard anyone describe what makes an "agent" an agent, the definitions probably trace back to this paper.</p>
+<h2>Reactive Agents and the BDI Model (1986 - 1995)</h2>
+<p>Rodney Brooks at MIT challenged the symbolic approach directly. His <strong>subsumption architecture</strong> (1986) argued against internal world models entirely. Instead, agents should be built as layered sets of reactive behaviors, where each layer handles a specific concern (avoid obstacles, wander, explore) and complex behavior emerges from the interaction of simple rules. He demonstrated this on physical robots.</p>
+<p>Running in parallel was the <strong>BDI model</strong> (Belief-Desire-Intention), which took the opposite approach. Originally a philosophical framework from Michael Bratman (1987), it was formalized computationally by Rao and Georgeff in 1991. BDI agents maintain beliefs about the state of the world, desires they want to achieve, and intentions they have committed to pursuing. The model provided a structured way to think about agent decision-making and is still used in multi-agent system design.</p>
+<p>Wooldridge and Jennings published their survey "Intelligent Agents: Theory and Practice" in 1995. It defined the properties that distinguish an agent from ordinary software: autonomy, reactivity, pro-activeness, and social ability. These definitions became the standard vocabulary for the field. Most current descriptions of what makes an "agent" an agent trace back to this paper.</p>
 
-<h2>Multi-Agent Systems (1996 - 2005)</h2>
-<p>With individual agents better understood, researchers turned to making them work together.</p>
-<p><strong>FIPA</strong> (Foundation for Intelligent Physical Agents) standardized how agents communicate, defining an Agent Communication Language with message types borrowed from speech act theory: request, inform, propose, accept, reject. <strong>JADE</strong> (2000), a Java framework implementing FIPA standards, became the dominant platform for multi-agent research in academia.</p>
-<p>This era produced foundational work in coordination: auction mechanisms for resource allocation, contract nets for task distribution, cooperative problem-solving protocols. Most of these ideas sat in academic papers for 20 years before LLM-based multi-agent frameworks rediscovered them.</p>
+<h2>Multi-Agent Coordination (1996 - 2005)</h2>
+<p>With individual agent architecture better understood, the research community turned to how agents work together. <strong>FIPA</strong> (Foundation for Intelligent Physical Agents) standardized inter-agent communication, defining an Agent Communication Language with message types drawn from speech act theory: request, inform, propose, accept, reject.</p>
+<p><strong>JADE</strong> (2000), a Java framework implementing FIPA standards, became the dominant platform for multi-agent research in academic settings. The era also produced work on auction mechanisms for resource allocation, contract nets for task distribution (originally proposed by Smith in 1980), and cooperative problem-solving protocols.</p>
+<p>Much of this coordination research sat in academic papers for two decades. LLM-based multi-agent frameworks have been rediscovering these patterns since 2023, sometimes explicitly and sometimes by reinventing them from scratch.</p>
 
 <h2>Reinforcement Learning (2013 - 2019)</h2>
-<p>Deep learning changed everything. Instead of hand-coding agent behavior, you could let agents learn from experience.</p>
-<p>DeepMind's <strong>DQN</strong> (2013, published in Nature 2015) played Atari games at superhuman level by learning directly from raw pixels. No rules, no heuristics, just a neural network learning which actions lead to higher scores.</p>
-<p><strong>AlphaGo</strong> (2016) defeated Lee Sedol 4-1 in Go, a game that had been considered too complex for brute-force search. It combined Monte Carlo Tree Search with deep neural networks trained through self-play. <strong>AlphaZero</strong> (2017) generalized the approach to chess, shogi, and Go, learning entirely from self-play with zero human game knowledge.</p>
-<p><strong>OpenAI Five</strong> (2019) beat world champions at Dota 2. DeepMind's <strong>AlphaStar</strong> reached Grandmaster level in StarCraft II the same year. These proved that learned agents could handle real-time, incomplete-information, multi-player environments at the highest level.</p>
-<p>What these systems had in common: they were narrow. Each one was trained for a single game or environment. General-purpose agents that could handle arbitrary tasks were still out of reach.</p>
+<p>Deep reinforcement learning shifted the approach from hand-coded rules to learned behavior. Instead of programming what an agent should do, you define a reward signal and let the agent discover the strategy through trial and error.</p>
+<p>DeepMind's <strong>DQN</strong> (Mnih et al., 2013 preprint, 2015 Nature publication) learned to play Atari games at superhuman level by training a neural network directly on pixel inputs. No domain knowledge, no handcrafted features. The network learned which actions maximized the score through repeated play.</p>
+<p><strong>AlphaGo</strong> (Silver et al., 2016) defeated the world champion Lee Sedol 4-1 in Go by combining Monte Carlo Tree Search with deep neural networks trained through self-play. <strong>AlphaZero</strong> (2017) generalized the approach to chess, shogi, and Go, learning entirely from self-play with no human game knowledge at all.</p>
+<p>By 2019, <strong>OpenAI Five</strong> had beaten world champions at Dota 2 and DeepMind's <strong>AlphaStar</strong> reached Grandmaster level in StarCraft II. These results demonstrated that learned agents could handle real-time, incomplete-information, multi-player environments.</p>
+<p>The limitation was generality. Each system was trained for a single game or environment. A general-purpose agent that could handle arbitrary tasks remained out of reach.</p>
 
 <h2>LLM-Based Agents (2022 - Present)</h2>
-<p>Large language models changed what "general-purpose" meant for agents.</p>
-<p>The pivotal paper was <strong>ReAct</strong> (Yao et al., October 2022), which showed that LLMs could interleave chain-of-thought reasoning with tool-use actions in a loop. The model reasons about what to do, calls a tool, reads the result, and reasons again. This Reason+Act pattern became the backbone of every modern agent framework.</p>
-<p><strong>Toolformer</strong> (Schick et al., Meta, February 2023) demonstrated that LLMs could learn when and how to call APIs on their own, without being told at each step.</p>
-<p><strong>Auto-GPT</strong> (March 2023) was the first agent that captured mainstream attention. It hit 100,000+ GitHub stars within weeks by attempting fully autonomous task execution with GPT-4. The practical reliability was limited, but it proved that the concept had broad appeal and got a lot of developers thinking about what was possible.</p>
-<p><strong>June 2023</strong> brought OpenAI's function calling API, which gave LLMs a structured, reliable mechanism for invoking tools. This replaced the fragile prompt-based parsing that earlier agents relied on.</p>
-<p>Through 2024 and 2025, the ecosystem matured. Anthropic released Claude Code as a full coding agent. Frameworks like LangChain, CrewAI, and AutoGen made multi-agent orchestration accessible. Microsoft's Magnetic-One and Anthropic's computer use capabilities pushed agents toward general-purpose computer interaction.</p>
-<p>The current state (2025-2026): agent architectures combine ReAct-style loops, tool use, persistent memory, and multi-agent coordination. The big open problems are reliability (agents still make mistakes on multi-step tasks), evaluation (how do you benchmark something this open-ended), and safety (how much real-world authority should you delegate to a model).</p>
+<p>Large language models made general-purpose agents possible by providing a reasoning engine that already understood a wide range of tasks, domains, and concepts. The remaining problem was connecting that reasoning to action.</p>
+<p>Yao et al. solved this in their October 2022 paper "<strong>ReAct: Synergizing Reasoning and Acting in Language Models</strong>." The key insight was that LLMs could interleave chain-of-thought reasoning with tool-use actions in a loop. The model reasons about what to do, calls a tool, reads the result, and reasons again. This pattern became the foundation of every major agent framework that followed.</p>
+<p>Schick et al. at Meta published <strong>Toolformer</strong> in February 2023, showing that LLMs could learn when and how to call external APIs autonomously, without step-by-step instruction.</p>
+<p><strong>Auto-GPT</strong> launched in March 2023 and reached over 100,000 GitHub stars within weeks. It attempted fully autonomous task execution with GPT-4. Practical reliability was poor, but the project demonstrated that the concept of an autonomous AI agent had broad public appeal.</p>
+<p>OpenAI introduced <strong>function calling</strong> in their API in June 2023, providing a structured mechanism for LLMs to invoke tools. This replaced the fragile prompt-based tool invocation that earlier agents relied on and made tool use far more reliable.</p>
+<p>Through 2024 and 2025, the ecosystem matured. Anthropic released Claude Code as a production coding agent. Frameworks like LangChain, CrewAI, and AutoGen made multi-agent orchestration accessible to a wider range of developers. Microsoft's Magnetic-One and Anthropic's computer use capabilities pushed agents toward general-purpose computer interaction.</p>
+<p>The current generation of agent architectures combines ReAct-style reasoning loops, tool use, persistent memory, and multi-agent coordination. Open problems include reliability on multi-step tasks, evaluation methodology for open-ended work, and the question of how much real-world authority it is appropriate to delegate to a model.</p>
 
-<h2>What Connects All of This</h2>
-<p>Modern LLM agents are not a clean break from the past. They embed planning (from STRIPS), goal-directed behavior (from BDI), multi-agent coordination (from the FIPA era), learned policies (from RL), and natural language interfaces, all unified through the language model as a general-purpose reasoning engine.</p>
-<p>The difference is that previous generations of agents were each built for one task or domain. LLM agents get general-purpose reasoning for free from the pre-trained model, and they get domain-specific capability through tools. That combination is why they feel like a qualitative shift, even though every individual piece has been around for years.</p>
+<h2>The Through Line</h2>
+<p>Modern LLM agents carry forward ideas from every prior era. Planning from STRIPS. Goal-directed behavior from BDI. Coordination protocols from the multi-agent systems community. Learned strategies from reinforcement learning. The language model unifies these as a general-purpose reasoning engine that can be connected to tools and data sources.</p>
+<p>Previous agent generations were each built for a single task or domain. LLM agents get broad reasoning capability from the pre-trained model and acquire domain-specific capability through tools. That combination is new. The individual components are not.</p>
 
 <div class="takeaways">
     <h3>Timeline</h3>
     <ul>
-        <li>1958: Advice Taker proposed. 1971: STRIPS. 1972: SHRDLU.</li>
-        <li>1986: Brooks' reactive agents. 1991: BDI formalized. 1995: Wooldridge & Jennings survey.</li>
-        <li>2000: JADE framework. FIPA standards for agent communication.</li>
+        <li>1958: McCarthy's Advice Taker. 1971: STRIPS planner. 1972: SHRDLU.</li>
+        <li>1986: Brooks' subsumption architecture. 1991: BDI formalized. 1995: Wooldridge & Jennings survey.</li>
+        <li>2000: JADE framework. FIPA agent communication standards.</li>
         <li>2013-2019: DQN, AlphaGo, AlphaZero, OpenAI Five, AlphaStar.</li>
-        <li>2022: ReAct paper. 2023: Auto-GPT, Toolformer, function calling.</li>
+        <li>2022: ReAct (Yao et al.). 2023: Auto-GPT, Toolformer, function calling.</li>
         <li>2024-2026: Claude Code, mature frameworks, multi-agent orchestration.</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARTICLE: HUMAN-MACHINE TRUST                                  -->
+<!-- ============================================================ -->
+<div id="content-trust-state" data-title="Where We Stand on Trust">
+<div class="notepad-body">
+
+<h2>The Problem Nobody Agrees On</h2>
+<p>Ask ten researchers what "trust in AI" means and you'll get twelve definitions. Some treat it as a measurable cognitive state. Others call it a social relationship. A few insist it's just risk tolerance dressed up in fancier language. This confusion isn't academic navel-gazing. It matters because how you define trust determines what you try to fix.</p>
+<p>The practical version: when should a person follow an AI's recommendation, and when should they override it? Get this wrong in one direction and the doctor rubber-stamps a bad diagnosis. Get it wrong in the other and the pilot ignores a system that's trying to save the plane.</p>
+<p>Both of those things happen. They happen a lot.</p>
+
+<h2>Too Much and Too Little</h2>
+<p>The research community has two terms for the failure modes. <strong>Automation bias</strong> is when people defer to an AI even when it's wrong. <strong>Algorithm aversion</strong> is when they refuse to follow an AI even when it's right. Both are well-documented, and the frustrating finding is that they're both common, sometimes in the same person, depending on the task.</p>
+<p>Parasuraman and Manzey laid out the automation bias framework back in 2010, and it's held up. People skip their own analysis when a machine gives them an answer. It's worse when the system is usually right, because you learn to stop checking. Then the one time the system fails, you miss it.</p>
+<p>Algorithm aversion goes the other way. Dietvorst, Simmons, and Massey at Wharton showed that people who watch an algorithm make a mistake will sometimes abandon it entirely, even if it still outperforms their own judgment. One wrong answer and they're done. This happens more in subjective domains. People tolerate bad AI predictions about weather but not about hiring or criminal sentencing.</p>
+<p>De Vries and colleagues found that the split is domain-dependent. Quantitative tasks push people toward automation bias. Moral and subjective tasks push them toward aversion. The same person might blindly follow a navigation app and refuse to trust a medical AI on the same afternoon.</p>
+<p>The goal the field keeps chasing is <strong>calibrated trust</strong>, where a person's confidence in an AI matches the AI's actual reliability. Almost nobody achieves this naturally.</p>
+
+<h2>Explainability Was Supposed to Help</h2>
+<p>For years, the pitch went like this: if we just explain what the AI is doing, people will trust it the right amount. Make the black box transparent and the calibration problem goes away.</p>
+<p>The research has not been kind to this idea.</p>
+<p>Kaur et al. (2020, CHI) studied data scientists using interpretability tools. These were technical people who should have known better. They over-trusted the explanations. They saw feature importance charts and treated them as ground truth without questioning whether the explanations were faithful to what the model actually did.</p>
+<p>Chromik and Butz described what they called "dark patterns of XAI," where explanations create a false sense of understanding. A plausible-sounding explanation increases trust even if it's wrong. Jacovi and Goldberg formalized this distinction between "faithfulness" (the explanation actually matches the model's reasoning) and "plausibility" (the explanation sounds reasonable to a human). These two properties are independent. An explanation can sound great and be completely misleading.</p>
+<p>Schemmer and colleagues found that for simple tasks, adding explanations sometimes made things worse. People spent cognitive effort parsing the explanation instead of evaluating the prediction. Performance went down.</p>
+<p>The current view is more nuanced. Explanations can help, but only when the user has enough expertise to evaluate them, the explanation type matches the task, and the explanation is actually faithful. That's a narrow set of conditions. For most real-world deployments, slapping an explanation on an AI output and hoping for the best is not a strategy.</p>
+
+<h2>LLMs Changed the Game</h2>
+<p>Most trust research before 2023 studied traditional decision-support systems. An AI makes a recommendation, a human accepts or rejects it. The interaction is structured and bounded.</p>
+<p>LLMs broke that model. When the AI talks to you in natural language, uses your name, responds to your emotions, and sounds confident about everything, the trust dynamics shift from analytical to social. People start applying interpersonal trust heuristics. They evaluate the AI the way they'd evaluate a colleague.</p>
+<p>This has specific consequences. Anthropomorphism effects are significant. The more human-like the interaction feels, the more people rely on social cues (politeness, confidence, fluency) instead of accuracy cues (track record, uncertainty signals, domain expertise). A smooth, articulate wrong answer is more persuasive than a halting, hedging right one.</p>
+<p>Jakesch et al. at Cornell studied how AI-generated opinions shift human attitudes. The effect is real and measurable. When an LLM presents a position confidently, people adjust their views toward it, even on subjective questions where the model has no special authority.</p>
+<p>Sycophancy makes this worse. Models trained with RLHF have a tendency to agree with the user, tell them what they want to hear, and validate their existing beliefs. Anthropic's own research has flagged this as a trust calibration risk. If the AI always agrees with you, you never get the corrective signal that builds appropriate calibration.</p>
+
+<h2>When the AI Gets It Wrong</h2>
+<p>AI systems fail. The question is what happens to trust afterward.</p>
+<p>De Visser and colleagues established the basics of trust repair in automation. The most effective strategy is acknowledgment combined with explanation combined with corrective action. Just saying sorry doesn't work as well with machines as it does with people. You need to show you understand what went wrong and that you've changed.</p>
+<p>Esterwood and Robert at the University of Michigan added an important distinction. Competence violations (the AI couldn't do the task) are easier to repair than integrity violations (the AI seemed to be deceptive or biased). If your AI system gives a wrong medical diagnosis, you can rebuild trust by improving accuracy. If your AI system appears to be biased against certain patients, the damage is much harder to undo.</p>
+<p>LLMs introduce a new dimension here. Because they can talk about their failures in natural language, they have a richer repair toolkit than traditional automation. An LLM that explains its mistake and adjusts its approach in real-time can recover trust faster than a system that just outputs a corrected number. But this also means an LLM that confabulates an explanation for why it was wrong, without actually understanding the failure, can fake repair in ways that are hard for users to detect.</p>
+
+<h2>Who Trusts More (and Less)</h2>
+<p>Individual differences matter. Not everyone responds to AI the same way.</p>
+<p>Personality is a factor but a weaker one than you might expect. Openness to Experience correlates with higher AI trust. Neuroticism correlates with lower trust. Agreeableness is associated with more deference to AI recommendations. These effects are consistent but modest in size.</p>
+<p>Technical literacy is a stronger predictor than any personality trait. People who understand how these systems work tend to have better-calibrated trust, neither too high nor too low. This isn't because they trust more or less. It's because they have a framework for evaluating when trust is warranted.</p>
+<p>Age and generational effects are messy. Some studies find older adults show higher automation bias. Others find them more aversion-prone. The inconsistency probably reflects different tasks and contexts more than a real generational pattern.</p>
+
+<h2>Working with AI Teammates</h2>
+<p>The hardest trust problems show up when AI is a teammate, not just a tool.</p>
+<p>McNeese, Demir, and Cooke at Arizona State have studied human-AI teaming extensively, much of it funded through DARPA and Army Research Lab programs. Their central finding: effective human-AI teams need shared mental models. Both the human and the AI need some understanding of what the other is doing and why. But opaque AI teammates prevent this. You can't build a shared model with something you can't read.</p>
+<p>Healthcare provides the clearest examples. Cai et al. at Google studied AI-assisted pathology and found that AI recommendations anchored physician diagnoses. When the AI highlighted a region of a scan, doctors focused on that region, even when the critical finding was somewhere else. The AI was right often enough that this usually helped. But when it was wrong, the anchoring effect meant doctors missed things they would have caught on their own.</p>
+<p>Driving automation shows the trust handoff problem. The SAE levels of automation assume clean transitions between human and machine control. In practice, the handoff moment is the most dangerous part. A driver who has been monitoring their phone while the car drives itself needs several seconds to regain situational awareness. Trust in the automation makes this worse, because higher trust means less monitoring and slower handoff.</p>
+
+<h2>Where This Is Heading</h2>
+<p>The field is moving away from treating trust as a property of individuals. The older framing was cognitive: trust is a mental state, measured through surveys, predicted by personality traits. The newer framing is relational and systemic. Trust is something that emerges from the interaction between a person, a system, a task, an organization, and a context.</p>
+<p>This matters for design. If trust is cognitive, you fix it by giving people better information (explanations, confidence scores, accuracy metrics). If trust is relational, you fix it by changing the interaction (how failures are communicated, how control is shared, how the AI presents uncertainty, what social cues it sends).</p>
+<p>The biggest open question is whether the social trust dynamics of LLMs are a feature or a bug. Conversational AI makes interactions more natural and accessible. It also exploits social heuristics that evolved for human relationships and don't necessarily transfer well to software. We trust confident humans because confidence usually correlates with knowledge. We trust agreeable humans because agreeableness usually signals honesty. Neither of these correlations holds for LLMs.</p>
+<p>The research community hasn't resolved this. I don't think they will anytime soon. But the work is getting sharper, the measurements are getting better, and the stakes keep going up as these systems take on more responsibility.</p>
+
+<div class="takeaways">
+    <h3>Key References</h3>
+    <ul>
+        <li>Parasuraman & Manzey (2010): automation bias framework</li>
+        <li>Dietvorst, Simmons & Massey (Wharton): algorithm aversion</li>
+        <li>Kaur et al. (2020, CHI): over-trust in interpretability tools</li>
+        <li>Chromik & Butz: dark patterns of XAI</li>
+        <li>Jacovi & Goldberg: faithfulness vs. plausibility of explanations</li>
+        <li>Jakesch et al. (Cornell): AI opinion influence on humans</li>
+        <li>Esterwood & Robert (U Michigan): competence vs. integrity violations</li>
+        <li>McNeese, Demir & Cooke (Arizona State): human-AI team mental models</li>
+        <li>Cai et al. (Google): AI anchoring in pathology</li>
     </ul>
 </div>
 </div>
