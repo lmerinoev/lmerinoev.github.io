@@ -211,7 +211,7 @@ function openFolder(id) {
     });
     html += '</div>';
 
-    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research' };
+    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes' };
     WM.open('folder-' + id, folderNames[id] || id, html, {
         icon: FOLDER_ICON_SMALL,
         width: 420, height: 320,
@@ -269,6 +269,9 @@ const FOLDER_CONTENTS = {
     ],
     'trust-research': [
         { id: 'trust-state', name: 'Where We Stand on Trust.txt', icon: FILE_ICON_32 },
+    ],
+    'apple-notes': [
+        { id: 'john-ternus', name: 'John Ternus.txt', icon: FILE_ICON_32 },
     ]
 };
 
@@ -298,6 +301,7 @@ document.querySelectorAll('.start-item').forEach(item => {
         if (action === 'about') showAbout();
         if (action === 'docs') openFolder('agent-docs');
         if (action === 'trust') openFolder('trust-research');
+        if (action === 'apple') openFolder('apple-notes');
         if (action === 'readme') openFile('readme');
         if (action === 'image') openImage('vaporwave');
         if (action === 'shutdown') showShutdown();
