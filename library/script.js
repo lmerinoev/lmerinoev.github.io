@@ -211,7 +211,7 @@ function openFolder(id) {
     });
     html += '</div>';
 
-    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes' };
+    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes', 'hardware-scaling': 'Hardware Scaling' };
     WM.open('folder-' + id, folderNames[id] || id, html, {
         icon: FOLDER_ICON_SMALL,
         width: 420, height: 320,
@@ -272,6 +272,15 @@ const FOLDER_CONTENTS = {
     ],
     'apple-notes': [
         { id: 'john-ternus', name: 'John Ternus.txt', icon: FILE_ICON_32 },
+        { id: 'ternus-five-decisions', name: 'Five Decisions.txt', icon: FILE_ICON_32 },
+        { id: 'apple-silicon', name: 'Apple Silicon Transition.txt', icon: FILE_ICON_32 },
+        { id: 'operations-strategy', name: 'Operations as Strategy.txt', icon: FILE_ICON_32 },
+    ],
+    'hardware-scaling': [
+        { id: 'npi-phase-gates', name: 'From EVT to MP.txt', icon: FILE_ICON_32 },
+        { id: 'vertical-integration', name: 'Vertical Integration.txt', icon: FILE_ICON_32 },
+        { id: 'supply-chain-moat', name: 'Supply Chain as Moat.txt', icon: FILE_ICON_32 },
+        { id: 'dfm', name: 'Design for Manufacturing.txt', icon: FILE_ICON_32 },
     ]
 };
 
@@ -302,6 +311,8 @@ document.querySelectorAll('.start-item').forEach(item => {
         if (action === 'docs') openFolder('agent-docs');
         if (action === 'trust') openFolder('trust-research');
         if (action === 'apple') openFolder('apple-notes');
+        if (action === 'hardware') openFolder('hardware-scaling');
+        if (action === 'reading') openFile('reading-list');
         if (action === 'readme') openFile('readme');
         if (action === 'image') openImage('vaporwave');
         if (action === 'shutdown') showShutdown();
