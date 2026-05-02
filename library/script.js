@@ -211,7 +211,7 @@ function openFolder(id) {
     });
     html += '</div>';
 
-    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes', 'hardware-scaling': 'Hardware Scaling' };
+    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes', 'hardware-scaling': 'Hardware Scaling', 'design': 'Design' };
     WM.open('folder-' + id, folderNames[id] || id, html, {
         icon: FOLDER_ICON_SMALL,
         width: 420, height: 320,
@@ -281,6 +281,9 @@ const FOLDER_CONTENTS = {
         { id: 'vertical-integration', name: 'Vertical Integration.txt', icon: FILE_ICON_32 },
         { id: 'supply-chain-moat', name: 'Supply Chain as Moat.txt', icon: FILE_ICON_32 },
         { id: 'dfm', name: 'Design for Manufacturing.txt', icon: FILE_ICON_32 },
+    ],
+    'design': [
+        { id: 'jony-ive', name: 'Becoming a Student of Jony Ive.txt', icon: FILE_ICON_32 },
     ]
 };
 
@@ -312,6 +315,7 @@ document.querySelectorAll('.start-item').forEach(item => {
         if (action === 'trust') openFolder('trust-research');
         if (action === 'apple') openFolder('apple-notes');
         if (action === 'hardware') openFolder('hardware-scaling');
+        if (action === 'design') openFolder('design');
         if (action === 'reading') openFile('reading-list');
         if (action === 'readme') openFile('readme');
         if (action === 'image') openImage('vaporwave');
