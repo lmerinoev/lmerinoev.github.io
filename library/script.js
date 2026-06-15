@@ -211,7 +211,7 @@ function openFolder(id) {
     });
     html += '</div>';
 
-    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes', 'hardware-scaling': 'Hardware Scaling', 'design': 'Design', 'launch-product': 'How to launch a new product' };
+    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes', 'hardware-scaling': 'Hardware Scaling', 'design': 'Design', 'launch-product': 'How to launch a new product', 'reduction': 'Reduction' };
     WM.open('folder-' + id, folderNames[id] || id, html, {
         icon: FOLDER_ICON_SMALL,
         width: 420, height: 320,
@@ -292,6 +292,15 @@ const FOLDER_CONTENTS = {
         { id: 'launch-process', name: 'A Launch Is a Process.txt', icon: FILE_ICON_32 },
         { id: 'launch-operations', name: 'Having Something to Sell.txt', icon: FILE_ICON_32 },
         { id: 'launch-gtm', name: 'Getting It Into Hands.txt', icon: FILE_ICON_32 },
+    ],
+    'reduction': [
+        { id: 'reduction-intro', name: "Reduce, Don't Produce.txt", icon: FILE_ICON_32 },
+        { id: 'reduction-architecture', name: 'Architecture - Less but Better.txt', icon: FILE_ICON_32 },
+        { id: 'reduction-music', name: "Music - The Notes You Don't Play.txt", icon: FILE_ICON_32 },
+        { id: 'reduction-art', name: 'Art - Carving Away.txt', icon: FILE_ICON_32 },
+        { id: 'reduction-film', name: 'Film - Cutting to the Essential.txt', icon: FILE_ICON_32 },
+        { id: 'reduction-writing', name: 'Writing - Omit Needless Words.txt', icon: FILE_ICON_32 },
+        { id: 'reduction-product', name: 'Product - Saying No.txt', icon: FILE_ICON_32 },
     ]
 };
 
@@ -325,6 +334,7 @@ document.querySelectorAll('.start-item').forEach(item => {
         if (action === 'hardware') openFolder('hardware-scaling');
         if (action === 'design') openFolder('design');
         if (action === 'launch') openFolder('launch-product');
+        if (action === 'reduction') openFolder('reduction');
         if (action === 'reading') openFile('reading-list');
         if (action === 'readme') openFile('readme');
         if (action === 'image') openImage('vaporwave');
