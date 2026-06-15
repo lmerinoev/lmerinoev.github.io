@@ -211,7 +211,7 @@ function openFolder(id) {
     });
     html += '</div>';
 
-    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes', 'hardware-scaling': 'Hardware Scaling', 'design': 'Design' };
+    const folderNames = { 'agent-docs': 'Agent Docs', 'trust-research': 'Trust Research', 'apple-notes': 'Apple Notes', 'hardware-scaling': 'Hardware Scaling', 'design': 'Design', 'launch-product': 'How to launch a new product' };
     WM.open('folder-' + id, folderNames[id] || id, html, {
         icon: FOLDER_ICON_SMALL,
         width: 420, height: 320,
@@ -284,6 +284,14 @@ const FOLDER_CONTENTS = {
     ],
     'design': [
         { id: 'jony-ive', name: 'Becoming a Student of Jony Ive.txt', icon: FILE_ICON_32 },
+    ],
+    'launch-product': [
+        { id: 'launch-iphone-timeline', name: 'iPhone - Announce, Then Ship.txt', icon: FILE_ICON_32 },
+        { id: 'launch-iphone-sourcing', name: 'iPhone - Glass & Foxconn.txt', icon: FILE_ICON_32 },
+        { id: 'launch-iphone-gtm', name: 'iPhone - The Carrier Deal.txt', icon: FILE_ICON_32 },
+        { id: 'launch-process', name: 'A Launch Is a Process.txt', icon: FILE_ICON_32 },
+        { id: 'launch-operations', name: 'Having Something to Sell.txt', icon: FILE_ICON_32 },
+        { id: 'launch-gtm', name: 'Getting It Into Hands.txt', icon: FILE_ICON_32 },
     ]
 };
 
@@ -316,6 +324,7 @@ document.querySelectorAll('.start-item').forEach(item => {
         if (action === 'apple') openFolder('apple-notes');
         if (action === 'hardware') openFolder('hardware-scaling');
         if (action === 'design') openFolder('design');
+        if (action === 'launch') openFolder('launch-product');
         if (action === 'reading') openFile('reading-list');
         if (action === 'readme') openFile('readme');
         if (action === 'image') openImage('vaporwave');
