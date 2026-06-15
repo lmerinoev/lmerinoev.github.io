@@ -42,6 +42,11 @@
             <span class="icon-label">Design</span>
         </div>
 
+        <div class="desktop-icon" data-action="open-folder" data-target="launch-product">
+            <svg viewBox="0 0 32 32" class="icon-img"><path d="M2 7h28v21H2z" fill="#FFD442" stroke="#BF9900" stroke-width="1"/><path d="M2 4h11l2 3H2z" fill="#FFD442" stroke="#BF9900" stroke-width="1"/></svg>
+            <span class="icon-label">How to Launch a Product</span>
+        </div>
+
         <div class="desktop-icon" data-action="open-file" data-target="reading-list">
             <svg viewBox="0 0 32 32" class="icon-img"><path d="M6 2h12l8 8v20H6z" fill="#fff" stroke="#808080" stroke-width="1"/><path d="M18 2v8h8" fill="#ddd" stroke="#808080" stroke-width="1"/><line x1="10" y1="14" x2="22" y2="14" stroke="#ccc"/><line x1="10" y1="18" x2="22" y2="18" stroke="#ccc"/><line x1="10" y1="22" x2="18" y2="22" stroke="#ccc"/></svg>
             <span class="icon-label">Reading List.txt</span>
@@ -93,6 +98,7 @@
         <div class="start-item" data-action="apple"><span class="si-icon">📁</span> Apple Notes</div>
         <div class="start-item" data-action="hardware"><span class="si-icon">📁</span> Hardware Scaling</div>
         <div class="start-item" data-action="design"><span class="si-icon">📁</span> Design</div>
+        <div class="start-item" data-action="launch"><span class="si-icon">📁</span> How to Launch a Product</div>
         <div class="start-item" data-action="reading"><span class="si-icon">📄</span> Reading List</div>
         <div class="start-item" data-action="readme"><span class="si-icon">📄</span> README</div>
         <div class="start-item" data-action="image"><span class="si-icon">🌴</span> Palm Tree</div>
@@ -118,6 +124,7 @@
     <li><strong>Apple Notes</strong>. John Ternus, the Apple Silicon transition, and operations as strategy. A reading curriculum for hardware product scaling.</li>
     <li><strong>Hardware Scaling</strong>. The vocabulary and discipline of shipping hardware: NPI phase gates, vertical integration, supply chain, DFM.</li>
     <li><strong>Design</strong>. Notes on industrial design, becoming a student of Jony Ive, and the lineage of designers worth studying.</li>
+    <li><strong>How to Launch a Product</strong>. The original iPhone as a case study in shipping a new product (timeline, sourcing and manufacturing, the carrier deal and launch day), plus a general playbook on launching: strategy, operations, and go-to-market.</li>
 </ul>
 <p>The <strong>Reading List</strong> on the desktop is the curated list of books, podcasts, and newsletters that everything here was built from.</p>
 <p>Double-click icons to open them. You can have multiple windows open, drag them around, and minimize them to the taskbar. On mobile, tap twice to open.</p>
@@ -1192,6 +1199,316 @@ async for message in query(
         <li>"The lie is, because we spend all our time talking about what we can measure, that's all that matters"</li>
         <li>"Even if you're innocent in your intention, if you're involved in something that has poor consequences, you need to own it"</li>
         <li>Stripe Sessions, May 8, 2025: watch it twice</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARTICLE: IPHONE - ANNOUNCE, THEN SHIP                         -->
+<!-- ============================================================ -->
+<div id="content-launch-iphone-timeline" data-title="iPhone: Announce, Then Ship">
+<div class="notepad-body">
+
+<h2>A date on the calendar before a finished phone</h2>
+<p>On January 9, 2007, Steve Jobs stood on stage at Macworld in San Francisco and showed a phone that did not really work yet. He scrolled through music, made a call, loaded a web page, and the room believed it was watching a finished product. It was not. The iPhone would not go on sale until June 29, 2007, and in January much of its software still crashed if you touched the wrong thing in the wrong order.</p>
+<p>That gap between the announcement and the ship date is the whole story. Apple committed publicly to a product months before that product could survive a day of normal use. The question worth asking is why a company would do that on purpose, and what the choice did to the people building the thing.</p>
+
+<h2>Why announce six months early</h2>
+<p>Apple did not usually preview hardware. The standard pattern was to announce and ship close together, partly to deny competitors a head start and partly to keep the surprise. The iPhone broke that pattern, and the main reason was regulatory.</p>
+<p>A phone with a cellular radio has to be certified by the FCC before it can be sold in the United States. FCC certification filings become public, and they include photographs, internal diagrams, and technical detail. Apple submitted the iPhone to the FCC in early 2007, and those documents would eventually open to anyone who asked. Jobs did not want the world's first look at the iPhone to be a regulatory PDF. Announcing in January let Apple reveal the phone on its own terms, with its own framing, before the filing could leak the secret out from under them.</p>
+<p>The early date did other work too. It gave the press almost six months to build anticipation, and it pressured carriers and developers into the orbit of a product that did not yet exist in stores. Once Apple had said the words out loud, the deadline was real and external.</p>
+
+<h2>Project Purple and the secrecy around it</h2>
+<p>Inside Apple the effort was Project Purple. The team was sealed off in a locked building in Cupertino that people called the Purple Dorm, named in part for a smell that reminded them of pizza. Scott Forstall recruited engineers without being able to tell them what they would build. He told them the project was so secret he could not describe it, and that they should expect to give up their nights and weekends for a couple of years.</p>
+<p>The door of the Purple Dorm had a Fight Club sign on it, and the joke carried the rule: the first rule was that you did not talk about it outside those doors. Jobs scattered pieces of the work across the campus so that no single group could see the full shape of what was coming.</p>
+
+<h2>P1 versus P2</h2>
+<p>Apple did not start with one design. Two competing concepts ran in parallel. P1 was built on the iPod, steered by the click wheel that people already knew. P2 was the riskier idea: a slab of glass driven by multitouch, descended from work that would also feed into the OS X side of the company.</p>
+<p>Running both at once was a hedge. Rather than bet early and risk betting wrong, the team developed the two paths together and let them prove themselves. P2 won. The click wheel could not handle the demands of a phone with a browser and a keyboard, and multitouch could. The phone Jobs showed in January was the descendant of P2, and the operating system underneath it was a stripped-down relative of the Mac's, not the iPod's.</p>
+
+<h2>The golden path</h2>
+<p>The most revealing detail of the January demo came out years later, mostly through Fred Vogelstein. Reporting for the New York Times Magazine in a 2013 piece titled "And Then Steve Said, 'Let There Be an iPhone,'" and again in his book "Dogfight," Vogelstein described how fragile the demo unit really was.</p>
+<p>The prototype had only 128MB of memory and ran software that was unfinished, slow, and prone to freezing. The apps were incomplete. Tap the wrong icon and the phone could lock up or shut off. So the engineers worked out what they called the golden path: a precise sequence of actions, performed in a specific order, that the phone could get through without crashing. Jobs could send an email and then browse the web, but if he reversed the order the phone tended to fall over.</p>
+<p>Jobs rehearsed against that script for days. The team kept several phones on hand so they could swap to a fresh unit if one died mid-demo. The signal was so unreliable that engineers hard-coded the status bar to show five bars and put a portable cell tower backstage. By the accounts of people who were there, they were drinking Scotch in the audience by the time it was over, because they could not quite believe nothing had broken.</p>
+
+<h2>What a fixed public date does to a program</h2>
+<p>A launch date you have announced to the world is a forcing function. It does not care whether the software is ready. It converts every open question into a countdown, and it forces decisions that would otherwise drag on. June 29 was not negotiable once Apple had said it, and that fact organized everything the team did between January and summer.</p>
+<p>That pressure has a real cost. People burned out, features got cut, and the demo had to be staged because the actual product could not yet do what the demo claimed. The deadline bought focus, and it charged for it. The lesson is not that public deadlines are good or bad, but that they are powerful, and that a team should understand what kind of pressure it is signing up for before it picks a date and says it out loud.</p>
+<p>There is a separate question the January announcement could not answer: could Apple actually build these things at scale, by the millions, and get them into people's hands. Sourcing, manufacturing, and the deals that put the phone in stores are their own subjects, and later articles in this folder take them up. Here the point is narrower. Apple chose a date, told the world, and then spent six months making the claim true.</p>
+
+<div class="takeaways">
+    <h3>Takeaways</h3>
+    <ul>
+        <li>Apple announced the iPhone on January 9, 2007 and shipped it on June 29, partly because FCC filings would have leaked it first.</li>
+        <li>An early public reveal let Apple control the story, build anticipation, and pull the ecosystem into place.</li>
+        <li>Project Purple ran under heavy secrecy, including the locked Purple Dorm and a recruiting pitch that hid the work itself.</li>
+        <li>Two designs competed, the iPod-derived P1 and the multitouch P2; P2 won because the click wheel could not carry a real phone.</li>
+        <li>The Macworld demo ran on a scripted golden path because the software was unfinished and crashed easily, as Fred Vogelstein reported.</li>
+        <li>A fixed, public launch date forces decisions and focus, and it extracts a real cost from the team that meets it.</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARTICLE: IPHONE - GLASS, FOXCONN, AND THE RAMP                -->
+<!-- ============================================================ -->
+<div id="content-launch-iphone-sourcing" data-title="iPhone: Glass &amp; Foxconn">
+<div class="notepad-body">
+
+<h2>The keys in the pocket</h2>
+<p>Steve Jobs had been carrying a prototype iPhone in his pocket for weeks, and he came back angry. The screen was plastic, and his keys had scratched it. Walter Isaacson recounts the moment in his biography: Jobs decided the phone would ship with glass, and he wanted it changed weeks before the June 2007 launch. People put glass and keys and other junk in their pockets, he reasoned, and a plastic screen would look beaten up before the phone was a month old. The decision was simple to state and very hard to execute. The product was nearly done, the launch date was fixed, and glass that could survive a pocket did not exist on Apple's shelf or anyone else's that Apple had lined up.</p>
+<p>This is a story about the part of a launch that customers never see. By the time you are holding a finished phone, someone has already solved the problem of where the glass comes from, who builds the thing, and how you get from zero to enough units to sell on day one. The original iPhone is a good case to study because almost everything about it was being attempted for the first time, on a deadline, in secret.</p>
+
+<h2>Going to Corning</h2>
+<p>Jobs went to Corning, the glassmaker founded in 1851, and to its CEO Wendell Weeks. As Isaacson tells it, Jobs started explaining to Weeks how glass was made, and Weeks cut him off: "Can you shut up and let me teach you some science?" Corning had a chemically strengthened glass it had developed in the 1960s under the name "Project Muscle," a glass strengthened by an ion-exchange process that puts the surface under compression so cracks do not spread easily. It had never found a real market and had been shelved for decades. Corning later branded it Gorilla Glass.</p>
+<p>Jobs wanted as much of it as Corning could make, in a matter of months. Weeks told him plainly that Corning did not have the capacity, that none of its plants were making the glass at all. Jobs told him not to be afraid, to get his mind around it, that he could do it. Weeks, in Isaacson's account, shook his head when he retold the story. Corning repurposed a plant in Harrodsburg, Kentucky to make the glass at volume on a brutal timeline. Reporting on the episode, including a Fast Company account years later, describes the Harrodsburg facility being switched over to LCD glass and then to the strengthened glass for Apple. Corning delivered. The phone shipped with glass.</p>
+<p>One thing deserves precision, because the legend tends to compress it. The glass that shipped on the first iPhone was the product of this crash effort. The "Gorilla Glass" brand name and the broad licensing business came later. What matters for the launch is that a supplier with a dormant technology was pushed to industrialize it in months, and that Apple was willing to put money and its own deadline behind that push.</p>
+
+<h2>What was actually inside</h2>
+<p>The glass is the famous part, but a phone is a few hundred parts, and most of them came from somewhere specific. The picture below comes from teardowns done right after launch, mainly by iSuppli (later part of IHS) and reported through outlets like AppleInsider and EDN. Treat the exact part numbers and dollar figures as teardown estimates rather than Apple's own disclosures, because Apple disclosed almost nothing.</p>
+<p>Samsung supplied the application processor, an ARM-based system-on-chip that teardowns identified as the S5L8900, reported as a stacked package that also carried memory dies. Samsung also supplied the NAND flash that held the storage, an 8-gigabyte part on the high-end model. The cellular baseband came from Infineon, the PMB8876 "S-Gold 2," along with Infineon's radio transceiver and power management parts; iSuppli put Infineon's combined silicon at around 15 dollars of the bill of materials. Wi-Fi came from a Marvell chip, the 88W8686, reported at roughly 6 dollars. The touch panel module was attributed to Balda of Germany working with TPK in China, estimated near 27 dollars, which made it one of the more expensive single items. The touchscreen controller was a Broadcom part, the BCM5973. iSuppli's much-quoted total put the hardware and manufacturing cost of the 8-gigabyte model around 266 dollars against a 599-dollar price.</p>
+<p>I list these not to be exhaustive but to show the shape of the problem. A new product type pulls parts from a dozen vendors across several countries, each with its own lead time, yield curve, and minimum order. Several of these were single-source: one processor vendor, one baseband vendor. Single-sourcing buys you the best part and tight integration, and it means a problem at one supplier can stop the whole line.</p>
+
+<h2>Final assembly at Foxconn</h2>
+<p>The pieces came together in China. Final assembly of the original iPhone was done by Hon Hai, the Taiwanese contract manufacturer better known by its Foxconn trade name, at its operations in Shenzhen. Contract manufacturing at this scale is not a matter of handing over a design and waiting. Apple had to deliver tooling, the molds and fixtures and test rigs specific to this product, and tooling has long lead times of its own. It had to define the assembly steps, the test points, and the criteria for a unit to pass. And it had to do the work of new product introduction, the NPI ramp, where a line that has never built a given product is brought up from hand-built samples to thousands of identical units a day.</p>
+<p>The hard part of an NPI ramp is that yield starts low. The first units off a new line are slow and many of them fail test, and you learn why by building them, finding the failures, and fixing the process. For a known product you have done this before. For the iPhone, nobody had built a capacitive multi-touch phone with a bonded glass front at volume, so every station on the line was being figured out at the same time the clock was running toward June 29.</p>
+
+<h2>The ramp against a fixed date</h2>
+<p>A launch with a date announced to the public removes the easiest pressure valve. If your ramp goes badly, you cannot quietly slip the launch by a quarter, because the date is already a promise. You can ship fewer units, you can ration supply, but you have to have working phones in stores on the day. That turns every supply question into a scheduling question. The long-lead components, the ones with the slowest path from order to delivery, set the real start date for the whole program. If the application processor or the glass or the touch module is the bottleneck, no amount of effort downstream buys back the time.</p>
+<p>Secrecy made it harder. Apple kept the product tightly held, which limited how much it could tell suppliers and how openly it could second-source or shop a part around. A vendor building to a spec it only partly understands, under a code name, cannot help you the way a fully briefed partner can. Apple traded some of that openness for control of the surprise, and the surprise was part of the product.</p>
+
+<h2>Why the late glass switch was so expensive</h2>
+<p>The keys-in-the-pocket decision is a good lesson precisely because of when it happened. Changing a material weeks before launch is one of the most expensive moves you can make in a hardware program. The glass front is not a sticker you swap. It changes the supplier, the tooling, the bonding process, the strength testing, the way the panel mates to the touch sensor, and the assembly line that puts it all together. A change that would be cheap in early design becomes enormous in late ramp, because by then a long chain of decisions has been built on top of the old choice.</p>
+<p>Jobs made the call anyway, and it worked, which is why it gets told as a triumph. The honest reading is narrower. It worked because Apple could put 200 million dollars and its own engineers behind Corning, because Corning had a real, if dormant, technology to revive rather than inventing one from scratch, and because there was just barely enough calendar left. The lesson for most teams is not "demand glass at the last minute." It is the opposite: decide the things that touch your suppliers and your tooling early, because late changes are paid for in money, in risk, and in nights nobody gets back.</p>
+
+<h2>What carries over</h2>
+<p>You will probably not be sourcing a phone. The structure of the problem carries over anyway. Whatever you are launching, some part of it comes from outside your walls, some part of it has the longest lead time and quietly sets your schedule, and some part of it can only be made by one supplier who can therefore stop you cold. Manufacturing readiness for a launch is mostly the work of finding those parts before they find you, and giving yourself enough slack that a bad yield week or a late mold does not turn into a missed date you already announced.</p>
+
+<div class="takeaways">
+    <h3>Takeaways</h3>
+    <ul>
+        <li>Late material changes are cheap early in design and brutally expensive once tooling and assembly are committed; decide supplier-facing things first.</li>
+        <li>A dormant technology you can revive (Corning's 1960s glass) beats inventing one from scratch when the calendar is short.</li>
+        <li>Single-source parts give you the best component and tight integration, and they let one supplier halt your whole line.</li>
+        <li>Long-lead components set the real start date for the program; effort downstream cannot buy back that time.</li>
+        <li>An NPI ramp on a never-built product starts at low yield, and you fix the process by building, failing, and learning while the clock runs.</li>
+        <li>A publicly fixed launch date removes the slip-the-quarter option, so every supply problem becomes a scheduling problem you have to solve.</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARTICLE: IPHONE - THE CINGULAR DEAL AND LAUNCH DAY           -->
+<!-- ============================================================ -->
+<div id="content-launch-iphone-gtm" data-title="iPhone: The Carrier Deal">
+<div class="notepad-body">
+
+<h2>The phone with no carrier on it</h2>
+<p>Pick up an original iPhone and look at the front. There is no carrier logo. There was no carrier software loaded on it, no apps you could not delete, no branded start screen. In 2007 that was strange enough to be the story. American phones came to you through the carrier, who subsidized the hardware, stamped its name on the case, loaded its own software, and decided which models lived or died. Apple sold the first iPhone into that world while refusing almost every part of how it worked. This is a story about the deal that let them do it, the price they picked, and the day the phone went on sale.</p>
+
+<h2>Going to the carriers</h2>
+<p>A phone needs a network, and in the United States that meant making a deal with one of the carriers. What Apple wanted was close to a reversal of the normal arrangement. Apple would control the device, the software, and the brand. The carrier would not put its name on the phone, would not load software onto it, and would not decide how it was sold. Apple wanted to own the relationship with the customer. And reportedly it wanted a share of the monthly service revenue, around ten dollars per subscriber per month, on top of selling the hardware.</p>
+<p>By most accounts Apple went to Verizon first, and Verizon said no. Reporting at the time, traced back to USA Today, says Verizon balked at exactly these terms: a cut of monthly fees, Apple's control over how and where the phone could be sold, Apple's say over customer service and repairs. From Verizon's seat that was the carrier handing its business to a hardware company. They passed.</p>
+<p>Cingular took the deal. The agreement was an exclusive one, reported as a five-year US exclusive, and Cingular got the iPhone on Apple's terms. Cingular would share a portion of monthly subscriber revenue with Apple. There is a wrinkle of timing worth stating plainly: the company that signed was Cingular, but it was in the middle of rebranding to AT&T, the name it had acquired, and around the launch the iPhone's carrier was being called AT&T. Same company, two names depending on when you read about it.</p>
+<p>The unusual part was not that a phone had one carrier. Exclusives were common. The unusual part was who set the terms. A carrier was agreeing to be a pipe: provide the network, share the revenue, and stay off the product. Apple traded away the carrier's subsidy and its distribution muscle, and in return kept the thing it cared about most, which was control of the product and the customer.</p>
+
+<h2>The price, and what it was saying</h2>
+<p>The iPhone launched at 499 dollars for the 4-gigabyte model and 599 dollars for the 8-gigabyte model, and you still had to sign a two-year contract with the carrier on top of that. By the standards of 2007 this was a lot of money for a phone. The going expectation was that a contract bought down the hardware to a low or sometimes zero up-front price, the cost buried in your monthly bill. The iPhone asked for the contract and a high sticker price.</p>
+<p>That price did work for Apple. The phone read as a premium object, the contract and the price both signaling that this was not a giveaway handset. Whether buyers experienced 599 dollars as positioning or just as expensive is a fair question. What is clear is that Apple chose a number that sat well above what a subsidized phone felt like, and held it as part of the product's identity.</p>
+
+<h2>The September cut</h2>
+<p>The price held for about ten weeks. On September 5, 2007, Apple cut the 8-gigabyte iPhone from 599 dollars to 399 dollars, a 200-dollar drop, a little over two months after launch. People who had paid full price in June and July were angry, and they said so loudly. They had bought the thing at its most expensive, partly to have it first, and now it cost two hundred dollars less while they were still inside their two-year contracts.</p>
+<p>Steve Jobs answered with an open letter on Apple's site. He defended the cut, writing that lowering the price was the right decision and the right time to make it, that the iPhone was far enough ahead of the competition that a lower price would reach more customers. He also gave ground. Apple offered early buyers a 100-dollar credit at the Apple store. The letter acknowledged, in plain terms, that the people who had paid early were upset and that Apple owed them something.</p>
+<p>There is a lesson sitting in here about launch pricing, and it cuts two ways. A high launch price captures the buyers who want the thing most and will pay most, and you can lower it later to reach everyone else. That is ordinary. The trouble is the speed. Ten weeks is fast enough that your earliest, most enthusiastic customers feel punished for their enthusiasm. The 100-dollar credit was the cost of repairing that, and the fact that Apple paid it tells you the goodwill of early adopters was worth protecting. The honest version is not that the cut was a mistake or a masterstroke. It was a real cost, mostly paid in trust, and Apple chose to buy some of it back.</p>
+
+<h2>Hello</h2>
+<p>The marketing leaned on wanting the phone rather than on what it did. The first iPhone television ad, called "Hello," aired during the 79th Academy Awards on February 25, 2007, months before anyone could buy one. It was a montage of film and television characters answering phones and saying "hello," dozens of them, from old movies and shows, cut together so the word passed from one to the next. The iPhone appeared at the end with the line that it was coming in June. The ad did not even say the product's name out loud.</p>
+<p>What the ad did not do is as telling as what it did. It did not list the things the phone could do. It did not explain the touchscreen or the browser or the voicemail. It put the phone at the end of a long line of phones people already knew and loved from the movies, and let you fill in the rest. That is a confident way to advertise a product, and it only works if the product can carry the desire the ad builds. Apple bet it could.</p>
+
+<h2>Launch day</h2>
+<p>The iPhone went on sale June 29, 2007. People lined up outside Apple Stores and AT&T stores, some for days, and the lines were part of the coverage as much as the phone was. The scarcity and the waiting were doing work that no ad could buy.</p>
+<p>The quiet but important decision was how you turned the phone on. Instead of activating it in the store, the way carrier phones worked, you took the iPhone home, plugged it into your computer, and activated it through iTunes. This broke the carrier-store model on purpose. The store was no longer the place where the carrier signed you up and learned who you were. Apple put activation through its own software, on your own machine, which kept the experience inside Apple's world and kept the carrier at arm's length from the moment of setup. It also strained the activation servers. With everyone activating at once, some buyers waited hours to get a working phone, which was the predictable cost of moving a step that used to happen in thousands of stores into one funnel.</p>
+<p>The early numbers came with caveats. Apple said it sold 270,000 iPhones in the first 30 hours, a figure it reported a few weeks later. That number drew some skepticism at the time, partly because it landed below what some analysts had floated and partly because counting "first 30 hours" is its own choice. Apple then announced it had sold its one millionth iPhone on September 9, which it put at 74 days after launch. Both figures come from Apple, so read them as Apple's framing rather than audited counts, but the shape is not in dispute: fast out of the gate, a million inside two and a half months.</p>
+
+<h2>What carries over</h2>
+<p>Most of what made this launch unusual was not the phone. It was the choices around the phone. Apple picked its channel and bent the carrier to it instead of accepting the carrier's terms, which is the choice of who owns the customer. It put activation through iTunes, which kept that ownership even at the moment of setup. It priced high and let the price say something, then paid in credits and an apology when the cut came too fast. And it spent its first ad building desire rather than explaining anything.</p>
+<p>None of these requires a phone to copy. The questions underneath them are the general ones for any launch. Who controls the relationship with the buyer, you or your distributor. What your price is saying before anyone reads the spec sheet. Whether your earliest customers will feel rewarded or burned by what you do in the months after they buy. The iPhone got most of these right and paid visibly for the one it rushed, which is about as instructive as a launch gets.</p>
+
+<div class="takeaways">
+    <h3>Takeaways</h3>
+    <ul>
+        <li>Choosing your channel is choosing who owns the customer; Apple bent the carrier to its terms rather than accept the carrier's, and Verizon walked away over exactly that.</li>
+        <li>The original deal gave Apple control of device, software, and brand plus a reported revenue share (~$10/subscriber/month), instead of the usual subsidized, carrier-controlled model; the subsidy model returned with iPhone 3G in 2008.</li>
+        <li>A high launch price (499/599 dollars on a two-year contract) can position a product, but cutting it 200 dollars after ten weeks punished early buyers and cost real goodwill.</li>
+        <li>Apple bought that goodwill back with a 100-dollar credit and an open letter; protecting early adopters was worth paying for.</li>
+        <li>The "Hello" ad built desire without listing what the phone did, which only works when the product can carry the wanting the ad creates.</li>
+        <li>Moving activation from the carrier store to at-home iTunes kept Apple's control of setup, and concentrated the load enough to strain the servers on day one.</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARTICLE: A LAUNCH IS A PROCESS, NOT A DAY                     -->
+<!-- ============================================================ -->
+<div id="content-launch-process" data-title="A Launch Is a Process">
+<div class="notepad-body">
+
+<h2>The day is the smallest part</h2>
+<p>When people say a product launched on a certain date, they mean the day the press release went out, the keynote happened, or the store page flipped to "buy now." That day is real, and it matters. But it is the visible tip of something much larger, and treating it as the work is how launches go wrong. The date is when the program gets tested in public. The program is everything that had to be true for that test to pass.</p>
+<p>I find it useful to define launch by what a customer can actually do, not by what a company announces. A product has launched when a customer can find it, buy it, receive it, and use it successfully, all four, in sequence, without a person from the company stepping in to rescue the transaction. If any one of those breaks, you have made an announcement, not a launch. The order matters too. A customer who can find and buy a product but cannot get it working has a worse experience than one who never found it, because now they have paid and they are disappointed.</p>
+<p>So the question that organizes a launch is not "when do we tell people," but "when is every step of that path solid enough to send a stranger down it." Most of this article is about how those two questions diverge, and what to do about the gap.</p>
+
+<h2>Know what you are actually selling</h2>
+<p>Before any of the readiness work, you have to be able to say what the product is and who it is for in a way that survives contact with a real buyer. This sounds obvious and is the step teams most often skip, because the people building the product already know what it does and assume everyone else will too.</p>
+<p>Clayton Christensen's jobs-to-be-done framing is the cleanest way I know to force the question. Christensen argued that customers do not buy products so much as hire them to do a job. His standard example came from a fast-food chain trying to sell more milkshakes. Demographic research and product tweaks did nothing. The insight came from watching when shakes sold: early morning, to solo commuters, who were not really hungry but faced a long, dull drive and wanted something that lasted and could be held in one hand. The job was "keep me occupied and not-hungry on my commute." Once you see that, you stop competing with other milkshakes and start competing with bananas, bagels, and boredom. The product you would build is completely different.</p>
+<p>The launch consequence is direct. If you do not know the job, you will describe your product by what it does feature by feature, and a list like that is not a reason to buy. The buyer has to translate that list into "will this do my job," and most buyers will not do that translation for you. They will leave.</p>
+
+<h2>Positioning is the work most teams underrate</h2>
+<p>April Dunford makes the case in <em>Obviously Awesome</em> that positioning is context-setting: you are telling the buyer what kind of thing your product is, so they bring the right expectations and the right comparisons. Get the context wrong and even a good product reads as confusing or overpriced. Dunford breaks positioning into a few connected pieces: the competitive alternatives a customer would use if you did not exist, the unique capabilities you have that those alternatives lack, the value those capabilities enable, the customers who care most about that value, and the market category that frames all of it.</p>
+<p>What makes this a launch problem and not just a marketing problem is that positioning decides the comparison set. If you launch a project-management tool and let people file it next to the market leader, you are judged against that leader's full capability list on day one. If you position it as the tool for a specific kind of team doing a specific kind of work, you are judged against whatever that team uses now, often a spreadsheet and a group chat, and you look great. Same product, different verdict, because the context was set differently before anyone clicked.</p>
+<p>Dunford's practical point is that positioning is deliberate. The default, which is to position against whatever the most obvious competitor is, is rarely the position that makes you look best. You choose it, and you choose it before you write a word of launch copy.</p>
+
+<h2>The launch is where every function gets tested at once</h2>
+<p>A launch is the one moment when product, engineering or manufacturing, marketing, sales, support, and legal all have to be ready on the same day. Each of these functions can be "almost done" on its own schedule. The launch is what converts six separate "almost done" states into a single pass-or-fail.</p>
+<p>The failure mode is that each function reports green against its own definition and no one checks the seams. Engineering ships the capability. Marketing has the campaign. Support has not been told the capability exists, so the first wave of confused customers hits a team that cannot answer them. Or legal has not cleared a claim the campaign is built around, and the campaign has to be pulled the morning of. None of these is a hard problem in isolation. They become a problem because launch is the only date that forces all of them to be true together, and most planning happens inside functions rather than across them.</p>
+<p>The fix is unglamorous: one launch owner who does not own any of the individual functions, whose only job is the path from find to use working end to end, and a readiness review where each function reports against the same definition of done. The owner's real value is asking the seam questions. Does support have the answer to the question marketing's headline will generate. Can the buy button actually charge a card in the regions the press release will reach.</p>
+
+<h2>Announce and ship are two different dates</h2>
+<p>You do not have to announce and ship on the same day, and often you should not. The first iPhone is the clearest example. Apple revealed it on January 9, 2007, and did not sell one until June 29, almost six months later. Part of the reason was practical: Apple had to file with the FCC, and Steve Jobs did not want the product's existence leaking out of a regulatory filing before he could reveal it on his own terms. The announce-early choice traded months of buildable hype against the risk of telling competitors what was coming and the risk of customers holding off on buying current products.</p>
+<p>That trade-off generalizes. Announcing before you ship buys you demand, press, and time to seed reviewers, at the cost of tipping your hand and starting a clock you now have to beat. Announcing at ship, the more common pattern, keeps things tight but forfeits the runway. There is no universal right answer, but there is a wrong one: announcing on a date you then cannot ship by, which converts your hype into impatience and your early fans into people writing "where is it" under every post.</p>
+<p>Related is the choice between a soft launch and a big-bang launch. A soft launch, limited regions, a waitlist, a percentage rollout, lets you test the find-buy-receive-use path with real customers while the blast radius is small. You give up the concentrated attention of a single big moment, but you get to find the broken step before it breaks at scale. For anything where you are unsure the path holds, soft launch first and save the big moment for when you know it works.</p>
+
+<h2>A date is a forcing function and a risk</h2>
+<p>A committed launch date is one of the most useful tools a team has. It organizes the whole program, it forces decisions that would otherwise drift, and it gives every function a shared deadline to plan against. Take the date away and work expands to fill all available time. This is the honest case for picking a date early and defending it.</p>
+<p>The same date becomes a risk the moment it has no slack. A plan where every milestone has to land exactly on time for the launch to hold is a plan that assumes nothing goes wrong, and something always goes wrong. The way through is milestone gating: the launch date depends on earlier gates, like "feature complete," "support trained," "legal cleared," each with its own date and each able to slip a little without the launch slipping. When a gate misses, you learn it weeks out, while you still have moves, rather than the night before. A date with gates and slack is a forcing function. A date with neither is a countdown to an incident.</p>
+
+<h2>Decide what success means before you find out</h2>
+<p>Define the metric that matters before launch, because afterward you will be tempted to pick whichever number went up. The trap is vanity metrics: page views, sign-ups, press mentions, downloads. These feel like success and mostly measure attention, which fades. The metric you want measures whether the product is doing its job. For software that usually means activation, the share of sign-ups who reach the point of getting real value, and then retention, whether they come back. For physical goods it often means sell-through, the share of units that actually sell rather than ship to a shelf, and the return rate. Pick the one or two numbers that would still matter in three months, write them down, and write down the threshold that would count as the launch working. Doing this before launch is the only way to keep the post-launch story honest, because the temptation to declare victory off a traffic spike is strong and the spike tells you almost nothing.</p>
+
+<h2>What usually goes wrong</h2>
+<p>Three patterns account for most launch failures I have seen, and none of them is bad luck. Scope creep is the first: the launch keeps absorbing "just one more" thing, the date holds, and quality and readiness get squeezed to make room. The second is marketing writing checks operations cannot cash, a promise of same-day shipping the warehouse cannot meet, a capability the demo implied that the product does not have, so the gap between expectation and reality lands as a flood of disappointment right when attention peaks. The third, underneath both, is no clear owner of the end-to-end path, so every function optimizes its own piece and the seams between them belong to no one.</p>
+<p>A launch is a process, and the day is where you find out whether the process was sound. Plan the path, not the announcement. Pick a date, then give it gates and slack. Decide what winning means before you can be tempted to redefine it. Do that and the day mostly takes care of itself, which is the goal: a launch day that feels uneventful because all the work that mattered already happened.</p>
+
+<div class="takeaways">
+    <h3>Takeaways</h3>
+    <ul>
+        <li>A product has launched only when a customer can find, buy, receive, and use it without rescue, all four, in order.</li>
+        <li>Know the job your product is hired to do before you describe it, and set the buyer's comparison set deliberately with positioning.</li>
+        <li>Launch is the one date that tests product, engineering, marketing, sales, support, and legal at the same time, so own the seams between them.</li>
+        <li>Announce and ship are separate decisions; soft-launch when you are unsure the path holds, and save the big moment for when you know it works.</li>
+        <li>A committed date organizes the program, but only with milestone gates and slack; without them it is a countdown to an incident.</li>
+        <li>Pick the metric that still matters in three months (activation, retention, sell-through) before launch, so a traffic spike cannot pass for success.</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARTICLE: HAVING SOMETHING TO SELL                             -->
+<!-- ============================================================ -->
+<div id="content-launch-operations" data-title="Having Something to Sell">
+<div class="notepad-body">
+
+<h2>The part marketing forgets</h2>
+<p>A launch is the day you tell the world the product exists and ask people to buy it. The day before, someone has to make sure there is a product to hand over, that it works when the buyer turns it on, and that it can actually reach them. That second job is operations, and it is the one most likely to be treated as a detail right up until it becomes the reason the whole thing slips.</p>
+<p>Marketing runs on dates. A campaign has a calendar, a set of beats, a moment everything points toward. Operations runs on lead times and physical limits, and those do not move because a date was promised in a meeting. When the two disagree, the launch breaks along the operations line almost every time, because you can rewrite a press release the night before and you cannot conjure ten thousand finished units the night before. A launch fails if there is nothing to ship or what ships is broken. Everything else is downstream of that.</p>
+
+<h2>Sourcing is mostly waiting</h2>
+<p>Whatever you are building, some of it comes from outside your walls, and the parts that come from outside arrive on their own schedule. In supply chain terms, lead time is the total elapsed time from placing an order to having the thing in hand, including the supplier's order processing, their production, and transport. For a stock screw it is days. For a custom display, a specialized sensor, or a chip built on a constrained process, it can run months, and it is common for the longest single lead time in a program to exceed the entire marketing runway. The campaign you can plan in eight weeks may depend on a part that takes twenty to arrive.</p>
+<p>That math is why the long-lead component, not the launch date, sets the real start of the program. If your slowest part takes five months, ordering it the day you finalize the design already puts shipping five months out, and no effort downstream buys that time back. The first job of sourcing is finding which part is slowest before it finds you.</p>
+<p>The second job is asking how many suppliers can make each part. A single-source component, one that only one qualified vendor produces, gives you tight integration and often the best version of the part. It also means a fire, a flood, a labor dispute, or a quality hold at that one supplier stops your line cold. Teams reduce that exposure by second-sourcing, qualifying a second vendor for the same part. Qualification is not a phone call. It means confirming the second source meets the same electrical, mechanical, and environmental specs, running their parts through your tests, and often re-validating the assembly that uses them. It is slow and it costs money, which is exactly why people skip it and then regret it when the single source fails.</p>
+
+<h2>Why late changes cost so much</h2>
+<p>A change to the design is cheap when the design is still on a screen. It gets more expensive at every step after that, and the curve is steep. Once you have cut tooling, the molds and fixtures and test rigs built specifically for one version of the part, changing the part can mean cutting new tooling, and tooling has long lead times of its own. Once you have qualified suppliers and validated the assembly, a change can force re-qualification and re-validation of everything the change touches.</p>
+<p>The original iPhone is the clean example. Weeks before the June 2007 launch, Steve Jobs decided the screen had to be glass instead of plastic, and Apple pushed Corning to industrialize a strengthened glass it had developed decades earlier and shelved. It worked, and it gets told as a triumph, but the honest reading is that it worked because Apple could put serious money and its own engineers behind a supplier who already had the technology, with just barely enough calendar left. For most teams the lesson runs the other way. Decide the things that touch your suppliers and your tooling early, because a change that costs a meeting in design costs a quarter in late ramp.</p>
+
+<h2>The ramp has phases for a reason</h2>
+<p>Hardware teams move a product to volume through a sequence of gates, and the vocabulary is worth knowing because the gates exist to stop you from shipping a problem you have not found yet. The common sequence is EVT, DVT, PVT, then MP. EVT, engineering validation test, is where the first real prototypes confirm the thing works at all and meets the spec it was designed to. DVT, design validation test, widens the question from individual parts to the whole product, checking that the design as a system hits its functional and performance targets and can be built. PVT, production validation test, builds units on the actual production line with production tooling and process, to prove that the line, not just the engineers, can make a good unit at rate. Only then does the program move to MP, mass production, where multiple lines run in parallel and output climbs to full volume.</p>
+<p>The reason you cannot safely compress these phases is that each one tests a different failure mode, and skipping a phase means shipping with that failure mode untested. EVT finds design bugs. DVT finds system interactions. PVT finds the problems that only appear when a real line with real operators and real tooling tries to make the part repeatedly. Yield, the fraction of units that pass, starts low on a new line and climbs as you find and fix process problems by building, failing, and learning. Compressing the phases does not make the line faster. It moves the discovery of the problems from your factory to your customers.</p>
+<p>Software has its own version of this. The analog to a careful ramp is staged rollout, releasing to a small fraction of users first and widening as the metrics hold, backed by load testing against expected traffic and capacity provisioning so the servers do not fall over on launch day. A digital launch can fail the same way a hardware launch fails, by going to everyone at once before anyone confirmed the system survives everyone at once.</p>
+
+<h2>How many to build is a bet</h2>
+<p>You need enough units in the channel to sell on launch day, with stock in stores and distribution centers before the first customer shows up. That is channel fill, and getting it wrong is costly in both directions. Build too few and you sell out, lose the launch-day momentum, and hand the moment to a competitor or to resellers marking up scarce stock. Build too many of a product that flops and you are left with inventory you have to discount or write down, having spent cash on parts and assembly for units nobody wanted.</p>
+<p>The hard part is that a new product has no sales history to forecast from. You are estimating demand for something the market has never seen, under deep uncertainty, and the usual statistical tools that lean on past demand have nothing to lean on. Teams fall back on analogs to similar products, pre-orders, channel commitments, and judgment, and they stay honest about the error bars. The reasonable move is usually to stage the build so you can ramp output as real demand data arrives, rather than committing the whole bet to a number guessed before launch.</p>
+
+<h2>The field is a harder test than the lab</h2>
+<p>First-pass yield, the percentage of units that pass inspection with no rework or repair, is the headline quality number on a line, and a low first-pass yield early in a ramp is normal. But passing in the factory is not the same as surviving in the field. The lab tests what you thought to test, for as long as you had patience to run it. The field tests everything, in conditions you did not imagine, for far longer, across far more units.</p>
+<p>That gap is where the expensive failures live. A part can pass every bench test and then fail after months of thermal cycling in a hot car, or after a kind of drop the test plan did not cover, or only on the small fraction of units that sit at the edge of a tolerance the lab sample happened to miss. These are the failures that pass the lab and surface as field returns once the population is large and the clock has run. You cannot fully close the gap before launch, but you narrow it with margin, with accelerated life testing, and with the honesty to treat the lab result as suggestive rather than final.</p>
+
+<h2>Can the customer actually start using it</h2>
+<p>Having a working unit in a warehouse is not the same as a customer using the product. Between those two states sits logistics and everything that has to work for the buyer. Distribution has to put units where people can get them. Activation, the steps to set the product up and get it running, has to work on the buyer's first try, because a product that ships fine and then fails to activate is, to the customer, broken. Returns will happen, and the path to handle them has to exist on day one rather than be improvised under load. Support has to be staffed and trained before the questions arrive, not after.</p>
+<p>These are easy to defer because they sit at the end of the line and feel like they can be sorted out later. They cannot, because launch day is exactly when all of them get hit at once, at the highest volume the product will ever see relative to how ready the support organization is.</p>
+
+<h2>Operations gates the date</h2>
+<p>The single point that ties all of this together is about who holds the launch date. A date set by marketing without operations buy-in is a wish. The parts arrive when they arrive, the line yields what it yields, and the field finds what it finds, none of which care about the campaign calendar. The only safe launch date is one that operations has signed off on, derived from the longest lead time, the ramp the phases actually allow, and the inventory the build plan can deliver.</p>
+<p>This is unglamorous, and it is the constraint. You can move a launch date before you announce it. You cannot move it after, and you cannot ship what you did not build. Let operations readiness set the date, and let marketing point its calendar at that date rather than the other way around.</p>
+
+<div class="takeaways">
+    <h3>Takeaways</h3>
+    <ul>
+        <li>A launch fails if there is nothing to ship or it ships broken; operations is the real constraint, not marketing.</li>
+        <li>The longest-lead component sets the program start date, and it can exceed the entire marketing runway.</li>
+        <li>Single-source parts let one supplier stop your line; second-sourcing costs slow qualification but buys resilience.</li>
+        <li>EVT, DVT, PVT, MP each test a different failure mode; compressing phases just moves discovery from your factory to your customers.</li>
+        <li>Build quantity is a bet under deep uncertainty: too few loses the launch, too many is a write-down. Stage the build.</li>
+        <li>The field tests longer and noisier than the lab, and activation, returns, and support all get hit at once on day one.</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARTICLE: GETTING IT INTO HANDS                                -->
+<!-- ============================================================ -->
+<div id="content-launch-gtm" data-title="Getting It Into Hands">
+<div class="notepad-body">
+
+<h2>The day after the line forms</h2>
+<p>A launch is the moment a product stops being yours and starts being something a stranger can buy, use, and judge. Everything before it is internal. The schematic, the roadmap, the demo that wowed the board, none of it counts until someone outside the building hands over money and gets value back. Getting a product into hands is its own discipline, separate from building it, and teams that are good at one are often bad at the other.</p>
+<p>This is about that discipline: how you price, where you sell, how you create the demand, what you actually say to the buyer, who closes the deal, and how you know afterward whether any of it worked. I will lean on the original iPhone because it is well documented and because Apple got some of this exactly right and one piece of it visibly wrong, which is more instructive than a clean win.</p>
+
+<h2>Price is a sentence about where you sit</h2>
+<p>Most teams treat pricing as arithmetic. Add up the cost, mark it up, ship it. That is cost-plus pricing, and its main virtue is that it is easy. Its flaw is that it ignores the buyer entirely. You can be profitable on every unit and still leave money on the table, or price yourself into a market you did not intend to enter. Cost-plus answers the question "what do I need to charge" and never asks "what is this worth to the person buying it."</p>
+<p>The two alternatives both start from outside the building. Competitive pricing sets your number against what rivals already charge, which is a shortcut, because the market has validated the range and buyers will not flinch. The cost is that it signals parity. You are telling the buyer you are one more option in a known category. Value-based pricing starts from what the product is worth to the customer for the job it does, and it is the only one of the three that lets you charge a premium on purpose. It also demands that you actually understand the buyer, which is harder than reading a competitor's price sheet.</p>
+<p>The part teams miss is that the number is read as a claim. A high price says "this is the good one." A low price says "this is the affordable one," and you cannot easily say both. Pricing is the most compressed piece of positioning you have, a single figure the buyer decodes before they have read a word of your marketing. Pick it to match where you want to sit, not just to clear your costs.</p>
+
+<h2>The cost of taking it back</h2>
+<p>Once you set a launch price, cutting it fast is dangerous, and the first iPhone is the textbook case. It shipped on June 29, 2007 at 599 dollars for the 8-gigabyte model. On September 5, barely two months later, Apple dropped that to 399 dollars, a 200-dollar cut. Early buyers were furious. They had paid a premium to be first and watched the premium evaporate before the phone was a season old.</p>
+<p>Steve Jobs posted an open letter within days. He apologized, gave every full-price iPhone buyer a 100-dollar Apple store credit, and defended the move in the same breath, writing that "there is always change and improvement, and there is always someone who bought a product before a particular cutoff date." That credit cost Apple real money and bought back some goodwill, but the cleaner lesson is that the situation should not have existed. A price cut this soon after launch tells your most loyal customers, the ones who paid first, that their loyalty was a mistake. The goodwill you spend repairing it is worth more than the demand the cut creates. If you think you will need to cut, you probably launched too high, and it is cheaper to start lower than to retreat.</p>
+
+<h2>Reach versus the relationship</h2>
+<p>Where you sell shapes what you can control. Selling direct, your own store or site, gives you the customer relationship, the data, the margin, and the message, at the cost of reach and the work of building distribution yourself. Selling through retail or partners buys reach fast and hands away some of the relationship: the partner owns the shelf, often the data, and a slice of the margin, and they can bury you next to a competitor.</p>
+<p>Apple's 2007 carrier deal is a sharp example of refusing the usual trade. Carriers at the time dictated the phones on their networks, loaded them with their own software, and put their brand on the hardware. Jobs would not accept that. He went to Verizon first and the asks were too steep, so Verizon walked. AT&T took the deal: a multi-year exclusive in exchange for letting Apple keep control of the device, the software, and the brand, with Apple even selling music and apps to iPhone users without sharing that revenue. Apple used a partner for reach onto a cellular network it could never build, and still kept the things that made the product Apple's. That is the move worth copying. Decide which parts of the relationship are load-bearing for you and refuse to trade those, even when a partner offers reach for them.</p>
+
+<h2>Demand is built before the product ships</h2>
+<p>The iPhone was announced in January 2007 and shipped at the end of June. That announce-then-ship gap was deliberate. It let anticipation build, gave the press six months of material, and turned launch day into an event with lines outside stores. The lines are theater, and theater is not worthless. It manufactures scarcity, gives the press an image, and signals to everyone still deciding that other people already decided. What it does not do is create durable demand on its own. A line is a spike. The business is what happens in the months after the cameras leave.</p>
+<p>The split that matters here is earned versus paid. Earned media is the coverage and word of mouth you do not buy, and it carries credibility paid media cannot. Paid media is the advertising you control and can turn up at will. Launch-day press is mostly earned, which is why it is so valuable and so hard to repeat: it is a one-time event, and once the spike fades, paid media is what keeps users arriving. The mistake is treating the announcement as the finish. The announcement is the easy part. Sustaining demand after the novelty wears off is the actual job, and it runs on a clear message far more than on a long list of capabilities. Nobody outside your company has memorized what your product can do.</p>
+
+<h2>Sell the job, not the spec sheet</h2>
+<p>The clearest way to think about that message comes from Clayton Christensen's jobs-to-be-done idea: customers do not buy products, they hire them to do a job. His example was a fast-food chain trying to sell more milkshakes. Research on the milkshake itself, sweeter, thicker, more flavors, did nothing. When the team watched who actually bought them, they found morning commuters hiring the milkshake to make a long, boring drive bearable, something thick enough to last and easy to hold one-handed. The job was the commute, not the dessert. Once you see the job, the product and the pitch both change.</p>
+<p>April Dunford makes the same point for the business buyer in her book "Obviously Awesome." Positioning, in her framing, is choosing the market context where your product's strengths are the obvious answer, and most products are positioned badly not because they are weak but because they are described against the wrong alternative. A spec sheet describes the product. Positioning describes the situation the buyer is in and why this is the thing that resolves it. Lead with the job and the situation, and the specs become supporting evidence rather than the argument.</p>
+
+<h2>Somebody still has to close</h2>
+<p>Awareness is not a sale, and the gap between them is where launches quietly fail. For a consumer product the closing motion is often the product itself: the buyer sees the ad, walks into the store or to the checkout page, and the experience does the selling. The funnel is short, so the work is removing friction, making the path from "I want this" to "I own this" as direct as possible.</p>
+<p>For a B2B product the funnel is long and a human closes it. That salesperson needs material the marketing never had to produce: the answer to the procurement question, the security review, the comparison against the specific competitor the buyer already uses, the case for why now rather than next year. This is sales enablement, and it is unglamorous and decisive. A launch that generates demand the sales team cannot convert is a launch that produced expensive noise. The funnel from awareness to a buyer who is using the product has to be aligned end to end, and the handoffs between marketing and sales are where it usually breaks.</p>
+
+<h2>Count the right things</h2>
+<p>The numbers a launch generates are not all worth the same. Press impressions, page views, and pre-orders are easy to celebrate and easy to mistake for success. The numbers that tell you whether you have a business are sell-through (units that actually reached end customers, not units shipped to a channel), activation (buyers who set the thing up and used it), and retention (buyers still using it weeks later). A launch spike with no activation behind it is a product people bought once and abandoned, and you will see it eventually in returns and silence.</p>
+<p>The failure that recurs across launches has two shapes, and they are mirror images. In one, marketing writes a check operations cannot cash: demand arrives and there is no supply, no support, no working signup, and the goodwill burns off in a week. In the other, the product is genuinely good and nobody can find it or understand what it is for. A good launch is the narrow case where the product is ready, the price says the right thing, the buyer can find it, the message names the job, and somebody is there to close and to count what happened honestly. Getting it built is half the work. Getting it into hands is the other half, and it is the half more teams underestimate.</p>
+
+<div class="takeaways">
+    <h3>Takeaways</h3>
+    <ul>
+        <li>Price is positioning compressed into one number; cost-plus ignores the buyer, value-based pricing lets you charge a premium on purpose.</li>
+        <li>Cutting price right after launch punishes your earliest, most loyal buyers; if you expect to cut, you launched too high.</li>
+        <li>Use partners for reach you cannot build yourself, but refuse to trade away the parts of the customer relationship that are load-bearing.</li>
+        <li>Launch-day lines and press are a spike of earned media; durable demand comes from a clear message and paid channels after the novelty fades.</li>
+        <li>Sell the job the customer is hiring the product for (Christensen, Dunford), not the spec sheet.</li>
+        <li>Measure sell-through, activation, and retention, not impressions and pre-orders; a spike is not a business.</li>
     </ul>
 </div>
 </div>
