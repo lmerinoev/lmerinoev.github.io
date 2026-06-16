@@ -45,7 +45,16 @@ const ICON = {
     // Finder two-tone smiling face on Aqua tile
     finder: `<svg viewBox="0 0 48 48"><defs><linearGradient id="fnTile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3ff"/><stop offset="0.5" stop-color="#2f86e0"/><stop offset="0.5" stop-color="#1f6fcf"/><stop offset="1" stop-color="#7cc0ff"/></linearGradient><linearGradient id="fnGloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs><rect x="6.5" y="6.5" width="35" height="35" rx="9.5" fill="url(#fnTile)" stroke="#15568f" stroke-width="0.8"/><path d="M11 9.5h26c2 0 3.5 1.5 3.5 3.5v6c-6 2.4-27 2.4-33 0v-6C7.5 11 9 9.5 11 9.5z" fill="url(#fnGloss)"/><path d="M24 11c-2.8 2.6-2.8 23.4 0 26-5.5.4-12-2-12-13s6.5-13.4 12-13z" fill="#eef6ff"/><path d="M24 11c2.8 2.6 2.8 23.4 0 26 5.5.4 12-2 12-13s-6.5-13.4-12-13z" fill="#1f4f86"/><ellipse cx="18.5" cy="20" rx="1.5" ry="2.3" fill="#1f4f86"/><ellipse cx="29.5" cy="20" rx="1.5" ry="2.3" fill="#eef6ff"/><path d="M17 30c4 3 10 3 14 0" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-linecap="round"/></svg>`,
 
-    home: `<svg viewBox="0 0 48 48"><defs><linearGradient id="hmRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9efff"/><stop offset="1" stop-color="#6fb1ec"/></linearGradient></defs><path d="M24 8 6 23.5h5.5V39h25V23.5H42z" fill="url(#hmRoof)" stroke="#3f86c9" stroke-width="0.8"/><rect x="20" y="28" width="8" height="11" rx="1" fill="#3f86c9"/><rect x="14" y="26" width="6" height="6" rx="0.8" fill="#bfe0fb" stroke="#3f86c9" stroke-width="0.6"/></svg>`
+    home: `<svg viewBox="0 0 48 48"><defs><linearGradient id="hmRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9efff"/><stop offset="1" stop-color="#6fb1ec"/></linearGradient></defs><path d="M24 8 6 23.5h5.5V39h25V23.5H42z" fill="url(#hmRoof)" stroke="#3f86c9" stroke-width="0.8"/><rect x="20" y="28" width="8" height="11" rx="1" fill="#3f86c9"/><rect x="14" y="26" width="6" height="6" rx="0.8" fill="#bfe0fb" stroke="#3f86c9" stroke-width="0.6"/></svg>`,
+
+    // Painter's palette with color dabs + a brush (Sketch.app)
+    sketch: `<svg viewBox="0 0 48 48"><defs><radialGradient id="skP" cx="0.4" cy="0.35" r="0.85"><stop offset="0" stop-color="#fffefb"/><stop offset="1" stop-color="#e7e2d4"/></radialGradient><linearGradient id="skH" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#bd812f"/><stop offset="1" stop-color="#f0c477"/></linearGradient></defs><path d="M21 6C11.8 6 4.5 12.3 4.5 20c0 4.1 3.3 6.1 6.8 6.1 2.1 0 2.9-1.3 5-1.3 1.9 0 2.8 1.5 2.8 3.3 0 3.5 3.1 5.2 6.2 5.2C35.7 33.3 43.5 27.4 43.5 19.4 43.5 11.4 32.3 6 21 6z" fill="url(#skP)" stroke="#b1ab98" stroke-width="0.8"/><circle cx="12.5" cy="18" r="2.3" fill="#e8463a"/><circle cx="17.5" cy="12.5" r="2.3" fill="#f5a623"/><circle cx="24.5" cy="11.5" r="2.3" fill="#27ae60"/><circle cx="31.5" cy="14" r="2.3" fill="#2f86e0"/><circle cx="35.5" cy="20.5" r="2.3" fill="#8e44ad"/><ellipse cx="19" cy="27" rx="3.8" ry="3" fill="#c9c2af"/><g transform="rotate(45 35 35)"><rect x="32.8" y="19" width="4.4" height="21" rx="1.6" fill="url(#skH)" stroke="#8f6326" stroke-width="0.5"/><rect x="32.4" y="17.4" width="5.2" height="3" rx="1" fill="#d2d2d2" stroke="#9a9a9a" stroke-width="0.4"/><path d="M32.8 40h4.4l-2.2 5z" fill="#3a3a3a"/></g></svg>`,
+
+    // Friendly robot head with antenna (Ask Luis agent)
+    agent: `<svg viewBox="0 0 48 48"><defs><linearGradient id="agB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3ff"/><stop offset="0.5" stop-color="#3f8fe0"/><stop offset="0.5" stop-color="#236fcf"/><stop offset="1" stop-color="#7cc0ff"/></linearGradient></defs><line x1="24" y1="5.5" x2="24" y2="11" stroke="#9aa4b0" stroke-width="2"/><circle cx="24" cy="5" r="2.4" fill="#e8463a"/><rect x="9" y="11" width="30" height="24" rx="7.5" fill="url(#agB)" stroke="#15568f" stroke-width="0.8"/><rect x="12" y="13.5" width="24" height="7.5" rx="3.8" fill="#ffffff" opacity="0.25"/><circle cx="18" cy="23" r="3.4" fill="#fff"/><circle cx="30" cy="23" r="3.4" fill="#fff"/><circle cx="18.6" cy="23.6" r="1.5" fill="#1f4f86"/><circle cx="30.6" cy="23.6" r="1.5" fill="#1f4f86"/><path d="M18 29c3 2.3 9 2.3 12 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><rect x="14" y="35" width="20" height="6" rx="2.5" fill="#9aa4b0"/><rect x="6" y="20" width="3.5" height="7" rx="1.5" fill="#9aa4b0"/><rect x="38.5" y="20" width="3.5" height="7" rx="1.5" fill="#9aa4b0"/></svg>`,
+
+    // Terminal: dark tile with green prompt >_
+    terminal: `<svg viewBox="0 0 48 48"><defs><linearGradient id="tmB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b4049"/><stop offset="1" stop-color="#15181d"/></linearGradient></defs><rect x="6" y="8" width="36" height="32" rx="6.5" fill="url(#tmB)" stroke="#0a0c0f" stroke-width="0.8"/><rect x="6.5" y="8.5" width="35" height="10" rx="6" fill="#ffffff" opacity="0.06"/><path d="M12 19.5l7 6-7 6" fill="none" stroke="#4fd14f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="22" y1="31.5" x2="33" y2="31.5" stroke="#e8e8e8" stroke-width="2.6" stroke-linecap="round"/></svg>`
 };
 
 /* small sidebar icons */
@@ -59,6 +68,11 @@ const SBI = {
 
 /* add the sizing class to a raw icon SVG string */
 function glyph(svg) { return svg.replace('<svg', '<svg class="icon-glyph"'); }
+
+/* escape user text before inserting as HTML */
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 /* --------------------------------------------------------------------------
    Window Manager
@@ -455,6 +469,225 @@ function openLibrary() {
 }
 
 /* --------------------------------------------------------------------------
+   Sketch — a little MacPaint-style drawing app
+   -------------------------------------------------------------------------- */
+function openSketch() {
+    if (WM.wins['sketch']) { WM.unminimize('sketch'); WM.focus('sketch'); return; }
+    const wrap = document.createElement('div');
+    wrap.className = 'sketch';
+    const palette = ['#000000', '#7f7f7f', '#ffffff', '#c0392b', '#e8b931', '#f39c12', '#27ae60', '#2f86e0', '#8e44ad', '#8b5a2b'];
+    wrap.innerHTML = `
+        <div class="sketch-toolbar">
+            <div class="sketch-swatches">${palette.map((c, i) => `<button class="sw${i === 0 ? ' active' : ''}" style="background:${c}" data-color="${c}"></button>`).join('')}</div>
+            <span class="sketch-sep"></span>
+            <div class="sketch-sizes">
+                <button data-size="2">·</button>
+                <button data-size="6" class="active">•</button>
+                <button data-size="14">●</button>
+            </div>
+            <span class="sketch-sep"></span>
+            <button class="sketch-btn" data-tool="eraser">Eraser</button>
+            <button class="sketch-btn" data-act="clear">Clear</button>
+            <button class="sketch-btn" data-act="save">Save PNG</button>
+        </div>
+        <div class="sketch-canvas-wrap"><canvas class="sketch-canvas" width="760" height="460"></canvas></div>`;
+
+    const canvas = wrap.querySelector('.sketch-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    let color = '#000000', size = 6, erasing = false, drawing = false, lx = 0, ly = 0;
+
+    function pos(e) {
+        const r = canvas.getBoundingClientRect();
+        const cx = e.touches ? e.touches[0].clientX : e.clientX;
+        const cy = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: (cx - r.left) * (canvas.width / r.width), y: (cy - r.top) * (canvas.height / r.height) };
+    }
+    function start(e) { drawing = true; const p = pos(e); lx = p.x; ly = p.y; dot(p); }
+    function dot(p) { ctx.fillStyle = erasing ? '#fff' : color; ctx.beginPath(); ctx.arc(p.x, p.y, (erasing ? size * 2.4 : size) / 2, 0, 7); ctx.fill(); }
+    function move(e) {
+        if (!drawing) return;
+        if (e.cancelable) e.preventDefault();
+        const p = pos(e);
+        ctx.strokeStyle = erasing ? '#fff' : color;
+        ctx.lineWidth = erasing ? size * 2.4 : size;
+        ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y); ctx.stroke();
+        lx = p.x; ly = p.y;
+    }
+    function end() { drawing = false; }
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, { passive: false });
+    canvas.addEventListener('touchmove', move, { passive: false });
+    canvas.addEventListener('touchend', end);
+
+    const swWrap = wrap.querySelector('.sketch-swatches');
+    swWrap.addEventListener('click', e => {
+        const b = e.target.closest('.sw'); if (!b) return;
+        color = b.dataset.color; erasing = false;
+        swWrap.querySelectorAll('.sw').forEach(s => s.classList.remove('active'));
+        b.classList.add('active');
+        wrap.querySelector('[data-tool="eraser"]').classList.remove('active');
+    });
+    wrap.querySelector('.sketch-sizes').addEventListener('click', e => {
+        const b = e.target.closest('button'); if (!b) return;
+        size = parseInt(b.dataset.size, 10);
+        wrap.querySelectorAll('.sketch-sizes button').forEach(s => s.classList.remove('active'));
+        b.classList.add('active');
+    });
+    wrap.querySelector('[data-tool="eraser"]').addEventListener('click', function () {
+        erasing = !erasing; this.classList.toggle('active', erasing);
+    });
+    wrap.querySelector('[data-act="clear"]').addEventListener('click', () => {
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+    wrap.querySelector('[data-act="save"]').addEventListener('click', () => {
+        const a = document.createElement('a');
+        a.download = 'sketch.png'; a.href = canvas.toDataURL('image/png'); a.click();
+    });
+
+    WM.open('sketch', 'Sketch', wrap, { metal: true, width: 620, height: 560, titleIcon: ICON.sketch, dockKey: 'sketch', dockIcon: ICON.sketch });
+    if (WM.wins['sketch']) WM.wins['sketch'].menuApp = 'Sketch';
+}
+
+/* --------------------------------------------------------------------------
+   Agent — "Ask Luis": a rule-based desktop guide that can also navigate
+   -------------------------------------------------------------------------- */
+function openAgent() {
+    if (WM.wins['agent']) { WM.unminimize('agent'); WM.focus('agent'); return; }
+    const wrap = document.createElement('div');
+    wrap.className = 'agent';
+    wrap.innerHTML = `
+        <div class="agent-log"></div>
+        <form class="agent-input"><input type="text" placeholder="Ask about research, writing, labs…" autocomplete="off"><button type="submit">Send</button></form>`;
+    const log = wrap.querySelector('.agent-log');
+    const input = wrap.querySelector('input');
+
+    function add(role, html) {
+        const m = document.createElement('div');
+        m.className = 'agent-msg ' + role;
+        m.innerHTML = `<span class="agent-bubble">${html}</span>`;
+        log.appendChild(m); log.scrollTop = log.scrollHeight;
+        return m;
+    }
+
+    const rules = [
+        { t: /\b(help|what can you|commands?)\b/i, r: 'I can tell you about Luis and open things for you. Try: <em>"show me your research"</em>, <em>"what do you write about?"</em>, <em>"open labs"</em>, <em>"projects"</em>, <em>"who are you?"</em>, or <em>"open the library"</em>.' },
+        { t: /\b(hi|hey|hello|yo|sup|howdy)\b/i, r: 'Hey! I’m Luis’s desktop agent. Ask me about his research, writing, labs, or projects — or tell me to open one and I’ll take you there.' },
+        { t: /(research|paper|robot|\btrust\b|hri|conformity|decision)/i, r: 'Luis researches human–AI interaction — trust formation, decision-making with humanoid robots, and conformity with robot peers. Opening the Research folder for you.', a: () => Finder.open('research') },
+        { t: /(writ|blog|essay|article|sleeper|resonant|safety|alignment)/i, r: 'His writing digs into AI safety and personal computing — like <em>Sleeper Agents</em> and <em>Resonant Computing</em>. Opening Writing.', a: () => Finder.open('writing') },
+        { t: /(lab|demo|vision|emotion|pose|object|drum|jarvis|generative|\bar\b|experiment)/i, r: 'The Labs are in-browser experiments — computer vision, audio, and AR. Opening Labs.', a: () => Finder.open('labs') },
+        { t: /(project|coffee|photo|design|color|crayon|portfolio)/i, r: 'Personal projects: coffee photography, photography, creative design, and color studies. Opening Projects.', a: () => Finder.open('projects') },
+        { t: /(about|who are|who is|yourself|\bluis\b|background|bio)/i, r: 'Luis is a human–AI interaction researcher — trust, collaboration, and decision-making between people and machines. Here’s his About card.', a: () => openDoc('about') },
+        { t: /(library|windows|win95|95|classic)/i, r: 'There’s a fully working Windows 95 machine on this site. Booting the Library now — enjoy the nostalgia.', a: () => openLibrary() },
+        { t: /(sketch|draw|paint)/i, r: 'Feeling creative? Opening Sketch so you can draw something.', a: () => openSketch() },
+        { t: /(terminal|shell|command line|bash)/i, r: 'Opening Terminal — type <em>help</em> in there to see what it can do.', a: () => openTerminal() },
+        { t: /(contact|reach|email|hire|collaborat|twitter|\bx\b)/i, r: 'The best way to reach Luis is on X / Twitter, <strong>@HipsterCow</strong>. He’s always up for thoughtful collaborations.' },
+        { t: /(thank|thanks|cheers|ty)\b/i, r: 'Anytime. 👋' }
+    ];
+    function reply(q) {
+        for (const rule of rules) if (rule.t.test(q)) return rule;
+        return { r: 'I’m a small rule-based guide, so I keep things simple. Ask about <em>research</em>, <em>writing</em>, <em>labs</em>, or <em>projects</em> — or type <em>help</em>.' };
+    }
+
+    add('bot', 'Hi, I’m Luis’s desktop agent. Ask me about his research, writing, labs, or projects — or say <em>"open research"</em> and I’ll take you there. Type <em>help</em> for ideas.');
+
+    wrap.querySelector('form').addEventListener('submit', e => {
+        e.preventDefault();
+        const q = input.value.trim(); if (!q) return;
+        add('user', escapeHtml(q));
+        input.value = '';
+        const typing = add('bot', '<span class="agent-typing">•••</span>');
+        const res = reply(q);
+        setTimeout(() => {
+            typing.querySelector('.agent-bubble').innerHTML = res.r;
+            log.scrollTop = log.scrollHeight;
+            if (res.a) setTimeout(res.a, 450);
+        }, 500);
+    });
+
+    WM.open('agent', 'Ask Luis', wrap, { width: 440, height: 520, titleIcon: ICON.agent, dockKey: 'agent', dockIcon: ICON.agent });
+    if (WM.wins['agent']) WM.wins['agent'].menuApp = 'Ask Luis';
+    setTimeout(() => input.focus(), 120);
+}
+
+/* --------------------------------------------------------------------------
+   Terminal — a faux Terminal.app that talks to the desktop
+   -------------------------------------------------------------------------- */
+function openTerminal() {
+    if (WM.wins['terminal']) { WM.unminimize('terminal'); WM.focus('terminal'); return; }
+    const wrap = document.createElement('div');
+    wrap.className = 'term';
+    wrap.innerHTML = `<div class="term-screen"><div class="term-out"></div><div class="term-line"><span class="term-prompt">luis@mac ~ % </span><span class="term-input" contenteditable="true" spellcheck="false"></span></div></div>`;
+    const screen = wrap.querySelector('.term-screen');
+    const out = wrap.querySelector('.term-out');
+    const inputEl = wrap.querySelector('.term-input');
+
+    function print(html) { const d = document.createElement('div'); d.innerHTML = html; out.appendChild(d); }
+    function echoCmd(cmd) { print('<span class="term-prompt">luis@mac ~ % </span>' + escapeHtml(cmd)); }
+
+    const opens = {
+        research: () => Finder.open('research'), writing: () => Finder.open('writing'),
+        blog: () => Finder.open('writing'), labs: () => Finder.open('labs'),
+        projects: () => Finder.open('projects'), about: () => openDoc('about'),
+        library: () => openLibrary(), win95: () => openLibrary(),
+        sketch: () => openSketch(), agent: () => openAgent(),
+        home: () => Finder.open('home'), hd: () => Finder.open('home'), finder: () => Finder.open('home')
+    };
+
+    const commands = {
+        help: () => 'Available commands:\n  ls                list items\n  open &lt;name&gt;       open research | writing | labs | projects | about | library | sketch | agent\n  whoami            current user\n  about             short bio\n  date              current date/time\n  echo &lt;text&gt;       print text\n  neofetch          system info\n  clear             clear the screen',
+        ls: () => 'Research/   Writing/   Labs/   Projects/   About.txt   Library/',
+        whoami: () => 'luis',
+        pwd: () => '/Users/luis',
+        about: () => 'Luis Merino — human–AI interaction researcher.\nTrust, collaboration, and decision-making between people and machines.\nAlso: coffee, photography, and building things in the browser.',
+        date: () => new Date().toString(),
+        echo: (args) => escapeHtml(args.join(' ')),
+        sudo: () => 'We trust you have received the usual lecture… just kidding. Permission denied 😏',
+        neofetch: () => 'luis@mac\n-----------\nOS: Mac OS X 10.4 (Tiger, in a browser)\nHost: lmerinoev.github.io\nShell: zsh (cosplay)\nWM: Aqua\nUptime: since you opened this tab\nTheme: Aqua Blue\nFun fact: there’s a Windows 95 running in the Library.',
+        open: (args) => {
+            const name = (args[0] || '').toLowerCase();
+            if (!name) return 'usage: open &lt;name&gt;';
+            if (opens[name]) { setTimeout(opens[name], 200); return 'Opening ' + escapeHtml(name) + '…'; }
+            return 'open: ' + escapeHtml(name) + ': no such item. Try: ' + Object.keys(opens).slice(0, 8).join(', ');
+        }
+    };
+
+    function run(line) {
+        const parts = line.trim().split(/\s+/);
+        const cmd = (parts.shift() || '').toLowerCase();
+        if (!cmd) return null;
+        if (cmd === 'clear') { out.innerHTML = ''; return null; }
+        if (commands[cmd]) return commands[cmd](parts);
+        return cmd + ': command not found. Type "help".';
+    }
+
+    inputEl.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const line = inputEl.textContent;
+            echoCmd(line);
+            inputEl.textContent = '';
+            const res = run(line);
+            if (res !== null) print(res);
+            screen.scrollTop = screen.scrollHeight;
+        }
+    });
+    screen.addEventListener('mousedown', e => {
+        if (!e.target.closest('.term-input') && window.getSelection().isCollapsed) {
+            setTimeout(() => inputEl.focus(), 0);
+        }
+    });
+
+    print('Welcome to the desktop terminal. Type "help" to get started.');
+    WM.open('terminal', 'Terminal — luis@mac', wrap, { width: 600, height: 400, titleIcon: ICON.terminal, dockKey: 'terminal', dockIcon: ICON.terminal });
+    if (WM.wins['terminal']) WM.wins['terminal'].menuApp = 'Terminal';
+    setTimeout(() => inputEl.focus(), 120);
+}
+
+/* --------------------------------------------------------------------------
    Dock
    -------------------------------------------------------------------------- */
 const Dock = {
@@ -467,6 +700,11 @@ const Dock = {
             { key: 'writing', label: 'Writing', icon: ICON.folder, action: () => Finder.open('writing') },
             { key: 'labs', label: 'Labs', icon: ICON.folder, action: () => Finder.open('labs') },
             { key: 'projects', label: 'Projects', icon: ICON.folder, action: () => Finder.open('projects') },
+            { sep: true },
+            { key: 'sketch', label: 'Sketch', icon: ICON.sketch, action: openSketch },
+            { key: 'agent', label: 'Ask Luis', icon: ICON.agent, action: openAgent },
+            { key: 'terminal', label: 'Terminal', icon: ICON.terminal, action: openTerminal },
+            { sep: true },
             { key: 'textedit', label: 'About Me', icon: ICON.textedit, action: () => openDoc('about') },
             { key: 'safari', label: 'Analysis', icon: ICON.safari, action: () => openIframe({ name: 'Analysis', url: 'analysis/', w: 980, h: 660, icon: 'safari' }) },
             { key: 'library', label: 'Library (Windows 95)', icon: ICON.win95, action: openLibrary },
@@ -562,10 +800,13 @@ const Menu = {
 function buildDesktopIcons() {
     const c = document.getElementById('desktop-icons');
     const icons = [
-        { icon: ICON.hd, label: 'Macintosh HD', action: () => Finder.open('home') },
-        { icon: ICON.win95, label: 'Library', action: openLibrary },
-        { icon: ICON.textedit, label: 'About Me', action: () => openDoc('about') }
+        { icon: ICON.hd, label: 'Macintosh HD', action: () => Finder.open('home') }
     ];
+    // Project folders live on the desktop
+    FOLDERS.projects.items.forEach(p => {
+        icons.push({ icon: ICON.folder, label: p.name, action: () => openItem(p) });
+    });
+    icons.push({ icon: ICON.win95, label: 'Library', action: openLibrary });
     icons.forEach(d => {
         const el = document.createElement('div');
         el.className = 'desktop-icon';
@@ -603,7 +844,7 @@ function init() {
         wc.querySelector('.welcome-close').addEventListener('click', () => wc.remove());
     }
     // expose for any inline handlers
-    window.MacOS = { Finder, openDoc, openLibrary, openIframe };
+    window.MacOS = { Finder, openDoc, openLibrary, openIframe, openSketch, openAgent, openTerminal };
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

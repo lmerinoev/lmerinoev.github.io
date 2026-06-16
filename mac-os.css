@@ -627,6 +627,84 @@ html, body {
 }
 
 /* --------------------------------------------------------------------------
+   Sketch (Paint) app
+   -------------------------------------------------------------------------- */
+.sketch { display: flex; flex-direction: column; height: 100%; background: #d6d6d6; }
+.sketch-toolbar {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 7px 10px;
+    background: linear-gradient(to bottom, #ededed, #d2d2d2);
+    border-bottom: 1px solid #a7a7a7;
+}
+.sketch-swatches { display: flex; gap: 4px; }
+.sketch-swatches .sw {
+    width: 18px; height: 18px; border-radius: 3px; padding: 0;
+    border: 1px solid rgba(0,0,0,0.35); cursor: default;
+}
+.sketch-swatches .sw.active { outline: 2px solid var(--aqua-blue); outline-offset: 1px; }
+.sketch-sep { width: 1px; height: 20px; background: #b0b0b0; }
+.sketch-sizes { display: flex; gap: 3px; }
+.sketch-sizes button, .sketch-btn {
+    border: 1px solid #9a9a9a; border-radius: 5px; padding: 2px 9px; cursor: default;
+    font-size: 12px; min-width: 26px; color: #2d2d2d;
+    background: linear-gradient(to bottom, #ffffff, #dcdcdc);
+}
+.sketch-sizes button.active, .sketch-btn.active {
+    background: linear-gradient(to bottom, #bcd6f5, #7fb0ec); border-color: #5b87c9; color: #16315e;
+}
+.sketch-canvas-wrap {
+    flex: 1; overflow: auto; padding: 12px;
+    display: flex; align-items: center; justify-content: center; background: #b6b6b6;
+}
+.sketch-canvas {
+    background: #fff; border: 1px solid #888; max-width: 100%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3); cursor: crosshair; touch-action: none;
+}
+
+/* --------------------------------------------------------------------------
+   Agent (Ask Luis) chat app
+   -------------------------------------------------------------------------- */
+.agent { display: flex; flex-direction: column; height: 100%; background: #eef1f5; }
+.agent-log { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.agent-msg { display: flex; }
+.agent-msg.user { justify-content: flex-end; }
+.agent-bubble {
+    max-width: 80%; padding: 8px 12px; border-radius: 14px;
+    font-size: 13px; line-height: 1.45; user-select: text;
+}
+.agent-msg.bot .agent-bubble { background: #fff; border: 1px solid #dfe3e8; border-bottom-left-radius: 4px; color: #1d1d1d; }
+.agent-msg.user .agent-bubble { background: linear-gradient(to bottom, #5fa0ef, #3b7dde); color: #fff; border-bottom-right-radius: 4px; }
+.agent-input { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #cfd4da; background: #e4e8ee; }
+.agent-input input {
+    flex: 1; border: 1px solid #aab2bd; border-radius: 15px; padding: 6px 13px;
+    font-size: 13px; font-family: inherit; outline: none; background: #fff;
+}
+.agent-input input:focus { border-color: var(--aqua-blue); box-shadow: 0 0 0 2px rgba(59,125,222,0.3); }
+.agent-input button {
+    border: 1px solid #5b87c9; border-radius: 15px; padding: 6px 16px; cursor: default;
+    font-size: 13px; font-weight: 600; color: #16315e;
+    background: linear-gradient(to bottom, #bcd6f5, #7fb0ec);
+}
+.agent-typing { letter-spacing: 2px; animation: agentblink 1s infinite; }
+@keyframes agentblink { 50% { opacity: 0.3; } }
+
+/* --------------------------------------------------------------------------
+   Terminal app
+   -------------------------------------------------------------------------- */
+.term { height: 100%; background: #14121a; }
+.term-screen {
+    height: 100%; padding: 10px 12px; overflow-y: auto; cursor: text;
+    background: rgba(20, 18, 26, 0.97); color: #e8e8e8; user-select: text;
+    font-family: 'Monaco', 'Menlo', 'SF Mono', 'Cascadia Mono', Consolas, monospace;
+    font-size: 12.5px; line-height: 1.5;
+}
+.term-out { white-space: pre-wrap; word-break: break-word; }
+.term-out > div { margin-bottom: 2px; }
+.term-line { display: flex; }
+.term-prompt { color: #4fd14f; white-space: pre; }
+.term-input { flex: 1; outline: none; white-space: pre-wrap; word-break: break-word; caret-color: #e8e8e8; }
+
+/* --------------------------------------------------------------------------
    Mobile
    -------------------------------------------------------------------------- */
 @media (max-width: 700px) {
@@ -642,7 +720,9 @@ html, body {
     .finder-sidebar { flex-basis: 110px; }
     .win-resize { display: none; }
     .doc { padding: 22px 20px 50px; }
-    #dock { gap: 0; padding: 4px 5px 5px; border-radius: 12px; max-width: 100%; }
+    #dock-wrap { justify-content: flex-start; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; padding: 0 6px; }
+    #dock-wrap::-webkit-scrollbar { display: none; }
+    #dock { gap: 0; padding: 4px 5px 5px; border-radius: 12px; margin: 0 auto; flex: 0 0 auto; }
     .dock-item { width: 29px; height: 29px; }
     .dock-item img, .dock-item svg { width: 29px; height: 29px; }
     .dock-item:hover { transform: scale(1.25) translateY(-3px); margin: 0 3px; }
