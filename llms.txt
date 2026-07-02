@@ -40,7 +40,7 @@ Browser-based experiments in computer vision, audio, and AI.
 ### Photography
 Self-assigned street and candid photography challenges. Practice, not portfolio.
 
-- [Street Assignments](https://lmerinoev.github.io/photography/)
+- [Street Practice](https://lmerinoev.github.io/photography/)
 
 ### Analysis (Strategic Intelligence Briefs)
 Leadership profiles and strategic analysis.
