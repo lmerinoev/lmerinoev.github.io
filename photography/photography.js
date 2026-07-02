@@ -337,12 +337,19 @@
         var images = '';
         if (ch.images && ch.images.length) {
             images =
-                '<div class="entry-strip">' +
+                '<div class="entry-strip' + (ch.images.length < 3 ? ' entry-strip--' + ch.images.length : '') + '">' +
                 ch.images.map(function (im) {
-                    return '<img src="' + im.src + '" alt="' + im.alt + '" loading="lazy">';
+                    var src = 'https://commons.wikimedia.org/wiki/Special:FilePath/' +
+                        encodeURIComponent(im.file.replace(/^File:/, '')) + '?width=900';
+                    return '<img src="' + src + '" alt="' + im.alt + '" loading="lazy">';
                 }).join('') +
                 '</div>' +
-                '<p class="entry-credit">' + ch.images.map(function (im) { return im.credit; }).join(' · ') + '</p>';
+                '<p class="entry-credit">Photos: ' +
+                ch.images.map(function (im) {
+                    return '<a href="' + im.pageUrl + '" target="_blank" rel="noopener">' +
+                        im.author + '</a> (' + im.license + ')';
+                }).join(' · ') +
+                ' · via Wikimedia Commons</p>';
         }
 
         var study = ch.study
