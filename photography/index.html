@@ -3,182 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photography Challenges - Luis Merino</title>
+    <title>Street Practice - Luis Merino</title>
     <meta name="description" content="A deck of self-assigned street and candid photography challenges. Practice, not portfolio.">
     <meta name="author" content="Luis Merino">
-    <meta property="og:title" content="Photography Challenges">
+    <meta property="og:title" content="Street Practice">
     <meta property="og:description" content="A deck of self-assigned street and candid photography challenges. Practice, not portfolio.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:creator" content="@HipsterCow">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
-    <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="photography.css">
     <link rel="icon" href="../images/art/favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="/" class="nav-logo">Luis Merino</a>
-            <div class="nav-links">
-                <a href="../index.html" class="nav-link">Home</a>
-                <a href="../index.html#research" class="nav-link">Research</a>
-                <a href="../index.html#writing" class="nav-link">Writing</a>
-                <a href="../labs/" class="nav-link">Labs</a>
-                <a href="./" class="nav-link active">Photography</a>
-                <a href="../about.html" class="nav-link">About</a>
-            </div>
-            <div class="nav-actions">
-                <button class="nav-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
-                <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">&#9776;</button>
-            </div>
-        </div>
-    </nav>
+    <a class="home-mark" href="/">&larr; lmerino</a>
 
-    <section class="hero">
+    <!-- ================= Hero ================= -->
+    <header class="hero">
         <div class="container">
-            <div class="hero-label">
-                <span class="hero-label-dot"></span>
-                Practice, not portfolio
-            </div>
-            <h1 class="hero-title">Street Assignments</h1>
-            <p class="hero-subtitle">
+            <svg class="hero-enso" width="72" height="72" viewBox="0 0 100 100" aria-hidden="true">
+                <path class="hero-enso-path" d="M 62 9 A 43 43 0 1 0 88 42"
+                      fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+            </svg>
+            <p class="hero-eyebrow">Practice, not portfolio</p>
+            <h1 class="hero-title">Street Practice</h1>
+            <p class="hero-intro">
                 A deck of self-assigned challenges for street and candid photography.
                 Pick one, go shoot, come back for the next. Nothing gets posted here —
                 the pictures stay in your pocket; the practice is the point.
                 Take one for yourself or send one to a friend.
             </p>
             <div class="hero-actions">
-                <a href="#this-week" class="chal-btn chal-btn--brand">This week&rsquo;s challenge</a>
-                <button class="chal-btn" id="deal-btn" type="button">Deal me a random one</button>
+                <a href="#this-week" class="btn btn--shu">This week&rsquo;s challenge</a>
+                <button type="button" class="btn" id="deal-btn">Draw a slip</button>
             </div>
         </div>
-    </section>
+    </header>
 
+    <!-- ================= This Week ================= -->
     <section class="section" id="this-week">
         <div class="container">
-            <div class="section-header reveal">
+            <div class="section-rule">
                 <h2 class="section-title">This Week</h2>
-                <p class="section-desc">One assignment rotates in every Monday. Everyone visiting sees the same one — shoot it together, apart.</p>
+                <span class="section-kanji" aria-hidden="true">床</span>
             </div>
+            <p class="section-desc">One assignment hangs in the alcove, changed every Monday. Everyone visiting sees the same one — shoot it together, apart.</p>
             <div id="weekly-slot"></div>
         </div>
     </section>
 
+    <!-- ================= The Deck ================= -->
     <section class="section" id="deck">
         <div class="container">
-            <div class="section-header reveal">
+            <div class="section-rule">
                 <h2 class="section-title">The Deck</h2>
-                <p class="section-desc">Twenty-five standing assignments. Difficulty runs from an easy afternoon to a test of nerve. Progress is saved on this device only.</p>
+                <span class="section-kanji" aria-hidden="true">巻</span>
+            </div>
+            <p class="section-desc">Twenty-five standing assignments, read top to bottom like a handscroll. Difficulty runs from an easy afternoon (一) to a test of nerve (三). Progress is stamped on this device only.</p>
+
+            <div class="deck-toolbar">
+                <div class="deck-filters" id="chal-filters" role="group" aria-label="Filter challenges">
+                    <button class="deck-filter active" data-filter="all" type="button">All</button>
+                    <button class="deck-filter" data-filter="light" type="button">Light</button>
+                    <button class="deck-filter" data-filter="people" type="button">People</button>
+                    <button class="deck-filter" data-filter="composition" type="button">Composition</button>
+                    <button class="deck-filter" data-filter="courage" type="button">Courage</button>
+                    <button class="deck-filter" data-filter="discipline" type="button">Discipline</button>
+                    <button class="deck-filter" data-filter="play" type="button">Play</button>
+                </div>
+                <div class="deck-progress">
+                    <svg width="34" height="34" viewBox="0 0 100 100" aria-hidden="true">
+                        <path d="M 62 9 A 43 43 0 1 0 88 42" fill="none" stroke="#D9D3C2" stroke-width="7" stroke-linecap="round"/>
+                        <path id="progress-enso" d="M 62 9 A 43 43 0 1 0 88 42" fill="none" stroke="#221F1A" stroke-width="7" stroke-linecap="round"/>
+                    </svg>
+                    <span class="deck-progress-count" id="progress-count"></span>
+                    <button class="deck-progress-reset" id="progress-reset" type="button" title="Clear all stamps on this device">reset</button>
+                </div>
             </div>
 
-            <div class="chal-toolbar reveal">
-                <div class="chal-filters" id="chal-filters" role="group" aria-label="Filter challenges">
-                    <button class="chal-filter active" data-filter="all" type="button">All</button>
-                    <button class="chal-filter" data-filter="light" type="button">Light</button>
-                    <button class="chal-filter" data-filter="people" type="button">People</button>
-                    <button class="chal-filter" data-filter="composition" type="button">Composition</button>
-                    <button class="chal-filter" data-filter="courage" type="button">Courage</button>
-                    <button class="chal-filter" data-filter="discipline" type="button">Discipline</button>
-                    <button class="chal-filter" data-filter="play" type="button">Play</button>
-                </div>
-                <div class="chal-progress">
-                    <span class="chal-progress-count" id="progress-count"></span>
-                    <span class="chal-progress-bar"><span class="chal-progress-fill" id="progress-fill"></span></span>
-                    <button class="chal-progress-reset" id="progress-reset" type="button" title="Clear all completed marks">reset</button>
-                </div>
-            </div>
-
-            <div class="chal-grid" id="chal-grid"></div>
-            <noscript><p class="chal-noscript">The challenge deck needs JavaScript to deal the cards.</p></noscript>
+            <div class="deck-list" id="chal-list"></div>
+            <noscript><p class="deck-noscript">The deck needs JavaScript to unroll.</p></noscript>
         </div>
     </section>
 
+    <!-- ================= The Masters ================= -->
     <section class="section" id="masters">
         <div class="container">
-            <div class="section-header reveal">
+            <div class="section-rule">
                 <h2 class="section-title">The Masters</h2>
-                <p class="section-desc">Four photographers this deck steals from. When a challenge feels impossible, look at how they did it.</p>
+                <span class="section-kanji" aria-hidden="true">師</span>
             </div>
-            <div class="master-grid">
-                <div class="master-card reveal">
-                    <div class="master-name">Joel Meyerowitz</div>
-                    <div class="master-place">New York &middot; b. 1938</div>
+            <p class="section-desc">Four photographers this deck steals from. When a challenge feels impossible, look at how they did it — the links go to their work where it officially lives.</p>
+
+            <div class="master-list">
+                <article class="master">
+                    <h3 class="master-name">Joel Meyerowitz</h3>
+                    <p class="master-place">New York &middot; b. 1938</p>
                     <p class="master-lesson">Made color street photography legitimate when everyone said it couldn&rsquo;t be art. Stood on Fifth Avenue for years. His lesson: the street is a stage — pick your spot, wait, and the picture assembles itself around you.</p>
-                    <div class="master-ref">Deck cards: Work the Corner &middot; Follow the Light &middot; Three Planes</div>
-                </div>
-                <div class="master-card reveal">
-                    <div class="master-name">Daid&#333; Moriyama</div>
-                    <div class="master-place">Tokyo &middot; b. 1938</div>
+                    <p class="master-links">Study: <a href="https://www.joelmeyerowitz.com/" target="_blank" rel="noopener">joelmeyerowitz.com</a></p>
+                </article>
+                <article class="master">
+                    <h3 class="master-name">Daid&#333; Moriyama</h3>
+                    <p class="master-place">Tokyo &middot; b. 1938</p>
                     <p class="master-lesson">Are, bure, boke — rough, blurred, out of focus. Shoots like a stray dog moves through the city: fast, low, on instinct, without preciousness. His lesson: grain and blur are texture, not failure.</p>
-                    <div class="master-ref">Deck cards: Are, Bure, Boke &middot; After Dark</div>
-                </div>
-                <div class="master-card reveal">
-                    <div class="master-name">Vivian Maier</div>
-                    <div class="master-place">Chicago &middot; 1926&ndash;2009</div>
+                    <p class="master-links">Study: <a href="https://www.moriyamadaido.com/en/" target="_blank" rel="noopener">moriyamadaido.com</a></p>
+                </article>
+                <article class="master">
+                    <h3 class="master-name">Vivian Maier</h3>
+                    <p class="master-place">Chicago &middot; 1926&ndash;2009</p>
                     <p class="master-lesson">A nanny who shot 150,000 frames nobody saw until after her death. Rolleiflex at the waist, eyes on the street. Her lesson: be invisible in plain sight — waiting rooms, reflections, quiet juxtapositions.</p>
-                    <div class="master-ref">Deck cards: Two Worlds &middot; The Theatre of Waiting &middot; Waist Level</div>
-                </div>
-                <div class="master-card reveal">
-                    <div class="master-name">Samuel Lintaro Hopf</div>
-                    <div class="master-place">Hamburg &middot; samuel streetlife</div>
+                    <p class="master-links">Study: <a href="https://www.vivianmaier.com/" target="_blank" rel="noopener">vivianmaier.com</a></p>
+                </article>
+                <article class="master">
+                    <h3 class="master-name">Samuel Lintaro Hopf</h3>
+                    <p class="master-place">Hamburg &middot; samuel streetlife</p>
                     <p class="master-lesson">Works the street openly and calmly, camera visible, no sneaking. Finds one good scene and stays with it. His lesson: thirty frames from one spot beat three hundred from nowhere.</p>
-                    <div class="master-ref">Deck cards: One Scene, Thirty Frames &middot; Carry the Big Camera</div>
-                </div>
+                    <p class="master-links">Study: <a href="https://www.youtube.com/@samuelstreetlife" target="_blank" rel="noopener">youtube.com/@samuelstreetlife</a></p>
+                </article>
             </div>
         </div>
     </section>
 
+    <!-- ================= The Kit ================= -->
     <section class="section" id="kit">
         <div class="container">
-            <div class="section-header reveal">
+            <div class="section-rule">
                 <h2 class="section-title">The Kit</h2>
-                <p class="section-desc">Each challenge suggests a camera. The tool shapes the picture — that&rsquo;s why it&rsquo;s part of the assignment.</p>
+                <span class="section-kanji" aria-hidden="true">具</span>
             </div>
-            <div class="kit-list reveal">
-                <div class="kit-row">
-                    <div class="kit-name">Ricoh GR II</div>
-                    <div class="kit-role">The pocket knife. 28mm, snap focus, invisible. Default for the courage cards.</div>
-                </div>
-                <div class="kit-row">
-                    <div class="kit-name">Fujifilm X100V</div>
-                    <div class="kit-role">The daily driver. One focal length, optical finder, leaf-shutter quiet. For patient work.</div>
-                </div>
-                <div class="kit-row">
-                    <div class="kit-name">Fujifilm X-M1</div>
-                    <div class="kit-role">The slow one. Deliberate walks and color studies with classic Fuji files.</div>
-                </div>
-                <div class="kit-row">
-                    <div class="kit-name">Digicams</div>
-                    <div class="kit-role">The toys. CCD colors, tiny sensors, slow AF. Permission to stop being precious.</div>
-                </div>
-                <div class="kit-row">
-                    <div class="kit-name">Nikon DSLR</div>
-                    <div class="kit-role">The loud one. Take it out when the assignment is to be seen, not to hide.</div>
-                </div>
-            </div>
+            <p class="section-desc">Each challenge suggests a camera. The tool shapes the picture — that&rsquo;s why it&rsquo;s part of the assignment.</p>
+
+            <dl class="kit-list">
+                <div class="kit-row"><dt>Ricoh GR II</dt><dd>The pocket knife. 28mm, snap focus, invisible. Default for the courage cards.</dd></div>
+                <div class="kit-row"><dt>Fujifilm X100V</dt><dd>The daily driver. One focal length, optical finder, leaf-shutter quiet. For patient work.</dd></div>
+                <div class="kit-row"><dt>Fujifilm X-M1</dt><dd>The slow one. Deliberate walks and color studies with classic Fuji files.</dd></div>
+                <div class="kit-row"><dt>Digicams</dt><dd>The toys. CCD colors, tiny sensors, slow AF. Permission to stop being precious.</dd></div>
+                <div class="kit-row"><dt>Nikon DSLR</dt><dd>The loud one. Take it out when the assignment is to be seen, not to hide.</dd></div>
+            </dl>
         </div>
     </section>
 
+    <!-- ================= Footer ================= -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-inner">
-                <div class="footer-links">
-                    <a href="https://x.com/HipsterCow" target="_blank" rel="noopener" class="footer-link">X / Twitter</a>
-                    <a href="#" class="footer-link">Instagram</a>
-                    <a href="#" class="footer-link">LinkedIn</a>
-                </div>
-                <p class="footer-copy">&copy; 2026 Luis Merino</p>
-            </div>
+            <p class="footer-license">
+                Challenge text by Luis Merino, released under
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>.
+                Photographs, where shown, remain under their individually credited licenses.
+            </p>
+            <p class="footer-marks" aria-hidden="true">朱 &middot; 墨 &middot; 間</p>
         </div>
     </footer>
 
-    <script src="../script.js"></script>
     <script src="photography.js"></script>
 </body>
 </html>

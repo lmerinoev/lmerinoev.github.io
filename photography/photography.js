@@ -1,14 +1,24 @@
 // ============================================================
-// Photography Challenges — deck, weekly rotation, progress
+// Street Practice — deck, weekly rotation, stamps
 //
 // To add a challenge: append an object to CHALLENGES below.
-// slug: stable id (used for share links + saved progress)
+// slug: stable id (share links + saved progress — don't rename)
 // difficulty: 1 easy afternoon … 3 test of nerve
 // themes: light | people | composition | courage | discipline | play
+// study: optional link to a master's official archive
+// images: optional [{src, alt, credit}] — CC-licensed only,
+//         credit must name author + license + source
 // ============================================================
 
 (function () {
     'use strict';
+
+    var STUDY = {
+        meyerowitz: { label: 'Joel Meyerowitz', url: 'https://www.joelmeyerowitz.com/' },
+        moriyama: { label: 'Daidō Moriyama', url: 'https://www.moriyamadaido.com/en/' },
+        maier: { label: 'Vivian Maier', url: 'https://www.vivianmaier.com/' },
+        lintaro: { label: 'Samuel Lintaro', url: 'https://www.youtube.com/@samuelstreetlife' }
+    };
 
     var CHALLENGES = [
         {
@@ -18,7 +28,8 @@
             difficulty: 1,
             themes: ['people'],
             camera: 'X100V',
-            master: 'after Joel Meyerowitz'
+            master: 'after Joel Meyerowitz',
+            study: STUDY.meyerowitz
         },
         {
             slug: 'snap-no-chimping',
@@ -35,7 +46,8 @@
             difficulty: 2,
             themes: ['play'],
             camera: 'GR II',
-            master: 'after Daidō Moriyama'
+            master: 'after Daidō Moriyama',
+            study: STUDY.moriyama
         },
         {
             slug: 'two-worlds',
@@ -44,7 +56,8 @@
             difficulty: 2,
             themes: ['composition'],
             camera: 'any',
-            master: 'after Vivian Maier'
+            master: 'after Vivian Maier',
+            study: STUDY.maier
         },
         {
             slug: 'noon-light',
@@ -93,7 +106,8 @@
             difficulty: 1,
             themes: ['people'],
             camera: 'any',
-            master: 'after Vivian Maier'
+            master: 'after Vivian Maier',
+            study: STUDY.maier
         },
         {
             slug: 'follow-the-light',
@@ -102,7 +116,8 @@
             difficulty: 1,
             themes: ['light'],
             camera: 'any',
-            master: 'after Joel Meyerowitz'
+            master: 'after Joel Meyerowitz',
+            study: STUDY.meyerowitz
         },
         {
             slug: 'thirty-six-exposures',
@@ -135,7 +150,8 @@
             difficulty: 3,
             themes: ['light'],
             camera: 'X100V',
-            master: 'after Daidō Moriyama'
+            master: 'after Daidō Moriyama',
+            study: STUDY.moriyama
         },
         {
             slug: 'three-planes',
@@ -144,7 +160,8 @@
             difficulty: 3,
             themes: ['composition'],
             camera: 'any',
-            master: 'after Joel Meyerowitz'
+            master: 'after Joel Meyerowitz',
+            study: STUDY.meyerowitz
         },
         {
             slug: 'visual-pun',
@@ -153,7 +170,8 @@
             difficulty: 2,
             themes: ['composition'],
             camera: 'any',
-            master: 'after Vivian Maier'
+            master: 'after Vivian Maier',
+            study: STUDY.maier
         },
         {
             slug: 'same-spot-four-lights',
@@ -178,7 +196,8 @@
             difficulty: 2,
             themes: ['courage'],
             camera: 'GR II',
-            master: 'after Vivian Maier'
+            master: 'after Vivian Maier',
+            study: STUDY.maier
         },
         {
             slug: 'the-exit',
@@ -203,7 +222,8 @@
             difficulty: 3,
             themes: ['courage'],
             camera: 'Nikon DSLR',
-            master: 'after Samuel Lintaro'
+            master: 'after Samuel Lintaro',
+            study: STUDY.lintaro
         },
         {
             slug: 'one-scene-thirty-frames',
@@ -212,7 +232,8 @@
             difficulty: 2,
             themes: ['discipline'],
             camera: 'X100V',
-            master: 'after Samuel Lintaro'
+            master: 'after Samuel Lintaro',
+            study: STUDY.lintaro
         },
         {
             slug: 'no-people-street',
@@ -224,20 +245,31 @@
         }
     ];
 
+    // progress carries over from the previous design — same key
     var STORAGE_KEY = 'photo-challenges-done';
     // Monday, Jan 5 2026 UTC — anchor for the weekly rotation
     var WEEK_ANCHOR = Date.UTC(2026, 0, 5);
     var MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
 
-    var grid = document.getElementById('chal-grid');
+    var KANJI = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+
+    var list = document.getElementById('chal-list');
     var weeklySlot = document.getElementById('weekly-slot');
     var filterWrap = document.getElementById('chal-filters');
     var progressCount = document.getElementById('progress-count');
-    var progressFill = document.getElementById('progress-fill');
+    var progressEnso = document.getElementById('progress-enso');
     var progressReset = document.getElementById('progress-reset');
     var dealBtn = document.getElementById('deal-btn');
 
     var activeFilter = 'all';
+
+    // ---------- helpers ----------
+
+    function kanjiNum(n) {
+        if (n <= 10) return KANJI[n - 1];
+        if (n < 20) return '十' + (n % 10 ? KANJI[n % 10 - 1] : '');
+        return KANJI[Math.floor(n / 10) - 1] + '十' + (n % 10 ? KANJI[n % 10 - 1] : '');
+    }
 
     // ---------- progress (localStorage, this device only) ----------
 
@@ -254,7 +286,7 @@
     function saveDone(slugs) {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(slugs));
-        } catch (e) { /* private mode — progress just won't persist */ }
+        } catch (e) { /* private mode — stamps just won't persist */ }
     }
 
     function isDone(slug) {
@@ -266,6 +298,7 @@
         var i = done.indexOf(slug);
         if (i === -1) done.push(slug); else done.splice(i, 1);
         saveDone(done);
+        return i === -1;
     }
 
     // ---------- weekly rotation (same for every visitor) ----------
@@ -288,40 +321,58 @@
 
     // ---------- rendering ----------
 
-    function dotsHtml(difficulty) {
-        var html = '';
+    function difficultyHtml(d) {
+        var out = [];
         for (var i = 1; i <= 3; i++) {
-            html += '<span class="chal-card-dot' + (i <= difficulty ? ' chal-card-dot--on' : '') + '"></span>';
+            out.push('<span' + (i <= d ? '' : ' class="dim"') + '>' + KANJI[i - 1] + '</span>');
         }
-        return html;
+        return '<span class="entry-difficulty" title="Difficulty ' + d + ' of 3">' + out.join(' ') + '</span>';
     }
 
-    function cardHtml(ch, opts) {
-        var num = String(CHALLENGES.indexOf(ch) + 1);
-        if (num.length < 2) num = '0' + num;
-        var done = isDone(ch.slug);
+    function entryHtml(ch, opts) {
         var weekly = opts && opts.weekly;
+        var done = isDone(ch.slug);
+        var num = kanjiNum(CHALLENGES.indexOf(ch) + 1);
+
+        var images = '';
+        if (ch.images && ch.images.length) {
+            images =
+                '<div class="entry-strip">' +
+                ch.images.map(function (im) {
+                    return '<img src="' + im.src + '" alt="' + im.alt + '" loading="lazy">';
+                }).join('') +
+                '</div>' +
+                '<p class="entry-credit">' + ch.images.map(function (im) { return im.credit; }).join(' · ') + '</p>';
+        }
+
+        var study = ch.study
+            ? '<p class="entry-study">Study: <a href="' + ch.study.url + '" target="_blank" rel="noopener">' + ch.study.label + '</a></p>'
+            : '';
 
         return '' +
-            '<article class="chal-card' + (weekly ? ' chal-card--weekly' : '') + (done ? ' chal-card--done' : '') + '"' +
+            '<article class="entry' + (weekly ? ' entry--weekly' : '') + (done ? ' entry--done' : '') + '"' +
             ' data-slug="' + ch.slug + '"' + (weekly ? '' : ' id="' + ch.slug + '"') + '>' +
-            '  <div class="chal-card-top">' +
-            '    <span class="chal-card-num">' + (weekly ? weekLabel() : 'No. ' + num) + '</span>' +
-            '    <span class="chal-card-dots" title="Difficulty ' + ch.difficulty + ' of 3">' + dotsHtml(ch.difficulty) + '</span>' +
-            '  </div>' +
-            '  <h3 class="chal-card-title">' + ch.title + '</h3>' +
-            '  <p class="chal-card-brief">' + ch.brief + '</p>' +
-            (ch.master ? '<div class="chal-card-master">' + ch.master + '</div>' : '') +
-            '  <div class="chal-card-meta">' +
-            '    <span class="chal-tag chal-tag--camera">' + ch.camera + '</span>' +
-            ch.themes.map(function (t) { return '<span class="chal-tag">' + t + '</span>'; }).join('') +
-            '  </div>' +
-            '  <div class="chal-card-actions">' +
-            '    <button class="chal-done-btn" type="button" data-action="done" aria-pressed="' + done + '">' +
-            '      <span class="chal-done-box">&#10003;</span>' + (done ? 'Done' : 'Mark done') +
-            '    </button>' +
-            '    <button class="chal-share-btn" type="button" data-action="share">Copy link</button>' +
-            '  </div>' +
+            (weekly ? '<span class="entry-vertical" aria-hidden="true">今週の課題</span>' : '') +
+            (done ? '<span class="entry-hanko" aria-hidden="true">済</span>' : '') +
+            (weekly
+                ? '<p class="entry-week">This week · ' + weekLabel() + '</p>'
+                : '<p class="entry-num" aria-label="Challenge ' + (CHALLENGES.indexOf(ch) + 1) + '">' + num + '</p>') +
+            '<h3 class="entry-title">' + ch.title + '</h3>' +
+            '<p class="entry-brief">' + ch.brief + '</p>' +
+            (ch.master ? '<p class="entry-master">' + ch.master + '</p>' : '') +
+            '<div class="entry-meta">' +
+            difficultyHtml(ch.difficulty) +
+            '<span>' + ch.camera + '</span>' +
+            ch.themes.map(function (t) { return '<span>' + t + '</span>'; }).join('') +
+            '</div>' +
+            images +
+            study +
+            '<div class="entry-actions">' +
+            '<button class="entry-done-btn" type="button" data-action="done" aria-pressed="' + done + '">' +
+            (done ? 'Stamped 済' : 'Mark done') +
+            '</button>' +
+            '<button class="entry-share-btn" type="button" data-action="share">Copy link</button>' +
+            '</div>' +
             '</article>';
     }
 
@@ -329,38 +380,42 @@
         var visible = CHALLENGES.filter(function (ch) {
             return activeFilter === 'all' || ch.themes.indexOf(activeFilter) !== -1;
         });
-        grid.innerHTML = visible.map(function (ch) { return cardHtml(ch); }).join('');
-        weeklySlot.innerHTML = cardHtml(weeklyChallenge(), { weekly: true });
+        list.innerHTML = visible.map(function (ch) { return entryHtml(ch); }).join('');
+        weeklySlot.innerHTML = entryHtml(weeklyChallenge(), { weekly: true });
 
         var doneCount = loadDone().filter(function (slug) {
             return CHALLENGES.some(function (ch) { return ch.slug === slug; });
         }).length;
-        progressCount.textContent = doneCount + ' / ' + CHALLENGES.length + ' done';
-        progressFill.style.width = (doneCount / CHALLENGES.length * 100) + '%';
+
+        progressCount.textContent = doneCount + ' / ' + CHALLENGES.length;
+
+        // ink the ensō in proportion to stamped challenges
+        var len = progressEnso.getTotalLength();
+        var drawn = len * (doneCount / CHALLENGES.length);
+        progressEnso.style.strokeDasharray = drawn + ' ' + len;
     }
 
     // ---------- interactions ----------
 
-    function flash(card) {
-        card.classList.remove('chal-card--flash');
-        void card.offsetWidth; // restart the animation
-        card.classList.add('chal-card--flash');
+    function flash(entry) {
+        entry.classList.remove('entry--flash');
+        void entry.offsetWidth; // restart the animation
+        entry.classList.add('entry--flash');
     }
 
-    function goToCard(slug) {
-        var card = grid.querySelector('[data-slug="' + slug + '"]');
-        if (!card) {
-            // hidden by the active filter — show everything, then find it
+    function goToEntry(slug) {
+        var entry = list.querySelector('[data-slug="' + slug + '"]');
+        if (!entry) {
             activeFilter = 'all';
-            filterWrap.querySelectorAll('.chal-filter').forEach(function (f) {
+            filterWrap.querySelectorAll('.deck-filter').forEach(function (f) {
                 f.classList.toggle('active', f.dataset.filter === 'all');
             });
             render();
-            card = grid.querySelector('[data-slug="' + slug + '"]');
+            entry = list.querySelector('[data-slug="' + slug + '"]');
         }
-        if (card) {
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            flash(card);
+        if (entry) {
+            entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            flash(entry);
         }
     }
 
@@ -368,7 +423,7 @@
         var url = location.origin + location.pathname + '#' + slug;
         function ok() {
             var prev = btn.textContent;
-            btn.textContent = 'Copied ✓';
+            btn.textContent = 'Copied';
             btn.classList.add('copied');
             setTimeout(function () {
                 btn.textContent = prev;
@@ -387,23 +442,28 @@
     document.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-action]');
         if (!btn) return;
-        var card = btn.closest('.chal-card');
-        if (!card) return;
-        var slug = card.dataset.slug;
+        var entry = btn.closest('.entry');
+        if (!entry) return;
+        var slug = entry.dataset.slug;
 
         if (btn.dataset.action === 'done') {
-            toggleDone(slug);
+            var nowDone = toggleDone(slug);
             render();
+            if (nowDone) {
+                // press the fresh stamp(s) for this slug
+                document.querySelectorAll('.entry[data-slug="' + slug + '"] .entry-hanko')
+                    .forEach(function (h) { h.classList.add('pressed'); });
+            }
         } else if (btn.dataset.action === 'share') {
             copyLink(slug, btn);
         }
     });
 
     filterWrap.addEventListener('click', function (e) {
-        var btn = e.target.closest('.chal-filter');
+        var btn = e.target.closest('.deck-filter');
         if (!btn) return;
         activeFilter = btn.dataset.filter;
-        filterWrap.querySelectorAll('.chal-filter').forEach(function (f) {
+        filterWrap.querySelectorAll('.deck-filter').forEach(function (f) {
             f.classList.toggle('active', f === btn);
         });
         render();
@@ -411,7 +471,7 @@
 
     progressReset.addEventListener('click', function () {
         if (loadDone().length === 0) return;
-        if (window.confirm('Clear all completed marks on this device?')) {
+        if (window.confirm('Clear all stamps on this device?')) {
             saveDone([]);
             render();
         }
@@ -421,7 +481,7 @@
         var pool = CHALLENGES.filter(function (ch) { return !isDone(ch.slug); });
         if (pool.length === 0) pool = CHALLENGES;
         var pick = pool[Math.floor(Math.random() * pool.length)];
-        goToCard(pick.slug);
+        goToEntry(pick.slug);
     });
 
     // ---------- init ----------
@@ -431,8 +491,8 @@
     if (location.hash) {
         var slug = location.hash.slice(1);
         if (CHALLENGES.some(function (ch) { return ch.slug === slug; })) {
-            // let layout settle before scrolling to the shared card
-            setTimeout(function () { goToCard(slug); }, 100);
+            // let layout settle before scrolling to the shared entry
+            setTimeout(function () { goToEntry(slug); }, 100);
         }
     }
 })();
