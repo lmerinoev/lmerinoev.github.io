@@ -1,0 +1,431 @@
+/* ============================================================
+   Photography Challenges — page styles
+   Inherits tokens from ../styles.css (see DESIGN_SYSTEM.md)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Hero buttons
+   ------------------------------------------------------------ */
+
+.chal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease);
+}
+
+.chal-btn:hover {
+    border-color: var(--gray-300);
+}
+
+.chal-btn:active {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+    transform: translateY(0.5px);
+}
+
+.chal-btn--brand {
+    border-bottom: 2px solid var(--brand);
+}
+
+/* ------------------------------------------------------------
+   Toolbar: filters + progress
+   ------------------------------------------------------------ */
+
+.chal-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+}
+
+@media (min-width: 768px) {
+    .chal-toolbar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.chal-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.chal-filter {
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--gray-400);
+    background: transparent;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease);
+}
+
+.chal-filter:hover {
+    color: var(--gray-700);
+    border-color: var(--gray-200);
+}
+
+.chal-filter.active {
+    color: var(--gray-900);
+    border-color: var(--gray-200);
+    border-bottom: 2px solid var(--brand);
+}
+
+.chal-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.chal-progress-count {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    white-space: nowrap;
+}
+
+.chal-progress-bar {
+    display: inline-block;
+    width: 96px;
+    height: 3px;
+    background: var(--gray-100);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.chal-progress-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--brand);
+    transition: width var(--duration-slow) var(--ease);
+}
+
+.chal-progress-reset {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--gray-300);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.chal-progress-reset:hover {
+    color: var(--gray-500);
+}
+
+/* ------------------------------------------------------------
+   Challenge cards
+   ------------------------------------------------------------ */
+
+.chal-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+    .chal-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .chal-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.chal-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    background: var(--white);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-md);
+    transition: border-color var(--duration-normal) var(--ease);
+    scroll-margin-top: calc(var(--nav-height) + var(--space-8));
+}
+
+.chal-card:hover {
+    border-color: var(--gray-200);
+}
+
+.chal-card--weekly {
+    border-top: 2px solid var(--brand);
+}
+
+.chal-card--done {
+    background: var(--gray-50);
+}
+
+.chal-card--done .chal-card-title {
+    color: var(--gray-400);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+}
+
+.chal-card--flash {
+    animation: chal-flash 1.6s var(--ease);
+}
+
+@keyframes chal-flash {
+    0%, 60% { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-subtle); }
+    100% { border-color: var(--gray-100); box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chal-card--flash {
+        animation: none;
+        border-color: var(--brand);
+    }
+}
+
+.chal-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chal-card-num {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    color: var(--gray-300);
+}
+
+.chal-card-dots {
+    display: inline-flex;
+    gap: 3px;
+}
+
+.chal-card-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gray-200);
+}
+
+.chal-card-dot--on {
+    background: var(--gray-500);
+}
+
+.chal-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--gray-900);
+    line-height: 1.2;
+}
+
+.chal-card-brief {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    line-height: 1.6;
+    flex: 1;
+}
+
+.chal-card-master {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    font-style: italic;
+}
+
+.chal-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.chal-tag {
+    padding: 2px var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--gray-400);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-sm);
+}
+
+.chal-tag--camera {
+    color: var(--gray-600);
+    background: var(--gray-50);
+}
+
+.chal-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--gray-100);
+}
+
+.chal-done-btn,
+.chal-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) 0;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--gray-400);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color var(--duration-normal) var(--ease);
+    min-height: 32px;
+}
+
+.chal-done-btn:hover,
+.chal-share-btn:hover {
+    color: var(--gray-800);
+}
+
+.chal-done-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    line-height: 1;
+    color: transparent;
+    transition: all var(--duration-normal) var(--ease);
+}
+
+.chal-card--done .chal-done-box {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: var(--gray-900);
+}
+
+.chal-share-btn.copied {
+    color: var(--success);
+}
+
+.chal-noscript {
+    font-size: 0.875rem;
+    color: var(--gray-400);
+}
+
+/* ------------------------------------------------------------
+   Masters
+   ------------------------------------------------------------ */
+
+.master-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+    .master-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.master-card {
+    padding: var(--space-6);
+    background: var(--white);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-md);
+}
+
+.master-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.master-place {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    color: var(--gray-300);
+    margin-top: var(--space-1);
+}
+
+.master-lesson {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    line-height: 1.6;
+    margin-top: var(--space-3);
+}
+
+.master-ref {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--gray-400);
+    margin-top: var(--space-3);
+}
+
+/* ------------------------------------------------------------
+   Kit
+   ------------------------------------------------------------ */
+
+.kit-list {
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.kit-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-6);
+    background: var(--white);
+}
+
+.kit-row + .kit-row {
+    border-top: 1px solid var(--gray-100);
+}
+
+@media (min-width: 768px) {
+    .kit-row {
+        flex-direction: row;
+        align-items: baseline;
+        gap: var(--space-6);
+    }
+
+    .kit-name {
+        flex: 0 0 160px;
+    }
+}
+
+.kit-name {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--gray-800);
+}
+
+.kit-role {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    line-height: 1.6;
+}

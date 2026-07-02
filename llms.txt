@@ -37,6 +37,11 @@ Browser-based experiments in computer vision, audio, and AI.
 - [Object Tracking](https://lmerinoev.github.io/object-tracking.html)
 - [Augmented Reality](https://lmerinoev.github.io/ar-demo.html)
 
+### Photography
+Self-assigned street and candid photography challenges. Practice, not portfolio.
+
+- [Street Assignments](https://lmerinoev.github.io/photography/)
+
 ### Analysis (Strategic Intelligence Briefs)
 Leadership profiles and strategic analysis.
 

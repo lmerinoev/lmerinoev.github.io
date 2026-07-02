@@ -275,6 +275,7 @@ const FOLDERS = {
     projects: {
         title: 'Projects',
         items: [
+            { type: 'iframe', icon: 'photos', name: 'Photo Challenges', url: 'photography/', w: 980, h: 700 },
             { type: 'iframe', icon: 'photos', name: 'Coffee Photography', url: 'coffee.html', w: 880, h: 620 },
             { type: 'iframe', icon: 'photos', name: 'Photography', url: 'photography.html', w: 880, h: 620 },
             { type: 'iframe', icon: 'photos', name: 'Creative Design', url: 'creating.html', w: 880, h: 620 },
