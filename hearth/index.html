@@ -155,6 +155,17 @@
     text-align: center;
     text-transform: uppercase;
   }
+  #unlock .alt {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-top: 2rem;
+  }
+  #unlock .alt:hover { color: var(--sumi); }
+  #restore-fields { display: flex; flex-direction: column; gap: 1.4rem; }
+  #restore-fields input { text-align: center; font-size: 0.85rem; }
 
   #app { animation: inkin 0.4s ease; }
   @keyframes inkin { from { opacity: 0; } to { opacity: 1; } }
@@ -608,12 +619,17 @@
 <div id="unlock">
   <div class="mark">炉</div>
   <form id="unlock-form" autocomplete="off">
+    <div id="restore-fields" class="hidden">
+      <input type="password" id="r-token" placeholder="github token" autocomplete="off">
+      <input type="text" id="r-gist" placeholder="gist id" autocomplete="off">
+    </div>
     <input type="password" id="pass" placeholder="passphrase" autocomplete="current-password">
     <input type="password" id="pass2" class="hidden" placeholder="once more" autocomplete="new-password">
     <label class="keep"><input type="checkbox" id="keep"> keep unlocked on this device</label>
     <button type="submit" class="go" id="unlock-go">Enter</button>
   </form>
   <div class="msg" id="unlock-msg"></div>
+  <button class="alt" id="unlock-restore">Restore from sync</button>
   <div class="sub">hearth · private · encrypted</div>
 </div>
 
@@ -720,6 +736,24 @@
     <!-- settings -->
     <main id="view-settings" class="hidden">
       <h2 class="viewtitle">Settings</h2>
+
+      <div class="set-item" id="sync-off">
+        <div class="si-l"><h3>Sync 同期</h3><p>Sync between devices through a private GitHub Gist. Only ciphertext ever leaves this device. Paste a fine-grained token with gist access; leave the gist id empty to create a new one.</p></div>
+        <button class="act" id="s-sync-show">Connect</button>
+      </div>
+      <div class="set-item hidden" id="sync-form">
+        <div class="si-l" style="width:100%">
+          <div class="addrow"><input type="password" id="s-token" placeholder="github token (gist scope)"></div>
+          <div class="addrow" style="margin-top:0.6rem"><input type="text" id="s-gist" placeholder="gist id — empty to create new"></div>
+        </div>
+        <button class="act" id="s-sync-go">Link</button>
+      </div>
+      <div class="set-item hidden" id="sync-on">
+        <div class="si-l"><h3>Sync 同期</h3><p id="sync-info">Connected.</p></div>
+        <button class="act" id="s-sync-now">Sync now</button>
+        <button class="act" id="s-sync-off-btn">Disconnect</button>
+      </div>
+
       <div class="set-item">
         <div class="si-l"><h3>Export</h3><p>Download your data as plain JSON. Keep it somewhere safe — it is unencrypted.</p></div>
         <button class="act" id="s-export">Export</button>
@@ -761,6 +795,8 @@
 const LS_SALT = 'hearth.salt';
 const LS_BLOB = 'hearth.blob';
 const LS_KEY  = 'hearth.key';
+const LS_SYNC = 'hearth.sync';
+const GIST_FILE = 'hearth.json';
 const ITER = 310000;
 const te = new TextEncoder(), td = new TextDecoder();
 
@@ -789,14 +825,23 @@ let key = null;
 let state = null;
 let saveTimer = null;
 
-const freshState = () => ({ version: 1, days: {}, released: 0, releases: {} });
+const freshState = () => ({ version: 1, days: {}, released: 0, releases: {}, touched: {} });
 
 function save() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
-    try { localStorage.setItem(LS_BLOB, await encrypt(key, state)); }
+    try {
+      localStorage.setItem(LS_BLOB, await encrypt(key, state));
+      scheduleSync();
+    }
     catch (e) { console.error('save failed', e); }
   }, 150);
+}
+
+// day-level modification clock, used to merge devices
+function touch(ds) {
+  if (!state.touched) state.touched = {};
+  state.touched[ds] = Date.now();
 }
 
 /* ============ dates ============ */
@@ -813,6 +858,7 @@ const MONTHS = ['January','February','March','April','May','June','July','August
 
 function day(dstr) {
   if (!state.days[dstr]) state.days[dstr] = { status: 'home', entries: [], meal: null, run: null, reset: false };
+  touch(dstr); // day() is the mutable accessor — every caller is about to change this day
   return state.days[dstr];
 }
 const dayRO = dstr => state.days[dstr] || { status: 'home', entries: [], meal: null, run: null, reset: false };
@@ -889,6 +935,20 @@ async function boot() {
   $('pass').focus();
 }
 
+let restoreMode = false;
+$('unlock-restore').addEventListener('click', () => {
+  restoreMode = !restoreMode;
+  $('restore-fields').classList.toggle('hidden', !restoreMode);
+  $('pass2').classList.toggle('hidden', restoreMode || !isSetup());
+  $('unlock-restore').textContent = restoreMode ? 'Never mind' : 'Restore from sync';
+  const msg = $('unlock-msg');
+  msg.className = 'msg';
+  msg.textContent = restoreMode
+    ? 'Paste the token and gist id from your other device, then your usual passphrase.'
+    : '';
+  if (restoreMode) $('r-token').focus();
+});
+
 $('unlock-form').addEventListener('submit', async ev => {
   ev.preventDefault();
   const msg = $('unlock-msg');
@@ -896,6 +956,23 @@ $('unlock-form').addEventListener('submit', async ev => {
   if (pass.length < 8) { msg.className = 'msg err'; msg.textContent = 'Eight characters at least.'; return; }
   msg.className = 'msg'; msg.textContent = '…';
   try {
+    if (restoreMode) {
+      const token = $('r-token').value.trim(), gistId = $('r-gist').value.trim();
+      if (!token || !gistId) { msg.className = 'msg err'; msg.textContent = 'Token and gist id are both needed.'; return; }
+      if (!isSetup() && !window.confirm('Replace this device’s Hearth data with the synced copy?')) return;
+      const remote = await gistPayloadOf(await gistGet(token, gistId));
+      if (!remote || !remote.blob || !remote.salt) throw Object.assign(new Error('That gist holds no Hearth data.'), { shown: true });
+      key = await deriveKey(pass, unb64(remote.salt));
+      state = await decrypt(key, JSON.stringify(remote.blob)); // throws on wrong passphrase
+      localStorage.setItem(LS_SALT, remote.salt);
+      localStorage.setItem(LS_BLOB, JSON.stringify(remote.blob));
+      syncToken = token;
+      syncMeta = { gistId, last: null, tokenEnc: JSON.parse(await encrypt(key, token)) };
+      saveSyncMeta();
+      if ($('keep').checked) localStorage.setItem(LS_KEY, JSON.stringify(await crypto.subtle.exportKey('jwk', key)));
+      enter();
+      return;
+    }
     if (isSetup()) {
       if (pass !== $('pass2').value) { msg.className = 'msg err'; msg.textContent = 'The two passphrases differ.'; return; }
       const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -914,13 +991,16 @@ $('unlock-form').addEventListener('submit', async ev => {
   } catch (e) {
     key = null;
     msg.className = 'msg err';
-    msg.textContent = 'That passphrase does not open this door.';
+    msg.textContent = e.shown ? e.message
+      : restoreMode ? 'Restore failed — check the token, gist id, and passphrase.'
+      : 'That passphrase does not open this door.';
   }
 });
 
 function enter() {
   $('unlock').classList.add('hidden');
   $('app').classList.remove('hidden');
+  if (!syncToken) unlockSync(); else syncNow(false);
   renderAll();
 }
 
@@ -1085,6 +1165,7 @@ $('q-reset').addEventListener('click', () => {
 $('q-release').addEventListener('click', () => {
   state.released++;
   state.releases[today()] = (state.releases[today()] || 0) + 1;
+  touch(today());
   save(); renderAll();
 });
 
@@ -1191,8 +1272,165 @@ function renderMonth() {
   $('m-seals').textContent = ms.seals;
 }
 
+/* ============ sync (private gist, ciphertext only) ============ */
+let syncToken = null;          // held in memory; persisted encrypted under the passphrase key
+let syncMeta = null;           // { gistId, last, tokenEnc } in localStorage (tokenEnc is ciphertext)
+let syncTimer = null;
+let syncing = false;
+
+const loadSyncMeta = () => { try { syncMeta = JSON.parse(localStorage.getItem(LS_SYNC)); } catch (e) { syncMeta = null; } };
+const saveSyncMeta = () => localStorage.setItem(LS_SYNC, JSON.stringify(syncMeta));
+
+const GH = 'https://api.github.com';
+const ghHeaders = token => ({ 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' });
+
+async function gistGet(token, id) {
+  const r = await fetch(`${GH}/gists/${id}`, { headers: ghHeaders(token) });
+  if (!r.ok) throw new Error(r.status === 404 ? 'gist not found (check id & token scope)' : 'github: ' + r.status);
+  return r.json();
+}
+async function gistWrite(token, id, content) {
+  const body = JSON.stringify({ description: 'Hearth — encrypted sync (ciphertext only)', public: false, files: { [GIST_FILE]: { content } } });
+  const r = await fetch(id ? `${GH}/gists/${id}` : `${GH}/gists`, {
+    method: id ? 'PATCH' : 'POST',
+    headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
+    body
+  });
+  if (!r.ok) throw new Error('github: ' + r.status);
+  return r.json();
+}
+async function gistPayloadOf(g) {
+  const f = g.files && g.files[GIST_FILE];
+  if (!f) return null;
+  const content = f.truncated ? await (await fetch(f.raw_url)).text() : f.content;
+  try { return JSON.parse(content); } catch (e) { return null; }
+}
+async function makePayload() {
+  return JSON.stringify({
+    version: 1,
+    salt: localStorage.getItem(LS_SALT),
+    updatedAt: Date.now(),
+    blob: JSON.parse(await encrypt(key, state))
+  });
+}
+
+// newest edit per day wins; counters only ever grow
+function mergeStates(a, b) {
+  const out = { ...freshState() };
+  const ta = a.touched || {}, tb = b.touched || {};
+  const days = new Set([...Object.keys(a.days || {}), ...Object.keys(b.days || {})]);
+  for (const ds of days) {
+    const newer = (tb[ds] || 0) > (ta[ds] || 0) ? b : a;
+    const older = newer === a ? b : a;
+    out.days[ds] = newer.days[ds] || older.days[ds];
+    const rel = (newer.releases && newer.releases[ds] != null) ? newer.releases[ds]
+              : (older.releases && older.releases[ds] != null) ? older.releases[ds] : null;
+    if (rel != null) out.releases[ds] = rel;
+    out.touched[ds] = Math.max(ta[ds] || 0, tb[ds] || 0);
+  }
+  out.released = Math.max(a.released || 0, b.released || 0);
+  return out;
+}
+
+function syncMsg(t) {
+  const info = $('sync-info');
+  if (info) info.textContent = t;
+}
+function fmtLast() {
+  if (!syncMeta || !syncMeta.last) return 'Connected.';
+  const d = new Date(syncMeta.last);
+  return `Gist ${syncMeta.gistId.slice(0, 8)}… · last synced ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+async function syncNow(forcePush) {
+  if (!syncMeta || !syncMeta.gistId || !syncToken || !key || !state || syncing) return;
+  syncing = true;
+  syncMsg('Syncing…');
+  try {
+    if (!forcePush) {
+      const remote = await gistPayloadOf(await gistGet(syncToken, syncMeta.gistId));
+      if (remote && remote.blob) {
+        if (remote.salt !== localStorage.getItem(LS_SALT)) throw new Error('cloud was encrypted under a different passphrase — disconnect & relink');
+        state = mergeStates(state, await decrypt(key, JSON.stringify(remote.blob)));
+        localStorage.setItem(LS_BLOB, await encrypt(key, state));
+      }
+    }
+    await gistWrite(syncToken, syncMeta.gistId, await makePayload());
+    syncMeta.last = Date.now(); saveSyncMeta();
+    renderAll();
+    syncMsg(fmtLast());
+  } catch (e) {
+    syncMsg(navigator.onLine ? 'Sync failed — ' + e.message : 'Offline — will sync when back.');
+  } finally { syncing = false; }
+}
+
+function scheduleSync() {
+  if (!syncMeta || !syncToken) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => syncNow(false), 4000);
+}
+window.addEventListener('online', () => scheduleSync());
+
+async function unlockSync() {
+  loadSyncMeta();
+  if (!syncMeta || !syncMeta.tokenEnc) return;
+  try {
+    syncToken = await decrypt(key, JSON.stringify(syncMeta.tokenEnc));
+    syncNow(false);
+  } catch (e) { syncToken = null; syncMsg('Could not unlock the sync token — reconnect in Settings.'); }
+}
+
+async function connectSync(token, gistId) {
+  if (gistId) {
+    const remote = await gistPayloadOf(await gistGet(token, gistId));
+    if (remote && remote.blob && remote.salt !== localStorage.getItem(LS_SALT)) {
+      if (!window.confirm('That gist holds Hearth data from a different passphrase lineage. Overwrite the cloud with THIS device’s data? (To adopt the cloud data instead, use “Restore from sync” on a fresh device.)')) {
+        throw new Error('cancelled');
+      }
+    }
+  }
+  syncToken = token;
+  const tokenEnc = JSON.parse(await encrypt(key, token));
+  if (!gistId) {
+    const g = await gistWrite(token, null, await makePayload());
+    gistId = g.id;
+  }
+  syncMeta = { gistId, last: null, tokenEnc };
+  saveSyncMeta();
+  await syncNow(false);
+}
+
+function renderSync() {
+  const on = !!(syncMeta && syncMeta.gistId);
+  $('sync-off').classList.toggle('hidden', on);
+  $('sync-on').classList.toggle('hidden', !on);
+  if (on) syncMsg(syncToken ? fmtLast() : 'Token locked — reconnect in Settings.');
+  if (!on) $('sync-form').classList.add('hidden');
+}
+
 /* ============ settings ============ */
 const smsg = t => { $('s-msg').textContent = t; setTimeout(() => { if ($('s-msg').textContent === t) $('s-msg').textContent = ''; }, 5000); };
+
+$('s-sync-show').addEventListener('click', () => $('sync-form').classList.toggle('hidden'));
+$('s-sync-go').addEventListener('click', async () => {
+  const token = $('s-token').value.trim();
+  const gistId = $('s-gist').value.trim();
+  if (!token) return smsg('A token is required.');
+  smsg('Linking…');
+  try {
+    await connectSync(token, gistId || null);
+    $('s-token').value = ''; $('s-gist').value = '';
+    renderSync();
+    smsg(`Linked. Gist id: ${syncMeta.gistId} — paste it on your other devices.`);
+  } catch (e) { smsg(e.message === 'cancelled' ? 'Cancelled.' : 'Could not link — ' + e.message); }
+});
+$('s-sync-now').addEventListener('click', () => syncNow(false));
+$('s-sync-off-btn').addEventListener('click', () => {
+  if (!window.confirm('Disconnect sync on this device? The gist and its data stay on GitHub.')) return;
+  localStorage.removeItem(LS_SYNC);
+  syncMeta = null; syncToken = null;
+  renderSync();
+});
 
 $('s-export').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
@@ -1233,17 +1471,25 @@ $('s-repass').addEventListener('click', async () => {
   if (p1.length < 8) return smsg('Eight characters at least.');
   const p2 = window.prompt('Once more:');
   if (p1 !== p2) return smsg('The two passphrases differ.');
+  if (syncMeta && syncToken) await syncNow(false); // pull the latest before the lineage changes
   const salt = crypto.getRandomValues(new Uint8Array(16));
   key = await deriveKey(p1, salt);
   localStorage.setItem(LS_SALT, b64(salt));
   localStorage.setItem(LS_BLOB, await encrypt(key, state));
   if (localStorage.getItem(LS_KEY)) localStorage.setItem(LS_KEY, JSON.stringify(await crypto.subtle.exportKey('jwk', key)));
+  if (syncMeta && syncToken) {
+    syncMeta.tokenEnc = JSON.parse(await encrypt(key, syncToken));
+    saveSyncMeta();
+    await syncNow(true); // push the new lineage; other devices must re-restore
+    smsg('Re-encrypted and pushed. Other devices: use “Restore from sync” once.');
+    return;
+  }
   smsg('Re-encrypted under the new passphrase.');
 });
 
 $('s-erase').addEventListener('click', () => {
-  if (!window.confirm('Erase all Hearth data on this device? There is no undo.')) return;
-  [LS_SALT, LS_BLOB, LS_KEY].forEach(k => localStorage.removeItem(k));
+  if (!window.confirm('Erase all Hearth data on this device? There is no undo. (A synced gist stays on GitHub.)')) return;
+  [LS_SALT, LS_BLOB, LS_KEY, LS_SYNC].forEach(k => localStorage.removeItem(k));
   location.reload();
 });
 
@@ -1253,7 +1499,7 @@ function renderAll() {
   if (view === 'tonight') renderTonight();
   if (view === 'week') renderWeek();
   if (view === 'month') renderMonth();
-  if (view === 'settings') renderKeep();
+  if (view === 'settings') { renderKeep(); loadSyncMeta(); renderSync(); }
 }
 
 /* ============ pwa ============ */

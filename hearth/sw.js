@@ -1,4 +1,4 @@
-const CACHE = 'hearth-v1';
+const CACHE = 'hearth-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -17,6 +17,8 @@ self.addEventListener('activate', e => {
 // Network-first so updates land; cache fallback keeps it working offline (and on planes).
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  // sync API calls (api.github.com) must never be served stale from cache
+  if (new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(
     fetch(e.request)
       .then(res => {
