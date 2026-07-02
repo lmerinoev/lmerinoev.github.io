@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F7F4EE">
+<title>Hearth</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hearth">
+<style>
+  :root {
+    --washi: #F7F4EE;
+    --washi-deep: #EFEBE1;
+    --sumi: #26241F;
+    --sumi-soft: #4A463D;
+    --stone: #8C877B;
+    --faint: #B7B1A3;
+    --hairline: #E2DDD1;
+    --shu: #B93A26;
+    --shu-soft: #F5E4DC;
+    --ai: #6B7590;
+    --ai-deep: #4A5265;
+    --mincho: 'Hiragino Mincho ProN', 'Yu Mincho', YuMincho, 'Noto Serif JP', 'Songti SC', Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  body.night {
+    --washi: #1D1C18;
+    --washi-deep: #24221D;
+    --sumi: #E6E1D4;
+    --sumi-soft: #C4BEAE;
+    --stone: #8C877B;
+    --faint: #5C574C;
+    --hairline: #34322B;
+    --shu: #C4472F;
+    --shu-soft: #3A241E;
+    --ai: #7C87A0;
+    --ai-deep: #9AA3B8;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--sans);
+    background: var(--washi);
+    color: var(--sumi);
+    line-height: 1.7;
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 0;
+    min-height: 100vh;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 1.25rem calc(5.5rem + env(safe-area-inset-bottom));
+  }
+
+  button {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:focus-visible, input:focus-visible, a:focus-visible {
+    outline: 1.5px solid var(--shu);
+    outline-offset: 2px;
+  }
+  input[type="text"], input[type="password"], input[type="number"] {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--sumi);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--stone);
+    border-radius: 0;
+    padding: 0.4rem 0.1rem;
+    width: 100%;
+  }
+  input::placeholder { color: var(--faint); }
+
+  .hidden { display: none !important; }
+
+  /* ---------- unlock ---------- */
+  #unlock {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    gap: 0;
+  }
+  #unlock .mark {
+    font-family: var(--mincho);
+    font-size: 1.1rem;
+    letter-spacing: 0.5em;
+    color: var(--stone);
+    margin-bottom: 3.5rem;
+  }
+  #unlock form {
+    width: min(20rem, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+  #unlock input { text-align: center; font-size: 1.05rem; letter-spacing: 0.08em; }
+  #unlock .go {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--stone);
+    padding: 0.8rem;
+    border: 1px solid var(--hairline);
+    transition: color 0.3s, border-color 0.3s;
+  }
+  #unlock .go:hover { color: var(--sumi); border-color: var(--stone); }
+  #unlock .keep {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    color: var(--stone);
+  }
+  #unlock .keep input { width: auto; accent-color: var(--shu); }
+  #unlock .msg {
+    font-size: 0.8rem;
+    color: var(--stone);
+    text-align: center;
+    min-height: 1.4em;
+    margin-top: 1.5rem;
+    max-width: 24em;
+  }
+  #unlock .msg.err { color: var(--shu); }
+  #unlock .sub {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: var(--faint);
+    margin-top: 4rem;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  #app { animation: inkin 0.4s ease; }
+  @keyframes inkin { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    #app { animation: none; }
+    body { transition: none; }
+  }
+
+  /* ---------- header ---------- */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 0 0.9rem;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 1.8rem;
+  }
+  header .brand {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  header .hbtns { display: flex; gap: 1.4rem; }
+  header .hbtn {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+    transition: color 0.3s;
+  }
+  header .hbtn:hover { color: var(--sumi); }
+
+  /* ---------- shared bits ---------- */
+  .ph-date {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .ph-title {
+    font-family: var(--mincho);
+    font-size: 1.75rem;
+    font-weight: 400;
+    margin: 0.4rem 0 0;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .ph-title .jp {
+    font-size: 0.78rem;
+    color: var(--stone);
+    letter-spacing: 0.3em;
+  }
+
+  .stones {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    margin: 1.6rem 0 1.9rem;
+  }
+  .stone-d {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--sumi);
+    flex: none;
+  }
+  .stone-d.away { background: transparent; border: 1px solid var(--ai); width: 8px; height: 8px; }
+  .stone-d.empty { background: transparent; border: 1px solid var(--hairline); width: 8px; height: 8px; }
+  .stone-d.now { background: var(--shu); border: none; width: 9px; height: 9px; }
+  .stones .slabel {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: var(--stone);
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .sect { border-top: 1px solid var(--hairline); padding: 1.3rem 0; }
+  .plabel {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.7rem;
+  }
+  .plabel .paction {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: var(--stone);
+  }
+  .plabel .paction:hover { color: var(--sumi); }
+
+  .zen-task {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.5rem 0;
+    font-size: 0.92rem;
+    width: 100%;
+    text-align: left;
+  }
+  .zen-task .ink {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--stone);
+    flex: none;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .zen-task.done .ink { background: var(--sumi); border-color: var(--sumi); }
+  .zen-task.done .txt { color: var(--faint); }
+  .zen-task .txt { flex: 1; min-width: 0; }
+  .zen-task .zsub {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+    text-transform: uppercase;
+  }
+  .zen-task .del { color: var(--faint); font-size: 0.85rem; padding: 0 0.2rem; visibility: hidden; }
+  .zen-task:hover .del { visibility: visible; }
+  .empty-note { font-size: 0.85rem; color: var(--faint); padding: 0.4rem 0; font-style: italic; font-family: var(--mincho); }
+
+  .addrow { display: flex; gap: 0.8rem; align-items: center; margin-top: 0.4rem; }
+  .addrow input { font-size: 0.9rem; }
+  .addrow .ok {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: var(--stone);
+    text-transform: uppercase;
+    flex: none;
+  }
+
+  /* quick log */
+  .seg { display: flex; border: 1px solid var(--hairline); }
+  .seg button {
+    flex: 1;
+    padding: 0.6rem 0.4rem;
+    font-size: 0.78rem;
+    color: var(--stone);
+    border-right: 1px solid var(--hairline);
+    transition: background 0.25s, color 0.25s;
+  }
+  .seg button:last-child { border-right: none; }
+  .seg button.on { background: var(--sumi); color: var(--washi); }
+  .seg button.on.warn { background: var(--shu); color: var(--shu-soft); }
+  .seg button .k { font-family: var(--mincho); margin-right: 0.4rem; }
+
+  .qrow { display: flex; gap: 0.75rem; margin-top: 0.85rem; flex-wrap: wrap; }
+  .qbtn {
+    flex: 1;
+    min-width: 7rem;
+    border: 1px solid var(--hairline);
+    padding: 0.6rem 0.6rem;
+    font-size: 0.78rem;
+    color: var(--stone);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: color 0.25s, border-color 0.25s, background 0.25s;
+  }
+  .qbtn .k { font-family: var(--mincho); }
+  .qbtn:hover { color: var(--sumi); border-color: var(--stone); }
+  .qbtn.on { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+
+  .homestat { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .homestat .lbl { font-size: 0.9rem; }
+  .homestat .lbl .jp { font-family: var(--mincho); margin-right: 0.6rem; }
+  .togglebtn {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid var(--hairline);
+    padding: 0.45rem 0.9rem;
+    color: var(--stone);
+  }
+  .togglebtn.away { color: var(--ai-deep); border-color: var(--ai); }
+
+  .foot-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid var(--hairline);
+    padding-top: 1.3rem;
+    margin-top: 0.3rem;
+  }
+  .ph-stat .k {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .ph-stat .v { font-family: var(--mincho); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+  .hanko {
+    width: 38px; height: 38px;
+    background: var(--shu);
+    border-radius: 4px;
+    color: var(--shu-soft);
+    font-family: var(--mincho);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-3deg);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .hanko.earned { opacity: 1; }
+
+  /* ---------- week view ---------- */
+  .week-scroll { overflow-x: auto; margin: 0 -1.25rem; padding: 0 1.25rem; }
+  .week {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(96px, 1fr));
+    border: 1px solid var(--hairline);
+    background: var(--washi);
+    min-width: 680px;
+  }
+  .day {
+    border-right: 1px solid var(--hairline);
+    padding: 0.9rem 0.7rem 1rem;
+    min-height: 11rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .day:last-child { border-right: none; }
+  .day.away { background: color-mix(in srgb, var(--ai) 6%, transparent); }
+  .day .dname {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+  }
+  .day .dname .num { font-family: var(--mincho); font-size: 0.95rem; color: var(--sumi); letter-spacing: 0; }
+  .day.away .dname .num { color: var(--ai-deep); }
+  .day.today .dname .num {
+    color: #F5E4DC;
+    background: var(--shu);
+    width: 1.55rem; height: 1.55rem;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-3deg);
+  }
+  .entry {
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: var(--sumi-soft);
+    padding-left: 0.75rem;
+    position: relative;
+    text-align: left;
+    width: 100%;
+  }
+  .entry::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    border: 1px solid var(--stone);
+  }
+  .entry.done { color: var(--faint); }
+  .entry.done::before { background: var(--sumi); border-color: var(--sumi); }
+  .day .dayadd {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--faint);
+    text-align: left;
+    margin-top: auto;
+    padding-top: 0.4rem;
+  }
+  .day .dayadd:hover { color: var(--sumi); }
+  .day .awayflag {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    color: var(--ai);
+    text-align: left;
+  }
+  .day .dhanko {
+    font-family: var(--mincho);
+    font-size: 0.72rem;
+    color: var(--shu);
+    border: 1px solid var(--shu);
+    border-radius: 3px;
+    width: 1.35rem; height: 1.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-3deg);
+    margin-top: 0.2rem;
+  }
+
+  .week-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem 2.4rem;
+    padding: 1.2rem 0 0.4rem;
+    border-top: 1px solid var(--hairline);
+    margin-top: 1.4rem;
+  }
+  .stat .k {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+  .stat .v { font-family: var(--mincho); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+  .stat .v .dim { color: var(--faint); font-size: 0.85rem; }
+  .stat .v .warn { color: var(--shu); }
+
+  .weeknav { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.2rem; }
+  .weeknav .range { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; color: var(--stone); text-transform: uppercase; }
+  .weeknav .wbtns { display: flex; gap: 1.2rem; }
+  .weeknav .wbtn { font-family: var(--mono); font-size: 0.7rem; color: var(--faint); letter-spacing: 0.1em; }
+  .weeknav .wbtn:hover { color: var(--sumi); }
+
+  /* ---------- month view ---------- */
+  .enso-wrap { display: flex; flex-direction: column; align-items: center; padding: 2.5rem 0 1.5rem; }
+  .enso-figure { position: relative; width: 200px; height: 200px; }
+  .enso-count {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .enso-count .n { font-family: var(--mincho); font-size: 2.8rem; line-height: 1; font-variant-numeric: tabular-nums; }
+  .enso-count .of { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.2em; color: var(--stone); margin-top: 0.4rem; }
+  .enso-cap {
+    font-family: var(--mincho);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--stone);
+    margin-top: 1.8rem;
+    text-align: center;
+    max-width: 22em;
+  }
+  .month-stats { margin-top: 2rem; }
+  .mstat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .mstat .lbl { font-size: 0.9rem; }
+  .mstat .lbl .jp { font-family: var(--mincho); margin-right: 0.7rem; }
+  .mstat .val { font-family: var(--mincho); font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+  .mstat .val .dim { color: var(--faint); font-size: 0.9rem; }
+
+  /* ---------- settings ---------- */
+  .set-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .set-item .si-l h3 { font-size: 0.9rem; font-weight: 500; margin: 0; letter-spacing: 0.03em; }
+  .set-item .si-l p { font-size: 0.76rem; color: var(--stone); margin: 0.15rem 0 0; max-width: 30em; }
+  .set-item .act {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid var(--hairline);
+    padding: 0.45rem 0.9rem;
+    color: var(--stone);
+    white-space: nowrap;
+    flex: none;
+  }
+  .set-item .act:hover { color: var(--sumi); border-color: var(--stone); }
+  .set-item .act.danger { color: var(--shu); border-color: var(--shu); opacity: 0.85; }
+  .setmsg { font-size: 0.8rem; color: var(--stone); min-height: 1.3em; margin-top: 1rem; }
+
+  /* ---------- bottom nav ---------- */
+  nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--washi);
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    transition: background 0.4s ease;
+  }
+  nav button {
+    padding: 0.9rem 1.6rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    color: var(--faint);
+    transition: color 0.25s;
+  }
+  nav button .k { font-family: var(--mincho); font-size: 1.05rem; line-height: 1; }
+  nav button .e { font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  nav button.on { color: var(--sumi); }
+  nav button.on .k { color: var(--shu); }
+
+  h2.viewtitle {
+    font-family: var(--mincho);
+    font-size: 1.45rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin: 0 0 1.4rem;
+  }
+
+  /* on wide screens the week gets the room a 7-column calendar needs;
+     reading views keep their narrow measure */
+  @media (min-width: 1024px) {
+    .wrap { max-width: 980px; }
+    header, #view-tonight, #view-month, #view-settings { max-width: 640px; margin-left: auto; margin-right: auto; }
+    header { margin-bottom: 1.8rem; }
+    .week { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ unlock ============ -->
+<div id="unlock">
+  <div class="mark">炉</div>
+  <form id="unlock-form" autocomplete="off">
+    <input type="password" id="pass" placeholder="passphrase" autocomplete="current-password">
+    <input type="password" id="pass2" class="hidden" placeholder="once more" autocomplete="new-password">
+    <label class="keep"><input type="checkbox" id="keep"> keep unlocked on this device</label>
+    <button type="submit" class="go" id="unlock-go">Enter</button>
+  </form>
+  <div class="msg" id="unlock-msg"></div>
+  <div class="sub">hearth · private · encrypted</div>
+</div>
+
+<!-- ============ app ============ -->
+<div id="app" class="hidden">
+  <div class="wrap">
+    <header>
+      <span class="brand">hearth</span>
+      <div class="hbtns">
+        <button class="hbtn" id="btn-lock">Lock</button>
+      </div>
+    </header>
+
+    <!-- tonight -->
+    <main id="view-tonight">
+      <span class="ph-date" id="t-date"></span>
+      <p class="ph-title"><span id="t-greet">Welcome home.</span><span class="jp" id="t-greet-jp">おかえりなさい</span></p>
+
+      <div class="stones" id="t-stones"></div>
+
+      <div class="sect">
+        <div class="homestat">
+          <span class="lbl"><span class="jp">家</span><span id="t-homelbl">Home night</span></span>
+          <button class="togglebtn" id="t-away-toggle">✈ mark away</button>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="plabel"><span>今夜 · Tonight</span><button class="paction" id="t-add">＋ Add</button></div>
+        <div id="t-tasks"></div>
+        <div class="addrow hidden" id="t-addrow">
+          <input type="text" id="t-input" placeholder="cook — tacos al pastor" maxlength="80">
+          <button class="ok" id="t-save">Save</button>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="plabel"><span>食 · Dinner</span></div>
+        <div class="seg" id="t-meal">
+          <button data-meal="cooked"><span class="k">自</span>Cooked</button>
+          <button data-meal="ordered"><span class="k">出</span>Ordered</button>
+          <button data-meal="out"><span class="k">外</span>Out</button>
+        </div>
+        <div class="qrow">
+          <button class="qbtn" id="q-run"><span class="k">体</span><span id="q-run-lbl">Log run</span></button>
+          <button class="qbtn" id="q-reset"><span class="k">静</span><span id="q-reset-lbl">15m reset</span></button>
+          <button class="qbtn" id="q-release"><span class="k">空</span>Release +1</button>
+        </div>
+        <div class="addrow hidden" id="run-row">
+          <input type="number" id="run-km" placeholder="distance, km" min="0" step="0.1" inputmode="decimal">
+          <button class="ok" id="run-save">Save</button>
+        </div>
+      </div>
+
+      <div class="foot-stats">
+        <div class="ph-stat"><span class="k">空 · Released</span><span class="v" id="t-released">0</span></div>
+        <div class="ph-stat"><span class="k">家 · Nights home</span><span class="v" id="t-nights">0</span></div>
+        <div class="hanko" id="t-hanko" title="A complete evening">今</div>
+      </div>
+    </main>
+
+    <!-- week -->
+    <main id="view-week" class="hidden">
+      <div class="weeknav">
+        <span class="range" id="w-range"></span>
+        <div class="wbtns">
+          <button class="wbtn" id="w-prev">← prev</button>
+          <button class="wbtn" id="w-today">this week</button>
+          <button class="wbtn" id="w-next">next →</button>
+        </div>
+      </div>
+      <div class="week-scroll"><div class="week" id="w-grid"></div></div>
+      <div class="addrow hidden" id="w-addrow">
+        <input type="text" id="w-input" placeholder="" maxlength="80">
+        <button class="ok" id="w-save">Save</button>
+      </div>
+      <div class="week-footer" id="w-stats"></div>
+    </main>
+
+    <!-- month -->
+    <main id="view-month" class="hidden">
+      <div class="enso-wrap">
+        <div class="enso-figure">
+          <svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Month ring of nights at home">
+            <circle cx="100" cy="100" r="84" fill="none" stroke="var(--hairline)" stroke-width="1.5"/>
+            <circle id="m-ring" cx="100" cy="100" r="84" fill="none" stroke="var(--sumi)" stroke-width="3"
+                    stroke-linecap="round" stroke-dasharray="0 527.8" transform="rotate(-90 100 100)"/>
+          </svg>
+          <div class="enso-count">
+            <span class="n" id="m-nights">0</span>
+            <span class="of" id="m-of">OF 30</span>
+          </div>
+        </div>
+        <p class="enso-cap">The circle never closes.<br>That is not a flaw.</p>
+      </div>
+      <div class="month-stats">
+        <div class="mstat"><span class="lbl"><span class="jp">体</span>Runs this month</span><span class="val" id="m-runs">0</span></div>
+        <div class="mstat"><span class="lbl"><span class="jp">食</span>Cooked, of dinners logged</span><span class="val" id="m-cooked">—</span></div>
+        <div class="mstat"><span class="lbl"><span class="jp">空</span>Released this month</span><span class="val" id="m-released">0</span></div>
+        <div class="mstat"><span class="lbl"><span class="jp">印</span>Complete evenings</span><span class="val" id="m-seals">0</span></div>
+      </div>
+    </main>
+
+    <!-- settings -->
+    <main id="view-settings" class="hidden">
+      <h2 class="viewtitle">Settings</h2>
+      <div class="set-item">
+        <div class="si-l"><h3>Export</h3><p>Download your data as plain JSON. Keep it somewhere safe — it is unencrypted.</p></div>
+        <button class="act" id="s-export">Export</button>
+      </div>
+      <div class="set-item">
+        <div class="si-l"><h3>Import</h3><p>Restore from an exported JSON file. Replaces what's on this device.</p></div>
+        <button class="act" id="s-import">Import</button>
+        <input type="file" id="s-file" accept="application/json" class="hidden">
+      </div>
+      <div class="set-item">
+        <div class="si-l"><h3>Keep unlocked</h3><p>Stores the key on this device so you skip the passphrase. Turn off on shared machines.</p></div>
+        <button class="act" id="s-keep">—</button>
+      </div>
+      <div class="set-item">
+        <div class="si-l"><h3>Change passphrase</h3><p>Re-encrypts everything under a new passphrase.</p></div>
+        <button class="act" id="s-repass">Change</button>
+      </div>
+      <div class="set-item">
+        <div class="si-l"><h3>Erase everything</h3><p>Deletes all Hearth data from this device. There is no undo.</p></div>
+        <button class="act danger" id="s-erase">Erase</button>
+      </div>
+      <div class="setmsg" id="s-msg"></div>
+    </main>
+  </div>
+
+  <nav>
+    <button data-view="tonight" class="on"><span class="k">今</span><span class="e">Tonight</span></button>
+    <button data-view="week"><span class="k">週</span><span class="e">Week</span></button>
+    <button data-view="month"><span class="k">月</span><span class="e">Month</span></button>
+    <button data-view="settings"><span class="k">設</span><span class="e">More</span></button>
+  </nav>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ============ storage & crypto ============ */
+const LS_SALT = 'hearth.salt';
+const LS_BLOB = 'hearth.blob';
+const LS_KEY  = 'hearth.key';
+const ITER = 310000;
+const te = new TextEncoder(), td = new TextDecoder();
+
+const b64 = u8 => btoa(String.fromCharCode(...u8));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function deriveKey(pass, salt) {
+  const km = await crypto.subtle.importKey('raw', te.encode(pass), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: ITER, hash: 'SHA-256' },
+    km, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
+}
+async function encrypt(key, obj) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, te.encode(JSON.stringify(obj)));
+  return JSON.stringify({ iv: b64(iv), ct: b64(new Uint8Array(ct)) });
+}
+async function decrypt(key, blobStr) {
+  const { iv, ct } = JSON.parse(blobStr);
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(iv) }, key, unb64(ct));
+  return JSON.parse(td.decode(pt));
+}
+
+/* ============ state ============ */
+let key = null;
+let state = null;
+let saveTimer = null;
+
+const freshState = () => ({ version: 1, days: {}, released: 0, releases: {} });
+
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try { localStorage.setItem(LS_BLOB, await encrypt(key, state)); }
+    catch (e) { console.error('save failed', e); }
+  }, 150);
+}
+
+/* ============ dates ============ */
+const ymd = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const today = () => ymd(new Date());
+const parseYmd = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+function mondayOf(d) {
+  const x = new Date(d); const dow = (x.getDay() + 6) % 7;
+  x.setDate(x.getDate() - dow); return x;
+}
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function day(dstr) {
+  if (!state.days[dstr]) state.days[dstr] = { status: 'home', entries: [], meal: null, run: null, reset: false };
+  return state.days[dstr];
+}
+const dayRO = dstr => state.days[dstr] || { status: 'home', entries: [], meal: null, run: null, reset: false };
+
+/* ============ derived ============ */
+const isHome = dstr => dayRO(dstr).status !== 'away';
+const sealed = d => d.entries.length > 0 && d.entries.every(e => e.done) && d.meal === 'cooked';
+
+function monthDays() {
+  const now = new Date();
+  const total = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+  const out = [];
+  for (let i = 1; i <= now.getDate(); i++) out.push(ymd(new Date(now.getFullYear(), now.getMonth(), i)));
+  return { elapsed: out, total };
+}
+function monthStats() {
+  const { elapsed, total } = monthDays();
+  let nights = 0, runs = 0, cooked = 0, meals = 0, seals = 0, released = 0;
+  for (const ds of elapsed) {
+    const d = dayRO(ds);
+    if (d.status !== 'away') nights++;
+    if (d.run) runs++;
+    if (d.meal) { meals++; if (d.meal === 'cooked') cooked++; }
+    if (sealed(d)) seals++;
+    released += state.releases[ds] || 0;
+  }
+  return { nights, total, runs, cooked, meals, seals, released };
+}
+function weekStats(mon) {
+  let nights = 0, elapsed = 0, runs = 0, cooked = 0, ordered = 0, released = 0;
+  const t = today();
+  for (let i = 0; i < 7; i++) {
+    const ds = ymd(addDays(mon, i));
+    const d = dayRO(ds);
+    if (ds <= t) { elapsed++; if (d.status !== 'away') nights++; }
+    if (d.run) runs++;
+    if (d.meal === 'cooked') cooked++;
+    if (d.meal === 'ordered' || d.meal === 'out') ordered++;
+    released += state.releases[ds] || 0;
+  }
+  return { nights, elapsed, runs, cooked, ordered, released };
+}
+
+/* ============ dom helpers ============ */
+const $ = id => document.getElementById(id);
+const el = (tag, cls, txt) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (txt !== undefined) n.textContent = txt;
+  return n;
+};
+
+/* ============ unlock flow ============ */
+const isSetup = () => !localStorage.getItem(LS_SALT);
+
+async function boot() {
+  applyTheme();
+  setInterval(applyTheme, 60000);
+
+  const stored = localStorage.getItem(LS_KEY);
+  if (stored && !isSetup()) {
+    try {
+      key = await crypto.subtle.importKey('jwk', JSON.parse(stored), { name: 'AES-GCM' }, true, ['encrypt','decrypt']);
+      state = await decrypt(key, localStorage.getItem(LS_BLOB));
+      return enter();
+    } catch (e) { localStorage.removeItem(LS_KEY); key = null; }
+  }
+  if (isSetup()) {
+    $('pass2').classList.remove('hidden');
+    $('pass').placeholder = 'choose a passphrase';
+    $('pass').autocomplete = 'new-password';
+    $('unlock-msg').textContent = 'First light. Choose a passphrase — it encrypts everything and cannot be recovered if lost.';
+  }
+  $('pass').focus();
+}
+
+$('unlock-form').addEventListener('submit', async ev => {
+  ev.preventDefault();
+  const msg = $('unlock-msg');
+  const pass = $('pass').value;
+  if (pass.length < 8) { msg.className = 'msg err'; msg.textContent = 'Eight characters at least.'; return; }
+  msg.className = 'msg'; msg.textContent = '…';
+  try {
+    if (isSetup()) {
+      if (pass !== $('pass2').value) { msg.className = 'msg err'; msg.textContent = 'The two passphrases differ.'; return; }
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      key = await deriveKey(pass, salt);
+      state = freshState();
+      localStorage.setItem(LS_SALT, b64(salt));
+      localStorage.setItem(LS_BLOB, await encrypt(key, state));
+    } else {
+      key = await deriveKey(pass, unb64(localStorage.getItem(LS_SALT)));
+      state = await decrypt(key, localStorage.getItem(LS_BLOB));
+    }
+    if ($('keep').checked) {
+      localStorage.setItem(LS_KEY, JSON.stringify(await crypto.subtle.exportKey('jwk', key)));
+    }
+    enter();
+  } catch (e) {
+    key = null;
+    msg.className = 'msg err';
+    msg.textContent = 'That passphrase does not open this door.';
+  }
+});
+
+function enter() {
+  $('unlock').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  renderAll();
+}
+
+$('btn-lock').addEventListener('click', () => {
+  localStorage.removeItem(LS_KEY);
+  location.reload();
+});
+
+/* ============ theme ============ */
+function applyTheme() {
+  const h = new Date().getHours();
+  const night = h >= 18 || h < 6;
+  document.body.classList.toggle('night', night);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = night ? '#1D1C18' : '#F7F4EE';
+}
+
+/* ============ nav ============ */
+let view = 'tonight';
+let weekAnchor = mondayOf(new Date());
+
+document.querySelectorAll('nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    view = b.dataset.view;
+    document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+    ['tonight','week','month','settings'].forEach(v =>
+      $('view-' + v).classList.toggle('hidden', v !== view));
+    renderAll();
+  });
+});
+
+/* ============ render: tonight ============ */
+function renderTonight() {
+  const t = today();
+  const d = dayRO(t);
+  const now = new Date();
+  const DOW_FULL = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  $('t-date').textContent = `${DOW_FULL[(now.getDay()+6)%7]} · ${MONTHS[now.getMonth()].slice(0,3)} ${String(now.getDate()).padStart(2,'0')}`;
+  const h = now.getHours();
+  $('t-greet').textContent = d.status === 'away' ? 'Safe travels.' : (h < 12 ? 'Good morning.' : h < 17 ? 'Good afternoon.' : 'Welcome home.');
+  $('t-greet-jp').textContent = d.status === 'away' ? 'いってらっしゃい' : (h < 17 ? 'こんにちは' : 'おかえりなさい');
+
+  // stones
+  const stones = $('t-stones');
+  stones.textContent = '';
+  const mon = mondayOf(now);
+  let nightsWk = 0;
+  for (let i = 0; i < 7; i++) {
+    const ds = ymd(addDays(mon, i));
+    const s = el('span', 'stone-d');
+    if (ds === t) s.classList.add(isHome(ds) ? 'now' : 'away');
+    else if (ds > t) s.classList.add('empty');
+    else if (!isHome(ds)) s.classList.add('away');
+    if (ds <= t && isHome(ds)) nightsWk++;
+    stones.appendChild(s);
+  }
+  stones.appendChild(el('span', 'slabel', `${nightsWk} night${nightsWk === 1 ? '' : 's'} home`));
+
+  // away toggle
+  const tg = $('t-away-toggle');
+  const away = d.status === 'away';
+  $('t-homelbl').textContent = away ? 'Away tonight' : 'Home night';
+  tg.textContent = away ? '⌂ mark home' : '✈ mark away';
+  tg.classList.toggle('away', away);
+
+  // tasks
+  const list = $('t-tasks');
+  list.textContent = '';
+  if (!d.entries.length) list.appendChild(el('div', 'empty-note', 'An open evening.'));
+  d.entries.forEach(e => {
+    const row = el('button', 'zen-task' + (e.done ? ' done' : ''));
+    row.type = 'button';
+    row.appendChild(el('span', 'ink'));
+    row.appendChild(el('span', 'txt', e.text));
+    const del = el('span', 'del', '×');
+    del.addEventListener('click', ev => {
+      ev.stopPropagation();
+      const dd = day(t);
+      dd.entries = dd.entries.filter(x => x.id !== e.id);
+      save(); renderAll();
+    });
+    row.appendChild(del);
+    row.addEventListener('click', () => {
+      const dd = day(t);
+      const en = dd.entries.find(x => x.id === e.id);
+      if (en) { en.done = !en.done; save(); renderAll(); }
+    });
+    list.appendChild(row);
+  });
+
+  // meal seg
+  $('t-meal').querySelectorAll('button').forEach(b => {
+    b.classList.toggle('on', d.meal === b.dataset.meal);
+    b.classList.toggle('warn', b.classList.contains('on') && b.dataset.meal !== 'cooked');
+  });
+
+  // quick buttons
+  $('q-run').classList.toggle('on', !!d.run);
+  $('q-run-lbl').textContent = d.run ? `Ran ${d.run.km}k` : 'Log run';
+  $('q-reset').classList.toggle('on', !!d.reset);
+  $('q-reset-lbl').textContent = d.reset ? 'Reset done' : '15m reset';
+
+  // footer
+  $('t-released').textContent = state.released;
+  const ms = monthStats();
+  $('t-nights').textContent = `${ms.nights}/${ms.total}`;
+  $('t-hanko').classList.toggle('earned', sealed(d));
+}
+
+$('t-away-toggle').addEventListener('click', () => {
+  const d = day(today());
+  d.status = d.status === 'away' ? 'home' : 'away';
+  save(); renderAll();
+});
+
+$('t-add').addEventListener('click', () => {
+  $('t-addrow').classList.toggle('hidden');
+  if (!$('t-addrow').classList.contains('hidden')) $('t-input').focus();
+});
+function addTonight() {
+  const v = $('t-input').value.trim();
+  if (!v) return;
+  day(today()).entries.push({ id: crypto.randomUUID(), text: v, done: false });
+  $('t-input').value = '';
+  save(); renderAll();
+  $('t-input').focus();
+}
+$('t-save').addEventListener('click', addTonight);
+$('t-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addTonight(); } });
+
+$('t-meal').querySelectorAll('button').forEach(b => {
+  b.addEventListener('click', () => {
+    const d = day(today());
+    d.meal = d.meal === b.dataset.meal ? null : b.dataset.meal;
+    save(); renderAll();
+  });
+});
+
+$('q-run').addEventListener('click', () => {
+  const d = day(today());
+  if (d.run) { d.run = null; save(); renderAll(); return; }
+  $('run-row').classList.toggle('hidden');
+  if (!$('run-row').classList.contains('hidden')) $('run-km').focus();
+});
+function saveRun() {
+  const km = parseFloat($('run-km').value);
+  if (!isFinite(km) || km <= 0) return;
+  day(today()).run = { km: Math.round(km * 10) / 10 };
+  $('run-km').value = '';
+  $('run-row').classList.add('hidden');
+  save(); renderAll();
+}
+$('run-save').addEventListener('click', saveRun);
+$('run-km').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveRun(); } });
+
+$('q-reset').addEventListener('click', () => {
+  const d = day(today());
+  d.reset = !d.reset;
+  save(); renderAll();
+});
+
+$('q-release').addEventListener('click', () => {
+  state.released++;
+  state.releases[today()] = (state.releases[today()] || 0) + 1;
+  save(); renderAll();
+});
+
+/* ============ render: week ============ */
+let weekAddTarget = null;
+
+function renderWeek() {
+  const t = today();
+  const mon = weekAnchor;
+  const sun = addDays(mon, 6);
+  const fmt = d => `${MONTHS[d.getMonth()].slice(0,3)} ${String(d.getDate()).padStart(2,'0')}`;
+  $('w-range').textContent = `${fmt(mon)} — ${fmt(sun)}`.toUpperCase();
+
+  const grid = $('w-grid');
+  grid.textContent = '';
+  for (let i = 0; i < 7; i++) {
+    const dt = addDays(mon, i);
+    const ds = ymd(dt);
+    const d = dayRO(ds);
+    const cell = el('div', 'day' + (d.status === 'away' ? ' away' : '') + (ds === t ? ' today' : ''));
+
+    const head = el('div', 'dname');
+    head.appendChild(el('span', '', DOW[i]));
+    const num = el('button', 'num', String(dt.getDate()));
+    num.type = 'button';
+    num.title = 'Toggle home / away';
+    num.addEventListener('click', () => {
+      const dd = day(ds);
+      dd.status = dd.status === 'away' ? 'home' : 'away';
+      save(); renderAll();
+    });
+    head.appendChild(num);
+    cell.appendChild(head);
+
+    if (d.status === 'away') cell.appendChild(el('span', 'awayflag', '✈ away'));
+
+    d.entries.forEach(e => {
+      const row = el('button', 'entry' + (e.done ? ' done' : ''), e.text);
+      row.type = 'button';
+      row.addEventListener('click', () => {
+        const en = day(ds).entries.find(x => x.id === e.id);
+        if (en) { en.done = !en.done; save(); renderAll(); }
+      });
+      cell.appendChild(row);
+    });
+    if (d.run) cell.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
+    if (d.meal) cell.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
+    if (sealed(d)) cell.appendChild(el('span', 'dhanko', '印'));
+
+    const add = el('button', 'dayadd', '＋');
+    add.type = 'button';
+    add.addEventListener('click', () => {
+      weekAddTarget = ds;
+      $('w-addrow').classList.remove('hidden');
+      $('w-input').placeholder = `${DOW[i]} ${dt.getDate()} — plan something`;
+      $('w-input').focus();
+    });
+    cell.appendChild(add);
+    grid.appendChild(cell);
+  }
+
+  const s = weekStats(mon);
+  const stats = $('w-stats');
+  stats.textContent = '';
+  const mkStat = (k, html) => {
+    const box = el('div', 'stat');
+    box.appendChild(el('span', 'k', k));
+    const v = el('span', 'v'); v.innerHTML = html;
+    box.appendChild(v); stats.appendChild(box);
+  };
+  mkStat('Nights home', `${s.nights}<span class="dim">/${s.elapsed || 7}</span>`);
+  mkStat('Runs', `${s.runs}`);
+  mkStat('Cooked', `${s.cooked} <span class="dim">·</span> <span class="warn">${s.ordered}</span>`);
+  mkStat('Released', `${s.released}`);
+}
+
+$('w-prev').addEventListener('click', () => { weekAnchor = addDays(weekAnchor, -7); renderWeek(); });
+$('w-next').addEventListener('click', () => { weekAnchor = addDays(weekAnchor, 7); renderWeek(); });
+$('w-today').addEventListener('click', () => { weekAnchor = mondayOf(new Date()); renderWeek(); });
+
+function addWeekEntry() {
+  const v = $('w-input').value.trim();
+  if (!v || !weekAddTarget) return;
+  day(weekAddTarget).entries.push({ id: crypto.randomUUID(), text: v, done: false });
+  $('w-input').value = '';
+  $('w-addrow').classList.add('hidden');
+  save(); renderAll();
+}
+$('w-save').addEventListener('click', addWeekEntry);
+$('w-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addWeekEntry(); } });
+
+/* ============ render: month ============ */
+function renderMonth() {
+  const ms = monthStats();
+  const now = new Date();
+  $('m-nights').textContent = ms.nights;
+  $('m-of').textContent = `OF ${ms.total} · ${MONTHS[now.getMonth()].slice(0,4).toUpperCase()}`;
+  const C = 2 * Math.PI * 84;
+  const frac = Math.min(ms.nights / ms.total, 0.96); // the enso never closes
+  $('m-ring').setAttribute('stroke-dasharray', `${(C * frac).toFixed(1)} ${C.toFixed(1)}`);
+  $('m-runs').textContent = ms.runs;
+  $('m-cooked').innerHTML = ms.meals ? `${ms.cooked}<span class="dim">/${ms.meals}</span>` : '—';
+  $('m-released').textContent = ms.released;
+  $('m-seals').textContent = ms.seals;
+}
+
+/* ============ settings ============ */
+const smsg = t => { $('s-msg').textContent = t; setTimeout(() => { if ($('s-msg').textContent === t) $('s-msg').textContent = ''; }, 5000); };
+
+$('s-export').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `hearth-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  smsg('Exported. Store it somewhere private — it is plain JSON.');
+});
+
+$('s-import').addEventListener('click', () => $('s-file').click());
+$('s-file').addEventListener('change', async ev => {
+  const f = ev.target.files[0];
+  if (!f) return;
+  try {
+    const obj = JSON.parse(await f.text());
+    if (typeof obj !== 'object' || obj.version !== 1 || typeof obj.days !== 'object') throw new Error('shape');
+    state = { ...freshState(), ...obj };
+    save(); renderAll();
+    smsg('Imported.');
+  } catch (e) { smsg('That file is not a Hearth export.'); }
+  ev.target.value = '';
+});
+
+function renderKeep() {
+  $('s-keep').textContent = localStorage.getItem(LS_KEY) ? 'On — turn off' : 'Off — turn on';
+}
+$('s-keep').addEventListener('click', async () => {
+  if (localStorage.getItem(LS_KEY)) localStorage.removeItem(LS_KEY);
+  else localStorage.setItem(LS_KEY, JSON.stringify(await crypto.subtle.exportKey('jwk', key)));
+  renderKeep();
+});
+
+$('s-repass').addEventListener('click', async () => {
+  const p1 = window.prompt('New passphrase (8+ characters):');
+  if (p1 === null) return;
+  if (p1.length < 8) return smsg('Eight characters at least.');
+  const p2 = window.prompt('Once more:');
+  if (p1 !== p2) return smsg('The two passphrases differ.');
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  key = await deriveKey(p1, salt);
+  localStorage.setItem(LS_SALT, b64(salt));
+  localStorage.setItem(LS_BLOB, await encrypt(key, state));
+  if (localStorage.getItem(LS_KEY)) localStorage.setItem(LS_KEY, JSON.stringify(await crypto.subtle.exportKey('jwk', key)));
+  smsg('Re-encrypted under the new passphrase.');
+});
+
+$('s-erase').addEventListener('click', () => {
+  if (!window.confirm('Erase all Hearth data on this device? There is no undo.')) return;
+  [LS_SALT, LS_BLOB, LS_KEY].forEach(k => localStorage.removeItem(k));
+  location.reload();
+});
+
+/* ============ render all ============ */
+function renderAll() {
+  if (!state) return;
+  if (view === 'tonight') renderTonight();
+  if (view === 'week') renderWeek();
+  if (view === 'month') renderMonth();
+  if (view === 'settings') renderKeep();
+}
+
+/* ============ pwa ============ */
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+boot();
+})();
+</script>
+</body>
+</html>
