@@ -245,6 +245,292 @@
         }
     ];
 
+    // ------------------------------------------------------------
+    // Example photographs — every entry license-verified against the
+    // Wikimedia Commons API (CC0 / public domain / CC BY / CC BY-SA).
+    // file → thumbnail via Special:FilePath; pageUrl → attribution.
+    // ------------------------------------------------------------
+    var IMAGES = {
+        'work-the-corner': [
+            { file: 'File:Cross The Street (200876449).jpeg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Cross_The_Street_(200876449).jpeg',
+              author: 'Daniel Steuri', license: 'CC BY 3.0',
+              alt: 'Black-and-white view down a wide New York avenue as pedestrians cross the intersection mid-stride' },
+            { file: 'File:Tokyo Shibuya Scramble Crossing 2018-10-09.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Tokyo_Shibuya_Scramble_Crossing_2018-10-09.jpg',
+              author: 'Benh LIEU SONG', license: 'CC BY-SA 2.0',
+              alt: 'Crowds of pedestrians streaming across Tokyo\'s Shibuya scramble crossing at dusk under neon signs' }
+        ],
+        'snap-no-chimping': [
+            { file: 'File:Waiting On The Crossroad (210075649).jpeg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Waiting_On_The_Crossroad_(210075649).jpeg',
+              author: 'Daniel Steuri', license: 'CC BY 3.0',
+              alt: 'Candid black-and-white shot of a woman checking her phone while waiting at a Hong Kong crosswalk' },
+            { file: 'File:Urban Encounter Dublin Ireland Black And White Street Photography (157695877).jpeg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Urban_Encounter_Dublin_Ireland_Black_And_White_Street_Photography_(157695877).jpeg',
+              author: 'Giuseppe Milo', license: 'CC BY 3.0',
+              alt: 'Close wide-angle candid of backlit pedestrians on a Dublin sidewalk beside a double-decker bus' }
+        ],
+        'are-bure-boke': [
+            { file: 'File:Walking with motion blur at Copenhagen Central Station by Thomas Leuthard (14250556323).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Walking_with_motion_blur_at_Copenhagen_Central_Station_by_Thomas_Leuthard_(14250556323).jpg',
+              author: 'Thomas Leuthard', license: 'CC BY 2.0',
+              alt: 'Motion-blurred figure striding past a train at Copenhagen Central Station in grainy black and white' },
+            { file: 'File:Night moves - Flickr - Edna Winti.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Night_moves_-_Flickr_-_Edna_Winti.jpg',
+              author: 'Edna Winti', license: 'CC BY 2.0',
+              alt: 'Blurred cars streak through a rain-slicked night intersection under glowing streetlights' }
+        ],
+        'two-worlds': [
+            { file: 'File:Puddle reflection (explore) - Flickr - Maria Eklind.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Puddle_reflection_(explore)_-_Flickr_-_Maria_Eklind.jpg',
+              author: 'Maria Eklind', license: 'CC BY-SA 2.0',
+              alt: 'City buildings and a dramatic cloudy sky mirrored in a large street puddle in Malmo' },
+            { file: 'File:Shop window reflection Philip Lane Tottenham London N15 England 01.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Shop_window_reflection_Philip_Lane_Tottenham_London_N15_England_01.jpg',
+              author: 'Acabashi', license: 'CC BY-SA 4.0',
+              alt: 'London street and terraced houses layered over cafe furniture in a shop window reflection' }
+        ],
+        'noon-light': [
+            { file: 'File:The Step Dublin Ireland Black And White Street Photography (143674539).jpeg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:The_Step_Dublin_Ireland_Black_And_White_Street_Photography_(143674539).jpeg',
+              author: 'Giuseppe Milo', license: 'CC BY 3.0',
+              alt: 'Silhouetted walker casting a long hard shadow on Dublin\'s sunlit quayside cobbles' },
+            { file: 'File:Pedestrian Crossing New York Black And White Street Photography (239013123).jpeg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Pedestrian_Crossing_New_York_Black_And_White_Street_Photography_(239013123).jpeg',
+              author: 'Giuseppe Milo', license: 'CC BY 3.0',
+              alt: 'Lone pedestrian crossing a New York street carved by harsh sunlight and deep black shadows' }
+        ],
+        'follow-one-color': [
+            { file: 'File:Red umbrella - Flickr - darko149.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Red_umbrella_-_Flickr_-_darko149.jpg',
+              author: 'Darko B', license: 'CC0',
+              alt: 'A single bright red umbrella crossing a muted stone-paved square seen from above' },
+            { file: 'File:Yellow Cabs in NYC (Unsplash).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Yellow_Cabs_in_NYC_(Unsplash).jpg',
+              author: 'Ferdinand Stöhr', license: 'CC0',
+              alt: 'Yellow taxis repeating down a grey Manhattan street canyon at West 23rd Street' }
+        ],
+        'mono-week': [
+            { file: 'File:Under the city - Stockholm, Sweden - Black and white street photography (23154504561).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Under_the_city_-_Stockholm,_Sweden_-_Black_and_white_street_photography_(23154504561).jpg',
+              author: 'Giuseppe Milo', license: 'CC BY 2.0',
+              alt: 'Lone silhouetted figure walking toward the bright exit of a dark Stockholm underpass, deep blacks against blown highlights' },
+            { file: 'File:Grand Central Station - New York - Black and white street photography (37855074185).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Grand_Central_Station_-_New_York_-_Black_and_white_street_photography_(37855074185).jpg',
+              author: 'Giuseppe Milo', license: 'CC BY 2.0',
+              alt: 'Backlit commuters cast long shadows across the glowing floor of Grand Central Terminal in high-contrast black and white' }
+        ],
+        'hands': [
+            { file: 'File:India - Varanasi green peas - 2714.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:India_-_Varanasi_green_peas_-_2714.jpg',
+              author: 'Jorge Royan', license: 'CC BY-SA 3.0',
+              alt: 'Weathered, bangle-covered hands of a Varanasi market vendor cupping a handful of bright green chickpeas' },
+            { file: 'File:DFC 2099 A bustling market stall piled high with bright green grapes and other fresh fruit as a vendor hands a bag to a customer - a colorful scene of everyday produce trade.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:DFC_2099_A_bustling_market_stall_piled_high_with_bright_green_grapes_and_other_fresh_fruit_as_a_vendor_hands_a_bag_to_a_customer_-_a_colorful_scene_of_everyday_produce_trade.jpg',
+              author: 'PattayaPatrol', license: 'CC BY-SA 4.0',
+              alt: 'Hands exchanging a bag of fruit over piles of green grapes at a Thai night-market stall' }
+        ],
+        'not-close-enough': [
+            { file: 'File:Market Vendor - Old City - Dhaka - Bangladesh (12851018314).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Market_Vendor_-_Old_City_-_Dhaka_-_Bangladesh_(12851018314).jpg',
+              author: 'Adam Jones', license: 'CC BY-SA 2.0',
+              alt: 'Tight candid of a Dhaka market vendor in a green headscarf, her hand pressed to her forehead, face filling the frame' },
+            { file: 'File:India - Koyambedu Market - Faces 01 (3983959747).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:India_-_Koyambedu_Market_-_Faces_01_(3983959747).jpg',
+              author: 'McKay Savage', license: 'CC BY 2.0',
+              alt: 'Close-in candid of labourers shoulder-to-shoulder hoisting huge fruit baskets overhead at Koyambedu market, Chennai' }
+        ],
+        'theatre-of-waiting': [
+            { file: 'File:Moscow 1982 train station waiting on platform.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Moscow_1982_train_station_waiting_on_platform.jpg',
+              author: 'Smiley.toerist', license: 'CC BY-SA 3.0',
+              alt: 'Passengers sitting on luggage and pacing a long covered platform beside a train at a Moscow station, 1982' },
+            { file: 'File:WAITING FOR THE BUS-ON NICOLLET MALL - NARA - 551448.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:WAITING_FOR_THE_BUS-ON_NICOLLET_MALL_-_NARA_-_551448.jpg',
+              author: 'Donald Emmerich', license: 'Public domain',
+              alt: 'Young woman waiting for the bus barefoot on a bench on Nicollet Mall, Minneapolis, her sandals parked on the pavement below (1970s DOCUMERICA)' }
+        ],
+        'follow-the-light': [
+            { file: 'File:Manhattanhenge 2016-07-11 sunset crowd on W42 jeh.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Manhattanhenge_2016-07-11_sunset_crowd_on_W42_jeh.jpg',
+              author: 'Jim.henderson', license: 'CC0',
+              alt: 'Golden Manhattanhenge sunset light raking down West 42nd Street across a crowd of upturned faces' },
+            { file: 'File:Auckland Street With Rays, And Cyclist.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Auckland_Street_With_Rays,_And_Cyclist.jpg',
+              author: 'Ingolfson', license: 'Public domain',
+              alt: 'Shafts of morning sun cutting through fog and trees on an Auckland street as a cyclist rides through the beams' },
+            { file: 'File:Grand Central rays of light.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Grand_Central_rays_of_light.jpg',
+              author: 'WPA Federal Writers\' Project', license: 'Public domain',
+              alt: 'Iconic shafts of sunlight streaming through the tall windows of Grand Central Terminal onto commuters below' }
+        ],
+        'thirty-six-exposures': [
+            { file: 'File:H Street Corridor Washington D. C. 1978 people on sidewalk.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:H_Street_Corridor_Washington_D._C._1978_people_on_sidewalk.jpg',
+              author: 'Acabashi', license: 'CC BY-SA 4.0',
+              alt: 'Classic 1978 black-and-white 35mm frame of people gathered on an H Street sidewalk in Washington D.C., shot on a Kodak Retinette film camera' },
+            { file: 'File:Hermann Peffer fotografeert Willem van de Poll, Bestanddeelnr 254-4081.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Hermann_Peffer_fotografeert_Willem_van_de_Poll,_Bestanddeelnr_254-4081.jpg',
+              author: 'Willem van de Poll', license: 'CC0',
+              alt: 'Man in a corduroy jacket aiming a vintage 35mm rangefinder camera straight at the viewer from a terrace' }
+        ],
+        'bad-weather-only': [
+            { file: 'File:Voetgangers steken over bij de Munt in een regenachtig Amsterdam, Bestanddeelnr 252-0964.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Voetgangers_steken_over_bij_de_Munt_in_een_regenachtig_Amsterdam,_Bestanddeelnr_252-0964.jpg',
+              author: 'Willem van de Poll', license: 'CC0',
+              alt: 'Black-and-white scene of pedestrians with umbrellas crossing rain-slicked cobblestones near the Munt in Amsterdam' },
+            { file: 'File:Rainy day at Merchant\'s Arch, Temple Bar, Dublin.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Rainy_day_at_Merchant%27s_Arch,_Temple_Bar,_Dublin.jpg',
+              author: 'David Kernan', license: 'CC BY 4.0',
+              alt: 'People with umbrellas, one bright red, walking down a rainy neon-lit alley in Dublin\'s Temple Bar' }
+        ],
+        'tourist-at-home': [
+            { file: 'File:KL subway commuters - Flickr - Franck Michel.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:KL_subway_commuters_-_Flickr_-_Franck_Michel.jpg',
+              author: 'Franck Michel', license: 'CC BY 2.0',
+              alt: 'Crowded Kuala Lumpur metro carriage with commuters absorbed in their phones' },
+            { file: 'File:Argentina-01873 - Rush Hour... (49005212511).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Argentina-01873_-_Rush_Hour..._(49005212511).jpg',
+              author: 'Dennis G. Jarvis', license: 'CC BY-SA 2.0',
+              alt: 'Commuters streaming along the platform beneath the vaulted iron roof of Retiro station, Buenos Aires' },
+            { file: 'File:Métro Lamarck - Caulaincourt (32585204717).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Métro_Lamarck_-_Caulaincourt_(32585204717).jpg',
+              author: 'madras91', license: 'CC BY 2.0',
+              alt: 'Everyday Montmartre street life around the Lamarck-Caulaincourt metro entrance seen from the stairs above' }
+        ],
+        'after-dark': [
+            { file: 'File:Walking around Kabukicho, Shinjuku at night. (29362321701).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Walking_around_Kabukicho,_Shinjuku_at_night._(29362321701).jpg',
+              author: 'Daniel Ramirez', license: 'CC BY 2.0',
+              alt: 'Pedestrians on a rain-damp Kabukicho street at night surrounded by glowing neon signs, Tokyo' },
+            { file: 'File:Mong Kok Neon Signs Night (48127904386).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Mong_Kok_Neon_Signs_Night_(48127904386).jpg',
+              author: 'Benh Lieu Song', license: 'CC BY-SA 2.0',
+              alt: 'Busy Mong Kok street at night under a canopy of colourful neon signs, Hong Kong' },
+            { file: 'File:Madrid (2019-10) - 50654214692.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Madrid_(2019-10)_-_50654214692.jpg',
+              author: 'Nicolas Vigier', license: 'CC0',
+              alt: 'Night crowd outside a Madrid bar in the rain, lit only by streetlights and shopfronts' }
+        ],
+        'three-planes': [
+            { file: 'File:India - Chennai - busy T. Nagar market 2 (3059483658).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:India_-_Chennai_-_busy_T._Nagar_market_2_(3059483658).jpg',
+              author: 'McKay Savage', license: 'CC BY 2.0',
+              alt: 'Dense Chennai market street with faces in the foreground, a crowd in the middle and receding signs beyond' },
+            { file: 'File:Busy crowd on Market Place at St Albans Market.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Busy_crowd_on_Market_Place_at_St_Albans_Market.jpg',
+              author: 'James Ó Nuanáin', license: 'CC BY-SA 2.0',
+              alt: 'Layered St Albans market scene: stalls in the foreground, shoppers in the middle, clock tower and rooftops behind' }
+        ],
+        'visual-pun': [
+            { file: 'File:Advertising, no one sees it anymore (47958434013).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Advertising,_no_one_sees_it_anymore_(47958434013).jpg',
+              author: 'madras91', license: 'CC BY 2.0',
+              alt: 'Three people chat obliviously beneath a giant bright-blue Fenty advertising wall in Paris' },
+            { file: 'File:William Goldberg, 771 Broadway, Manhattan (NYPL b13668355-482782).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:William_Goldberg,_771_Broadway,_Manhattan_(NYPL_b13668355-482782).jpg',
+              author: 'Berenice Abbott', license: 'Public domain',
+              alt: 'A sandwich-board man echoes the wall of suit-sale signs covering a 1930s Broadway clothing store' }
+        ],
+        'same-spot-four-lights': [
+            { file: 'File:Street and canal at dusk, Oudezijds Voorburgwal \'blue hour\', 7 januari 2011 (5821465439).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Street_and_canal_at_dusk,_Oudezijds_Voorburgwal_%27blue_hour%27,_7_januari_2011_(5821465439).jpg',
+              author: 'Jorge Láscar', license: 'CC BY 2.0',
+              alt: 'Amsterdam canal street at blue hour, deep blue sky against warm lamplit windows and bicycles' },
+            { file: 'File:Manchester at blue hour - England.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Manchester_at_blue_hour_-_England.jpg',
+              author: 'Jorge Franganillo', license: 'CC BY 4.0',
+              alt: 'Manchester backstreet at blue hour where fading daylight mixes with green and orange building lights' }
+        ],
+        'shadow-is-the-subject': [
+            { file: 'File:Into the Light - Flickr - Johnragai-Moment Catcher.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Into_the_Light_-_Flickr_-_Johnragai-Moment_Catcher.jpg',
+              author: 'John Ragai', license: 'CC BY 2.0',
+              alt: 'Backlit market walkers cast long black shadows toward the camera on wet asphalt' },
+            { file: 'File:Bogeyman (15784425120).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Bogeyman_(15784425120).jpg',
+              author: 'Anne Worner', license: 'CC BY-SA 2.0',
+              alt: 'A hatted figure\'s looming shadow thrown across a sunlit textured wall dappled with tree shadows' },
+            { file: 'File:32909689377 - Flickr - Keith Vaughton.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:32909689377_-_Flickr_-_Keith_Vaughton.jpg',
+              author: 'Keith Vaughton', license: 'CC BY 2.0',
+              alt: 'Lone man on his phone in a Manchester alley as a fire escape throws hard diagonal shadows around him' }
+        ],
+        'waist-level': [
+            { file: 'File:Paul Almásy 423-5-003.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Paul_Almásy_423-5-003.jpg',
+              author: 'Yves Tessier', license: 'CC BY-SA 4.0',
+              alt: 'Photographer Paul Almásy peering down into the waist-level viewfinder of his twin-lens Rolleiflex outdoors' },
+            { file: 'File:Paul Almásy 423-4-004.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Paul_Almásy_423-4-004.jpg',
+              author: 'Yves Tessier', license: 'CC BY-SA 4.0',
+              alt: 'Paul Almásy standing on a street with his Rolleiflex twin-lens camera slung at hip level, ready to shoot' }
+        ],
+        'the-exit': [
+            { file: 'File:Subway exit (16225414148).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Subway_exit_(16225414148).jpg',
+              author: 'Roberto Ciucci', license: 'CC BY 2.0',
+              alt: 'Black-and-white frame of two commuters emerging from a dark Shinjuku subway exit into daylight' },
+            { file: 'File:Canary Wharf tube station MMB 02.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Canary_Wharf_tube_station_MMB_02.jpg',
+              author: 'mattbuck', license: 'CC BY-SA 3.0',
+              alt: 'Rush-hour crowd descending the escalators at Canary Wharf tube station, figures blurring in the low light' },
+            { file: 'File:Milan, Metro station Duomo.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Milan%2C_Metro_station_Duomo.jpg',
+              author: 'Bjørn Giesenbauer', license: 'CC BY-SA 2.0',
+              alt: 'People climbing the metro exit stairs at Duomo station in Milan, stepping up into open light with the cathedral spires ahead' }
+        ],
+        'digicam-sunday': [
+            { file: 'File:Impromptu live gig in Shibuya Historical photo of Shibuya 2005.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Impromptu_live_gig_in_Shibuya_Historical_photo_of_Shibuya_2005.jpg',
+              author: 'Carl Johan Crafoord', license: 'CC BY 2.0',
+              alt: 'Casual 2005 compact-digicam snapshot of a crowd watching an impromptu street gig in Shibuya, Tokyo' },
+            { file: 'File:Tenka-ippin Shibuya shop (天下一品 渋谷店) (2004-09-21 05.24.41 by Antonio Fucito).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Tenka-ippin_Shibuya_shop_(天下一品_渋谷店)_(2004-09-21_05.24.41_by_Antonio_Fucito).jpg',
+              author: 'Antonio Fucito', license: 'CC BY-SA 2.0',
+              alt: '2004 point-and-shoot snap of a red-lanterned Shibuya ramen shopfront with the saturated colors of an early CCD digicam' }
+        ],
+        'carry-the-big-camera': [
+            { file: 'File:Photographer at the protest at Trump Tower 11-10 - 01.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Photographer_at_the_protest_at_Trump_Tower_11-10_-_01.jpg',
+              author: 'Rhododendrites', license: 'CC BY-SA 4.0',
+              alt: 'Photographer holding a DSLR with a large lens while working openly in a dense night-time street crowd in Manhattan' },
+            { file: 'File:Washington, D.C. Street photographer in front of the Capitol 8d26795v.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Washington%2C_D.C._Street_photographer_in_front_of_the_Capitol_8d26795v.jpg',
+              author: 'Esther Bubley', license: 'Public domain',
+              alt: '1940s street photographer working openly with a big tripod-mounted box camera as passers-by gather in front of the U.S. Capitol' }
+        ],
+        'one-scene-thirty-frames': [
+            { file: 'File:Fire and audience (24724911424).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Fire_and_audience_(24724911424).jpg',
+              author: 'Jeremy Segrott', license: 'CC BY 2.0',
+              alt: 'Fire-eating street performer arched back mid-act on Cardiff\'s Queen Street with a semicircle of onlookers reacting behind' },
+            { file: 'File:Women at Market Stall - Tbilisi - Georgia (18090590504) (2).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Women_at_Market_Stall_-_Tbilisi_-_Georgia_(18090590504)_(2).jpg',
+              author: 'Adam Jones', license: 'CC BY-SA 2.0',
+              alt: 'Candid tableau of three women chatting around a sidewalk fruit-and-vegetable stall in Tbilisi' },
+            { file: 'File:Street Performer Entertains Crowd with Fire Act Under Porto\'s Iconic Arches (55246923179).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Street_Performer_Entertains_Crowd_with_Fire_Act_Under_Porto%27s_Iconic_Arches_(55246923179).jpg',
+              author: 'Michael Gaylard', license: 'CC BY 4.0',
+              alt: 'Night plaza scene of a fire performer working beneath a floodlit stone arch in Porto while a seated crowd watches' }
+        ],
+        'no-people-street': [
+            { file: 'File:(2005) NYC\'s Steamy Manhole (5684925415).jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:(2005)_NYC%27s_Steamy_Manhole_(5684925415).jpg',
+              author: 'Diego Torres Silvestre', license: 'CC BY 2.0',
+              alt: 'Steam rising from a manhole on an empty New York street, human presence implied but no one in frame' },
+            { file: 'File:Pristine abandoned dress shoes, Rovisco Pais Avenue, Lisbon, Portugal julesvernex2.jpg',
+              pageUrl: 'https://commons.wikimedia.org/wiki/File:Pristine_abandoned_dress_shoes%2C_Rovisco_Pais_Avenue%2C_Lisbon%2C_Portugal_julesvernex2.jpg',
+              author: 'Jules Verne Times Two', license: 'CC BY-SA 4.0',
+              alt: 'Pair of abandoned black dress shoes left on Lisbon cobblestones scattered with fallen leaves' }
+        ]
+    };
+
+    CHALLENGES.forEach(function (ch) {
+        if (IMAGES[ch.slug]) ch.images = IMAGES[ch.slug];
+    });
+
     // progress carries over from the previous design — same key
     var STORAGE_KEY = 'photo-challenges-done';
     // Monday, Jan 5 2026 UTC — anchor for the weekly rotation
