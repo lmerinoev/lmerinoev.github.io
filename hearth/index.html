@@ -18,7 +18,7 @@
     --ground: #F2F1EE;
     --shell-dark: #161616;
     --card: #FFFFFF;
-    --card-green: #C9E4AE;
+    --card-green: #CBE2BD;
     --card-yellow: #F3DD8E;
     --card-blue: #A9DDE8;
 
@@ -89,10 +89,11 @@
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
-  button:focus-visible, input:focus-visible, a:focus-visible {
+  button:focus-visible, a:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
+  input:focus-visible { outline: none; border-color: var(--accent); }
   input[type="text"], input[type="password"], input[type="number"] {
     font-family: var(--sans);
     font-weight: 400;
@@ -131,6 +132,7 @@
     padding: 24px 16px;
   }
   #unlock .mark {
+    margin-top: auto;
     font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -184,7 +186,8 @@
   #unlock .sub {
     font-size: 11px;
     color: var(--ink-muted);
-    margin-top: 40px;
+    margin-top: auto;
+    padding-top: 32px;
     text-align: center;
   }
 
@@ -202,7 +205,6 @@
     font-size: 16px;
     font-weight: 700;
     letter-spacing: -0.01em;
-    text-transform: lowercase;
   }
   header .hbtn {
     background: var(--card);
@@ -221,10 +223,10 @@
     display: block;
   }
   .ph-title {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 30px;
+    font-weight: 400;
     letter-spacing: -0.02em;
-    line-height: 1.15;
+    line-height: 1.12;
     margin: 6px 0 0;
   }
   .ph-title .jp { display: none; }
@@ -238,18 +240,17 @@
   .stone-d {
     width: 10px; height: 10px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.65);
     flex: none;
   }
   .stone-d.away { background: var(--card-blue); }
-  .stone-d.empty { background: transparent; border: 1px dashed var(--hairline-dark); }
+  .stone-d.empty { background: transparent; border: 1px dashed rgba(255, 255, 255, 0.35); }
   .stone-d.now { background: #FFF; width: 12px; height: 12px; }
   .stones .slabel {
     font-size: 11px;
     font-weight: 600;
     color: var(--ink-muted-dark);
     margin-left: 6px;
-    text-transform: lowercase;
   }
 
   .homestat {
@@ -338,7 +339,6 @@
     font-size: 11px;
     font-weight: 600;
     color: var(--on-pastel-muted);
-    text-transform: lowercase;
   }
   .zen-task .del { color: rgba(26, 26, 26, 0.35); font-size: 16px; padding: 0 4px; visibility: hidden; }
   .zen-task:hover .del { visibility: visible; }
@@ -355,7 +355,6 @@
     font-size: 12px;
     font-weight: 600;
     margin-top: 12px;
-    text-transform: lowercase;
   }
   .done-toggle .caret { display: inline-block; transition: transform 0.15s ease; }
   .done-toggle.open .caret { transform: rotate(90deg); }
@@ -376,20 +375,20 @@
     font-size: 12px;
     font-weight: 600;
     flex: none;
-    text-transform: lowercase;
   }
 
   /* segmented (dark track, white active pill) */
   .seg {
-    display: flex;
+    display: inline-flex;
+    align-self: flex-start;
     background: var(--shell-dark);
     border-radius: var(--r-pill);
     padding: 3px;
   }
   .seg button {
-    flex: 1;
+    flex: none;
     border-radius: var(--r-pill);
-    padding: 9px 4px;
+    padding: 8px 16px;
     font-size: 12px;
     font-weight: 600;
     color: var(--ink-inverse);
@@ -431,7 +430,6 @@
     padding: 7px 12px;
     font-size: 11px;
     font-weight: 600;
-    text-transform: lowercase;
   }
   .coffee-ratio:empty { display: none; }
   .reflect {
@@ -466,7 +464,6 @@
     padding: 8px 14px;
     font-size: 12px;
     font-weight: 600;
-    text-transform: lowercase;
   }
 
   /* blue progress card (tonight footer) */
@@ -504,14 +501,15 @@
     margin-bottom: 2px;
   }
   .ph-stat:nth-of-type(2) .v {
-    font-size: 52px;
-    font-weight: 500;
+    font-size: 56px;
+    font-weight: 400;
     line-height: 1;
     letter-spacing: -0.03em;
     color: #1A1A1A;
     font-variant-numeric: tabular-nums;
   }
   .hanko {
+    display: none;
     grid-area: hanko;
     justify-self: start;
     width: 40px; height: 40px;
@@ -519,13 +517,12 @@
     border-radius: 50%;
     color: rgba(26, 26, 26, 0.5);
     font-size: 15px;
-    display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.6;
     transition: opacity 0.3s ease, background 0.3s ease;
   }
   .hanko.earned {
+    display: flex;
     background: #1A1A1A;
     border: none;
     color: #FFF;
@@ -562,7 +559,7 @@
     display: grid;
     grid-template-columns: 48px 1fr;
     column-gap: 14px;
-    align-items: start;
+    align-items: center;
   }
   .day.away { background: var(--card-blue); }
   .day .dname {
@@ -572,11 +569,9 @@
     gap: 4px;
   }
   .day .dname > span:first-child {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--ink-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
   }
   .day.away .dname > span:first-child { color: rgba(26, 26, 26, 0.5); }
   .day .dname .num {
@@ -635,7 +630,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 6px;
+    margin-top: 2px;
   }
   .day.away .dayadd { border-color: rgba(26, 26, 26, 0.4); color: rgba(26, 26, 26, 0.6); }
 
@@ -692,8 +687,8 @@
     align-items: center; justify-content: center;
   }
   .enso-count .n {
-    font-size: 56px;
-    font-weight: 500;
+    font-size: 60px;
+    font-weight: 400;
     line-height: 1;
     letter-spacing: -0.03em;
     color: #1A1A1A;
@@ -704,7 +699,6 @@
     font-weight: 600;
     color: var(--on-pastel-muted);
     margin-top: 6px;
-    text-transform: lowercase;
   }
   .enso-cap {
     font-size: 14px;
@@ -796,13 +790,23 @@
     transition: background 0.15s, color 0.15s;
   }
   nav button .k { display: none; }
+  nav .ni { width: 22px; height: 22px; display: block; }
   nav button .e {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0;
-    text-transform: capitalize;
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
-  nav button.on { background: #FFF; color: #1A1A1A; padding: 10px 20px; }
+  nav button.on { background: #FFF; color: #1A1A1A; padding: 10px 22px; }
+
+  /* ---------- dark-theme control contrast ---------- */
+  body.night .seg { background: #101010; border: 1px solid rgba(255, 255, 255, 0.08); }
+  body.night .qbtn { background: #2E2E2E; border-color: rgba(255, 255, 255, 0.10); }
+  body.night .qbtn.on { background: #F2F1EE; color: #1A1A1A; }
+  body.night header .hbtn, body.night .weeknav .wbtn { border-color: rgba(255, 255, 255, 0.12); }
+  body.night .day .dname .num { background: #0E0E0E; }
+  body.night .mstat .val { border-color: rgba(255, 255, 255, 0.16); }
 
   /* ---------- motion ---------- */
   @media (prefers-reduced-motion: reduce) {
@@ -835,7 +839,7 @@
 <div id="app" class="hidden">
   <div class="wrap">
     <header>
-      <span class="brand">hearth</span>
+      <span class="brand">Hearth</span>
       <div class="hbtns">
         <button class="hbtn" id="btn-lock">Lock</button>
       </div>
@@ -849,7 +853,7 @@
         <div class="stones" id="t-stones"></div>
         <div class="homestat">
           <span class="lbl"><span class="jp">家</span><span id="t-homelbl">Home night</span></span>
-          <button class="togglebtn" id="t-away-toggle">✈ mark away</button>
+          <button class="togglebtn" id="t-away-toggle">✈ Mark away</button>
         </div>
       </div>
 
@@ -899,7 +903,7 @@
         <div class="reflect" id="coffee-reflect">
           <span class="reflect-label" id="reflect-label">While it brews</span>
           <p class="reflect-body" id="reflect-body"></p>
-          <button class="reflect-next" id="reflect-next">another ›</button>
+          <button class="reflect-next" id="reflect-next">Another ›</button>
         </div>
       </div>
 
@@ -1006,10 +1010,10 @@
   </div>
 
   <nav>
-    <button data-view="tonight" class="on"><span class="k">今</span><span class="e">Tonight</span></button>
-    <button data-view="week"><span class="k">週</span><span class="e">Week</span></button>
-    <button data-view="month"><span class="k">月</span><span class="e">Month</span></button>
-    <button data-view="settings"><span class="k">設</span><span class="e">More</span></button>
+    <button data-view="tonight" class="on" title="Tonight"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4.5 20 11v8.5h-5.5V14h-5v5.5H4Z"/></svg><span class="e">Tonight</span></button>
+    <button data-view="week" title="Week"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="6" width="16" height="14" rx="3"/><path d="M4 10.5h16M8.5 4v3M15.5 4v3"/></svg><span class="e">Week</span></button>
+    <button data-view="month" title="Month"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 4a8 8 0 1 1-7.6 5.5"/></svg><span class="e">Month</span></button>
+    <button data-view="settings" title="More"><svg class="ni" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg><span class="e">More</span></button>
   </nav>
 </div>
 
@@ -1335,7 +1339,7 @@ function renderTonight() {
   const tg = $('t-away-toggle');
   const away = d.status === 'away';
   $('t-homelbl').textContent = away ? 'Away tonight' : 'Home night';
-  tg.textContent = away ? '⌂ mark home' : '✈ mark away';
+  tg.textContent = away ? '⌂ Mark home' : '✈ Mark away';
   tg.classList.toggle('away', away);
 
   // tasks
@@ -1505,7 +1509,7 @@ function renderWeek() {
   const mon = weekAnchor;
   const sun = addDays(mon, 6);
   const fmt = d => `${MONTHS[d.getMonth()].slice(0,3)} ${String(d.getDate()).padStart(2,'0')}`;
-  $('w-range').textContent = `${fmt(mon)} — ${fmt(sun)}`.toUpperCase();
+  $('w-range').textContent = `${fmt(mon)} — ${fmt(sun)}`;
 
   const grid = $('w-grid');
   grid.textContent = '';
@@ -1596,7 +1600,7 @@ function renderMonth() {
   const ms = monthStats();
   const now = new Date();
   $('m-nights').textContent = ms.nights;
-  $('m-of').textContent = `OF ${ms.total} · ${MONTHS[now.getMonth()].slice(0,4).toUpperCase()}`;
+  $('m-of').textContent = `of ${ms.total} · ${MONTHS[now.getMonth()].slice(0,3)}`;
   const C = 2 * Math.PI * 84;
   const frac = Math.min(ms.nights / ms.total, 0.96); // the enso never closes
   $('m-ring').setAttribute('stroke-dasharray', `${(C * frac).toFixed(1)} ${C.toFixed(1)}`);
