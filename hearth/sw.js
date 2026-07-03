@@ -1,4 +1,4 @@
-const CACHE = 'hearth-v2';
+const CACHE = 'hearth-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

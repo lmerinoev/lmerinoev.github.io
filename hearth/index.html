@@ -764,6 +764,10 @@
         <input type="file" id="s-file" accept="application/json" class="hidden">
       </div>
       <div class="set-item">
+        <div class="si-l"><h3>Appearance</h3><p>Light by default. Switch to dark whenever you like — the choice sticks on this device.</p></div>
+        <button class="act" id="s-theme">—</button>
+      </div>
+      <div class="set-item">
         <div class="si-l"><h3>Keep unlocked</h3><p>Stores the key on this device so you skip the passphrase. Turn off on shared machines.</p></div>
         <button class="act" id="s-keep">—</button>
       </div>
@@ -916,7 +920,6 @@ const isSetup = () => !localStorage.getItem(LS_SALT);
 
 async function boot() {
   applyTheme();
-  setInterval(applyTheme, 60000);
 
   const stored = localStorage.getItem(LS_KEY);
   if (stored && !isSetup()) {
@@ -1010,12 +1013,18 @@ $('btn-lock').addEventListener('click', () => {
 });
 
 /* ============ theme ============ */
+const LS_THEME = 'hearth.theme';
+function themePref() { return localStorage.getItem(LS_THEME) === 'dark' ? 'dark' : 'light'; }
 function applyTheme() {
-  const h = new Date().getHours();
-  const night = h >= 18 || h < 6;
-  document.body.classList.toggle('night', night);
+  const dark = themePref() === 'dark';
+  document.body.classList.toggle('night', dark);
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = night ? '#1D1C18' : '#F7F4EE';
+  if (meta) meta.content = dark ? '#1D1C18' : '#F7F4EE';
+}
+function setTheme(t) { localStorage.setItem(LS_THEME, t); applyTheme(); renderThemeToggle(); }
+function renderThemeToggle() {
+  const b = $('s-theme');
+  if (b) b.textContent = themePref() === 'dark' ? 'Dark — switch to light' : 'Light — switch to dark';
 }
 
 /* ============ nav ============ */
@@ -1465,6 +1474,8 @@ $('s-keep').addEventListener('click', async () => {
   renderKeep();
 });
 
+$('s-theme').addEventListener('click', () => setTheme(themePref() === 'dark' ? 'light' : 'dark'));
+
 $('s-repass').addEventListener('click', async () => {
   const p1 = window.prompt('New passphrase (8+ characters):');
   if (p1 === null) return;
@@ -1499,7 +1510,7 @@ function renderAll() {
   if (view === 'tonight') renderTonight();
   if (view === 'week') renderWeek();
   if (view === 'month') renderMonth();
-  if (view === 'settings') { renderKeep(); loadSyncMeta(); renderSync(); }
+  if (view === 'settings') { renderKeep(); renderThemeToggle(); loadSyncMeta(); renderSync(); }
 }
 
 /* ============ pwa ============ */
