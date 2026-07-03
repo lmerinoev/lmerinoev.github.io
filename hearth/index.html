@@ -287,7 +287,12 @@
     transition: background 0.25s, border-color 0.25s;
   }
   .zen-task.done .ink { background: var(--sumi); border-color: var(--sumi); }
-  .zen-task.done .txt { color: var(--faint); }
+  .zen-task.done .txt {
+    color: var(--faint);
+    text-decoration: line-through;
+    text-decoration-color: var(--stone);
+    text-decoration-thickness: 1px;
+  }
   .zen-task .txt { flex: 1; min-width: 0; }
   .zen-task .zsub {
     font-family: var(--mono);
@@ -299,6 +304,24 @@
   .zen-task .del { color: var(--faint); font-size: 0.85rem; padding: 0 0.2rem; visibility: hidden; }
   .zen-task:hover .del { visibility: visible; }
   .empty-note { font-size: 0.85rem; color: var(--faint); padding: 0.4rem 0; font-style: italic; font-family: var(--mincho); }
+  .done-toggle {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding: 0.6rem 0 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    text-align: left;
+  }
+  .done-toggle:hover { color: var(--stone); }
+  .done-toggle .caret { transition: transform 0.2s ease; display: inline-block; }
+  .done-toggle.open .caret { transform: rotate(90deg); }
+  @media (prefers-reduced-motion: reduce) { .done-toggle .caret { transition: none; } }
+  .done-list.collapsed { display: none; }
 
   .addrow { display: flex; gap: 0.8rem; align-items: center; margin-top: 0.4rem; }
   .addrow input { font-size: 0.9rem; }
@@ -343,6 +366,49 @@
   .qbtn .k { font-family: var(--mincho); }
   .qbtn:hover { color: var(--sumi); border-color: var(--stone); }
   .qbtn.on { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
+
+  /* coffee reflection */
+  .coffee-ratio {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--stone);
+  }
+  .reflect {
+    margin-top: 0.9rem;
+    padding: 1.15rem 1.2rem 1rem;
+    border: 1px solid var(--hairline);
+    border-left: 2px solid var(--shu);
+    background: color-mix(in srgb, var(--shu) 3%, transparent);
+  }
+  .reflect.hidden { display: none; }
+  .reflect-label {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+  .reflect-body {
+    font-family: var(--mincho);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--sumi);
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .reflect-body .attr { display: block; margin-top: 0.5rem; font-size: 0.8rem; color: var(--stone); font-style: italic; }
+  .reflect-next {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-top: 0.9rem;
+  }
+  .reflect-next:hover { color: var(--shu); }
 
   .homestat { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   .homestat .lbl { font-size: 0.9rem; }
@@ -392,37 +458,44 @@
   }
   .hanko.earned { opacity: 1; }
 
-  /* ---------- week view ---------- */
-  .week-scroll { overflow-x: auto; margin: 0 -1.25rem; padding: 0 1.25rem; }
+  /* ---------- week view (vertical, top-down) ---------- */
+  .week-scroll { }
   .week {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(96px, 1fr));
-    border: 1px solid var(--hairline);
-    background: var(--washi);
-    min-width: 680px;
-  }
-  .day {
-    border-right: 1px solid var(--hairline);
-    padding: 0.9rem 0.7rem 1rem;
-    min-height: 11rem;
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    border: 1px solid var(--hairline);
+    background: var(--washi);
   }
-  .day:last-child { border-right: none; }
+  .day {
+    border-bottom: 1px solid var(--hairline);
+    padding: 1rem 1.1rem 1.1rem;
+    display: grid;
+    grid-template-columns: 3.4rem 1fr;
+    column-gap: 1rem;
+    align-items: start;
+  }
+  .day:last-child { border-bottom: none; }
   .day.away { background: color-mix(in srgb, var(--ai) 6%, transparent); }
   .day .dname {
     font-family: var(--mono);
     font-size: 0.56rem;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--faint);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.35rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
-  .day .dname .num { font-family: var(--mincho); font-size: 0.95rem; color: var(--sumi); letter-spacing: 0; }
+  .day .dname .num { font-family: var(--mincho); font-size: 1.3rem; color: var(--sumi); letter-spacing: 0; }
+  .day-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+    min-height: 1.3rem;
+    justify-content: center;
+  }
   .day.away .dname .num { color: var(--ai-deep); }
   .day.today .dname .num {
     color: #F5E4DC;
@@ -459,8 +532,8 @@
     font-size: 0.7rem;
     color: var(--faint);
     text-align: left;
-    margin-top: auto;
-    padding-top: 0.4rem;
+    padding-top: 0.15rem;
+    align-self: flex-start;
   }
   .day .dayadd:hover { color: var(--sumi); }
   .day .awayflag {
@@ -603,14 +676,6 @@
     margin: 0 0 1.4rem;
   }
 
-  /* on wide screens the week gets the room a 7-column calendar needs;
-     reading views keep their narrow measure */
-  @media (min-width: 1024px) {
-    .wrap { max-width: 980px; }
-    header, #view-tonight, #view-month, #view-settings { max-width: 640px; margin-left: auto; margin-right: auto; }
-    header { margin-bottom: 1.8rem; }
-    .week { min-width: 0; }
-  }
 </style>
 </head>
 <body>
@@ -684,6 +749,19 @@
         </div>
       </div>
 
+      <div class="sect">
+        <div class="plabel"><span>珈琲 · Coffee</span><span class="coffee-ratio" id="coffee-ratio"></span></div>
+        <div class="seg" id="t-coffee">
+          <button data-coffee="home"><span class="k">淹</span>Brewed home</button>
+          <button data-coffee="out"><span class="k">外</span>Out</button>
+        </div>
+        <div class="reflect" id="coffee-reflect">
+          <span class="reflect-label" id="reflect-label">While it brews</span>
+          <p class="reflect-body" id="reflect-body"></p>
+          <button class="reflect-next" id="reflect-next">another ›</button>
+        </div>
+      </div>
+
       <div class="foot-stats">
         <div class="ph-stat"><span class="k">空 · Released</span><span class="v" id="t-released">0</span></div>
         <div class="ph-stat"><span class="k">家 · Nights home</span><span class="v" id="t-nights">0</span></div>
@@ -728,6 +806,7 @@
       <div class="month-stats">
         <div class="mstat"><span class="lbl"><span class="jp">体</span>Runs this month</span><span class="val" id="m-runs">0</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">食</span>Cooked, of dinners logged</span><span class="val" id="m-cooked">—</span></div>
+        <div class="mstat"><span class="lbl"><span class="jp">珈</span>Coffee brewed home</span><span class="val" id="m-coffee">—</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">空</span>Released this month</span><span class="val" id="m-released">0</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">印</span>Complete evenings</span><span class="val" id="m-seals">0</span></div>
       </div>
@@ -762,6 +841,10 @@
         <div class="si-l"><h3>Import</h3><p>Restore from an exported JSON file. Replaces what's on this device.</p></div>
         <button class="act" id="s-import">Import</button>
         <input type="file" id="s-file" accept="application/json" class="hidden">
+      </div>
+      <div class="set-item">
+        <div class="si-l"><h3>Appearance</h3><p>Light by default. Switch to dark whenever you like — the choice sticks on this device.</p></div>
+        <button class="act" id="s-theme">—</button>
       </div>
       <div class="set-item">
         <div class="si-l"><h3>Keep unlocked</h3><p>Stores the key on this device so you skip the passphrase. Turn off on shared machines.</p></div>
@@ -827,6 +910,42 @@ let saveTimer = null;
 
 const freshState = () => ({ version: 1, days: {}, released: 0, releases: {}, touched: {} });
 
+/* ============ coffee reflections ============ */
+// Small moments to sit with while the coffee brews at home.
+const REFLECTIONS = [
+  { t: 'question', body: 'What would make today feel worth being home for?' },
+  { t: 'question', body: 'Who have you not called in too long?' },
+  { t: 'question', body: 'What is one thing you own that you could pass on this week?' },
+  { t: 'question', body: 'What are you still carrying from work that you can set down at the door?' },
+  { t: 'question', body: 'What small thing at home are you grateful for right now?' },
+  { t: 'question', body: 'When did you last do nothing, on purpose?' },
+  { t: 'question', body: 'What would “enough” look like today?' },
+  { t: 'question', body: 'What is a want you’ve mistaken for a need?' },
+  { t: 'question', body: 'Which room do you love most — and when did you last just sit in it?' },
+  { t: 'question', body: 'If this weekend had one quiet highlight, what would you want it to be?' },
+  { t: 'question', body: 'What did rest actually look like the last time you felt rested?' },
+  { t: 'idea', body: 'Taste this cup with no phone in reach. Notice where your attention drifts.' },
+  { t: 'idea', body: 'Smell it before the first sip. Try to name three things in it.' },
+  { t: 'idea', body: 'Plan one meal you’ll cook at home this week.' },
+  { t: 'idea', body: 'Pick one drawer to empty for ten minutes later today.' },
+  { t: 'idea', body: 'Send one family member a photo of something small from your morning.' },
+  { t: 'idea', body: 'Choose one thing to do slowly today, on purpose.' },
+  { t: 'idea', body: 'Let it cool a little. Read one page of something good.' },
+  { t: 'idea', body: 'Look out a window for the length of this cup. Just watch.' },
+  { t: 'idea', body: 'Write down one idea you keep circling back to.' },
+  { t: 'idea', body: 'Name the single thing that would make today a good day. Just one.' },
+  { t: 'quote', body: 'Fall seven times, stand up eight.', attr: 'Japanese proverb' },
+  { t: 'quote', body: 'When walking, walk. When eating, eat.', attr: 'Zen proverb' },
+  { t: 'quote', body: 'One moment, one meeting — never to come again.', attr: '一期一会 · ichigo ichie' },
+  { t: 'quote', body: 'Sitting quietly, doing nothing — spring comes, and the grass grows by itself.', attr: 'Zen saying' },
+  { t: 'quote', body: 'The quieter you become, the more you can hear.' },
+  { t: 'quote', body: 'Wherever you are, be there completely.' },
+  { t: 'quote', body: 'The obstacle is the path.', attr: 'Zen proverb' },
+];
+const REFLECT_LABEL = { question: 'Sit with this', idea: 'Something to try', quote: 'A thought' };
+let reflectOffset = 0;
+const dateHash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
+
 function save() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
@@ -876,19 +995,21 @@ function monthDays() {
 }
 function monthStats() {
   const { elapsed, total } = monthDays();
-  let nights = 0, runs = 0, cooked = 0, meals = 0, seals = 0, released = 0;
+  let nights = 0, runs = 0, cooked = 0, meals = 0, seals = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
   for (const ds of elapsed) {
     const d = dayRO(ds);
     if (d.status !== 'away') nights++;
     if (d.run) runs++;
     if (d.meal) { meals++; if (d.meal === 'cooked') cooked++; }
+    if (d.coffee === 'home') coffeeHome++;
+    if (d.coffee === 'out') coffeeOut++;
     if (sealed(d)) seals++;
     released += state.releases[ds] || 0;
   }
-  return { nights, total, runs, cooked, meals, seals, released };
+  return { nights, total, runs, cooked, meals, seals, released, coffeeHome, coffeeOut };
 }
 function weekStats(mon) {
-  let nights = 0, elapsed = 0, runs = 0, cooked = 0, ordered = 0, released = 0;
+  let nights = 0, elapsed = 0, runs = 0, cooked = 0, ordered = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
   const t = today();
   for (let i = 0; i < 7; i++) {
     const ds = ymd(addDays(mon, i));
@@ -897,9 +1018,11 @@ function weekStats(mon) {
     if (d.run) runs++;
     if (d.meal === 'cooked') cooked++;
     if (d.meal === 'ordered' || d.meal === 'out') ordered++;
+    if (d.coffee === 'home') coffeeHome++;
+    if (d.coffee === 'out') coffeeOut++;
     released += state.releases[ds] || 0;
   }
-  return { nights, elapsed, runs, cooked, ordered, released };
+  return { nights, elapsed, runs, cooked, ordered, released, coffeeHome, coffeeOut };
 }
 
 /* ============ dom helpers ============ */
@@ -916,7 +1039,6 @@ const isSetup = () => !localStorage.getItem(LS_SALT);
 
 async function boot() {
   applyTheme();
-  setInterval(applyTheme, 60000);
 
   const stored = localStorage.getItem(LS_KEY);
   if (stored && !isSetup()) {
@@ -1010,16 +1132,23 @@ $('btn-lock').addEventListener('click', () => {
 });
 
 /* ============ theme ============ */
+const LS_THEME = 'hearth.theme';
+function themePref() { return localStorage.getItem(LS_THEME) === 'dark' ? 'dark' : 'light'; }
 function applyTheme() {
-  const h = new Date().getHours();
-  const night = h >= 18 || h < 6;
-  document.body.classList.toggle('night', night);
+  const dark = themePref() === 'dark';
+  document.body.classList.toggle('night', dark);
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = night ? '#1D1C18' : '#F7F4EE';
+  if (meta) meta.content = dark ? '#1D1C18' : '#F7F4EE';
+}
+function setTheme(t) { localStorage.setItem(LS_THEME, t); applyTheme(); renderThemeToggle(); }
+function renderThemeToggle() {
+  const b = $('s-theme');
+  if (b) b.textContent = themePref() === 'dark' ? 'Dark — switch to light' : 'Light — switch to dark';
 }
 
 /* ============ nav ============ */
 let view = 'tonight';
+let doneOpen = false;
 let weekAnchor = mondayOf(new Date());
 
 document.querySelectorAll('nav button').forEach(b => {
@@ -1069,8 +1198,8 @@ function renderTonight() {
   // tasks
   const list = $('t-tasks');
   list.textContent = '';
-  if (!d.entries.length) list.appendChild(el('div', 'empty-note', 'An open evening.'));
-  d.entries.forEach(e => {
+
+  const makeRow = e => {
     const row = el('button', 'zen-task' + (e.done ? ' done' : ''));
     row.type = 'button';
     row.appendChild(el('span', 'ink'));
@@ -1088,14 +1217,37 @@ function renderTonight() {
       const en = dd.entries.find(x => x.id === e.id);
       if (en) { en.done = !en.done; save(); renderAll(); }
     });
-    list.appendChild(row);
-  });
+    return row;
+  };
+
+  const active = d.entries.filter(e => !e.done);
+  const done = d.entries.filter(e => e.done);
+
+  if (!d.entries.length) list.appendChild(el('div', 'empty-note', 'An open evening.'));
+  else if (!active.length) list.appendChild(el('div', 'empty-note', 'Everything done. Rest.'));
+  active.forEach(e => list.appendChild(makeRow(e)));
+
+  if (done.length) {
+    const toggle = el('button', 'done-toggle' + (doneOpen ? ' open' : ''));
+    toggle.type = 'button';
+    toggle.appendChild(el('span', 'caret', '›'));
+    toggle.appendChild(el('span', '', `${done.length} completed`));
+    toggle.addEventListener('click', () => { doneOpen = !doneOpen; renderTonight(); });
+    list.appendChild(toggle);
+
+    const doneList = el('div', 'done-list' + (doneOpen ? '' : ' collapsed'));
+    done.forEach(e => doneList.appendChild(makeRow(e)));
+    list.appendChild(doneList);
+  }
 
   // meal seg
   $('t-meal').querySelectorAll('button').forEach(b => {
     b.classList.toggle('on', d.meal === b.dataset.meal);
     b.classList.toggle('warn', b.classList.contains('on') && b.dataset.meal !== 'cooked');
   });
+
+  // coffee
+  renderCoffee(d);
 
   // quick buttons
   $('q-run').classList.toggle('on', !!d.run);
@@ -1138,6 +1290,39 @@ $('t-meal').querySelectorAll('button').forEach(b => {
     save(); renderAll();
   });
 });
+
+// ---- coffee ----
+function currentReflection() {
+  const i = (dateHash(today()) + reflectOffset) % REFLECTIONS.length;
+  return REFLECTIONS[i];
+}
+function renderReflection() {
+  const r = currentReflection();
+  $('reflect-label').textContent = REFLECT_LABEL[r.t];
+  const body = $('reflect-body');
+  body.textContent = r.body;
+  if (r.attr) { const a = el('span', 'attr', '— ' + r.attr); body.appendChild(a); }
+}
+function renderCoffee(d) {
+  $('t-coffee').querySelectorAll('button').forEach(b =>
+    b.classList.toggle('on', d.coffee === b.dataset.coffee));
+  // reflection appears once you've chosen to brew at home — the ritual is the reward
+  const home = d.coffee === 'home';
+  $('coffee-reflect').classList.toggle('hidden', !home);
+  if (home) renderReflection();
+  const ms = monthStats();
+  $('coffee-ratio').textContent = ms.coffeeHome ? `${ms.coffeeHome} home this month` : '';
+}
+$('t-coffee').querySelectorAll('button').forEach(b => {
+  b.addEventListener('click', () => {
+    const d = day(today());
+    const was = d.coffee;
+    d.coffee = d.coffee === b.dataset.coffee ? null : b.dataset.coffee;
+    if (d.coffee === 'home' && was !== 'home') reflectOffset = 0; // fresh prompt when you start a home brew
+    save(); renderAll();
+  });
+});
+$('reflect-next').addEventListener('click', () => { reflectOffset++; renderReflection(); });
 
 $('q-run').addEventListener('click', () => {
   const d = day(today());
@@ -1200,7 +1385,9 @@ function renderWeek() {
     head.appendChild(num);
     cell.appendChild(head);
 
-    if (d.status === 'away') cell.appendChild(el('span', 'awayflag', '✈ away'));
+    const body = el('div', 'day-body');
+
+    if (d.status === 'away') body.appendChild(el('span', 'awayflag', '✈ away'));
 
     d.entries.forEach(e => {
       const row = el('button', 'entry' + (e.done ? ' done' : ''), e.text);
@@ -1209,11 +1396,12 @@ function renderWeek() {
         const en = day(ds).entries.find(x => x.id === e.id);
         if (en) { en.done = !en.done; save(); renderAll(); }
       });
-      cell.appendChild(row);
+      body.appendChild(row);
     });
-    if (d.run) cell.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
-    if (d.meal) cell.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
-    if (sealed(d)) cell.appendChild(el('span', 'dhanko', '印'));
+    if (d.run) body.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
+    if (d.meal) body.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
+    if (d.coffee) body.appendChild(el('div', 'entry done', d.coffee === 'home' ? 'Coffee home' : 'Coffee out'));
+    if (sealed(d)) body.appendChild(el('span', 'dhanko', '印'));
 
     const add = el('button', 'dayadd', '＋');
     add.type = 'button';
@@ -1223,7 +1411,9 @@ function renderWeek() {
       $('w-input').placeholder = `${DOW[i]} ${dt.getDate()} — plan something`;
       $('w-input').focus();
     });
-    cell.appendChild(add);
+    body.appendChild(add);
+
+    cell.appendChild(body);
     grid.appendChild(cell);
   }
 
@@ -1239,6 +1429,7 @@ function renderWeek() {
   mkStat('Nights home', `${s.nights}<span class="dim">/${s.elapsed || 7}</span>`);
   mkStat('Runs', `${s.runs}`);
   mkStat('Cooked', `${s.cooked} <span class="dim">·</span> <span class="warn">${s.ordered}</span>`);
+  mkStat('Coffee home', `${s.coffeeHome} <span class="dim">·</span> <span class="warn">${s.coffeeOut}</span>`);
   mkStat('Released', `${s.released}`);
 }
 
@@ -1268,6 +1459,7 @@ function renderMonth() {
   $('m-ring').setAttribute('stroke-dasharray', `${(C * frac).toFixed(1)} ${C.toFixed(1)}`);
   $('m-runs').textContent = ms.runs;
   $('m-cooked').innerHTML = ms.meals ? `${ms.cooked}<span class="dim">/${ms.meals}</span>` : '—';
+  $('m-coffee').innerHTML = (ms.coffeeHome + ms.coffeeOut) ? `${ms.coffeeHome}<span class="dim">/${ms.coffeeHome + ms.coffeeOut}</span>` : '—';
   $('m-released').textContent = ms.released;
   $('m-seals').textContent = ms.seals;
 }
@@ -1465,6 +1657,8 @@ $('s-keep').addEventListener('click', async () => {
   renderKeep();
 });
 
+$('s-theme').addEventListener('click', () => setTheme(themePref() === 'dark' ? 'light' : 'dark'));
+
 $('s-repass').addEventListener('click', async () => {
   const p1 = window.prompt('New passphrase (8+ characters):');
   if (p1 === null) return;
@@ -1499,7 +1693,7 @@ function renderAll() {
   if (view === 'tonight') renderTonight();
   if (view === 'week') renderWeek();
   if (view === 'month') renderMonth();
-  if (view === 'settings') { renderKeep(); loadSyncMeta(); renderSync(); }
+  if (view === 'settings') { renderKeep(); renderThemeToggle(); loadSyncMeta(); renderSync(); }
 }
 
 /* ============ pwa ============ */
