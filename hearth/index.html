@@ -16,11 +16,11 @@
   :root {
     --washi: #F7F4EE;
     --washi-deep: #EFEBE1;
-    --sumi: #26241F;
-    --sumi-soft: #4A463D;
-    --stone: #8C877B;
-    --faint: #B7B1A3;
-    --hairline: #E2DDD1;
+    --sumi: #211F1A;
+    --sumi-soft: #3B382F;
+    --stone: #6E695D;
+    --faint: #948E80;
+    --hairline: #DBD5C8;
     --shu: #B93A26;
     --shu-soft: #F5E4DC;
     --ai: #6B7590;
@@ -32,10 +32,10 @@
   body.night {
     --washi: #1D1C18;
     --washi-deep: #24221D;
-    --sumi: #E6E1D4;
-    --sumi-soft: #C4BEAE;
-    --stone: #8C877B;
-    --faint: #5C574C;
+    --sumi: #EDE8DC;
+    --sumi-soft: #CBC5B5;
+    --stone: #9A9384;
+    --faint: #736D5F;
     --hairline: #34322B;
     --shu: #C4472F;
     --shu-soft: #3A241E;
@@ -44,14 +44,14 @@
   }
 
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; font-size: 106.25%; }
   body {
     font-family: var(--sans);
     background: var(--washi);
     color: var(--sumi);
     line-height: 1.7;
     font-size: 1rem;
-    font-weight: 300;
+    font-weight: 400;
     margin: 0;
     min-height: 100vh;
     transition: background 0.4s ease, color 0.4s ease;
@@ -79,7 +79,7 @@
   }
   input[type="text"], input[type="password"], input[type="number"] {
     font-family: var(--sans);
-    font-weight: 300;
+    font-weight: 400;
     font-size: 1rem;
     color: var(--sumi);
     background: transparent;
