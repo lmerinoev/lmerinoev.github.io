@@ -287,7 +287,12 @@
     transition: background 0.25s, border-color 0.25s;
   }
   .zen-task.done .ink { background: var(--sumi); border-color: var(--sumi); }
-  .zen-task.done .txt { color: var(--faint); }
+  .zen-task.done .txt {
+    color: var(--faint);
+    text-decoration: line-through;
+    text-decoration-color: var(--stone);
+    text-decoration-thickness: 1px;
+  }
   .zen-task .txt { flex: 1; min-width: 0; }
   .zen-task .zsub {
     font-family: var(--mono);
@@ -299,6 +304,24 @@
   .zen-task .del { color: var(--faint); font-size: 0.85rem; padding: 0 0.2rem; visibility: hidden; }
   .zen-task:hover .del { visibility: visible; }
   .empty-note { font-size: 0.85rem; color: var(--faint); padding: 0.4rem 0; font-style: italic; font-family: var(--mincho); }
+  .done-toggle {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding: 0.6rem 0 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    text-align: left;
+  }
+  .done-toggle:hover { color: var(--stone); }
+  .done-toggle .caret { transition: transform 0.2s ease; display: inline-block; }
+  .done-toggle.open .caret { transform: rotate(90deg); }
+  @media (prefers-reduced-motion: reduce) { .done-toggle .caret { transition: none; } }
+  .done-list.collapsed { display: none; }
 
   .addrow { display: flex; gap: 0.8rem; align-items: center; margin-top: 0.4rem; }
   .addrow input { font-size: 0.9rem; }
@@ -392,37 +415,44 @@
   }
   .hanko.earned { opacity: 1; }
 
-  /* ---------- week view ---------- */
-  .week-scroll { overflow-x: auto; margin: 0 -1.25rem; padding: 0 1.25rem; }
+  /* ---------- week view (vertical, top-down) ---------- */
+  .week-scroll { }
   .week {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(96px, 1fr));
-    border: 1px solid var(--hairline);
-    background: var(--washi);
-    min-width: 680px;
-  }
-  .day {
-    border-right: 1px solid var(--hairline);
-    padding: 0.9rem 0.7rem 1rem;
-    min-height: 11rem;
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    border: 1px solid var(--hairline);
+    background: var(--washi);
   }
-  .day:last-child { border-right: none; }
+  .day {
+    border-bottom: 1px solid var(--hairline);
+    padding: 1rem 1.1rem 1.1rem;
+    display: grid;
+    grid-template-columns: 3.4rem 1fr;
+    column-gap: 1rem;
+    align-items: start;
+  }
+  .day:last-child { border-bottom: none; }
   .day.away { background: color-mix(in srgb, var(--ai) 6%, transparent); }
   .day .dname {
     font-family: var(--mono);
     font-size: 0.56rem;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--faint);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.35rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
-  .day .dname .num { font-family: var(--mincho); font-size: 0.95rem; color: var(--sumi); letter-spacing: 0; }
+  .day .dname .num { font-family: var(--mincho); font-size: 1.3rem; color: var(--sumi); letter-spacing: 0; }
+  .day-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+    min-height: 1.3rem;
+    justify-content: center;
+  }
   .day.away .dname .num { color: var(--ai-deep); }
   .day.today .dname .num {
     color: #F5E4DC;
@@ -459,8 +489,8 @@
     font-size: 0.7rem;
     color: var(--faint);
     text-align: left;
-    margin-top: auto;
-    padding-top: 0.4rem;
+    padding-top: 0.15rem;
+    align-self: flex-start;
   }
   .day .dayadd:hover { color: var(--sumi); }
   .day .awayflag {
@@ -603,14 +633,6 @@
     margin: 0 0 1.4rem;
   }
 
-  /* on wide screens the week gets the room a 7-column calendar needs;
-     reading views keep their narrow measure */
-  @media (min-width: 1024px) {
-    .wrap { max-width: 980px; }
-    header, #view-tonight, #view-month, #view-settings { max-width: 640px; margin-left: auto; margin-right: auto; }
-    header { margin-bottom: 1.8rem; }
-    .week { min-width: 0; }
-  }
 </style>
 </head>
 <body>
@@ -1029,6 +1051,7 @@ function renderThemeToggle() {
 
 /* ============ nav ============ */
 let view = 'tonight';
+let doneOpen = false;
 let weekAnchor = mondayOf(new Date());
 
 document.querySelectorAll('nav button').forEach(b => {
@@ -1078,8 +1101,8 @@ function renderTonight() {
   // tasks
   const list = $('t-tasks');
   list.textContent = '';
-  if (!d.entries.length) list.appendChild(el('div', 'empty-note', 'An open evening.'));
-  d.entries.forEach(e => {
+
+  const makeRow = e => {
     const row = el('button', 'zen-task' + (e.done ? ' done' : ''));
     row.type = 'button';
     row.appendChild(el('span', 'ink'));
@@ -1097,8 +1120,28 @@ function renderTonight() {
       const en = dd.entries.find(x => x.id === e.id);
       if (en) { en.done = !en.done; save(); renderAll(); }
     });
-    list.appendChild(row);
-  });
+    return row;
+  };
+
+  const active = d.entries.filter(e => !e.done);
+  const done = d.entries.filter(e => e.done);
+
+  if (!d.entries.length) list.appendChild(el('div', 'empty-note', 'An open evening.'));
+  else if (!active.length) list.appendChild(el('div', 'empty-note', 'Everything done. Rest.'));
+  active.forEach(e => list.appendChild(makeRow(e)));
+
+  if (done.length) {
+    const toggle = el('button', 'done-toggle' + (doneOpen ? ' open' : ''));
+    toggle.type = 'button';
+    toggle.appendChild(el('span', 'caret', '›'));
+    toggle.appendChild(el('span', '', `${done.length} completed`));
+    toggle.addEventListener('click', () => { doneOpen = !doneOpen; renderTonight(); });
+    list.appendChild(toggle);
+
+    const doneList = el('div', 'done-list' + (doneOpen ? '' : ' collapsed'));
+    done.forEach(e => doneList.appendChild(makeRow(e)));
+    list.appendChild(doneList);
+  }
 
   // meal seg
   $('t-meal').querySelectorAll('button').forEach(b => {
@@ -1209,7 +1252,9 @@ function renderWeek() {
     head.appendChild(num);
     cell.appendChild(head);
 
-    if (d.status === 'away') cell.appendChild(el('span', 'awayflag', '✈ away'));
+    const body = el('div', 'day-body');
+
+    if (d.status === 'away') body.appendChild(el('span', 'awayflag', '✈ away'));
 
     d.entries.forEach(e => {
       const row = el('button', 'entry' + (e.done ? ' done' : ''), e.text);
@@ -1218,11 +1263,11 @@ function renderWeek() {
         const en = day(ds).entries.find(x => x.id === e.id);
         if (en) { en.done = !en.done; save(); renderAll(); }
       });
-      cell.appendChild(row);
+      body.appendChild(row);
     });
-    if (d.run) cell.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
-    if (d.meal) cell.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
-    if (sealed(d)) cell.appendChild(el('span', 'dhanko', '印'));
+    if (d.run) body.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
+    if (d.meal) body.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
+    if (sealed(d)) body.appendChild(el('span', 'dhanko', '印'));
 
     const add = el('button', 'dayadd', '＋');
     add.type = 'button';
@@ -1232,7 +1277,9 @@ function renderWeek() {
       $('w-input').placeholder = `${DOW[i]} ${dt.getDate()} — plan something`;
       $('w-input').focus();
     });
-    cell.appendChild(add);
+    body.appendChild(add);
+
+    cell.appendChild(body);
     grid.appendChild(cell);
   }
 
