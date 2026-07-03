@@ -312,6 +312,9 @@ button:focus-visible {
     margin-bottom: 10px;
 }
 
+.entry-strip--2 { grid-template-columns: repeat(2, 1fr); }
+.entry-strip--1 { grid-template-columns: 1fr; }
+
 @media (max-width: 560px) {
     .entry-strip { grid-template-columns: 1fr; }
 }
@@ -331,6 +334,14 @@ button:focus-visible {
     color: var(--usuzumi);
     margin-bottom: 18px;
 }
+
+.entry-credit a {
+    color: var(--nezumi);
+    text-decoration: none;
+    border-bottom: 1px solid var(--shironeri);
+}
+
+.entry-credit a:hover { color: var(--sumi); }
 
 .entry-study {
     font-family: var(--gothic);
