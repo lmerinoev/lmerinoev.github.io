@@ -367,6 +367,49 @@
   .qbtn:hover { color: var(--sumi); border-color: var(--stone); }
   .qbtn.on { background: var(--sumi); color: var(--washi); border-color: var(--sumi); }
 
+  /* coffee reflection */
+  .coffee-ratio {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--stone);
+  }
+  .reflect {
+    margin-top: 0.9rem;
+    padding: 1.15rem 1.2rem 1rem;
+    border: 1px solid var(--hairline);
+    border-left: 2px solid var(--shu);
+    background: color-mix(in srgb, var(--shu) 3%, transparent);
+  }
+  .reflect.hidden { display: none; }
+  .reflect-label {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+  .reflect-body {
+    font-family: var(--mincho);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--sumi);
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .reflect-body .attr { display: block; margin-top: 0.5rem; font-size: 0.8rem; color: var(--stone); font-style: italic; }
+  .reflect-next {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-top: 0.9rem;
+  }
+  .reflect-next:hover { color: var(--shu); }
+
   .homestat { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   .homestat .lbl { font-size: 0.9rem; }
   .homestat .lbl .jp { font-family: var(--mincho); margin-right: 0.6rem; }
@@ -706,6 +749,19 @@
         </div>
       </div>
 
+      <div class="sect">
+        <div class="plabel"><span>珈琲 · Coffee</span><span class="coffee-ratio" id="coffee-ratio"></span></div>
+        <div class="seg" id="t-coffee">
+          <button data-coffee="home"><span class="k">淹</span>Brewed home</button>
+          <button data-coffee="out"><span class="k">外</span>Out</button>
+        </div>
+        <div class="reflect" id="coffee-reflect">
+          <span class="reflect-label" id="reflect-label">While it brews</span>
+          <p class="reflect-body" id="reflect-body"></p>
+          <button class="reflect-next" id="reflect-next">another ›</button>
+        </div>
+      </div>
+
       <div class="foot-stats">
         <div class="ph-stat"><span class="k">空 · Released</span><span class="v" id="t-released">0</span></div>
         <div class="ph-stat"><span class="k">家 · Nights home</span><span class="v" id="t-nights">0</span></div>
@@ -750,6 +806,7 @@
       <div class="month-stats">
         <div class="mstat"><span class="lbl"><span class="jp">体</span>Runs this month</span><span class="val" id="m-runs">0</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">食</span>Cooked, of dinners logged</span><span class="val" id="m-cooked">—</span></div>
+        <div class="mstat"><span class="lbl"><span class="jp">珈</span>Coffee brewed home</span><span class="val" id="m-coffee">—</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">空</span>Released this month</span><span class="val" id="m-released">0</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">印</span>Complete evenings</span><span class="val" id="m-seals">0</span></div>
       </div>
@@ -853,6 +910,42 @@ let saveTimer = null;
 
 const freshState = () => ({ version: 1, days: {}, released: 0, releases: {}, touched: {} });
 
+/* ============ coffee reflections ============ */
+// Small moments to sit with while the coffee brews at home.
+const REFLECTIONS = [
+  { t: 'question', body: 'What would make today feel worth being home for?' },
+  { t: 'question', body: 'Who have you not called in too long?' },
+  { t: 'question', body: 'What is one thing you own that you could pass on this week?' },
+  { t: 'question', body: 'What are you still carrying from work that you can set down at the door?' },
+  { t: 'question', body: 'What small thing at home are you grateful for right now?' },
+  { t: 'question', body: 'When did you last do nothing, on purpose?' },
+  { t: 'question', body: 'What would “enough” look like today?' },
+  { t: 'question', body: 'What is a want you’ve mistaken for a need?' },
+  { t: 'question', body: 'Which room do you love most — and when did you last just sit in it?' },
+  { t: 'question', body: 'If this weekend had one quiet highlight, what would you want it to be?' },
+  { t: 'question', body: 'What did rest actually look like the last time you felt rested?' },
+  { t: 'idea', body: 'Taste this cup with no phone in reach. Notice where your attention drifts.' },
+  { t: 'idea', body: 'Smell it before the first sip. Try to name three things in it.' },
+  { t: 'idea', body: 'Plan one meal you’ll cook at home this week.' },
+  { t: 'idea', body: 'Pick one drawer to empty for ten minutes later today.' },
+  { t: 'idea', body: 'Send one family member a photo of something small from your morning.' },
+  { t: 'idea', body: 'Choose one thing to do slowly today, on purpose.' },
+  { t: 'idea', body: 'Let it cool a little. Read one page of something good.' },
+  { t: 'idea', body: 'Look out a window for the length of this cup. Just watch.' },
+  { t: 'idea', body: 'Write down one idea you keep circling back to.' },
+  { t: 'idea', body: 'Name the single thing that would make today a good day. Just one.' },
+  { t: 'quote', body: 'Fall seven times, stand up eight.', attr: 'Japanese proverb' },
+  { t: 'quote', body: 'When walking, walk. When eating, eat.', attr: 'Zen proverb' },
+  { t: 'quote', body: 'One moment, one meeting — never to come again.', attr: '一期一会 · ichigo ichie' },
+  { t: 'quote', body: 'Sitting quietly, doing nothing — spring comes, and the grass grows by itself.', attr: 'Zen saying' },
+  { t: 'quote', body: 'The quieter you become, the more you can hear.' },
+  { t: 'quote', body: 'Wherever you are, be there completely.' },
+  { t: 'quote', body: 'The obstacle is the path.', attr: 'Zen proverb' },
+];
+const REFLECT_LABEL = { question: 'Sit with this', idea: 'Something to try', quote: 'A thought' };
+let reflectOffset = 0;
+const dateHash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
+
 function save() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
@@ -902,19 +995,21 @@ function monthDays() {
 }
 function monthStats() {
   const { elapsed, total } = monthDays();
-  let nights = 0, runs = 0, cooked = 0, meals = 0, seals = 0, released = 0;
+  let nights = 0, runs = 0, cooked = 0, meals = 0, seals = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
   for (const ds of elapsed) {
     const d = dayRO(ds);
     if (d.status !== 'away') nights++;
     if (d.run) runs++;
     if (d.meal) { meals++; if (d.meal === 'cooked') cooked++; }
+    if (d.coffee === 'home') coffeeHome++;
+    if (d.coffee === 'out') coffeeOut++;
     if (sealed(d)) seals++;
     released += state.releases[ds] || 0;
   }
-  return { nights, total, runs, cooked, meals, seals, released };
+  return { nights, total, runs, cooked, meals, seals, released, coffeeHome, coffeeOut };
 }
 function weekStats(mon) {
-  let nights = 0, elapsed = 0, runs = 0, cooked = 0, ordered = 0, released = 0;
+  let nights = 0, elapsed = 0, runs = 0, cooked = 0, ordered = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
   const t = today();
   for (let i = 0; i < 7; i++) {
     const ds = ymd(addDays(mon, i));
@@ -923,9 +1018,11 @@ function weekStats(mon) {
     if (d.run) runs++;
     if (d.meal === 'cooked') cooked++;
     if (d.meal === 'ordered' || d.meal === 'out') ordered++;
+    if (d.coffee === 'home') coffeeHome++;
+    if (d.coffee === 'out') coffeeOut++;
     released += state.releases[ds] || 0;
   }
-  return { nights, elapsed, runs, cooked, ordered, released };
+  return { nights, elapsed, runs, cooked, ordered, released, coffeeHome, coffeeOut };
 }
 
 /* ============ dom helpers ============ */
@@ -1149,6 +1246,9 @@ function renderTonight() {
     b.classList.toggle('warn', b.classList.contains('on') && b.dataset.meal !== 'cooked');
   });
 
+  // coffee
+  renderCoffee(d);
+
   // quick buttons
   $('q-run').classList.toggle('on', !!d.run);
   $('q-run-lbl').textContent = d.run ? `Ran ${d.run.km}k` : 'Log run';
@@ -1190,6 +1290,39 @@ $('t-meal').querySelectorAll('button').forEach(b => {
     save(); renderAll();
   });
 });
+
+// ---- coffee ----
+function currentReflection() {
+  const i = (dateHash(today()) + reflectOffset) % REFLECTIONS.length;
+  return REFLECTIONS[i];
+}
+function renderReflection() {
+  const r = currentReflection();
+  $('reflect-label').textContent = REFLECT_LABEL[r.t];
+  const body = $('reflect-body');
+  body.textContent = r.body;
+  if (r.attr) { const a = el('span', 'attr', '— ' + r.attr); body.appendChild(a); }
+}
+function renderCoffee(d) {
+  $('t-coffee').querySelectorAll('button').forEach(b =>
+    b.classList.toggle('on', d.coffee === b.dataset.coffee));
+  // reflection appears once you've chosen to brew at home — the ritual is the reward
+  const home = d.coffee === 'home';
+  $('coffee-reflect').classList.toggle('hidden', !home);
+  if (home) renderReflection();
+  const ms = monthStats();
+  $('coffee-ratio').textContent = ms.coffeeHome ? `${ms.coffeeHome} home this month` : '';
+}
+$('t-coffee').querySelectorAll('button').forEach(b => {
+  b.addEventListener('click', () => {
+    const d = day(today());
+    const was = d.coffee;
+    d.coffee = d.coffee === b.dataset.coffee ? null : b.dataset.coffee;
+    if (d.coffee === 'home' && was !== 'home') reflectOffset = 0; // fresh prompt when you start a home brew
+    save(); renderAll();
+  });
+});
+$('reflect-next').addEventListener('click', () => { reflectOffset++; renderReflection(); });
 
 $('q-run').addEventListener('click', () => {
   const d = day(today());
@@ -1267,6 +1400,7 @@ function renderWeek() {
     });
     if (d.run) body.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
     if (d.meal) body.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
+    if (d.coffee) body.appendChild(el('div', 'entry done', d.coffee === 'home' ? 'Coffee home' : 'Coffee out'));
     if (sealed(d)) body.appendChild(el('span', 'dhanko', '印'));
 
     const add = el('button', 'dayadd', '＋');
@@ -1295,6 +1429,7 @@ function renderWeek() {
   mkStat('Nights home', `${s.nights}<span class="dim">/${s.elapsed || 7}</span>`);
   mkStat('Runs', `${s.runs}`);
   mkStat('Cooked', `${s.cooked} <span class="dim">·</span> <span class="warn">${s.ordered}</span>`);
+  mkStat('Coffee home', `${s.coffeeHome} <span class="dim">·</span> <span class="warn">${s.coffeeOut}</span>`);
   mkStat('Released', `${s.released}`);
 }
 
@@ -1324,6 +1459,7 @@ function renderMonth() {
   $('m-ring').setAttribute('stroke-dasharray', `${(C * frac).toFixed(1)} ${C.toFixed(1)}`);
   $('m-runs').textContent = ms.runs;
   $('m-cooked').innerHTML = ms.meals ? `${ms.cooked}<span class="dim">/${ms.meals}</span>` : '—';
+  $('m-coffee').innerHTML = (ms.coffeeHome + ms.coffeeOut) ? `${ms.coffeeHome}<span class="dim">/${ms.coffeeHome + ms.coffeeOut}</span>` : '—';
   $('m-released').textContent = ms.released;
   $('m-seals').textContent = ms.seals;
 }
