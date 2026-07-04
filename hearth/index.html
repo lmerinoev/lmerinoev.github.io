@@ -730,6 +730,17 @@
   }
   .mstat .val .dim { color: var(--ink-muted); font-weight: 400; }
 
+  /* trends */
+  .trend-label {
+    font-size: 12px;
+    color: var(--ink-muted);
+    padding: 12px 8px 2px;
+  }
+  .trend-card { display: block; }
+  .trend-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .trend-head .lbl { font-size: 14px; font-weight: 600; }
+  .trend-svg { display: block; width: 100%; height: auto; margin-top: 12px; }
+
   /* ---------- settings ---------- */
   h2.viewtitle {
     font-size: 24px;
@@ -798,7 +809,19 @@
     clip: rect(0 0 0 0);
     white-space: nowrap;
   }
-  nav button.on { background: #FFF; color: #1A1A1A; padding: 10px 22px; }
+  nav button { position: relative; z-index: 1; padding: 10px 22px; }
+  nav button.on { color: #1A1A1A; }
+  .nav-drop {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 44px;
+    transform: translateY(-50%);
+    background: #FFF;
+    border-radius: 999px;
+    z-index: 0;
+    pointer-events: none;
+  }
 
   /* ---------- moment photo card ---------- */
   .card-photo { padding: 0; overflow: hidden; }
@@ -1090,6 +1113,8 @@
         <div class="mstat"><span class="lbl"><span class="jp">空</span>Released this month</span><span class="val" id="m-released">0</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">印</span>Complete evenings</span><span class="val" id="m-seals">0</span></div>
         <div id="m-practices" style="display:contents"></div>
+        <div class="trend-label">Trends · last 8 weeks</div>
+        <div id="m-trends" style="display:contents"></div>
       </div>
     </main>
 
@@ -1144,6 +1169,7 @@
   </div>
 
   <nav>
+    <span class="nav-drop" id="nav-drop" aria-hidden="true"></span>
     <button data-view="tonight" class="on" title="Tonight"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4.5 20 11v8.5h-5.5V14h-5v5.5H4Z"/></svg><span class="e">Tonight</span></button>
     <button data-view="week" title="Week"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="6" width="16" height="14" rx="3"/><path d="M4 10.5h16M8.5 4v3M15.5 4v3"/></svg><span class="e">Week</span></button>
     <button data-view="month" title="Month"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 4a8 8 0 1 1-7.6 5.5"/></svg><span class="e">Month</span></button>
@@ -1471,6 +1497,7 @@ $('unlock-form').addEventListener('submit', async ev => {
 function enter() {
   $('unlock').classList.add('hidden');
   $('app').classList.remove('hidden');
+  requestAnimationFrame(() => moveNavDrop(false));
   if (!syncToken) unlockSync(); else syncNow(false);
   renderAll();
 }
@@ -1500,15 +1527,36 @@ let view = 'tonight';
 let doneOpen = false;
 let weekAnchor = mondayOf(new Date());
 
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)');
+function moveNavDrop(animate) {
+  const drop = $('nav-drop');
+  const active = document.querySelector('nav button.on');
+  if (!drop || !active) return;
+  const to = { left: active.offsetLeft, width: active.offsetWidth };
+  const from = { left: drop.offsetLeft, width: drop.offsetWidth };
+  drop.style.left = to.left + 'px';
+  drop.style.width = to.width + 'px';
+  if (!animate || REDUCED.matches || !drop.animate || from.width === 0) return;
+  // liquid drop: stretch across both positions mid-flight, then snap into place
+  const span = Math.max(from.left + from.width, to.left + to.width) - Math.min(from.left, to.left);
+  drop.animate([
+    { left: from.left + 'px', width: from.width + 'px', height: '44px' },
+    { left: Math.min(from.left, to.left) + 'px', width: span + 'px', height: '34px', offset: 0.45 },
+    { left: to.left + 'px', width: to.width * 1.12 + 'px', height: '46px', offset: 0.8 },
+    { left: to.left + 'px', width: to.width + 'px', height: '44px' },
+  ], { duration: 420, easing: 'cubic-bezier(0.3, 0.9, 0.3, 1)' });
+}
 document.querySelectorAll('nav button').forEach(b => {
   b.addEventListener('click', () => {
     view = b.dataset.view;
     document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
     ['tonight','week','month','settings'].forEach(v =>
       $('view-' + v).classList.toggle('hidden', v !== view));
+    moveNavDrop(true);
     renderAll();
   });
 });
+window.addEventListener('resize', () => moveNavDrop(false));
 
 /* ============ render: tonight ============ */
 function renderTonight() {
@@ -1628,7 +1676,8 @@ function renderTonight() {
 
   // footer
   $('t-released').textContent = state.released;
-  $('q-release-n').textContent = state.released ? ` · ${state.released}` : '';
+  const relToday = state.releases[t] || 0;
+  $('q-release-n').textContent = relToday ? ` · ${relToday} today` : '';
   const ms = monthStats();
   $('t-nights').textContent = `${ms.nights}/${ms.total}`;
   $('t-hanko').classList.toggle('earned', sealed(d));
@@ -1871,6 +1920,7 @@ function renderMonth() {
     row.appendChild(el('span', 'val', String(tc)));
     mp.appendChild(row);
   }
+  renderTrends();
 }
 
 /* ============ sync (private gist, ciphertext only) ============ */
@@ -2318,6 +2368,71 @@ $('tj-input').addEventListener('input', () => {
   $('tj-count').textContent = n ? `${140 - n}` : '';
   tjAutosize();
 });
+
+/* ============ trends ============ */
+function firstDataDay() {
+  const keys = [...Object.keys(state.days || {}), ...Object.keys(state.releases || {})].filter(k => /^\d{4}-/.test(k));
+  return keys.length ? keys.sort()[0] : today();
+}
+function weeklySeries(n) {
+  const t = today();
+  const first = firstDataDay();
+  const mon0 = mondayOf(new Date());
+  const out = [];
+  for (let w = n - 1; w >= 0; w--) {
+    const mon = addDays(mon0, -7 * w);
+    const bucket = { nights: 0, runs: 0, cooked: 0, released: 0 };
+    for (let i = 0; i < 7; i++) {
+      const ds = ymd(addDays(mon, i));
+      if (ds > t || ds < first) continue; // no fake data before first use
+      const d = dayRO(ds);
+      if (d.status !== 'away') bucket.nights++;
+      if (d.run) bucket.runs++;
+      if (d.meal === 'cooked') bucket.cooked++;
+      bucket.released += state.releases[ds] || 0;
+    }
+    out.push(bucket);
+  }
+  return out;
+}
+function barChartSVG(values, max, color) {
+  const W = 320, H = 76, gap = 6;
+  const n = values.length;
+  const bw = (W - gap * (n - 1)) / n;
+  let bars = '';
+  values.forEach((v, i) => {
+    const h = max > 0 && v > 0 ? Math.max(6, (v / max) * (H - 10)) : 5;
+    const x = i * (bw + gap);
+    const y = H - h;
+    const fill = v === 0 ? 'var(--hairline)' : (i === n - 1 ? 'var(--ink)' : color);
+    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="4" fill="${fill}"/>`;
+  });
+  return `<svg class="trend-svg" viewBox="0 0 ${W} ${H}" role="img" aria-hidden="true">${bars}</svg>`;
+}
+function renderTrends() {
+  const wrap = $('m-trends');
+  if (!wrap) return;
+  wrap.textContent = '';
+  const series = weeklySeries(8);
+  const defs = [
+    { key: 'nights', lbl: '🏠 Nights home / week', color: 'var(--card-blue)', max: 7 },
+    { key: 'runs', lbl: '🏃 Runs / week', color: 'var(--card-green)', max: Math.max(3, ...series.map(x => x.runs)) },
+    { key: 'cooked', lbl: '🍳 Cooked dinners / week', color: 'var(--card-yellow)', max: 7 },
+    { key: 'released', lbl: '📦 Released / week', color: 'var(--accent)', max: Math.max(3, ...series.map(x => x.released)) },
+  ];
+  defs.forEach(def => {
+    const vals = series.map(x => x[def.key]);
+    const card = el('div', 'mstat trend-card');
+    const head = el('div', 'trend-head');
+    head.appendChild(el('span', 'lbl', def.lbl));
+    head.appendChild(el('span', 'val', String(vals[vals.length - 1])));
+    card.appendChild(head);
+    const holder = el('div', '');
+    holder.innerHTML = barChartSVG(vals, def.max, def.color);
+    card.appendChild(holder.firstChild);
+    wrap.appendChild(card);
+  });
+}
 
 /* ============ render all ============ */
 function renderAll() {
