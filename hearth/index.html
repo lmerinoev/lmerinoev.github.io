@@ -835,6 +835,17 @@
     flex: none;
   }
 
+  /* practices */
+  .qbtn.ghost {
+    border-style: dashed;
+    background: transparent;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+  .qbtn .pth { color: inherit; opacity: 0.55; font-weight: 700; }
+  .qbtn .delp { color: var(--accent); font-weight: 700; margin-left: 2px; }
+  .pr-hint { font-size: 12px; color: var(--ink-muted); margin: 12px 2px 0; line-height: 1.4; }
+
   /* hanko stamp-down */
   @keyframes stamp {
     0% { transform: scale(1.7) rotate(-10deg); opacity: 0; }
@@ -938,6 +949,16 @@
         </div>
       </div>
 
+      <div class="card" id="pr-card">
+        <div class="plabel"><span>Practices</span><button class="paction-lite" id="pr-edit" title="Add or remove practices">✎</button></div>
+        <div class="qrow" id="pr-chips"></div>
+        <div class="addrow hidden" id="pr-addrow">
+          <input type="text" id="pr-input" placeholder="📷 Photo walk" maxlength="24">
+          <button class="ok" id="pr-save">Add</button>
+        </div>
+        <p class="pr-hint hidden" id="pr-hint"></p>
+      </div>
+
       <div class="card card-yellow">
         <div class="plabel"><span>Coffee</span><span class="coffee-ratio" id="coffee-ratio"></span></div>
         <div class="seg" id="t-coffee">
@@ -1009,6 +1030,7 @@
         <div class="mstat"><span class="lbl"><span class="jp">珈</span>Coffee brewed home</span><span class="val" id="m-coffee">—</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">空</span>Released this month</span><span class="val" id="m-released">0</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">印</span>Complete evenings</span><span class="val" id="m-seals">0</span></div>
+        <div id="m-practices" style="display:contents"></div>
       </div>
     </main>
 
@@ -1110,7 +1132,7 @@ let key = null;
 let state = null;
 let saveTimer = null;
 
-const freshState = () => ({ version: 1, days: {}, released: 0, releases: {}, touched: {} });
+const freshState = () => ({ version: 1, days: {}, released: 0, releases: {}, touched: {}, practices: [] });
 
 /* ============ coffee reflections ============ */
 // Small moments to sit with while the coffee brews at home.
@@ -1530,6 +1552,9 @@ function renderTonight() {
   // moment photo
   renderMoment();
 
+  // practices
+  renderPractices();
+
   // quick buttons
   $('q-run').classList.toggle('on', !!d.run);
   $('q-run-lbl').textContent = d.run ? `Ran ${d.run.km}k` : 'Log run';
@@ -1683,6 +1708,10 @@ function renderWeek() {
     if (d.run) body.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
     if (d.meal) body.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
     if (d.coffee) body.appendChild(el('div', 'entry done', d.coffee === 'home' ? 'Coffee home' : 'Coffee out'));
+    practicesOf(d).forEach(pid => {
+      const pr = (state.practices || []).find(x => x.id === pid);
+      if (pr) body.appendChild(el('div', 'entry done', `${pr.e} ${pr.n}`));
+    });
     if (sealed(d)) body.appendChild(el('span', 'dhanko', '印'));
 
     const add = el('button', 'dayadd', '＋');
@@ -1744,6 +1773,18 @@ function renderMonth() {
   $('m-coffee').innerHTML = (ms.coffeeHome + ms.coffeeOut) ? `${ms.coffeeHome}<span class="dim">/${ms.coffeeHome + ms.coffeeOut}</span>` : '—';
   $('m-released').textContent = ms.released;
   $('m-seals').textContent = ms.seals;
+  const mp = $('m-practices');
+  mp.textContent = '';
+  const { elapsed } = monthDays();
+  (state.practices || []).forEach(pr => {
+    const c = elapsed.filter(ds => practicesOf(dayRO(ds)).includes(pr.id)).length;
+    if (!c) return;
+    const row = el('div', 'mstat');
+    const lbl = el('span', 'lbl', `${pr.e} ${pr.n}`);
+    const val = el('span', 'val', String(c));
+    row.appendChild(lbl); row.appendChild(val);
+    mp.appendChild(row);
+  });
 }
 
 /* ============ sync (private gist, ciphertext only) ============ */
@@ -1803,6 +1844,10 @@ function mergeStates(a, b) {
     out.touched[ds] = Math.max(ta[ds] || 0, tb[ds] || 0);
   }
   out.released = Math.max(a.released || 0, b.released || 0);
+  // practices list: newest edit wins wholesale
+  const pa = a.touched && a.touched['_practices'] || 0, pb = b.touched && b.touched['_practices'] || 0;
+  out.practices = (pb > pa ? b.practices : a.practices) || (a.practices || b.practices) || [];
+  out.touched['_practices'] = Math.max(pa, pb);
   return out;
 }
 
@@ -1968,6 +2013,95 @@ $('s-erase').addEventListener('click', () => {
   [LS_SALT, LS_BLOB, LS_KEY, LS_SYNC].forEach(k => localStorage.removeItem(k));
   location.reload();
 });
+
+/* ============ practices ============ */
+const PR_SUGGESTED = ['📷 Photo walk', '🎞️ Finish a roll', '📖 Read', '🎧 An album'];
+let prEditing = false;
+const practicesOf = d => d.practices || [];
+
+// thread: consecutive home days with the practice kept, counting back from
+// today (or yesterday if today isn't logged yet); away days pause, not break
+function threadCount(pid) {
+  let dt = new Date();
+  if (!practicesOf(dayRO(today())).includes(pid)) dt = addDays(dt, -1);
+  let n = 0;
+  for (let i = 0; i < 366; i++) {
+    const d = dayRO(ymd(dt));
+    if (d.status === 'away') { dt = addDays(dt, -1); continue; }
+    if (practicesOf(d).includes(pid)) { n++; dt = addDays(dt, -1); continue; }
+    break;
+  }
+  return n;
+}
+
+function addPractice(text) {
+  const list = state.practices || (state.practices = []);
+  if (list.length >= 6) { $('pr-hint').textContent = 'Six is plenty. Remove one first.'; return; }
+  const m = text.trim().match(/^(\p{Extended_Pictographic}(?:\uFE0F)?)\s*(.*)$/u);
+  const e = m && m[1] ? m[1] : '•';
+  const n = ((m && m[2]) || text).trim();
+  if (!n) return;
+  list.push({ id: crypto.randomUUID(), e, n });
+  touch('_practices');
+  save(); renderAll();
+}
+
+function renderPractices() {
+  const wrap = $('pr-chips');
+  if (!wrap || !state) return;
+  wrap.textContent = '';
+  const t = today();
+  const dToday = dayRO(t);
+  const list = state.practices || [];
+  const hint = $('pr-hint');
+
+  if (!list.length && !prEditing) {
+    PR_SUGGESTED.forEach(sg => {
+      const b = el('button', 'qbtn ghost', sg);
+      b.type = 'button';
+      b.addEventListener('click', () => addPractice(sg));
+      wrap.appendChild(b);
+    });
+    hint.textContent = 'Tap one to make it yours — or ✎ to write your own. Away days pause a thread; travel never breaks it.';
+    hint.classList.remove('hidden');
+    return;
+  }
+
+  list.forEach(pr => {
+    const done = practicesOf(dToday).includes(pr.id);
+    const b = el('button', 'qbtn' + (done ? ' on' : ''));
+    b.type = 'button';
+    b.appendChild(document.createTextNode(`${pr.e} ${pr.n}`));
+    const th = threadCount(pr.id);
+    if (th >= 2) b.appendChild(el('span', 'pth', ` · ${th}`));
+    if (prEditing) b.appendChild(el('span', 'delp', ' ×'));
+    b.addEventListener('click', () => {
+      if (prEditing) {
+        state.practices = state.practices.filter(x => x.id !== pr.id);
+        touch('_practices');
+        save(); renderAll();
+        return;
+      }
+      const dd = day(t);
+      dd.practices = done ? practicesOf(dd).filter(x => x !== pr.id) : [...practicesOf(dd), pr.id];
+      save(); renderAll();
+    });
+    wrap.appendChild(b);
+  });
+
+  hint.classList.toggle('hidden', !prEditing);
+  if (prEditing) hint.textContent = 'Tap a practice to remove it.';
+}
+
+$('pr-edit').addEventListener('click', () => {
+  prEditing = !prEditing;
+  $('pr-addrow').classList.toggle('hidden', !prEditing);
+  renderPractices();
+  if (prEditing) $('pr-input').focus();
+});
+function prAdd() { addPractice($('pr-input').value); $('pr-input').value = ''; }
+$('pr-save').addEventListener('click', prAdd);
+$('pr-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); prAdd(); } });
 
 /* ============ render all ============ */
 function renderAll() {
