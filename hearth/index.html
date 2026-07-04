@@ -847,6 +847,22 @@
   .pr-hint { font-size: 12px; color: var(--ink-muted); margin: 12px 2px 0; line-height: 1.4; }
 
   /* thoughts */
+  #tj-input {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 16px; /* >=16px: no iOS focus zoom */
+    line-height: 1.4;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: 22px;
+    padding: 11px 16px;
+    width: 100%;
+    resize: none;
+    overflow: hidden;
+    display: block;
+  }
+  #tj-input:focus-visible { outline: none; border-color: var(--accent); }
   .tj-count { font-size: 11px; font-weight: 600; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
   .thought { padding: 10px 0; border-bottom: 1px solid var(--hairline); }
   .thought p { margin: 0; font-size: 15px; line-height: 1.45; text-wrap: pretty; }
@@ -992,7 +1008,7 @@
         <div class="plabel"><span>Thoughts</span><span class="tj-count" id="tj-count"></span></div>
         <div id="tj-list"></div>
         <div class="addrow" style="margin-top:4px">
-          <input type="text" id="tj-input" placeholder="One small thought…" maxlength="140" autocomplete="off">
+          <textarea id="tj-input" rows="1" placeholder="One small thought…" maxlength="140" autocomplete="off"></textarea>
           <button class="ok" id="tj-save">Save</button>
         </div>
       </div>
@@ -2161,6 +2177,11 @@ function renderThoughts() {
     list.appendChild(row);
   });
 }
+function tjAutosize() {
+  const ta = $('tj-input');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+}
 function addThought() {
   const v = $('tj-input').value.trim();
   if (!v) return;
@@ -2173,6 +2194,7 @@ function addThought() {
   });
   $('tj-input').value = '';
   $('tj-count').textContent = '';
+  tjAutosize();
   save(); renderAll();
 }
 $('tj-save').addEventListener('click', addThought);
@@ -2180,6 +2202,7 @@ $('tj-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.prev
 $('tj-input').addEventListener('input', () => {
   const n = $('tj-input').value.length;
   $('tj-count').textContent = n ? `${140 - n}` : '';
+  tjAutosize();
 });
 
 /* ============ render all ============ */
