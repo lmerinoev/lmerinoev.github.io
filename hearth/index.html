@@ -846,6 +846,17 @@
   .qbtn .delp { color: var(--accent); font-weight: 700; margin-left: 2px; }
   .pr-hint { font-size: 12px; color: var(--ink-muted); margin: 12px 2px 0; line-height: 1.4; }
 
+  /* cleaning */
+  .clean-photo {
+    border-radius: 18px;
+    overflow: hidden;
+    aspect-ratio: 21 / 9;
+    margin-bottom: 12px;
+    background: var(--hairline);
+  }
+  .clean-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .clean-picker { margin-top: 8px; padding-top: 10px; border-top: 1px dashed var(--hairline); }
+
   /* thoughts */
   #tj-input {
     font-family: var(--sans);
@@ -973,9 +984,12 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="plabel"><span>Space</span></div>
-        <div class="qrow">
+      <div class="card" id="clean-card">
+        <div class="plabel"><span>Cleaning</span><button class="paction-lite" id="clean-add" title="Add a tidy for today">＋</button></div>
+        <div class="clean-photo hidden" id="clean-photo"><img id="clean-img" alt=""></div>
+        <div class="qrow" id="clean-chips"></div>
+        <div class="qrow clean-picker hidden" id="clean-picker"></div>
+        <div class="qrow" style="margin-top:8px">
           <button class="qbtn" id="q-reset"><span class="k">静</span><span id="q-reset-lbl">15m reset</span></button>
           <button class="qbtn" id="q-release"><span class="k"></span>Release +1</button>
         </div>
@@ -1599,6 +1613,9 @@ function renderTonight() {
   // thoughts
   renderThoughts();
 
+  // cleaning
+  renderCleaning();
+
   // quick buttons
   $('q-run').classList.toggle('on', !!d.run);
   $('q-run-lbl').textContent = d.run ? `Ran ${d.run.km}k` : 'Log run';
@@ -1756,6 +1773,7 @@ function renderWeek() {
       const pr = (state.practices || []).find(x => x.id === pid);
       if (pr) body.appendChild(el('div', 'entry done', `${pr.e} ${pr.n}`));
     });
+    (d.tidy || []).forEach(k => { const def = TIDY_ALL[k]; if (def) body.appendChild(el('div', 'entry done', `${def.e} ${def.n} tidied`)); });
     (d.thoughts || []).forEach(th => body.appendChild(el('div', 'entry tq done', `\u201C${th.x}\u201D`)));
     if (sealed(d)) body.appendChild(el('span', 'dhanko', '印'));
 
@@ -1830,6 +1848,13 @@ function renderMonth() {
     row.appendChild(lbl); row.appendChild(val);
     mp.appendChild(row);
   });
+  const tdc = elapsed.reduce((n, ds) => n + (dayRO(ds).tidy || []).length, 0);
+  if (tdc) {
+    const row = el('div', 'mstat');
+    row.appendChild(el('span', 'lbl', '🧹 Rooms tidied'));
+    row.appendChild(el('span', 'val', String(tdc)));
+    mp.appendChild(row);
+  }
   const tc = elapsed.reduce((n, ds) => n + (dayRO(ds).thoughts || []).length, 0);
   if (tc) {
     const row = el('div', 'mstat');
@@ -2154,6 +2179,86 @@ $('pr-edit').addEventListener('click', () => {
 function prAdd() { addPractice($('pr-input').value); $('pr-input').value = ''; }
 $('pr-save').addEventListener('click', prAdd);
 $('pr-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); prAdd(); } });
+
+/* ============ cleaning ============ */
+const TIDY_BASE = ['kitchen', 'living'];
+const TIDY_ALL = {
+  kitchen: { e: '🍳', n: 'Kitchen' },
+  living: { e: '🛋️', n: 'Living room' },
+  toilet: { e: '🚽', n: 'Toilet' },
+  office: { e: '🖥️', n: 'Office' },
+  closet: { e: '👕', n: 'Closet' },
+  fold: { e: '🧺', n: 'Fold clothes' },
+  clutter: { e: '📦', n: 'A clutter item' },
+};
+let tidyPicking = false;
+
+function renderCleaning() {
+  const wrap = $('clean-chips');
+  if (!wrap || !state) return;
+  const t = today();
+  const d = dayRO(t);
+  const done = d.tidy || [];
+  const extra = d.tidyExtra || [];
+
+  // rotating japanese-home photo, shares the moment pool; hidden until loaded
+  const img = $('clean-img');
+  const pool = MOMENT_THEMES.Home.ids;
+  const url = `https://images.unsplash.com/photo-${pool[dateHash(t + 'clean') % pool.length]}?w=840&h=360&fit=crop&q=70&auto=format`;
+  if (img.dataset.src !== url) {
+    img.dataset.src = url;
+    img.onload = () => $('clean-photo').classList.remove('hidden');
+    img.onerror = () => $('clean-photo').classList.add('hidden');
+    img.src = url;
+  }
+
+  wrap.textContent = '';
+  [...TIDY_BASE, ...extra].forEach(k => {
+    const def = TIDY_ALL[k];
+    if (!def) return;
+    const isDone = done.includes(k);
+    const b = el('button', 'qbtn' + (isDone ? ' on' : ''));
+    b.type = 'button';
+    b.appendChild(document.createTextNode(`${def.e} ${def.n}`));
+    if (tidyPicking && !TIDY_BASE.includes(k)) b.appendChild(el('span', 'delp', ' ×'));
+    b.addEventListener('click', () => {
+      const dd = day(t);
+      if (tidyPicking && !TIDY_BASE.includes(k)) {
+        dd.tidyExtra = (dd.tidyExtra || []).filter(x => x !== k);
+        dd.tidy = (dd.tidy || []).filter(x => x !== k);
+        save(); renderAll(); return;
+      }
+      const was = (dd.tidy || []).includes(k);
+      dd.tidy = was ? (dd.tidy || []).filter(x => x !== k) : [...(dd.tidy || []), k];
+      if (k === 'clutter') { // a released clutter item feeds the lifetime counter
+        if (!was) { state.released++; state.releases[t] = (state.releases[t] || 0) + 1; }
+        else { state.released = Math.max(0, state.released - 1); state.releases[t] = Math.max(0, (state.releases[t] || 0) - 1); }
+        touch(t);
+      }
+      save(); renderAll();
+    });
+    wrap.appendChild(b);
+  });
+
+  const picker = $('clean-picker');
+  picker.textContent = '';
+  picker.classList.toggle('hidden', !tidyPicking);
+  if (tidyPicking) {
+    Object.keys(TIDY_ALL).filter(k => !TIDY_BASE.includes(k) && !extra.includes(k)).forEach(k => {
+      const def = TIDY_ALL[k];
+      const b = el('button', 'qbtn ghost', `${def.e} ${def.n}`);
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        const dd = day(t);
+        dd.tidyExtra = [...(dd.tidyExtra || []), k];
+        save(); renderAll();
+      });
+      picker.appendChild(b);
+    });
+    if (!picker.children.length) picker.appendChild(el('span', 'pr-hint', 'Everything is already on today\u2019s list.'));
+  }
+}
+$('clean-add').addEventListener('click', () => { tidyPicking = !tidyPicking; renderCleaning(); });
 
 /* ============ thoughts (140-char journal) ============ */
 function renderThoughts() {
