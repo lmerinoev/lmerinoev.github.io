@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F2F1EE">
-<title>Hearth</title>
+<title>Habitat</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Hearth">
+<meta name="apple-mobile-web-app-title" content="Habitat">
 <style>
   :root {
     /* ground & surfaces */
@@ -819,7 +819,7 @@
 
 <!-- ============ unlock ============ -->
 <div id="unlock">
-  <div class="mark">Hearth</div>
+  <div class="mark">Habitat</div>
   <form id="unlock-form" autocomplete="off">
     <div id="restore-fields" class="hidden">
       <input type="password" id="r-token" placeholder="github token" autocomplete="off">
@@ -832,14 +832,14 @@
   </form>
   <div class="msg" id="unlock-msg"></div>
   <button class="alt" id="unlock-restore">Restore from sync</button>
-  <div class="sub">hearth · private · encrypted</div>
+  <div class="sub">Habitat · private · encrypted</div>
 </div>
 
 <!-- ============ app ============ -->
 <div id="app" class="hidden">
   <div class="wrap">
     <header>
-      <span class="brand">Hearth</span>
+      <span class="brand">Habitat</span>
       <div class="hbtns">
         <button class="hbtn" id="btn-lock">Lock</button>
       </div>
@@ -1002,7 +1002,7 @@
         <button class="act" id="s-repass">Change</button>
       </div>
       <div class="set-item">
-        <div class="si-l"><h3>Erase everything</h3><p>Deletes all Hearth data from this device. There is no undo.</p></div>
+        <div class="si-l"><h3>Erase everything</h3><p>Deletes all Habitat data from this device. There is no undo.</p></div>
         <button class="act danger" id="s-erase">Erase</button>
       </div>
       <div class="setmsg" id="s-msg"></div>
@@ -1022,6 +1022,8 @@
 'use strict';
 
 /* ============ storage & crypto ============ */
+// storage keys and gist filename keep the original 'hearth' prefix so
+// existing devices and synced gists keep working across the rename
 const LS_SALT = 'hearth.salt';
 const LS_BLOB = 'hearth.blob';
 const LS_KEY  = 'hearth.key';
@@ -1228,9 +1230,9 @@ $('unlock-form').addEventListener('submit', async ev => {
     if (restoreMode) {
       const token = $('r-token').value.trim(), gistId = $('r-gist').value.trim();
       if (!token || !gistId) { msg.className = 'msg err'; msg.textContent = 'Token and gist id are both needed.'; return; }
-      if (!isSetup() && !window.confirm('Replace this device’s Hearth data with the synced copy?')) return;
+      if (!isSetup() && !window.confirm('Replace this device’s Habitat data with the synced copy?')) return;
       const remote = await gistPayloadOf(await gistGet(token, gistId));
-      if (!remote || !remote.blob || !remote.salt) throw Object.assign(new Error('That gist holds no Hearth data.'), { shown: true });
+      if (!remote || !remote.blob || !remote.salt) throw Object.assign(new Error('That gist holds no Habitat data.'), { shown: true });
       key = await deriveKey(pass, unb64(remote.salt));
       state = await decrypt(key, JSON.stringify(remote.blob)); // throws on wrong passphrase
       localStorage.setItem(LS_SALT, remote.salt);
@@ -1629,7 +1631,7 @@ async function gistGet(token, id) {
   return r.json();
 }
 async function gistWrite(token, id, content) {
-  const body = JSON.stringify({ description: 'Hearth — encrypted sync (ciphertext only)', public: false, files: { [GIST_FILE]: { content } } });
+  const body = JSON.stringify({ description: 'Habitat — encrypted sync (ciphertext only)', public: false, files: { [GIST_FILE]: { content } } });
   const r = await fetch(id ? `${GH}/gists/${id}` : `${GH}/gists`, {
     method: id ? 'PATCH' : 'POST',
     headers: { ...ghHeaders(token), 'Content-Type': 'application/json' },
@@ -1723,7 +1725,7 @@ async function connectSync(token, gistId) {
   if (gistId) {
     const remote = await gistPayloadOf(await gistGet(token, gistId));
     if (remote && remote.blob && remote.salt !== localStorage.getItem(LS_SALT)) {
-      if (!window.confirm('That gist holds Hearth data from a different passphrase lineage. Overwrite the cloud with THIS device’s data? (To adopt the cloud data instead, use “Restore from sync” on a fresh device.)')) {
+      if (!window.confirm('That gist holds Habitat data from a different passphrase lineage. Overwrite the cloud with THIS device’s data? (To adopt the cloud data instead, use “Restore from sync” on a fresh device.)')) {
         throw new Error('cancelled');
       }
     }
@@ -1775,7 +1777,7 @@ $('s-export').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `hearth-${today()}.json`;
+  a.download = `habitat-${today()}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
   smsg('Exported. Store it somewhere private — it is plain JSON.');
@@ -1791,7 +1793,7 @@ $('s-file').addEventListener('change', async ev => {
     state = { ...freshState(), ...obj };
     save(); renderAll();
     smsg('Imported.');
-  } catch (e) { smsg('That file is not a Hearth export.'); }
+  } catch (e) { smsg('That file is not a Habitat export.'); }
   ev.target.value = '';
 });
 
@@ -1829,7 +1831,7 @@ $('s-repass').addEventListener('click', async () => {
 });
 
 $('s-erase').addEventListener('click', () => {
-  if (!window.confirm('Erase all Hearth data on this device? There is no undo. (A synced gist stays on GitHub.)')) return;
+  if (!window.confirm('Erase all Habitat data on this device? There is no undo. (A synced gist stays on GitHub.)')) return;
   [LS_SALT, LS_BLOB, LS_KEY, LS_SYNC].forEach(k => localStorage.removeItem(k));
   location.reload();
 });
