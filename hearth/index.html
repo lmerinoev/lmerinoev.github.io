@@ -97,7 +97,7 @@
   input[type="text"], input[type="password"], input[type="number"] {
     font-family: var(--sans);
     font-weight: 400;
-    font-size: 15px;
+    font-size: 16px; /* 16px minimum stops iOS Safari auto-zooming focused fields */
     color: var(--ink);
     background: transparent;
     border: 1px solid var(--hairline);
@@ -149,7 +149,7 @@
   }
   #unlock input { text-align: center; }
   #restore-fields { display: flex; flex-direction: column; gap: 12px; }
-  #restore-fields input { font-family: var(--mono); font-size: 13px; }
+  #restore-fields input { font-family: var(--mono); font-size: 16px; }
   #unlock .go {
     background: var(--shell-dark);
     color: var(--ink-inverse);
@@ -760,7 +760,7 @@
   }
   .set-item .act.danger { background: var(--accent); }
   #sync-form { flex-wrap: wrap; }
-  #sync-form input { font-family: var(--mono); font-size: 13px; }
+  #sync-form input { font-family: var(--mono); font-size: 16px; }
   .setmsg { font-size: 13px; color: var(--ink-muted); min-height: 1.3em; padding: 0 8px; }
 
   /* ---------- bottom nav ---------- */
@@ -845,6 +845,22 @@
   .qbtn .pth { color: inherit; opacity: 0.55; font-weight: 700; }
   .qbtn .delp { color: var(--accent); font-weight: 700; margin-left: 2px; }
   .pr-hint { font-size: 12px; color: var(--ink-muted); margin: 12px 2px 0; line-height: 1.4; }
+
+  /* thoughts */
+  .tj-count { font-size: 11px; font-weight: 600; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+  .thought { padding: 10px 0; border-bottom: 1px solid var(--hairline); }
+  .thought p { margin: 0; font-size: 15px; line-height: 1.45; text-wrap: pretty; }
+  .thought .tmeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+  }
+  .thought .tdel { font-size: 11px; font-weight: 600; color: var(--ink-muted); }
+  .thought .tdel:hover { color: var(--accent); }
+  .entry.tq { font-style: italic; font-weight: 400; }
 
   /* hanko stamp-down */
   @keyframes stamp {
@@ -969,6 +985,15 @@
           <span class="reflect-label" id="reflect-label">While it brews</span>
           <p class="reflect-body" id="reflect-body"></p>
           <button class="reflect-next" id="reflect-next">Another ›</button>
+        </div>
+      </div>
+
+      <div class="card" id="tj-card">
+        <div class="plabel"><span>Thoughts</span><span class="tj-count" id="tj-count"></span></div>
+        <div id="tj-list"></div>
+        <div class="addrow" style="margin-top:4px">
+          <input type="text" id="tj-input" placeholder="One small thought…" maxlength="140" autocomplete="off">
+          <button class="ok" id="tj-save">Save</button>
         </div>
       </div>
 
@@ -1555,6 +1580,9 @@ function renderTonight() {
   // practices
   renderPractices();
 
+  // thoughts
+  renderThoughts();
+
   // quick buttons
   $('q-run').classList.toggle('on', !!d.run);
   $('q-run-lbl').textContent = d.run ? `Ran ${d.run.km}k` : 'Log run';
@@ -1712,6 +1740,7 @@ function renderWeek() {
       const pr = (state.practices || []).find(x => x.id === pid);
       if (pr) body.appendChild(el('div', 'entry done', `${pr.e} ${pr.n}`));
     });
+    (d.thoughts || []).forEach(th => body.appendChild(el('div', 'entry tq done', `\u201C${th.x}\u201D`)));
     if (sealed(d)) body.appendChild(el('span', 'dhanko', '印'));
 
     const add = el('button', 'dayadd', '＋');
@@ -1785,6 +1814,13 @@ function renderMonth() {
     row.appendChild(lbl); row.appendChild(val);
     mp.appendChild(row);
   });
+  const tc = elapsed.reduce((n, ds) => n + (dayRO(ds).thoughts || []).length, 0);
+  if (tc) {
+    const row = el('div', 'mstat');
+    row.appendChild(el('span', 'lbl', '💭 Thoughts written'));
+    row.appendChild(el('span', 'val', String(tc)));
+    mp.appendChild(row);
+  }
 }
 
 /* ============ sync (private gist, ciphertext only) ============ */
@@ -2102,6 +2138,49 @@ $('pr-edit').addEventListener('click', () => {
 function prAdd() { addPractice($('pr-input').value); $('pr-input').value = ''; }
 $('pr-save').addEventListener('click', prAdd);
 $('pr-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); prAdd(); } });
+
+/* ============ thoughts (140-char journal) ============ */
+function renderThoughts() {
+  const list = $('tj-list');
+  if (!list || !state) return;
+  list.textContent = '';
+  (dayRO(today()).thoughts || []).forEach(th => {
+    const row = el('div', 'thought');
+    row.appendChild(el('p', '', th.x));
+    const meta = el('div', 'tmeta');
+    meta.appendChild(el('span', '', th.at));
+    const del = el('button', 'tdel', 'Remove');
+    del.type = 'button';
+    del.addEventListener('click', () => {
+      const dd = day(today());
+      dd.thoughts = (dd.thoughts || []).filter(x => x.id !== th.id);
+      save(); renderAll();
+    });
+    meta.appendChild(del);
+    row.appendChild(meta);
+    list.appendChild(row);
+  });
+}
+function addThought() {
+  const v = $('tj-input').value.trim();
+  if (!v) return;
+  const now = new Date();
+  const dd = day(today());
+  (dd.thoughts = dd.thoughts || []).push({
+    id: crypto.randomUUID(),
+    x: v.slice(0, 140),
+    at: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+  });
+  $('tj-input').value = '';
+  $('tj-count').textContent = '';
+  save(); renderAll();
+}
+$('tj-save').addEventListener('click', addThought);
+$('tj-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addThought(); } });
+$('tj-input').addEventListener('input', () => {
+  const n = $('tj-input').value.length;
+  $('tj-count').textContent = n ? `${140 - n}` : '';
+});
 
 /* ============ render all ============ */
 function renderAll() {
