@@ -800,6 +800,49 @@
   }
   nav button.on { background: #FFF; color: #1A1A1A; padding: 10px 22px; }
 
+  /* ---------- moment photo card ---------- */
+  .card-photo { padding: 0; overflow: hidden; }
+  .card-photo .plabel { padding: 16px 20px 0; margin-bottom: 10px; }
+  .paction-lite {
+    width: 36px; height: 36px;
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-muted);
+    font-size: 15px;
+    margin: -6px -2px 0 0;
+  }
+  .paction-lite:hover { color: var(--ink); border-color: var(--ink-muted); }
+  .photo-wrap { aspect-ratio: 3 / 2; background: var(--hairline); }
+  .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .moment-cap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px 16px;
+  }
+  .moment-cap .mcap { font-size: 14px; font-weight: 600; min-width: 0; }
+  .moment-cap .mtheme {
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    flex: none;
+  }
+
+  /* hanko stamp-down */
+  @keyframes stamp {
+    0% { transform: scale(1.7) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(0.92) rotate(2deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); }
+  }
+  .hanko.earned { animation: stamp 0.35s cubic-bezier(0.2, 0.8, 0.3, 1.15); }
+
   /* ---------- dark-theme control contrast ---------- */
   body.night .seg { background: #101010; border: 1px solid rgba(255, 255, 255, 0.08); }
   body.night .qbtn { background: #2E2E2E; border-color: rgba(255, 255, 255, 0.10); }
@@ -811,6 +854,7 @@
   /* ---------- motion ---------- */
   @media (prefers-reduced-motion: reduce) {
     #app { animation: none; }
+    .hanko.earned { animation: none; }
     body, .seg button, .qbtn, nav button, .done-toggle .caret, .zen-task .ink, .hanko { transition: none; }
   }
 </style>
@@ -904,6 +948,15 @@
           <span class="reflect-label" id="reflect-label">While it brews</span>
           <p class="reflect-body" id="reflect-body"></p>
           <button class="reflect-next" id="reflect-next">Another ›</button>
+        </div>
+      </div>
+
+      <div class="card card-photo" id="moment-card">
+        <div class="plabel"><span>A moment</span><button class="paction-lite" id="moment-next" title="Show another">↻</button></div>
+        <div class="photo-wrap"><img id="moment-img" alt=""></div>
+        <div class="moment-cap">
+          <span class="mcap" id="moment-cap-text"></span>
+          <span class="mtheme" id="moment-theme"></span>
         </div>
       </div>
 
@@ -1090,8 +1143,74 @@ const REFLECTIONS = [
   { t: 'quote', body: 'The quieter you become, the more you can hear.' },
   { t: 'quote', body: 'Wherever you are, be there completely.' },
   { t: 'quote', body: 'The obstacle is the path.', attr: 'Zen proverb' },
+  { t: 'idea', body: 'Load a roll this weekend. One walk, 36 frames, no deletes.' },
+  { t: 'question', body: 'What did your last roll teach you?' },
+  { t: 'idea', body: 'Put a record on while this brews. Side A, no skipping.' },
+  { t: 'idea', body: 'Change one brew variable today — grind, temp, or time. Notice it.' },
+  { t: 'question', body: 'Which frame from this month would you print?' },
+  { t: 'idea', body: 'Text your brother the best photo you took this week.' },
+  { t: 'idea', body: 'Take the camera on tonight\u2019s errand. Streets count.' },
+  { t: 'question', body: 'What album do you know every second of? When did you last play it?' },
+  { t: 'idea', body: 'Rate this cup against yesterday\u2019s. Same beans — what changed?' },
+  { t: 'question', body: 'If this bag of beans had one last cup in it, how would you brew it?' },
+  { t: 'idea', body: 'Plan a golden-hour run with the camera this week.' },
+  { t: 'question', body: 'What would you shoot if the whole city were empty at dawn?' },
+  { t: 'idea', body: 'Call your mom while the kettle heats.' },
+  { t: 'question', body: 'Which song sounds like this month?' },
+  { t: 'idea', body: 'One frame of the cats before this cup cools.' },
 ];
 const REFLECT_LABEL = { question: 'Sit with this', idea: 'Something to try', quote: 'A thought' };
+
+/* ============ moments (curated Unsplash CDN photos, hotlinked per their embed guidelines) ============ */
+const MOMENT_THEMES = {
+  Coffee: {
+    caps: ['Worth staying in for.', 'The good beans. Tonight.', 'Fifteen minutes, no drive.'],
+    ids: ['1495474472287-4d71bcdd2085','1509042239860-f550ce710b93','1512568400610-62da28bc8a13','1442512595331-e89e73853f31','1521302080334-4bebac2763a6','1461023058943-07fcbe16d735'],
+  },
+  Film: {
+    caps: ['36 frames. No deletes.', 'One roll this weekend?', 'The streets are free.'],
+    ids: ['1756334324139-b1e23f33cc03','1611324695129-562e44565afd','1723472281045-e926a5ee9929','1627902474271-127e3bf091f0','1657357296179-f6e7cde6af1c','1617627684950-79a2cf7f0bc4','1706670067082-235c17cc1e5a','1719123042320-eccee81258ac','1719122882751-27650742bcd6','1651771874430-2c1945dc5006','1649337024403-298630af6994'],
+  },
+  Running: {
+    caps: ['The road is patient.', 'Shoes by the door.', 'Twenty minutes buys the evening.'],
+    ids: ['1476480862126-209bfaa8edc8','1502904550040-7534597429ae','1552674605-db6ffd4facb5','1461896836934-ffe607ba8211','1486218119243-13883505764c'],
+  },
+  Outdoors: {
+    caps: ['Somewhere to run to.', 'Weekend material.', 'Go look at something big.'],
+    ids: ['1506905925346-21bda4d32df4','1464822759023-fed622ff2c3b','1441974231531-c6227db76b6e','1470071459604-3b5ec3a7fe05','1501785888041-af3ef285b470','1475924156734-496f6cac6ec1'],
+  },
+  Music: {
+    caps: ['Side A, no skipping.', 'Dinner needs a soundtrack.', 'Play the one you know by heart.'],
+    ids: ['1483412033650-1015ddeb83d1','1514320291840-2e0a9bf2a9ae','1470225620780-dba8ba36b745','1505740420928-5e560c06d30e','1493225457124-a3eb161ffa5f','1458560871784-56d23406c091'],
+  },
+  Home: {
+    caps: ['The point of all of it.', 'Somewhere the cats approve of.', 'Make it yours, one shelf at a time.'],
+    ids: ['1513694203232-719a280e022f','1484154218962-a197022b5858','1522708323590-d24dbb6b0267','1416339306562-f3d12fefd36f'],
+  },
+  Cooking: {
+    caps: ['Better than the app order.', 'One pan, one playlist.', 'Cook the keeper again.'],
+    ids: ['1466637574441-749b8f19452f','1490645935967-10de6ba17061','1556910103-1c02745aae4d','1547592180-85f173990554'],
+  },
+};
+const MOMENTS = Object.entries(MOMENT_THEMES).flatMap(([t, o]) => o.ids.map(id => ({ t, id })));
+let momentOffset = 0;
+function renderMoment() {
+  const card = $('moment-card');
+  if (!card) return;
+  const m = MOMENTS[(dateHash(today() + 'moment') + momentOffset) % MOMENTS.length];
+  const img = $('moment-img');
+  const url = `https://images.unsplash.com/photo-${m.id}?w=840&h=560&fit=crop&q=70&auto=format`;
+  if (img.dataset.src === url) return; // already showing this one
+  img.dataset.src = url;
+  card.classList.add('hidden'); // reveal only once the photo has actually loaded — offline, the card simply never appears
+  img.onload = () => card.classList.remove('hidden');
+  img.onerror = () => card.classList.add('hidden');
+  img.alt = m.t;
+  $('moment-theme').textContent = m.t;
+  const caps = MOMENT_THEMES[m.t].caps;
+  $('moment-cap-text').textContent = caps[(dateHash(today()) + momentOffset) % caps.length];
+  img.src = url;
+}
 let reflectOffset = 0;
 const dateHash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
 
@@ -1318,7 +1437,17 @@ function renderTonight() {
   const DOW_FULL = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   $('t-date').textContent = `${DOW_FULL[(now.getDay()+6)%7]} · ${MONTHS[now.getMonth()].slice(0,3)} ${String(now.getDate()).padStart(2,'0')}`;
   const h = now.getHours();
-  $('t-greet').textContent = d.status === 'away' ? 'Safe travels.' : (h < 12 ? 'Good morning.' : h < 17 ? 'Good afternoon.' : 'Welcome home.');
+  const wasAway = dayRO(ymd(addDays(now, -1))).status === 'away';
+  const leavingTomorrow = dayRO(ymd(addDays(now, 1))).status === 'away';
+  const dow = now.getDay();
+  let pool;
+  if (d.status === 'away') pool = ['Safe travels.', 'Home is waiting.', 'Travel light, come back soon.'];
+  else if (wasAway) pool = ['Welcome back. The cats noticed.', 'Back where you belong.', 'Home again. Breathe out.'];
+  else if (leavingTomorrow) pool = ['Home tonight. Make it count.', 'One good night before the trip.'];
+  else if (h < 12) pool = dow === 0 || dow === 6 ? ['A whole day at home.', 'Slow morning. You earned it.'] : ['Good morning.', 'Morning. Brew first.'];
+  else if (h < 17) pool = ['Good afternoon.', 'The evening is yours soon.'];
+  else pool = dow === 5 ? ['It\u2019s Friday. You\u2019re home.', 'Friday night, home team.'] : ['Welcome home.', 'The best part of the day.', 'Shoes off. You made it.'];
+  $('t-greet').textContent = pool[dateHash(t) % pool.length];
   $('t-greet-jp').textContent = d.status === 'away' ? 'いってらっしゃい' : (h < 17 ? 'こんにちは' : 'おかえりなさい');
 
   // stones
@@ -1398,6 +1527,9 @@ function renderTonight() {
   // coffee
   renderCoffee(d);
 
+  // moment photo
+  renderMoment();
+
   // quick buttons
   $('q-run').classList.toggle('on', !!d.run);
   $('q-run-lbl').textContent = d.run ? `Ran ${d.run.km}k` : 'Log run';
@@ -1472,6 +1604,7 @@ $('t-coffee').querySelectorAll('button').forEach(b => {
   });
 });
 $('reflect-next').addEventListener('click', () => { reflectOffset++; renderReflection(); });
+$('moment-next').addEventListener('click', () => { momentOffset++; renderMoment(); });
 
 $('q-run').addEventListener('click', () => {
   const d = day(today());
