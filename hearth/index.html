@@ -889,6 +889,9 @@
   .thought .tdel:hover { color: var(--accent); }
   .entry.tq { font-style: italic; font-weight: 400; }
 
+  @keyframes qpop { 40% { transform: scale(1.08); } }
+  .qbtn.pop { animation: qpop 0.28s ease; }
+
   /* hanko stamp-down */
   @keyframes stamp {
     0% { transform: scale(1.7) rotate(-10deg); opacity: 0; }
@@ -909,6 +912,7 @@
   @media (prefers-reduced-motion: reduce) {
     #app { animation: none; }
     .hanko.earned { animation: none; }
+    .qbtn.pop { animation: none; }
     body, .seg button, .qbtn, nav button, .done-toggle .caret, .zen-task .ink, .hanko { transition: none; }
   }
 </style>
@@ -991,7 +995,7 @@
         <div class="qrow clean-picker hidden" id="clean-picker"></div>
         <div class="qrow" style="margin-top:8px">
           <button class="qbtn" id="q-reset"><span class="k">静</span><span id="q-reset-lbl">15m reset</span></button>
-          <button class="qbtn" id="q-release"><span class="k"></span>Release +1</button>
+          <button class="qbtn" id="q-release"><span class="k"></span>Release +1<span class="pth" id="q-release-n"></span></button>
         </div>
       </div>
 
@@ -1624,6 +1628,7 @@ function renderTonight() {
 
   // footer
   $('t-released').textContent = state.released;
+  $('q-release-n').textContent = state.released ? ` · ${state.released}` : '';
   const ms = monthStats();
   $('t-nights').textContent = `${ms.nights}/${ms.total}`;
   $('t-hanko').classList.toggle('earned', sealed(d));
@@ -1720,6 +1725,10 @@ $('q-release').addEventListener('click', () => {
   state.releases[today()] = (state.releases[today()] || 0) + 1;
   touch(today());
   save(); renderAll();
+  const btn = $('q-release');
+  btn.classList.remove('pop');
+  void btn.offsetWidth; // restart the animation
+  btn.classList.add('pop');
 });
 
 /* ============ render: week ============ */
