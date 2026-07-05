@@ -419,6 +419,7 @@
   .qbtn .k { display: none; }
   .qbtn.on { background: var(--shell-dark); color: #FFF; border-color: transparent; }
   #q-run-lbl::before { content: '🏃 '; }
+  #q-ride-lbl::before { content: '🚴 '; }
   #q-reset-lbl::before { content: '🧘 '; }
   #q-release::before { content: '📦 '; }
 
@@ -1004,10 +1005,15 @@
         <div class="plabel"><span>Movement</span></div>
         <div class="qrow">
           <button class="qbtn" id="q-run"><span class="k">体</span><span id="q-run-lbl">Log run</span></button>
+          <button class="qbtn" id="q-ride"><span class="k"></span><span id="q-ride-lbl">Log ride</span></button>
         </div>
         <div class="addrow hidden" id="run-row">
           <input type="number" id="run-km" placeholder="distance, km" min="0" step="0.1" inputmode="decimal">
           <button class="ok" id="run-save">Save</button>
+        </div>
+        <div class="addrow hidden" id="ride-row">
+          <input type="number" id="ride-km" placeholder="distance, km" min="0" step="0.1" inputmode="decimal">
+          <button class="ok" id="ride-save">Save</button>
         </div>
       </div>
 
@@ -1108,6 +1114,7 @@
       </div>
       <div class="month-stats">
         <div class="mstat"><span class="lbl"><span class="jp">体</span>Runs this month</span><span class="val" id="m-runs">0</span></div>
+        <div class="mstat"><span class="lbl"><span class="jp"></span>Rides this month</span><span class="val" id="m-rides">0</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">食</span>Cooked, of dinners logged</span><span class="val" id="m-cooked">—</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">珈</span>Coffee brewed home</span><span class="val" id="m-coffee">—</span></div>
         <div class="mstat"><span class="lbl"><span class="jp">空</span>Released this month</span><span class="val" id="m-released">0</span></div>
@@ -1370,34 +1377,36 @@ function monthDays() {
 }
 function monthStats() {
   const { elapsed, total } = monthDays();
-  let nights = 0, runs = 0, cooked = 0, meals = 0, seals = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
+  let nights = 0, runs = 0, rides = 0, cooked = 0, meals = 0, seals = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
   for (const ds of elapsed) {
     const d = dayRO(ds);
     if (d.status !== 'away') nights++;
     if (d.run) runs++;
+    if (d.ride) rides++;
     if (d.meal) { meals++; if (d.meal === 'cooked') cooked++; }
     if (d.coffee === 'home') coffeeHome++;
     if (d.coffee === 'out') coffeeOut++;
     if (sealed(d)) seals++;
     released += state.releases[ds] || 0;
   }
-  return { nights, total, runs, cooked, meals, seals, released, coffeeHome, coffeeOut };
+  return { nights, total, runs, rides, cooked, meals, seals, released, coffeeHome, coffeeOut };
 }
 function weekStats(mon) {
-  let nights = 0, elapsed = 0, runs = 0, cooked = 0, ordered = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
+  let nights = 0, elapsed = 0, runs = 0, rides = 0, cooked = 0, ordered = 0, released = 0, coffeeHome = 0, coffeeOut = 0;
   const t = today();
   for (let i = 0; i < 7; i++) {
     const ds = ymd(addDays(mon, i));
     const d = dayRO(ds);
     if (ds <= t) { elapsed++; if (d.status !== 'away') nights++; }
     if (d.run) runs++;
+    if (d.ride) rides++;
     if (d.meal === 'cooked') cooked++;
     if (d.meal === 'ordered' || d.meal === 'out') ordered++;
     if (d.coffee === 'home') coffeeHome++;
     if (d.coffee === 'out') coffeeOut++;
     released += state.releases[ds] || 0;
   }
-  return { nights, elapsed, runs, cooked, ordered, released, coffeeHome, coffeeOut };
+  return { nights, elapsed, runs, rides, cooked, ordered, released, coffeeHome, coffeeOut };
 }
 
 /* ============ dom helpers ============ */
@@ -1671,6 +1680,8 @@ function renderTonight() {
   // quick buttons
   $('q-run').classList.toggle('on', !!d.run);
   $('q-run-lbl').textContent = d.run ? `Ran ${d.run.km}k` : 'Log run';
+  $('q-ride').classList.toggle('on', !!d.ride);
+  $('q-ride-lbl').textContent = d.ride ? `Rode ${d.ride.km}k` : 'Log ride';
   $('q-reset').classList.toggle('on', !!d.reset);
   $('q-reset-lbl').textContent = d.reset ? 'Reset done' : '15m reset';
 
@@ -1763,6 +1774,23 @@ function saveRun() {
 $('run-save').addEventListener('click', saveRun);
 $('run-km').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveRun(); } });
 
+$('q-ride').addEventListener('click', () => {
+  const d = day(today());
+  if (d.ride) { d.ride = null; save(); renderAll(); return; }
+  $('ride-row').classList.toggle('hidden');
+  if (!$('ride-row').classList.contains('hidden')) $('ride-km').focus();
+});
+function saveRide() {
+  const km = parseFloat($('ride-km').value);
+  if (!isFinite(km) || km <= 0) return;
+  day(today()).ride = { km: Math.round(km * 10) / 10 };
+  $('ride-km').value = '';
+  $('ride-row').classList.add('hidden');
+  save(); renderAll();
+}
+$('ride-save').addEventListener('click', saveRide);
+$('ride-km').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveRide(); } });
+
 $('q-reset').addEventListener('click', () => {
   const d = day(today());
   d.reset = !d.reset;
@@ -1825,6 +1853,7 @@ function renderWeek() {
       body.appendChild(row);
     });
     if (d.run) body.appendChild(el('div', 'entry done', `Run ${d.run.km}k`));
+    if (d.ride) body.appendChild(el('div', 'entry done', `Ride ${d.ride.km}k`));
     if (d.meal) body.appendChild(el('div', 'entry done', d.meal === 'cooked' ? 'Cooked' : d.meal === 'ordered' ? 'Ordered in' : 'Ate out'));
     if (d.coffee) body.appendChild(el('div', 'entry done', d.coffee === 'home' ? 'Coffee home' : 'Coffee out'));
     practicesOf(d).forEach(pid => {
@@ -1860,6 +1889,7 @@ function renderWeek() {
   };
   mkStat('Nights home', `${s.nights}<span class="dim">/${s.elapsed || 7}</span>`);
   mkStat('Runs', `${s.runs}`);
+  if (s.rides) mkStat('Rides', `${s.rides}`);
   mkStat('Cooked', `${s.cooked} <span class="dim">·</span> <span class="warn">${s.ordered}</span>`);
   mkStat('Coffee home', `${s.coffeeHome} <span class="dim">·</span> <span class="warn">${s.coffeeOut}</span>`);
   mkStat('Released', `${s.released}`);
@@ -1890,6 +1920,7 @@ function renderMonth() {
   const frac = Math.min(ms.nights / ms.total, 0.96); // the enso never closes
   $('m-ring').setAttribute('stroke-dasharray', `${(C * frac).toFixed(1)} ${C.toFixed(1)}`);
   $('m-runs').textContent = ms.runs;
+  $('m-rides').textContent = ms.rides;
   $('m-cooked').innerHTML = ms.meals ? `${ms.cooked}<span class="dim">/${ms.meals}</span>` : '—';
   $('m-coffee').innerHTML = (ms.coffeeHome + ms.coffeeOut) ? `${ms.coffeeHome}<span class="dim">/${ms.coffeeHome + ms.coffeeOut}</span>` : '—';
   $('m-released').textContent = ms.released;
@@ -2381,13 +2412,14 @@ function weeklySeries(n) {
   const out = [];
   for (let w = n - 1; w >= 0; w--) {
     const mon = addDays(mon0, -7 * w);
-    const bucket = { nights: 0, runs: 0, cooked: 0, released: 0 };
+    const bucket = { nights: 0, runs: 0, rides: 0, cooked: 0, released: 0 };
     for (let i = 0; i < 7; i++) {
       const ds = ymd(addDays(mon, i));
       if (ds > t || ds < first) continue; // no fake data before first use
       const d = dayRO(ds);
       if (d.status !== 'away') bucket.nights++;
       if (d.run) bucket.runs++;
+      if (d.ride) bucket.rides++;
       if (d.meal === 'cooked') bucket.cooked++;
       bucket.released += state.releases[ds] || 0;
     }
@@ -2417,6 +2449,7 @@ function renderTrends() {
   const defs = [
     { key: 'nights', lbl: '🏠 Nights home / week', color: 'var(--card-blue)', max: 7 },
     { key: 'runs', lbl: '🏃 Runs / week', color: 'var(--card-green)', max: Math.max(3, ...series.map(x => x.runs)) },
+    { key: 'rides', lbl: '🚴 Rides / week', color: 'var(--card-green)', max: Math.max(3, ...series.map(x => x.rides)) },
     { key: 'cooked', lbl: '🍳 Cooked dinners / week', color: 'var(--card-yellow)', max: 7 },
     { key: 'released', lbl: '📦 Released / week', color: 'var(--accent)', max: Math.max(3, ...series.map(x => x.released)) },
   ];
