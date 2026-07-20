@@ -1,4 +1,4 @@
-const CACHE = 'terradex-v5';
+const CACHE = 'terradex-v6';
 const SHELL = [
   './', './index.html', './data.js', './map-data.js',
   './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-512.png',
