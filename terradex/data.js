@@ -7,8 +7,12 @@
 //
 // status: 'visited' | 'upcoming' | 'wishlist'
 //   (marking COLLECTED in the app overrides via localStorage)
-// sprite: pixel art, rows of chars — '.' paper, '#' ink,
-//   'R' red, 'G' green, 'g' gray. Any width up to ~24 cols.
+// art: engraved-style SVG scene, 400x170 viewBox, drawn with the
+//   5-color palette. Shared shading patterns (defined in index.html):
+//   url(#hg) gray hatch · url(#hi) ink hatch · url(#hx) cross-hatch
+//   url(#dt) stipple · url(#wl) gray water · url(#wg) green water
+//   url(#wv) vertical fall lines. Colors via var(--ink/--gray/--red/
+//   --green/--paper).
 // deepTime / history: chronological, oldest first.
 // ============================================================
 
@@ -22,20 +26,19 @@ const DEX = [
     types: ['RIVER VALLEY', 'COLLEGE TOWN'],
     status: 'upcoming',
     coords: { lat: 46.8721, lon: -113.994 },
-    sprite: [
-      '....................',
-      '..........#.........',
-      '.........#.##.......',
-      '....#...##...#......',
-      '...###..#..R..##....',
-      '..##.####......##...',
-      '.##...##........##..',
-      '##.....#.........###',
-      '....................',
-      'G.GG..GG..GG..GG..G.',
-      '.G..GG..GG..GG..GG..',
-      '....................',
-    ],
+    art: `
+      <!-- Mt Jumbo, far, with Glacial Lake Missoula strandlines -->
+      <path d="M0 100 L58 58 L112 88 L168 42 L238 92 L400 92" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
+      <path d="M148 60 L190 60 M136 70 L204 70 M124 80 L218 80 M40 72 L80 72 M30 82 L94 82" stroke="var(--gray)" stroke-width="1.2"/>
+      <!-- valley floor and the river (tucks behind Sentinel) -->
+      <path d="M0 118 L220 138 L200 170 L0 170 Z" fill="url(#dt)" stroke="none"/>
+      <path d="M0 132 C60 130 130 140 204 154 L196 168 C130 154 60 142 0 144 Z" fill="url(#wg)" stroke="var(--green)" stroke-width="1.6"/>
+      <path d="M26 128 l7 -13 l7 13 Z M66 122 l7 -13 l7 13 Z M118 130 l6 -11 l6 11 Z" fill="var(--ink)"/>
+      <!-- Mt Sentinel, near, hatched, with the M -->
+      <path d="M176 170 L262 84 L336 128 L400 104 L400 170 Z" fill="var(--paper)"/>
+      <path d="M176 170 L262 84 L336 128 L400 104 L400 170 Z" fill="url(#hg)" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M258 138 L262 108 L274 126 L286 108 L290 138" fill="var(--paper)" stroke="var(--paper)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M258 138 L262 108 L274 126 L286 108 L290 138" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linejoin="round"/>`,
     flavor: 'A river town at the bottom of a vanished ice-age lake. The shorelines are still striped on the mountainsides above it.',
     stats: {
       'ELEVATION': '3,209 FT',
@@ -89,18 +92,29 @@ const DEX = [
     types: ['HIGH PLAINS', 'COAL TOWN'],
     status: 'visited',
     coords: { lat: 40.1128, lon: -104.9367 },
-    sprite: [
-      '....................',
-      '..............RR....',
-      '..............RR....',
-      '#.....#.............',
-      '##...##.............',
-      'G#.G.##G..G..G..G..G',
-      '####################',
-      '...#....#.....#.....',
-      '.#....#....#......#.',
-      '....#.....#...#.....',
-    ],
+    art: `
+      <!-- red plains sun -->
+      <circle cx="322" cy="46" r="20" fill="var(--red)"/>
+      <circle cx="322" cy="46" r="27" fill="none" stroke="var(--red)" stroke-width="1.4"/>
+      <!-- Front Range on the horizon, Longs Peak tallest -->
+      <path d="M0 92 L26 78 L48 88 L74 66 L96 84 L118 74 L142 86 L170 80 L192 90 L210 86 L228 92" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <path d="M64 76 L74 66 L84 76 Z" fill="var(--ink)"/>
+      <!-- plains: long field lines -->
+      <path d="M0 104 L400 104" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M0 118 L400 118 M0 132 L400 132 M0 146 L400 146 M0 160 L400 160" stroke="var(--gray)" stroke-width="1"/>
+      <!-- mine headframe -->
+      <path d="M258 104 L272 40 L286 104 M264 78 L281 78 M261 92 L284 92" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <circle cx="272" cy="46" r="7" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M272 46 L302 104" stroke="var(--gray)" stroke-width="1.4"/>
+      <path d="M250 104 L294 104 L294 96 L250 96 Z" fill="url(#hi)" stroke="var(--ink)" stroke-width="1.5"/>
+      <!-- grass tufts -->
+      <g stroke="var(--green)" stroke-width="1.6" fill="none">
+        <path d="M30 132 l-4 -9 M30 132 l0 -11 M30 132 l4 -9"/>
+        <path d="M96 146 l-4 -9 M96 146 l0 -11 M96 146 l4 -9"/>
+        <path d="M172 132 l-4 -9 M172 132 l0 -11 M172 132 l4 -9"/>
+        <path d="M348 146 l-4 -9 M348 146 l0 -11 M348 146 l4 -9"/>
+        <path d="M390 124 l-4 -9 M390 124 l0 -11 M390 124 l4 -9"/>
+      </g>`,
     flavor: 'A plains town that grew on coal dug from dinosaur-age swamps, with the Front Range standing on the western horizon.',
     stats: {
       'ELEVATION': '4,970 FT',
@@ -145,18 +159,37 @@ const DEX = [
     types: ['ALPINE VALLEY', 'PARK GATEWAY'],
     status: 'visited',
     coords: { lat: 40.3772, lon: -105.5217 },
-    sprite: [
-      '.....#........RR....',
-      '....###.......RR....',
-      '...##.##............',
-      '..##...##...........',
-      '.##..#..##......G...',
-      '##..###..##....GGG..',
-      '#..##.##..##..GGGGG.',
-      '..##...##..##GGGGGGG',
-      '.##.....##....#.#...',
-      '....................',
-    ],
+    art: `
+      <!-- Longs Peak with the hatched Diamond face -->
+      <path d="M0 96 L54 66 L92 82 L150 26 L216 92 L258 74 L306 96" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
+      <path d="M150 26 L134 42 L156 68 L182 58 Z" fill="url(#hi)" stroke="var(--ink)" stroke-width="1.5"/>
+      <path d="M92 82 L118 58 M182 58 L204 80 M134 42 L116 64" stroke="var(--ink)" stroke-width="1.2" fill="none"/>
+      <!-- meadow -->
+      <path d="M0 120 L400 120 L400 170 L0 170 Z" fill="url(#dt)" stroke="none"/>
+      <path d="M0 120 L400 120" stroke="var(--ink)" stroke-width="1.6"/>
+      <!-- pines -->
+      <g stroke="var(--ink)" stroke-width="1.4">
+        <path d="M262 118 l0 -34 M262 92 l-13 22 l26 0 Z M262 104 l-10 16 l20 0 Z" fill="var(--green)"/>
+        <path d="M300 118 l0 -46 M300 80 l-16 27 l32 0 Z M300 96 l-13 20 l26 0 Z" fill="var(--green)"/>
+        <path d="M348 118 l0 -38 M348 88 l-14 24 l28 0 Z M348 102 l-11 17 l22 0 Z" fill="var(--green)"/>
+        <path d="M382 118 l0 -30 M382 96 l-11 18 l22 0 Z" fill="var(--green)"/>
+      </g>
+      <!-- bull elk -->
+      <g fill="var(--ink)">
+        <ellipse cx="112" cy="124" rx="30" ry="12"/>
+        <path d="M88 130 L72 102 L84 96 L98 122 Z"/>
+        <ellipse cx="74" cy="97" rx="11" ry="6.5" transform="rotate(-24 74 97)"/>
+        <path d="M84 90 L92 84 L90 94 Z"/>
+        <path d="M140 118 L146 114 L146 122 Z"/>
+      </g>
+      <g stroke="var(--ink)" stroke-width="3.4" stroke-linecap="round" fill="none">
+        <path d="M92 132 L88 152 M100 134 L99 154 M124 134 L126 153 M134 131 L139 151"/>
+      </g>
+      <g stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" fill="none">
+        <path d="M78 90 C90 74 108 66 126 68"/>
+        <path d="M76 88 C84 70 98 60 112 58"/>
+        <path d="M88 80 L83 66 M100 72 L98 58 M113 68 L114 54 M122 68 L128 58"/>
+      </g>`,
     flavor: 'A glacier-carved valley at 7,500 feet where elk own the golf course and a mile of vertical granite owns the skyline.',
     stats: {
       'ELEVATION': '7,522 FT',
@@ -205,19 +238,31 @@ const DEX = [
     types: ['CANAL CITY', 'FALLS CITY'],
     status: 'visited',
     coords: { lat: 43.1566, lon: -77.6088 },
-    sprite: [
-      '....................',
-      '######......########',
-      '#....#.gg...#......#',
-      '#....#.gg...#..RR..#',
-      '#....#.gg...#..RR..#',
-      '#....#.gg...#......#',
-      '#....#..gg..#......#',
-      '.....#..gg..#.......',
-      '.....#gggggg#.......',
-      '.....#gggggg#.......',
-      '....................',
-    ],
+    art: `
+      <!-- mill buildings flanking High Falls -->
+      <g stroke="var(--ink)" stroke-width="2" fill="var(--paper)">
+        <path d="M18 116 L18 34 L120 34 L120 116"/>
+        <path d="M256 116 L256 24 L372 24 L372 116"/>
+      </g>
+      <path d="M18 34 L120 34 M256 24 L372 24" stroke="var(--ink)" stroke-width="3"/>
+      <!-- windows -->
+      <g fill="url(#hi)">
+        <rect x="32" y="46" width="14" height="18"/><rect x="62" y="46" width="14" height="18"/><rect x="92" y="46" width="14" height="18"/>
+        <rect x="32" y="76" width="14" height="18"/><rect x="62" y="76" width="14" height="18"/><rect x="92" y="76" width="14" height="18"/>
+        <rect x="272" y="36" width="14" height="18"/><rect x="302" y="36" width="14" height="18"/><rect x="332" y="36" width="14" height="18"/>
+        <rect x="272" y="66" width="14" height="18"/><rect x="332" y="66" width="14" height="18"/>
+      </g>
+      <!-- red mill sign -->
+      <rect x="298" y="64" width="22" height="22" fill="var(--red)"/>
+      <!-- gorge ledge and the falls -->
+      <path d="M120 116 L176 112 L232 116 L256 116" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M154 113 L154 152 L216 152 L216 114 Z" fill="url(#wv)" stroke="none"/>
+      <path d="M154 113 L154 152 M216 114 L216 152" stroke="var(--ink)" stroke-width="1.6"/>
+      <!-- gorge walls -->
+      <path d="M120 116 L120 170 L0 170 L0 116 Z" fill="url(#hg)" stroke="var(--ink)" stroke-width="1.6"/>
+      <path d="M256 116 L256 170 L400 170 L400 116 Z" fill="url(#hg)" stroke="var(--ink)" stroke-width="1.6"/>
+      <!-- plunge pool -->
+      <path d="M120 170 L120 156 C160 148 210 148 256 158 L256 170 Z" fill="url(#wl)" stroke="var(--ink)" stroke-width="1.4"/>`,
     flavor: 'America\'s first boomtown: a 96-foot waterfall in the middle of downtown once turned flour mills, then film factories.',
     stats: {
       'ELEVATION': '505 FT',
@@ -266,19 +311,35 @@ const DEX = [
     types: ['VALLEY VILLAGE', 'COLLEGE TOWN'],
     status: 'visited',
     coords: { lat: 42.7959, lon: -77.817 },
-    sprite: [
-      '....................',
-      '#..................#',
-      '##................##',
-      '....................',
-      '..GG....GGG....GG...',
-      '.G..GGGG...GGGG..G..',
-      '....................',
-      '......#..#..........',
-      '.....########.......',
-      '.....#.#..#.#.......',
-      '....................',
-    ],
+    art: `
+      <!-- valley walls, seen from the hilltop -->
+      <path d="M0 66 C70 46 150 44 220 54 C290 64 340 60 400 44" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <path d="M0 92 C80 74 170 72 250 82 C310 89 360 86 400 74" fill="none" stroke="var(--gray)" stroke-width="1.2"/>
+      <!-- valley flats -->
+      <path d="M0 92 C80 74 170 72 250 82 C310 89 360 86 400 74 L400 170 L0 170 Z" fill="url(#dt)" stroke="none"/>
+      <!-- oxbow meanders of the Genesee -->
+      <path d="M0 128 C40 112 60 140 100 126 C140 112 150 146 196 132 C242 118 250 150 300 136 C344 124 360 148 400 134"
+            fill="none" stroke="var(--green)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M96 120 C102 128 102 132 98 138 M200 124 C206 132 206 138 200 142" fill="none" stroke="var(--green)" stroke-width="2"/>
+      <!-- hedgerows and a barn -->
+      <path d="M20 156 L120 150 M240 158 L340 152" stroke="var(--gray)" stroke-width="1.4"/>
+      <g stroke="var(--ink)" stroke-width="1.8" fill="var(--paper)">
+        <path d="M296 96 L296 78 L310 68 L324 78 L324 96 Z"/>
+        <path d="M328 96 L328 84 L344 84 L344 96 Z"/>
+      </g>
+      <rect x="305" y="84" width="10" height="12" fill="url(#hi)"/>
+      <!-- the Main Street bear, on its column -->
+      <path d="M36 162 L76 162 L76 155 L36 155 Z M42 155 L70 155 L70 149 L42 149 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.8"/>
+      <rect x="52" y="128" width="8" height="21" fill="var(--ink)"/>
+      <rect x="38" y="124" width="36" height="4" fill="var(--ink)"/>
+      <g fill="var(--ink)">
+        <circle cx="56" cy="98" r="6.5"/>
+        <circle cx="51" cy="92" r="2.6"/>
+        <circle cx="61" cy="92" r="2.6"/>
+        <path d="M56 100 L62 103 L56 105 Z"/>
+        <path d="M49 104 C46 104 44 108 44 114 C44 120 46 124 50 124 L62 124 C66 124 68 120 68 114 C68 108 66 104 63 104 Z"/>
+        <path d="M46 108 C42 110 41 114 43 117 M66 108 C70 110 71 114 69 117" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      </g>`,
     flavor: 'A hilltop village above the oxbows of the Genesee, in the valley the Seneca called beautiful.',
     stats: {
       'ELEVATION': '~880 FT',
@@ -326,19 +387,34 @@ const DEX = [
     types: ['RIVER BLUFF', 'GARRISON TOWN'],
     status: 'visited',
     coords: { lat: 39.3111, lon: -94.9225 },
-    sprite: [
-      '......R.............',
-      '......RR............',
-      '......R.............',
-      '......#.............',
-      '...########.........',
-      '...#..##..#..##.....',
-      '...#..##..#.####....',
-      '...########.####....',
-      '....................',
-      'gg.gg.gg.gg.gg.gg.gg',
-      '....................',
-    ],
+    art: `
+      <!-- the Missouri below the bluff -->
+      <path d="M0 140 C90 128 200 132 400 122 L400 170 L0 170 Z" fill="url(#wl)" stroke="var(--ink)" stroke-width="1.6"/>
+      <!-- sternwheeler -->
+      <g stroke="var(--ink)" stroke-width="1.8" fill="var(--paper)">
+        <path d="M60 148 L150 148 L142 158 L70 158 Z"/>
+        <path d="M76 148 L76 138 L128 138 L128 148 Z"/>
+        <path d="M86 138 L86 130 L114 130 L114 138 Z"/>
+        <circle cx="142" cy="146" r="9"/>
+      </g>
+      <path d="M96 130 L96 116 M104 130 L104 116" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M96 116 C88 108 82 106 72 104 M104 116 C98 106 92 100 84 94" fill="none" stroke="var(--gray)" stroke-width="1.6"/>
+      <!-- the bluff -->
+      <path d="M212 122 C260 108 320 100 400 96 L400 40 L212 40 Z" fill="none"/>
+      <path d="M212 122 C260 108 320 100 400 96" fill="none" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M212 122 C260 108 320 100 400 96 L400 122 Z" fill="url(#hg)"/>
+      <!-- fort blockhouse and stockade -->
+      <g stroke="var(--ink)" stroke-width="2" fill="var(--paper)">
+        <path d="M268 100 L268 66 L316 66 L316 100 Z"/>
+        <path d="M262 66 L292 44 L322 66 Z" fill="url(#hi)"/>
+      </g>
+      <rect x="286" y="80" width="12" height="20" fill="url(#hi)"/>
+      <rect x="272" y="72" width="9" height="9" fill="url(#hi)"/>
+      <rect x="303" y="72" width="9" height="9" fill="url(#hi)"/>
+      <path d="M292 44 L292 22 L314 27 L292 33" fill="var(--red)" stroke="var(--ink)" stroke-width="1.4"/>
+      <path d="M330 100 l0 -14 m10 14 l0 -14 m10 14 l0 -14 m10 14 l0 -14 m10 14 l0 -14 m10 14 l0 -14 m10 14 l0 -14"
+            stroke="var(--ink)" stroke-width="2.2"/>
+      <path d="M330 90 L400 90" stroke="var(--ink)" stroke-width="1.4"/>`,
     flavor: 'The first city of Kansas, standing on Missouri River bluffs beside the oldest active Army post west of the Mississippi.',
     stats: {
       'ELEVATION': '~800 FT',
@@ -385,19 +461,34 @@ const DEX = [
     types: ['CAPITAL', 'FALL LINE'],
     status: 'visited',
     coords: { lat: 38.9072, lon: -77.0369 },
-    sprite: [
-      '.........R..........',
-      '.........#..........',
-      '.........#..........',
-      '........###.........',
-      '........###.........',
-      '........###.........',
-      '........###.........',
-      '........###.........',
-      '.......#####........',
-      'GGGGGG#######GGGGGG.',
-      '....................',
-    ],
+    art: `
+      <!-- cherry branch across the sky -->
+      <path d="M0 22 C60 30 110 26 150 44 M64 27 C80 20 92 20 104 14 M118 32 C132 30 140 24 148 20"
+            fill="none" stroke="var(--ink)" stroke-width="2"/>
+      <g fill="var(--red)">
+        <circle cx="70" cy="20" r="4"/><circle cx="88" cy="14" r="4"/><circle cx="104" cy="12" r="4"/>
+        <circle cx="126" cy="26" r="4"/><circle cx="146" cy="18" r="4"/><circle cx="46" cy="30" r="4"/>
+      </g>
+      <g fill="var(--paper)">
+        <circle cx="70" cy="20" r="1.4"/><circle cx="88" cy="14" r="1.4"/><circle cx="104" cy="12" r="1.4"/>
+        <circle cx="126" cy="26" r="1.4"/><circle cx="146" cy="18" r="1.4"/><circle cx="46" cy="30" r="1.4"/>
+      </g>
+      <!-- the Monument, color change a third up, beacon on top -->
+      <path d="M236 118 L244 30 L252 30 L260 118 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M244 30 L248 18 L252 30 Z" fill="var(--ink)"/>
+      <circle cx="248" cy="14" r="3" fill="var(--red)"/>
+      <path d="M239 88 L257 88" stroke="var(--gray)" stroke-width="1.8"/>
+      <!-- mall trees -->
+      <g fill="var(--green)" stroke="var(--ink)" stroke-width="1.2">
+        <path d="M160 118 C158 104 172 100 176 108 C186 102 196 108 192 118 Z"/>
+        <path d="M196 118 C194 106 206 102 210 110 C218 105 226 110 223 118 Z"/>
+        <path d="M274 118 C272 104 286 100 290 108 C300 102 310 108 306 118 Z"/>
+        <path d="M310 118 C308 106 320 102 324 110 C332 105 340 110 337 118 Z"/>
+      </g>
+      <path d="M0 118 L400 118" stroke="var(--ink)" stroke-width="2"/>
+      <!-- reflecting pool with the monument doubled -->
+      <path d="M120 128 L376 128 L376 162 L120 162 Z" fill="url(#wl)" stroke="var(--ink)" stroke-width="1.6"/>
+      <path d="M242 128 L245 152 L251 152 L254 128" fill="none" stroke="var(--gray)" stroke-width="1.2"/>`,
     flavor: 'A planned city built where the Piedmont rock dives under the Coastal Plain — with a dinosaur of its own buried beneath the Capitol\'s neighborhood.',
     stats: {
       'ELEVATION': '0–409 FT',
@@ -446,19 +537,30 @@ const DEX = [
     types: ['RIVER BLUFF', 'RAIL TOWN'],
     status: 'visited',
     coords: { lat: 39.5631, lon: -95.1216 },
-    sprite: [
-      '....................',
-      '.........R..........',
-      '.........#..........',
-      '.........#..........',
-      '..#################.',
-      '.........#..........',
-      '.........#..........',
-      '........###.........',
-      '.......#.#.#........',
-      '....................',
-      'gg.gg.gg.gg.gg.gg.gg',
-    ],
+    art: `
+      <!-- the river and loess bluffs below -->
+      <path d="M0 132 C60 122 140 128 220 120 C300 112 350 118 400 110 L400 170 L0 170 Z" fill="url(#wl)" stroke="var(--ink)" stroke-width="1.6"/>
+      <path d="M0 104 C60 96 110 100 150 108 L150 132 C100 126 40 130 0 134 Z" fill="url(#hg)" stroke="var(--ink)" stroke-width="1.6"/>
+      <!-- truss bridge -->
+      <path d="M210 120 L390 112 M210 128 L390 120" stroke="var(--ink)" stroke-width="1.8"/>
+      <path d="M222 120 L232 108 L244 119 L256 107 L268 118 L280 106 L292 117 L304 105 L316 116 L328 104 L340 115 L352 103 L364 114 L376 112"
+            fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+      <!-- the Electra in profile, flying east -->
+      <g transform="translate(120 30)">
+        <path d="M-14 24 L-26 4 L-16 6 L-4 20" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M-12 26 L-38 28 L-38 33 L-10 31 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M-14 24 C10 16 80 14 104 21 C112 23 112 28 104 30 C80 36 10 36 -14 30 C-18 28 -18 26 -14 24 Z"
+              fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M84 18 L96 18 L100 22 L88 22 Z" fill="var(--ink)"/>
+        <path d="M54 30 L6 62 L22 68 L64 34 Z" fill="url(#hg)" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M46 22 C42 16 58 12 66 15 C72 17 72 27 66 29 C58 32 42 30 46 22 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.8"/>
+        <circle cx="72" cy="22" r="9" fill="none" stroke="var(--gray)" stroke-width="1.6"/>
+        <circle cx="72" cy="22" r="2.4" fill="var(--ink)"/>
+        <circle cx="108" cy="25.5" r="4.5" fill="var(--red)"/>
+        <path d="M-8 27 L40 27" stroke="var(--red)" stroke-width="2"/>
+      </g>
+      <!-- slipstream -->
+      <path d="M56 62 C76 58 92 58 106 62 M64 72 C82 68 96 68 108 71" fill="none" stroke="var(--gray)" stroke-width="1.2"/>`,
     flavor: 'Amelia Earhart\'s hometown on the Missouri bluffs, where a railroad with a singing name began.',
     stats: {
       'ELEVATION': '~810 FT',
@@ -504,20 +606,31 @@ const DEX = [
     types: ['VALLEY TOWN', 'BITTERROOT'],
     status: 'upcoming',
     coords: { lat: 46.2466, lon: -114.1593 },
-    sprite: [
-      '.##.............##..',
-      '.###...........###..',
-      '.####.........####..',
-      '.#####..#.#..#####..',
-      '.######.###.######..',
-      '........#.#.........',
-      '....................',
-      '.G.GG.GG.GG.GG.GG...',
-      '..GG.GG..GG..GG.G...',
-      '....................',
-      '.......RRRR.........',
-      '.......R..R.........',
-    ],
+    art: `
+      <!-- the Bitterroot front: canyon-notched wall -->
+      <path d="M0 108 L36 44 L70 84 L104 36 L140 86 L176 40 L212 88 L248 34 L284 84 L318 46 L352 88 L378 62 L400 84"
+            fill="none" stroke="var(--ink)" stroke-width="1.8"/>
+      <path d="M36 44 L52 66 L36 66 Z M104 36 L120 60 L104 60 Z M176 40 L192 64 L176 64 Z M248 34 L264 58 L248 58 Z M318 46 L332 66 L318 66 Z" fill="var(--ink)"/>
+      <path d="M0 108 L400 108 L400 84 L378 62 L352 88 L318 46 L284 84 L248 34 L212 88 L176 40 L140 86 L104 36 L70 84 L36 44 Z" fill="url(#hg)" opacity="1"/>
+      <!-- U-canyon mouths -->
+      <path d="M56 108 C56 92 84 92 84 108 M128 108 C128 94 154 94 154 108 M200 108 C200 94 226 94 226 108 M272 108 C272 94 298 94 298 108" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6"/>
+      <path d="M0 108 L400 108" stroke="var(--ink)" stroke-width="2"/>
+      <!-- the Bitterroot River -->
+      <path d="M0 132 C70 124 140 138 210 130 C280 122 340 136 400 128 L400 146 C340 152 280 140 210 148 C140 156 70 142 0 150 Z" fill="url(#wg)" stroke="var(--green)" stroke-width="1.4"/>
+      <!-- fly fisher -->
+      <g stroke="var(--ink)" stroke-width="2" fill="none">
+        <circle cx="330" cy="112" r="4" fill="var(--ink)"/>
+        <path d="M330 116 L330 130 M330 130 L324 142 M330 130 L336 142 M330 120 L340 114 M340 114 L354 102"/>
+      </g>
+      <path d="M354 102 C372 108 378 122 372 132" fill="none" stroke="var(--gray)" stroke-width="1.2"/>
+      <!-- bitterroot flower -->
+      <g transform="translate(52 152)">
+        <g stroke="var(--red)" stroke-width="3.4" stroke-linecap="round">
+          <path d="M0 0 L0 -13 M0 0 L9 -9 M0 0 L13 0 M0 0 L9 9 M0 0 L0 13 M0 0 L-9 9 M0 0 L-13 0 M0 0 L-9 -9"/>
+          <path d="M0 0 L5 -12 M0 0 L12 -5 M0 0 L12 5 M0 0 L5 12 M0 0 L-5 12 M0 0 L-12 5 M0 0 L-12 -5 M0 0 L-5 -12"/>
+        </g>
+        <circle cx="0" cy="0" r="3.4" fill="var(--ink)"/>
+      </g>`,
     flavor: 'A copper king\'s town in the Salish homeland valley, beneath canyon walls carved by ice and a lake that drowned it all.',
     stats: {
       'ELEVATION': '3,570 FT',
@@ -553,6 +666,91 @@ const DEX = [
       { era: '~2 MILLION–15,000 YRS', title: 'Ice sculpts the wall', text: 'Valley glaciers pour repeatedly out of the high Bitterroots, gouging the evenly spaced U-shaped canyons — Blodgett, Mill, Bear — that give the range its trademark saw-toothed front.' },
       { era: '~15,000 YRS', title: 'Under Lake Missoula', text: 'When ice dams the Clark Fork, an arm of Glacial Lake Missoula floods north up the Bitterroot Valley; the future townsite lies hundreds of feet underwater, and lake silts settle on the valley floor now grazed by horses.' },
       { era: '~12,000 YRS', title: 'The people of the bitterroot', text: 'As the waters go for good, the ancestors of the Salish make the valley home, gathering sp̓eƛ̓m — bitterroot — on its benches each spring for the next twelve thousand years.' },
+    ],
+  },
+
+  {
+    id: 'los-angeles-ca',
+    num: 10,
+    name: 'Los Angeles',
+    region: 'California, USA',
+    country: 'USA',
+    types: ['BASIN CITY', 'PACIFIC COAST'],
+    status: 'upcoming',
+    coords: { lat: 34.0522, lon: -118.2437 },
+    art: `
+      <!-- low red sun over the Pacific -->
+      <circle cx="86" cy="84" r="24" fill="var(--red)"/>
+      <circle cx="86" cy="84" r="32" fill="none" stroke="var(--red)" stroke-width="1.4"/>
+      <path d="M0 108 L180 108" stroke="var(--ink)" stroke-width="1.8"/>
+      <path d="M0 112 L180 112 L180 136 C120 140 60 138 0 142 Z" fill="url(#wl)" stroke="none"/>
+      <!-- Griffith hill with observatory domes -->
+      <path d="M164 122 C220 84 300 78 400 96" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
+      <path d="M164 122 C220 84 300 78 400 96 L400 122 Z" fill="url(#hx)"/>
+      <g stroke="var(--ink)" stroke-width="1.8" fill="var(--paper)">
+        <path d="M258 84 L258 74 L306 74 L306 84 Z"/>
+        <path d="M262 74 C262 64 278 64 278 74 Z" fill="url(#hi)"/>
+        <path d="M296 74 C296 66 308 66 308 74 Z" fill="url(#hi)"/>
+        <path d="M240 84 L326 84"/>
+      </g>
+      <!-- downtown skyline -->
+      <g fill="url(#hi)" stroke="var(--ink)" stroke-width="1.4">
+        <rect x="196" y="112" width="14" height="34"/>
+        <rect x="214" y="102" width="16" height="44"/>
+        <rect x="234" y="118" width="12" height="28"/>
+        <rect x="250" y="108" width="16" height="38"/>
+        <rect x="270" y="120" width="12" height="26"/>
+      </g>
+      <path d="M0 146 L400 146" stroke="var(--ink)" stroke-width="2"/>
+      <!-- palms -->
+      <g stroke="var(--ink)" stroke-width="2.6" fill="none">
+        <path d="M322 146 C324 120 322 100 316 86"/>
+        <path d="M370 146 C368 116 370 96 376 82"/>
+      </g>
+      <g stroke="var(--green)" stroke-width="2.2" fill="none" stroke-linecap="round">
+        <path d="M316 86 C306 78 296 76 286 78 M316 86 C312 74 306 68 298 64 M316 86 C320 74 328 68 338 66 M316 86 C326 80 336 80 344 84"/>
+        <path d="M376 82 C366 74 356 72 346 74 M376 82 C372 70 366 64 358 60 M376 82 C380 70 388 64 398 62 M376 82 C386 76 396 76 400 80"/>
+      </g>`,
+    flavor: 'A city stacked on top of an ice-age trap: saber-toothed cats still surface in the asphalt while the whole basin slides slowly toward San Francisco.',
+    stats: {
+      'ELEVATION': '285 FT',
+      'FOUNDED': '1781',
+      'POPULATION': '~3,800,000',
+      'RANGE': 'SAN GABRIELS',
+      'COAST': 'PACIFIC',
+      'LANGUAGES': '220+',
+    },
+    facts: [
+      'The La Brea Tar Pits sit in the middle of the city, still bubbling — they\'ve yielded millions of ice-age fossils, including over 400 dire wolf skulls displayed on one glowing wall and the saber-toothed cat, California\'s state fossil.',
+      'The city was founded in 1781 as El Pueblo de Nuestra Señora la Reina de los Ángeles by 44 settlers, most of them of African and Indigenous descent.',
+      'This is Tongva homeland; the village of Yaanga stood near today\'s downtown, and Tongva mariners crossed to the Channel Islands in sewn-plank canoes.',
+      'The film industry came in the 1910s for the sunshine and the variety of scenery — and, in part, to put a continent between themselves and Edison\'s patent enforcers.',
+      'The Hollywood Sign went up in 1923 as "HOLLYWOODLAND," a real-estate advertisement meant to last about a year and a half.',
+      'Griffith Observatory has been free to the public since it opened in 1935 — a condition of Griffith J. Griffith\'s bequest.',
+      'The 1913 Los Angeles Aqueduct brought Owens Valley water 233 miles by gravity alone; at its opening William Mulholland said, in full: "There it is. Take it."',
+      'After a catastrophic 1938 flood, the LA River was encased in concrete — 51 miles of it, now the world\'s most filmed drainage ditch.',
+      'The ports of LA and Long Beach together form the busiest container port complex in the Western Hemisphere.',
+      'LA will host the Olympics for the third time in 2028 — only London has hosted three as well.',
+    ],
+    history: [
+      { era: 'DEEP PAST', title: 'Tongva basin', text: 'The Tongva people live throughout the basin and on the islands offshore; Yaanga, near the river\'s bend, is among the largest villages when the Spanish arrive.' },
+      { era: '1781', title: 'El Pueblo', text: 'Forty-four pobladores recruited from northern Mexico found the pueblo beside the river — a farming village at the edge of an empire.' },
+      { era: '1821–48', title: 'Rancho years', text: 'Under Mexico, mission lands become vast cattle ranchos; hides and tallow are the currency of a town of adobes.' },
+      { era: '1876–87', title: 'Rails and the boom', text: 'The Southern Pacific, then the Santa Fe, reach town; a fare war briefly drops a ticket from Kansas City to $1, and the great Southern California land boom is on.' },
+      { era: '1892', title: 'Oil under the streets', text: 'Edward Doheny strikes oil near downtown; within years derricks forest the neighborhoods, and LA becomes an oil town — it still pumps from urban wells.' },
+      { era: '1913', title: 'Water arrives', text: 'The Owens Valley aqueduct opens and the city\'s limits effectively vanish; the San Fernando Valley is annexed and the metropolis begins.' },
+      { era: '1910s–20s', title: 'Hollywood', text: 'Filmmakers settle a sleepy temperance suburb; within a decade it is the world capital of the movies, and "Hollywood" stops meaning a place.' },
+      { era: '1932', title: 'First Olympics', text: 'Depression-era LA stages the Games anyway, inventing the Olympic Village and the three-tier medal podium.' },
+      { era: '1965', title: 'Watts', text: 'Six days of uprising in Watts force the country to look at redlining, policing, and the city\'s divided geography — struggles that continue to shape LA.' },
+      { era: '1984–2028', title: 'The Olympic city', text: 'The profitable \'84 Games remake Olympic hosting; the 2028 Games will make LA a three-time host.' },
+    ],
+    deepTime: [
+      { era: '~150–66 MILLION YRS', title: 'No ground yet', text: 'Through most of the dinosaur age, much of the ground LA sits on doesn\'t exist — the coast is a subduction zone offshore, still assembling California. The state\'s rare dinosaur fossils, like duck-billed Augustynolophus (California\'s state dinosaur), come from animals washed out to sea.' },
+      { era: '~18–5 MILLION', title: 'The basin tears open', text: 'Caught in the developing San Andreas plate boundary, whole crustal blocks rotate like turntables and the LA Basin pulls apart and sinks, filling with miles of marine sediment. The organic-rich Monterey muds of this sea become the oil LA later drills.' },
+      { era: '~15 MILLION', title: 'Megalodon offshore', text: 'Warm Miocene seas cover the basin; whales, sea cows, and megalodon cruise above the future freeways. Shark teeth still weather out of the Palos Verdes hills.' },
+      { era: '~5 MILLION–NOW', title: 'Riding the Pacific plate', text: 'LA sits west of the San Andreas fault, on the Pacific plate, sliding northwest about two inches a year — the city creeps toward San Francisco\'s latitude a few million years from now. The young, broken San Gabriels rise fast and shed rock at the city\'s edge.' },
+      { era: '50,000–11,000 YRS', title: 'The tar traps', text: 'Asphalt seeps at Rancho La Brea snare mammoths, ground sloths, dire wolves, and saber-toothed cats — then the predators that came for them. It becomes one of the richest ice-age fossil sites on Earth, downtown-adjacent.' },
+      { era: '~13,000 YRS', title: 'First Californians', text: 'People reach the Channel Islands by boat — Arlington Springs Man is among the oldest human remains in North America. Millennia later, one woman\'s remains in the tar at La Brea record the basin\'s early people directly.' },
     ],
   },
 

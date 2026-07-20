@@ -382,18 +382,20 @@ function counts() {
   return { got, total };
 }
 
-/* ---------- sprite (pixel art) ---------- */
-const SPRITE_COLOR = { '#': 'var(--ink)', 'R': 'var(--red)', 'G': 'var(--green)', 'g': 'var(--gray)' };
-function spriteSVG(sprite) {
-  const rows = sprite.length, cols = Math.max(...sprite.map(r => r.length));
-  let rects = '';
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < sprite[r].length; c++) {
-      const ch = sprite[r][c];
-      if (ch in SPRITE_COLOR) rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="${SPRITE_COLOR[ch]}"/>`;
-    }
-  }
-  return `<svg viewBox="0 0 ${cols} ${rows}" shape-rendering="crispEdges" role="img">${rects}</svg>`;
+/* ---------- field plates (engraved-style SVG illustrations) ----------
+   Shared texture patterns, dithering-style shading an e-ink panel
+   renders natively: hatches, cross-hatch, stipple, water lines. */
+const ART_DEFS = `<defs>
+  <pattern id="hg" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--gray)" stroke-width="1"/></pattern>
+  <pattern id="hi" width="3.5" height="3.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3.5" stroke="var(--ink)" stroke-width="1"/></pattern>
+  <pattern id="hx" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6M6 0L0 6" stroke="var(--gray)" stroke-width="0.7" fill="none"/></pattern>
+  <pattern id="dt" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.4" cy="1.4" r="0.9" fill="var(--gray)"/><circle cx="4.4" cy="4.4" r="0.9" fill="var(--gray)"/></pattern>
+  <pattern id="wl" width="9" height="5" patternUnits="userSpaceOnUse"><line x1="0" y1="1.5" x2="6" y2="1.5" stroke="var(--gray)" stroke-width="1"/></pattern>
+  <pattern id="wg" width="9" height="5" patternUnits="userSpaceOnUse"><line x1="0" y1="1.5" x2="6" y2="1.5" stroke="var(--green)" stroke-width="1.1"/></pattern>
+  <pattern id="wv" width="5" height="9" patternUnits="userSpaceOnUse"><line x1="1.5" y1="0" x2="1.5" y2="7" stroke="var(--gray)" stroke-width="1"/></pattern>
+</defs>`;
+function artSVG(art) {
+  return `<svg viewBox="0 0 400 170" role="img">${ART_DEFS}${art}</svg>`;
 }
 
 /* ---------- views ---------- */
@@ -471,8 +473,8 @@ function viewEntry(id) {
       <span class="stamp st-${st}">${STATUS_LABEL[st]}</span>
     </div>
     <div class="panel spritebox">
-      <div class="panel-head"><span>FIELD SPRITE</span><span>${e.types.map(t => esc(t)).join(' / ')}</span></div>
-      ${spriteSVG(e.sprite)}
+      <div class="panel-head"><span>FIELD PLATE</span><span>${e.types.map(t => esc(t)).join(' / ')}</span></div>
+      ${artSVG(e.art)}
       <span class="coords">${coordStr}</span>
     </div>
     <div class="flavor">${esc(e.flavor)}</div>
@@ -561,7 +563,7 @@ function viewInfo() {
     <div class="panel">
       <div class="panel-head"><span>SPEC</span></div>
       <div class="panel-body kv">
-        <div><span class="k">FIRMWARE</span><span id="fw">v2</span></div>
+        <div><span class="k">FIRMWARE</span><span id="fw">v3</span></div>
         <div><span class="k">DISPLAY</span><span>SIMULATED E-INK · 5 COLORS</span></div>
         <div><span class="k">STORAGE</span><span>ON-DEVICE (LOCALSTORAGE)</span></div>
         <div><span class="k">NETWORK</span><span>WORKS OFFLINE</span></div>

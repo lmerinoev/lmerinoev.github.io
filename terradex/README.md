@@ -10,9 +10,11 @@ Live at `/terradex/` on the site. Unlisted and `noindex`, like Habitat.
 ## What it does
 
 - **DEX** — numbered entries for places visited, en route, and wanted.
-  Each entry has a pixel-art field sprite, type chips, stats, flavor text,
-  and three tabs: **FACTS**, **HISTORY** (human timeline), and **DEEP TIME**
-  (geology and paleontology back to the Precambrian).
+  Each entry has an engraved-style SVG "field plate" (fine line art with
+  hatch/stipple shading — the kind of image a real e-ink panel renders
+  beautifully), type chips, stats, flavor text, and three tabs: **FACTS**,
+  **HISTORY** (human timeline), and **DEEP TIME** (geology and paleontology
+  back to the Precambrian).
 - **MAP** — a dot-matrix world map. Diamonds mark entries: solid red =
   collected, green outline = en route, ink outline = uncharted.
 - **◆ MARK COLLECTED** — tap when you've stood on the ground. Stored in
