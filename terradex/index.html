@@ -126,7 +126,6 @@
     z-index: 5;
     background: var(--paper);
     border-top: 2px solid var(--ink);
-    padding: 0 0 env(safe-area-inset-bottom);
   }
   #nav .in { max-width: 430px; margin: 0 auto; display: flex; }
   #nav button {
@@ -137,7 +136,8 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--gray);
-    padding: 14px 0 13px;
+    /* buttons run through the home-indicator area so the bar meets the screen edge */
+    padding: 14px 0 calc(13px + env(safe-area-inset-bottom));
   }
   #nav button + button { border-left: 2px solid var(--ink); }
   #nav button.on { background: var(--ink); color: var(--paper); }
@@ -454,16 +454,6 @@
     color: var(--gray);
   }
 
-  /* ---------- e-ink refresh flash ---------- */
-  #flash {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    background: var(--ink);
-    pointer-events: none;
-    display: none;
-  }
-  #flash.on { display: block; }
 </style>
 </head>
 <body>
@@ -484,8 +474,6 @@
     <button id="nav-info" onclick="go('#/info')">Info</button>
   </div>
 </div>
-
-<div id="flash"></div>
 
 <script src="data.js"></script>
 <script src="map-data.js"></script>
@@ -695,7 +683,7 @@ function viewInfo() {
     </div>
     <div class="secthead"><h2>Spec</h2></div>
     <div class="kv">
-      <div><span class="k">Firmware</span><span>v6 · POSTER</span></div>
+      <div><span class="k">Firmware</span><span>v7 · POSTER</span></div>
       <div><span class="k">Display</span><span>Simulated e-ink · 5 colors</span></div>
       <div><span class="k">Storage</span><span>On-device (localStorage)</span></div>
       <div><span class="k">Network</span><span>Works offline</span></div>
@@ -733,43 +721,33 @@ function render() {
   document.getElementById('tally').innerHTML = `<b>${pad3(got)}</b>/${pad3(total)}`;
 }
 
-/* e-ink page flip: hard black flash, then the new page is simply there */
-let flashTimer = null;
-function flip(fn) {
-  const f = document.getElementById('flash');
-  f.classList.add('on');
-  clearTimeout(flashTimer);
-  flashTimer = setTimeout(() => {
-    fn();
-    window.scrollTo(0, 0);
-    setTimeout(() => f.classList.remove('on'), 60);
-  }, 90);
-}
-
 function go(hash) {
   if (location.hash === hash) return;
   state.tab = 'facts';
-  location.hash = hash; // hashchange listener does the flip+render
+  location.hash = hash; // hashchange listener renders
 }
 function setTab(t) {
   state.tab = t;
-  render(); // tab change is a partial refresh — no full flash, like e-ink partial update
+  render();
 }
 
 function mark(id) {
   const s = store.load();
   s.collected[id] = new Date().toISOString().slice(0, 10);
   store.save(s);
-  flip(render);
+  render();
 }
 function unmark(id) {
   const s = store.load();
   delete s.collected[id];
   store.save(s);
-  flip(render);
+  render();
 }
 
-window.addEventListener('hashchange', () => flip(render));
+window.addEventListener('hashchange', () => {
+  render();
+  window.scrollTo(0, 0);
+});
 render();
 
 /* ---------- PWA ---------- */

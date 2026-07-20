@@ -2,8 +2,8 @@
 
 A Pokédex for places. A private, offline-first PWA styled like a limited-color
 e-ink display (think Pebble Time 2 / pocket e-ink readers): paper, ink, one
-gray, and red + green accents. No gradients, no eased motion — pages flip with
-a hard e-ink refresh flash.
+gray, and red + green accents. No gradients, no eased motion — pages swap
+instantly, like an e-ink partial refresh.
 
 Live at `/terradex/` on the site. Unlisted and `noindex`, like Habitat.
 
@@ -47,5 +47,5 @@ Python rasterizer (point-in-polygon over a 120×50 grid, Antarctica omitted).
 
 ## Someday
 
-Port to a real pocket e-ink panel. The palette, hard refresh flash, and
+Port to a real pocket e-ink panel. The palette, instant refresh model, and
 dot-matrix rendering are already designed for that constraint.
