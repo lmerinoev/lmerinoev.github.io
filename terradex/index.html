@@ -454,9 +454,10 @@ function viewEntry(id) {
   const lat = e.coords.lat, lon = e.coords.lon;
   const coordStr = `${Math.abs(lat).toFixed(2)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(2)}°${lon >= 0 ? 'E' : 'W'}`;
 
+  const userCollected = !!store.load().collected[e.id];
   const collectUI = st === 'visited'
     ? `<div class="collected-line">◆ COLLECTED${date ? ' · ' + esc(date) : ''}</div>
-       <button class="collectbtn undo" onclick="unmark('${e.id}')">UNMARK</button>`
+       ${userCollected ? `<button class="collectbtn undo" onclick="unmark('${e.id}')">UNMARK</button>` : ''}`
     : `<button class="collectbtn" onclick="mark('${e.id}')">◆ MARK COLLECTED</button>`;
 
   return `
@@ -488,8 +489,7 @@ function viewEntry(id) {
     ${collectUI}`;
 }
 
-function mapSVG() {
-  const G = MAP_GRID;
+function mapSVG(G, size) {
   let dots = '';
   for (let r = 0; r < G.rows; r++) {
     const row = G.land[r];
@@ -497,15 +497,17 @@ function mapSVG() {
       if (row[c] === '#') dots += `<rect x="${c + 0.18}" y="${r + 0.18}" width="0.64" height="0.64" fill="var(--gray)"/>`;
     }
   }
+  const inBounds = e => e.coords.lon >= G.lonMin && e.coords.lon <= G.lonMax
+    && e.coords.lat >= G.latMin && e.coords.lat <= G.latMax;
   const toXY = (lat, lon) => [
     (lon - G.lonMin) / (G.lonMax - G.lonMin) * G.cols,
     (G.latMax - lat) / (G.latMax - G.latMin) * G.rows,
   ];
   let marks = '';
-  for (const e of DEX) {
+  for (const e of DEX.filter(inBounds)) {
     const st = effStatus(e);
     const [x, y] = toXY(e.coords.lat, e.coords.lon);
-    const d = `M ${x} ${y - 1.7} L ${x + 1.7} ${y} L ${x} ${y + 1.7} L ${x - 1.7} ${y} Z`;
+    const d = `M ${x} ${y - size} L ${x + size} ${y} L ${x} ${y + size} L ${x - size} ${y} Z`;
     const color = st === 'wishlist' ? 'var(--ink)' : st === 'upcoming' ? 'var(--green)' : 'var(--red)';
     const fill = st === 'visited' ? color : 'var(--paper)';
     marks += `<g onclick="go('#/entry/${e.id}')" style="cursor:pointer">
@@ -526,16 +528,23 @@ function viewMap() {
       <span class="sub">${esc(e.region.toUpperCase())}</span>
     </button>`;
   }).join('');
+  const usPins = typeof MAP_GRID_US !== 'undefined'
+    && DEX.some(e => e.coords.lon >= MAP_GRID_US.lonMin && e.coords.lon <= MAP_GRID_US.lonMax
+      && e.coords.lat >= MAP_GRID_US.latMin && e.coords.lat <= MAP_GRID_US.latMax);
   return `
     <div class="panel mapbox">
       <div class="panel-head"><span>WORLD GRID</span><span>${pad3(got)}/${pad3(total)}</span></div>
-      ${mapSVG()}
+      ${mapSVG(MAP_GRID, 1.7)}
       <div class="legend">
         <span><span class="glyph g-visited">◆</span>COLLECTED</span>
         <span><span class="glyph g-upcoming">◈</span>EN ROUTE</span>
         <span><span class="glyph g-wishlist">◇</span>UNCHARTED</span>
       </div>
     </div>
+    ${usPins ? `<div class="panel mapbox">
+      <div class="panel-head"><span>REGION · USA</span></div>
+      ${mapSVG(MAP_GRID_US, 1.5)}
+    </div>` : ''}
     ${pins}`;
 }
 
@@ -552,7 +561,7 @@ function viewInfo() {
     <div class="panel">
       <div class="panel-head"><span>SPEC</span></div>
       <div class="panel-body kv">
-        <div><span class="k">FIRMWARE</span><span id="fw">v1</span></div>
+        <div><span class="k">FIRMWARE</span><span id="fw">v2</span></div>
         <div><span class="k">DISPLAY</span><span>SIMULATED E-INK · 5 COLORS</span></div>
         <div><span class="k">STORAGE</span><span>ON-DEVICE (LOCALSTORAGE)</span></div>
         <div><span class="k">NETWORK</span><span>WORKS OFFLINE</span></div>
