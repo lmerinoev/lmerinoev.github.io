@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#EDEBE3">
+<meta name="theme-color" content="#F0F0ED">
 <title>Terradex</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -14,18 +14,21 @@
 <meta name="apple-mobile-web-app-title" content="Terradex">
 <style>
   /* ---------------------------------------------------------
-     E-INK EDITORIAL — paper, ink, one gray, two accents.
-     Big light type, hairlines instead of boxes, one soft accent
-     circle per screen. No gradients, no eased motion. Pages flip.
+     PLAYFUL E-INK — cool off-white ground, white cards, ink,
+     one gray, red + green accents. Overlapping circles, pills,
+     chunky friendly type. No gradients, no eased motion.
      --------------------------------------------------------- */
   :root {
-    --paper: #EDEBE3;
-    --ink: #14120E;
-    --gray: #8B877C;
-    --faint: #D6D3C7;
-    --red: #B02E1F;
-    --green: #3E6B3A;
-    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    --ground: #F0F0ED;
+    --card: #FCFCFA;
+    --ink: #17181A;
+    --gray: #92938C;
+    --faint: #E2E2DC;
+    --track: #E7E7E2;
+    --red: #D64533;
+    --green: #4F8748;
+    --paper: #FCFCFA; /* plates & maps paint "paper" = card white */
+    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'SF Pro Display', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   }
 
@@ -33,8 +36,8 @@
   html { -webkit-text-size-adjust: 100%; scroll-behavior: auto; }
   body {
     font-family: var(--sans);
-    background: var(--paper);
-    background-image: radial-gradient(rgba(20, 18, 14, 0.045) 1px, transparent 1px);
+    background: var(--ground);
+    background-image: radial-gradient(rgba(23, 24, 26, 0.035) 1px, transparent 1px);
     background-size: 3px 3px;
     color: var(--ink);
     font-size: 15px;
@@ -43,7 +46,7 @@
     margin: 0;
     min-height: 100vh;
   }
-  ::selection { background: var(--ink); color: var(--paper); }
+  ::selection { background: var(--ink); color: var(--card); }
 
   button {
     font-family: inherit;
@@ -56,17 +59,24 @@
     -webkit-tap-highlight-color: transparent;
     text-align: left;
   }
-  button:focus-visible, a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 6px; }
   a { color: inherit; }
   .hidden { display: none !important; }
   .mono { font-family: var(--mono); }
 
   .h-label {
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    font-weight: 700;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--gray);
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
   }
 
   /* ---------- chrome ---------- */
@@ -74,9 +84,8 @@
     position: sticky;
     top: 0;
     z-index: 5;
-    background: var(--paper);
-    border-bottom: 1px solid var(--faint);
-    padding: calc(10px + env(safe-area-inset-top)) 20px 10px;
+    background: var(--ground);
+    padding: calc(12px + env(safe-area-inset-top)) 20px 10px;
   }
   #topbar .in {
     max-width: 420px;
@@ -85,10 +94,10 @@
     justify-content: space-between;
     align-items: baseline;
   }
-  #topbar .mark { font-size: 16px; font-weight: 650; letter-spacing: -0.01em; }
-  #topbar .mark .dia { color: var(--red); font-size: 13px; }
-  #topbar .tally { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--gray); }
-  #topbar .tally b { color: var(--ink); font-weight: 600; }
+  #topbar .mark { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+  #topbar .mark .dia { color: var(--red); font-size: 14px; }
+  #topbar .tally { font-size: 12px; font-weight: 600; color: var(--gray); }
+  #topbar .tally b { color: var(--ink); }
 
   #nav {
     position: fixed;
@@ -96,79 +105,90 @@
     left: 0;
     right: 0;
     z-index: 5;
-    background: var(--paper);
+    background: var(--ground);
     border-top: 1px solid var(--faint);
-    padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+    padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
   }
   #nav .in {
     max-width: 420px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 10px;
   }
   #nav button {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     color: var(--gray);
-    padding: 4px 10px;
+    padding: 9px 22px;
+    border-radius: 999px;
   }
-  #nav button.on { color: var(--ink); }
-  #nav button.on::before { content: '◆ '; color: var(--red); font-size: 9px; vertical-align: 1px; }
+  #nav button.on { background: var(--ink); color: var(--card); }
 
   .wrap {
     max-width: 420px;
     margin: 0 auto;
-    padding: 0 20px calc(86px + env(safe-area-inset-bottom));
+    padding: 0 14px calc(88px + env(safe-area-inset-bottom));
   }
-  main { padding-top: 26px; display: flex; flex-direction: column; }
+  main { padding-top: 8px; display: flex; flex-direction: column; gap: 10px; }
 
   /* ---------- dex ---------- */
-  .hero-card {
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 22px;
-    padding: 22px 24px 20px;
-    margin-bottom: 10px;
-  }
-  .hero-card .h-label { color: var(--gray); }
-  .hero-card .n {
-    font-size: 64px;
-    font-weight: 200;
+  .hero { padding: 24px 24px 20px; }
+  .hero-art { position: absolute; top: 0; right: 0; width: 190px; height: auto; }
+  .hero .h-label { position: relative; }
+  .hero .n {
+    position: relative;
+    font-size: 56px;
+    font-weight: 800;
     line-height: 1.05;
-    letter-spacing: -0.03em;
-    margin: 2px 0 6px;
+    letter-spacing: -0.04em;
+    margin: 2px 0 8px;
   }
-  .hero-card .n .of { font-size: 26px; font-weight: 300; color: var(--gray); letter-spacing: 0; }
-  .hero-card .dots { font-size: 15px; letter-spacing: 0.32em; }
-  .hero-card .dots .d-visited { color: var(--red); }
-  .hero-card .dots .d-upcoming { color: var(--green); }
-  .hero-card .dots .d-wishlist, .hero-card .dots .d-unknown { color: var(--gray); }
+  .hero .n .of { font-size: 22px; font-weight: 700; color: var(--gray); letter-spacing: -0.01em; }
+  .hero .dots { position: relative; font-size: 15px; letter-spacing: 0.3em; }
+  .dots .d-visited { color: var(--red); }
+  .dots .d-upcoming { color: var(--green); }
+  .dots .d-wishlist, .dots .d-unknown { color: var(--gray); }
 
   .row {
     display: flex;
     align-items: center;
     gap: 14px;
     width: 100%;
-    padding: 15px 2px;
-    border-bottom: 1px solid var(--faint);
+    padding: 16px 18px;
   }
-  .row:active { opacity: 0.45; }
-  .rnum { font-family: var(--mono); font-size: 11px; color: var(--gray); letter-spacing: 0.06em; width: 30px; flex: none; }
+  .row:active { background: var(--faint); }
+  .rnum { font-family: var(--mono); font-size: 11px; color: var(--gray); letter-spacing: 0.06em; flex: none; width: 28px; }
   .rmain { flex: 1; min-width: 0; }
-  .rname { display: block; font-size: 21px; font-weight: 350; letter-spacing: -0.01em; line-height: 1.25; }
+  .rname { display: block; font-size: 20px; font-weight: 750; letter-spacing: -0.02em; line-height: 1.25; }
   .rsub {
     display: block;
     font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--gray);
     margin-top: 2px;
   }
-  .rglyph { font-size: 16px; flex: none; }
-  .row.unknown .rname { color: var(--gray); font-weight: 300; }
+
+  .chip {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+  .chip-visited { background: var(--red); color: var(--card); }
+  .chip-upcoming { background: var(--card); color: var(--green); border: 2px solid var(--green); }
+  .chip-wishlist { background: var(--card); color: var(--gray); border: 2px dashed var(--gray); }
+
+  .row.unknown { background: none; border: 2px dashed var(--faint); border-radius: 24px; }
+  .row.unknown .rname { color: var(--gray); font-weight: 600; }
+  .row.unknown:active { background: none; }
 
   .g-visited { color: var(--red); }
   .g-upcoming { color: var(--green); }
@@ -176,74 +196,77 @@
 
   /* ---------- entry ---------- */
   .crumb {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--gray);
-    padding: 2px 0 18px;
+    padding: 6px 6px 10px;
   }
   .crumb:active { color: var(--ink); }
 
-  .ehero { position: relative; padding: 6px 0 4px; }
-  .ecirc {
+  .ehead { padding: 26px 24px 22px; }
+  .ecorner {
     position: absolute;
-    top: -8px;
-    left: -10px;
-    width: 92px;
-    height: 92px;
+    top: -44px;
+    right: -44px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
-    z-index: 0;
   }
-  .ecirc.c-visited { background: var(--red); }
-  .ecirc.c-upcoming { background: var(--green); }
-  .ecirc.c-wishlist { background: var(--faint); }
-  .ehero > *:not(.ecirc) { position: relative; z-index: 1; }
+  .ecorner.c-visited { background: var(--red); }
+  .ecorner.c-upcoming { background: var(--green); }
+  .ecorner.c-wishlist { background: var(--faint); }
+  .edrip { position: absolute; top: 40px; right: 34px; width: 3px; height: 26px; }
+  .edrip.c-visited { background: var(--red); }
+  .edrip.c-upcoming { background: var(--green); }
+  .edrip.c-wishlist { background: var(--faint); }
   .enum { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--gray); }
-  .ehero h1 {
-    margin: 2px 0 4px;
-    font-size: 42px;
-    font-weight: 200;
-    letter-spacing: -0.02em;
+  .ehead h1 {
+    margin: 4px 0 4px;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
     line-height: 1.05;
+    max-width: 82%;
   }
   .eregion {
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--gray);
   }
-  .estatus {
-    margin-top: 10px;
+  .spill {
+    display: inline-block;
+    margin-top: 14px;
     font-size: 11.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
+    font-weight: 800;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    border-radius: 999px;
+    padding: 7px 14px;
   }
+  .s-visited { background: var(--red); color: var(--card); }
+  .s-upcoming { background: var(--green); color: var(--card); }
+  .s-wishlist { background: var(--track); color: var(--gray); }
 
-  .plate { margin: 22px 0 0; }
-  .plate .frame {
-    border: 1px solid var(--ink);
-    border-radius: 18px;
-    overflow: hidden;
-  }
-  .plate svg { display: block; width: 100%; height: auto; background: var(--paper); }
-  .plate figcaption {
+  .plate { padding: 10px 10px 12px; }
+  .plate svg { display: block; width: 100%; height: auto; border-radius: 16px; }
+  .plate .caption {
     font-family: var(--mono);
     font-size: 9.5px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     color: var(--gray);
     text-transform: uppercase;
-    padding: 8px 4px 0;
+    padding: 8px 10px 0;
     display: flex;
     justify-content: space-between;
+    gap: 12px;
   }
 
   .flavor {
-    margin: 26px 8px 0;
-    font-size: 16.5px;
-    font-weight: 300;
+    margin: 14px 20px 4px;
+    font-size: 16px;
+    font-weight: 500;
     font-style: italic;
     line-height: 1.6;
     text-align: center;
@@ -252,144 +275,146 @@
     content: '◆';
     display: block;
     font-style: normal;
-    font-size: 9px;
+    font-size: 10px;
     color: var(--red);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 22px;
-    margin-top: 26px;
-  }
-  .stats > div { padding: 11px 0 10px; border-top: 1px solid var(--faint); }
+  .statcard { padding: 8px 22px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; column-gap: 22px; }
+  .stats > div { padding: 12px 0 11px; border-top: 1px solid var(--faint); }
+  .stats > div:nth-child(-n+2) { border-top: none; }
   .stats .k {
     font-size: 9.5px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
-  .stats .v { font-size: 19px; font-weight: 350; letter-spacing: -0.01em; margin-top: 1px; }
-
-  .tabs {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin: 30px 0 4px;
-    border-bottom: 1px solid var(--faint);
-  }
-  .tabs button {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gray);
-    padding: 6px 2px 10px;
-    margin-bottom: -1px;
-  }
-  .tabs button.on { color: var(--ink); border-bottom: 2px solid var(--ink); }
-
-  .facts { margin: 0; padding: 0 2px; list-style: none; }
-  .facts li { padding: 13px 0; display: flex; gap: 12px; font-size: 14.5px; line-height: 1.6; }
-  .facts li + li { border-top: 1px solid var(--faint); }
-  .facts .bullet { color: var(--red); flex: none; font-size: 10px; padding-top: 4px; }
-
-  .tl { padding: 0 2px; }
-  .tl-item { padding: 14px 0; }
-  .tl-item + .tl-item { border-top: 1px solid var(--faint); }
-  .tl-item .era {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--gray);
   }
-  .tl-item.deep .era { color: var(--green); }
-  .tl-item .t { font-weight: 550; font-size: 16px; letter-spacing: -0.01em; margin: 2px 0 3px; }
+  .stats .v { font-size: 19px; font-weight: 750; letter-spacing: -0.02em; margin-top: 1px; }
+
+  .tabs {
+    display: flex;
+    background: var(--track);
+    border-radius: 999px;
+    padding: 4px;
+    margin: 8px 0 0;
+  }
+  .tabs button {
+    flex: 1;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 750;
+    letter-spacing: 0.02em;
+    color: var(--gray);
+    padding: 9px 0;
+    border-radius: 999px;
+  }
+  .tabs button.on { background: var(--ink); color: var(--card); }
+
+  .tabcard { padding: 6px 20px; }
+  .facts { margin: 0; padding: 0; list-style: none; }
+  .facts li { padding: 14px 0; display: flex; gap: 12px; font-size: 14.5px; line-height: 1.6; }
+  .facts li + li { border-top: 1px solid var(--faint); }
+  .facts .bullet { color: var(--red); flex: none; font-size: 10px; padding-top: 4px; }
+
+  .tl-item { padding: 14px 0; }
+  .tl-item + .tl-item { border-top: 1px solid var(--faint); }
+  .tl-item .era {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--card);
+    background: var(--ink);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .tl-item.deep .era { background: var(--green); }
+  .tl-item .t { font-weight: 750; font-size: 16px; letter-spacing: -0.015em; margin: 7px 0 3px; }
   .tl-item .x { font-size: 14.5px; line-height: 1.6; }
 
-  .collectwrap { margin-top: 30px; }
+  .collectwrap { margin-top: 10px; }
   .collectbtn {
     display: block;
     width: 100%;
     text-align: center;
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--red);
+    color: var(--card);
     border-radius: 999px;
-    font-size: 13px;
-    font-weight: 650;
-    letter-spacing: 0.16em;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 16px 0;
+    padding: 17px 0;
   }
   .collectbtn:active { opacity: 0.75; }
-  .collected-line {
+  .collected-card {
     text-align: center;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
+    padding: 20px;
+  }
+  .collected-line {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--red);
   }
   .unmark {
     display: block;
-    margin: 12px auto 0;
+    margin: 10px auto 0;
     text-align: center;
     font-size: 11px;
-    letter-spacing: 0.14em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--gray);
   }
 
   /* ---------- map ---------- */
+  .mapcard { padding: 10px; }
   .maphead {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding: 2px 2px 10px;
+    padding: 10px 12px 8px;
   }
-  .maphead .cnt { font-family: var(--mono); font-size: 11px; color: var(--gray); letter-spacing: 0.1em; }
-  .mapframe {
-    border: 1px solid var(--ink);
-    border-radius: 18px;
-    overflow: hidden;
-    margin: 0;
-  }
-  .mapframe svg { display: block; width: 100%; height: auto; }
+  .maphead .cnt { font-size: 12px; font-weight: 700; color: var(--gray); }
+  .mapcard svg { display: block; width: 100%; height: auto; border-radius: 16px; background: var(--card); }
   .legend {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 12px 0 26px;
+    gap: 18px;
+    padding: 12px 0 6px;
     font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--gray);
   }
   .legend span { display: flex; align-items: center; gap: 6px; }
-  .pinlist { margin-top: 4px; }
 
   /* ---------- info ---------- */
-  .prose { font-size: 14.5px; line-height: 1.7; padding: 10px 2px 4px; }
-  .prose p { margin: 0 0 14px; }
-  .infosec { margin-bottom: 26px; }
-  .kv { padding: 4px 2px 0; }
+  .infocard { padding: 20px 22px; }
+  .prose { font-size: 14.5px; line-height: 1.7; }
+  .prose p { margin: 10px 0 0; }
+  .kv { margin-top: 4px; }
   .kv div {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding: 10px 0;
+    padding: 11px 0;
     border-bottom: 1px solid var(--faint);
     font-size: 14px;
+    font-weight: 600;
   }
+  .kv div:last-child { border-bottom: none; }
   .kv .k {
     font-size: 9.5px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--gray);
   }
@@ -460,9 +485,7 @@ function counts() {
   return { got, total };
 }
 
-/* ---------- field plates (engraved-style SVG illustrations) ----------
-   Shared texture patterns, dithering-style shading an e-ink panel
-   renders natively: hatches, cross-hatch, stipple, water lines. */
+/* ---------- field plates (engraved-style SVG illustrations) ---------- */
 const ART_DEFS = `<defs>
   <pattern id="hg" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--gray)" stroke-width="1"/></pattern>
   <pattern id="hi" width="3.5" height="3.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3.5" stroke="var(--ink)" stroke-width="1"/></pattern>
@@ -476,6 +499,16 @@ function artSVG(art) {
   return `<svg viewBox="0 0 400 170" role="img">${ART_DEFS}${art}</svg>`;
 }
 
+/* hero card art: overlapping circles with drips, a nod to e-ink poster art */
+const HERO_ART = `<svg class="hero-art" viewBox="0 0 190 120" aria-hidden="true">
+  <circle cx="132" cy="18" r="34" fill="var(--red)"/>
+  <path d="M120 44 L120 78 M132 50 L132 64 M144 46 L144 96" stroke="var(--red)" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="86" cy="34" r="22" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
+  <path d="M86 56 L86 74" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="168" cy="62" r="13" fill="var(--green)"/>
+  <path d="M168 75 L168 92" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+</svg>`;
+
 /* ---------- views ---------- */
 function viewDex() {
   const { got, total } = counts();
@@ -485,30 +518,31 @@ function viewDex() {
 
   const rows = DEX.map(e => {
     const st = effStatus(e);
-    return `<button class="row" onclick="go('#/entry/${e.id}')">
+    return `<button class="card row" onclick="go('#/entry/${e.id}')">
       <span class="rnum">${pad3(e.num)}</span>
       <span class="rmain">
         <span class="rname">${esc(e.name)}</span>
-        <span class="rsub">${esc(e.region)} · ${e.types.map(esc).join(' / ')}</span>
+        <span class="rsub">${esc(e.region)}</span>
       </span>
-      <span class="rglyph g-${st}" title="${STATUS_LABEL[st]}">${STATUS_GLYPH[st]}</span>
+      <span class="chip chip-${st}" title="${STATUS_LABEL[st]}">${STATUS_GLYPH[st]}</span>
     </button>`;
   }).join('');
 
   let unknown = '';
   const nextNum = (DEX[DEX.length - 1]?.num || 0) + 1;
-  for (let i = 0; i < (typeof DEX_UNKNOWN_SLOTS === 'number' ? DEX_UNKNOWN_SLOTS : 0); i++) {
+  for (let i = 0; i < unknownSlots; i++) {
     unknown += `<div class="row unknown">
       <span class="rnum">${pad3(nextNum + i)}</span>
-      <span class="rmain"><span class="rname">· · ·</span><span class="rsub">Not yet logged</span></span>
-      <span class="rglyph g-wishlist">·</span>
+      <span class="rmain"><span class="rname">Somewhere new?</span><span class="rsub">Not yet logged</span></span>
+      <span class="chip chip-wishlist">?</span>
     </div>`;
   }
 
   return `
-    <div class="hero-card">
+    <div class="card hero">
+      ${HERO_ART}
       <div class="h-label">Collected</div>
-      <div class="n">${got}<span class="of"> / ${total}</span></div>
+      <div class="n">${got}<span class="of"> of ${total}</span></div>
       <div class="dots">${dots}</div>
     </div>
     ${rows}${unknown}`;
@@ -516,7 +550,7 @@ function viewDex() {
 
 function viewEntry(id) {
   const e = DEX.find(x => x.id === id);
-  if (!e) return `<div class="prose">Entry not found.</div>`;
+  if (!e) return `<div class="card infocard prose">Entry not found.</div>`;
   const st = effStatus(e);
   const date = collectedDate(e);
   const tab = state.tab;
@@ -530,8 +564,8 @@ function viewEntry(id) {
   } else {
     const items = tab === 'history' ? e.history : e.deepTime;
     const cls = tab === 'deep' ? 'tl-item deep' : 'tl-item';
-    body = `<div class="tl">${items.map(i =>
-      `<div class="${cls}"><span class="era">${esc(i.era)}</span><div class="t">${esc(i.title)}</div><div class="x">${esc(i.text)}</div></div>`).join('')}</div>`;
+    body = items.map(i =>
+      `<div class="${cls}"><span class="era">${esc(i.era)}</span><div class="t">${esc(i.title)}</div><div class="x">${esc(i.text)}</div></div>`).join('');
   }
 
   const lat = e.coords.lat, lon = e.coords.lon;
@@ -539,31 +573,34 @@ function viewEntry(id) {
 
   const userCollected = !!store.load().collected[e.id];
   const collectUI = st === 'visited'
-    ? `<div class="collected-line">◆ Collected${date ? ' · ' + esc(date) : ''}</div>
-       ${userCollected ? `<button class="unmark" onclick="unmark('${e.id}')">Unmark</button>` : ''}`
+    ? `<div class="card collected-card">
+         <div class="collected-line">◆ Collected${date ? ' · ' + esc(date) : ''}</div>
+         ${userCollected ? `<button class="unmark" onclick="unmark('${e.id}')">Unmark</button>` : ''}
+       </div>`
     : `<button class="collectbtn" onclick="mark('${e.id}')">◆ Mark collected</button>`;
 
   return `
-    <button class="crumb" onclick="go('#/dex')">← Dex</button>
-    <header class="ehero">
-      <div class="ecirc c-${st}"></div>
+    <button class="crumb" onclick="go('#/dex')">← Back to dex</button>
+    <div class="card ehead">
+      <div class="ecorner c-${st}"></div>
+      <div class="edrip c-${st}"></div>
       <div class="enum">Nº ${pad3(e.num)}</div>
       <h1>${esc(e.name)}</h1>
-      <div class="eregion">${esc(e.region)}</div>
-      <div class="estatus g-${st}">${STATUS_GLYPH[st]} ${STATUS_LABEL[st]}</div>
-    </header>
-    <figure class="plate">
-      <div class="frame">${artSVG(e.art)}</div>
-      <figcaption><span>Field plate · ${e.types.map(esc).join(' / ')}</span><span>${coordStr}</span></figcaption>
+      <div class="eregion">${esc(e.region)} · ${e.types.map(esc).join(' / ')}</div>
+      <span class="spill s-${st}">${STATUS_GLYPH[st]} ${STATUS_LABEL[st]}</span>
+    </div>
+    <figure class="card plate" style="margin:0">
+      ${artSVG(e.art)}
+      <div class="caption"><span>Field plate Nº ${pad3(e.num)}</span><span>${coordStr}</span></div>
     </figure>
     <p class="flavor">${esc(e.flavor)}</p>
-    <section class="stats">${statsHTML}</section>
+    <section class="card statcard"><div class="stats">${statsHTML}</div></section>
     <nav class="tabs">
       <button class="${tab === 'facts' ? 'on' : ''}" onclick="setTab('facts')">Facts</button>
       <button class="${tab === 'history' ? 'on' : ''}" onclick="setTab('history')">History</button>
       <button class="${tab === 'deep' ? 'on' : ''}" onclick="setTab('deep')">Deep time</button>
     </nav>
-    ${body}
+    <div class="card tabcard">${body}</div>
     <div class="collectwrap">${collectUI}</div>`;
 }
 
@@ -587,7 +624,7 @@ function mapSVG(G, size) {
     const [x, y] = toXY(e.coords.lat, e.coords.lon);
     const d = `M ${x} ${y - size} L ${x + size} ${y} L ${x} ${y + size} L ${x - size} ${y} Z`;
     const color = st === 'wishlist' ? 'var(--ink)' : st === 'upcoming' ? 'var(--green)' : 'var(--red)';
-    const fill = st === 'visited' ? color : 'var(--paper)';
+    const fill = st === 'visited' ? color : 'var(--card)';
     marks += `<g onclick="go('#/entry/${e.id}')" style="cursor:pointer">
       <rect x="${x - 3}" y="${y - 3}" width="6" height="6" fill="transparent"/>
       <path d="${d}" fill="${fill}" stroke="${color}" stroke-width="0.55"/>
@@ -600,8 +637,8 @@ function viewMap() {
   const { got, total } = counts();
   const pins = DEX.map(e => {
     const st = effStatus(e);
-    return `<button class="row" onclick="go('#/entry/${e.id}')">
-      <span class="rglyph g-${st}" style="width:30px">${STATUS_GLYPH[st]}</span>
+    return `<button class="card row" onclick="go('#/entry/${e.id}')">
+      <span class="chip chip-${st}">${STATUS_GLYPH[st]}</span>
       <span class="rmain">
         <span class="rname">${esc(e.name)}</span>
         <span class="rsub">${esc(e.region)}</span>
@@ -612,21 +649,25 @@ function viewMap() {
     && DEX.some(e => e.coords.lon >= MAP_GRID_US.lonMin && e.coords.lon <= MAP_GRID_US.lonMax
       && e.coords.lat >= MAP_GRID_US.latMin && e.coords.lat <= MAP_GRID_US.latMax);
   return `
-    <div class="maphead"><span class="h-label">World grid</span><span class="cnt">${got}/${total} collected</span></div>
-    <figure class="mapframe">${mapSVG(MAP_GRID, 1.7)}</figure>
-    <div class="legend">
-      <span><span class="g-visited">◆</span>Collected</span>
-      <span><span class="g-upcoming">◈</span>En route</span>
-      <span><span class="g-wishlist">◇</span>Uncharted</span>
+    <div class="card mapcard">
+      <div class="maphead"><span class="h-label">World grid</span><span class="cnt">${got} of ${total}</span></div>
+      ${mapSVG(MAP_GRID, 1.7)}
+      <div class="legend">
+        <span><span class="g-visited">◆</span>Collected</span>
+        <span><span class="g-upcoming">◈</span>En route</span>
+        <span><span class="g-wishlist">◇</span>Uncharted</span>
+      </div>
     </div>
-    ${usPins ? `<div class="maphead"><span class="h-label">Region · USA</span></div>
-    <figure class="mapframe">${mapSVG(MAP_GRID_US, 1.5)}</figure>` : ''}
-    <div class="pinlist">${pins}</div>`;
+    ${usPins ? `<div class="card mapcard">
+      <div class="maphead"><span class="h-label">Region · USA</span></div>
+      ${mapSVG(MAP_GRID_US, 1.5)}
+    </div>` : ''}
+    ${pins}`;
 }
 
 function viewInfo() {
   return `
-    <div class="infosec">
+    <div class="card infocard">
       <span class="h-label">About this unit</span>
       <div class="prose">
         <p><b>Terradex</b> is a field guide to places — visited, en route, and uncharted. Every entry logs the facts, the human history, and the deep time underneath: what stood on that ground when dinosaurs walked, and long before.</p>
@@ -634,17 +675,17 @@ function viewInfo() {
         <p>Mark a place <b style="color:var(--red)">◆ collected</b> when you have stood on its ground. Collections live on this device.</p>
       </div>
     </div>
-    <div class="infosec">
+    <div class="card infocard">
       <span class="h-label">Spec</span>
       <div class="kv">
-        <div><span class="k">Firmware</span><span>v4</span></div>
+        <div><span class="k">Firmware</span><span>v5</span></div>
         <div><span class="k">Display</span><span>Simulated e-ink · 5 colors</span></div>
         <div><span class="k">Storage</span><span>On-device (localStorage)</span></div>
         <div><span class="k">Network</span><span>Works offline</span></div>
         <div><span class="k">Future HW</span><span>Pocket e-ink panel</span></div>
       </div>
     </div>
-    <div class="infosec">
+    <div class="card infocard">
       <span class="h-label">Install</span>
       <div class="prose">
         <p style="margin:0">On iPhone: open in Safari → Share → <b>Add to Home Screen</b>. It runs full-screen and offline, like a device of its own.</p>
@@ -675,7 +716,7 @@ function render() {
     document.getElementById('nav-' + n).classList.toggle('on', r.view === n || (n === 'dex' && r.view === 'entry'));
   }
   const { got, total } = counts();
-  document.getElementById('tally').innerHTML = `<b>${pad3(got)}</b>/${pad3(total)} COLLECTED`;
+  document.getElementById('tally').innerHTML = `<b>${got}</b> of ${total} collected`;
 }
 
 /* e-ink page flip: hard black flash, then the new page is simply there */
