@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#EDEBE3">
+<title>Terradex</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Terradex">
+<style>
+  /* ---------------------------------------------------------
+     E-INK PALETTE — paper, ink, one gray, two Pebble accents.
+     No gradients, no soft shadows, no eased motion. Pages flip.
+     --------------------------------------------------------- */
+  :root {
+    --paper: #EDEBE3;
+    --ink: #14120E;
+    --gray: #8B877C;
+    --faint: #D6D3C7;
+    --red: #B02E1F;
+    --green: #3E6B3A;
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+
+  * { box-sizing: border-box; transition: none !important; animation: none; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: auto; }
+  body {
+    font-family: var(--mono);
+    background: var(--paper);
+    /* faint dot grain, like e-paper substrate */
+    background-image: radial-gradient(rgba(20, 18, 14, 0.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 0 12px calc(74px + env(safe-area-inset-bottom));
+  }
+
+  .hidden { display: none !important; }
+  .dither {
+    background-image: repeating-conic-gradient(var(--faint) 0% 25%, transparent 0% 50%);
+    background-size: 4px 4px;
+  }
+
+  /* ---------- device chrome ---------- */
+  #topbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    padding: calc(8px + env(safe-area-inset-top)) 12px 8px;
+  }
+  #topbar .in {
+    max-width: 406px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  #topbar .mark { font-weight: 700; letter-spacing: 0.12em; font-size: 15px; }
+  #topbar .mark .dia { color: var(--red); }
+  #topbar .tally { font-size: 11px; letter-spacing: 0.08em; color: var(--gray); }
+  #topbar .tally b { color: var(--ink); }
+
+  #nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    background: var(--paper);
+    border-top: 2px solid var(--ink);
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  }
+  #nav .in {
+    max-width: 406px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  #nav button {
+    border: 2px solid var(--ink);
+    padding: 9px 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    background: var(--paper);
+  }
+  #nav button.on { background: var(--ink); color: var(--paper); }
+
+  main { padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* ---------- shared pieces ---------- */
+  .panel { border: 2px solid var(--ink); background: var(--paper); }
+  .panel-head {
+    border-bottom: 2px solid var(--ink);
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .panel-body { padding: 12px 10px; }
+
+  .chip {
+    display: inline-block;
+    border: 1.5px solid var(--ink);
+    padding: 1px 7px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .chip.inv { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .stamp {
+    display: inline-block;
+    border: 2px solid currentColor;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    transform: rotate(-4deg);
+  }
+  .st-visited { color: var(--red); }
+  .st-upcoming { color: var(--green); }
+  .st-wishlist { color: var(--gray); }
+
+  .glyph { font-size: 15px; line-height: 1; }
+  .g-visited { color: var(--red); }
+  .g-upcoming { color: var(--green); }
+  .g-wishlist { color: var(--gray); }
+
+  /* ---------- dex list ---------- */
+  .dexcount { display: flex; gap: 8px; }
+  .dexcount .panel { flex: 1; text-align: center; padding: 10px 4px 8px; }
+  .dexcount .n { font-size: 22px; font-weight: 700; display: block; }
+  .dexcount .l { font-size: 9px; letter-spacing: 0.16em; color: var(--gray); font-weight: 700; }
+
+  .dexrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    padding: 10px;
+  }
+  .dexrow:active { background: var(--ink); color: var(--paper); }
+  .dexrow:active .sub, .dexrow:active .chip { color: inherit; border-color: currentColor; }
+  .dexrow .num {
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 5px;
+    flex: none;
+  }
+  .dexrow:active .num { background: var(--paper); color: var(--ink); }
+  .dexrow .mid { flex: 1; min-width: 0; }
+  .dexrow .nm { font-weight: 700; letter-spacing: 0.06em; font-size: 15px; }
+  .dexrow .sub { font-size: 11px; color: var(--gray); letter-spacing: 0.04em; }
+  .dexrow .chips { margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .dexrow.unknown { color: var(--gray); border-style: dashed; border-color: var(--gray); }
+  .dexrow.unknown .num { background: var(--gray); }
+  .dexrow.unknown:active { background: var(--paper); color: var(--gray); }
+
+  /* ---------- entry page ---------- */
+  .crumb {
+    align-self: flex-start;
+    border: 2px solid var(--ink);
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    background: var(--paper);
+  }
+  .crumb:active { background: var(--ink); color: var(--paper); }
+
+  .e-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .e-head h1 { margin: 2px 0 0; font-size: 26px; letter-spacing: 0.05em; line-height: 1.1; }
+  .e-head .region { font-size: 12px; color: var(--gray); letter-spacing: 0.06em; margin-top: 2px; }
+
+  .spritebox { position: relative; }
+  .spritebox svg { display: block; width: 100%; height: auto; }
+  .spritebox .coords {
+    position: absolute;
+    right: 6px;
+    bottom: 5px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    background: var(--paper);
+    padding: 0 4px;
+  }
+
+  .flavor {
+    border: 2px solid var(--ink);
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    margin: 5px 3px;
+    padding: 12px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; }
+  .stats > div { padding: 8px 10px 7px; border: 1px solid var(--faint); margin: -0.5px; }
+  .stats .k { font-size: 9px; font-weight: 700; letter-spacing: 0.16em; color: var(--gray); }
+  .stats .v { font-size: 14px; font-weight: 700; margin-top: 1px; }
+
+  .tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 2px solid var(--ink); }
+  .tabs button {
+    padding: 9px 0 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: var(--paper);
+  }
+  .tabs button + button { border-left: 2px solid var(--ink); }
+  .tabs button.on { background: var(--ink); color: var(--paper); }
+
+  .facts { margin: 0; padding: 0; list-style: none; }
+  .facts li { padding: 10px 2px; display: flex; gap: 9px; }
+  .facts li + li { border-top: 1px solid var(--faint); }
+  .facts .bullet { color: var(--red); flex: none; font-size: 12px; padding-top: 1px; }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { padding: 11px 2px; }
+  .tl-item + .tl-item { border-top: 1px solid var(--faint); }
+  .tl-item .era {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 2px 6px;
+    margin-bottom: 5px;
+  }
+  .tl-item.deep .era { background: var(--green); }
+  .tl-item .t { font-weight: 700; font-size: 14px; letter-spacing: 0.03em; margin-bottom: 2px; }
+  .tl-item .x { color: var(--ink); font-size: 13px; line-height: 1.55; }
+
+  .collectbtn {
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    font-size: 12px;
+    padding: 13px 0;
+    width: 100%;
+  }
+  .collectbtn:active { background: var(--paper); color: var(--ink); }
+  .collectbtn.undo { background: var(--paper); color: var(--ink); }
+  .collected-line { text-align: center; font-size: 11px; letter-spacing: 0.1em; color: var(--red); font-weight: 700; }
+
+  /* ---------- map ---------- */
+  .mapbox svg { display: block; width: 100%; height: auto; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 8px 10px; border-top: 2px solid var(--ink); font-size: 10px; letter-spacing: 0.08em; color: var(--gray); font-weight: 700; }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+
+  .pinrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    padding: 9px 10px;
+  }
+  .pinrow:active { background: var(--ink); color: var(--paper); }
+  .pinrow .nm { font-weight: 700; letter-spacing: 0.05em; flex: 1; }
+  .pinrow .sub { font-size: 11px; color: var(--gray); }
+  .pinrow:active .sub { color: inherit; }
+
+  /* ---------- info ---------- */
+  .prose { font-size: 13px; line-height: 1.65; }
+  .prose p { margin: 0 0 12px; }
+  .prose b { letter-spacing: 0.04em; }
+  .kv { font-size: 12px; }
+  .kv div { display: flex; justify-content: space-between; padding: 7px 2px; }
+  .kv div + div { border-top: 1px solid var(--faint); }
+  .kv .k { color: var(--gray); letter-spacing: 0.08em; font-size: 10px; font-weight: 700; padding-top: 2px; }
+
+  /* ---------- e-ink refresh flash ---------- */
+  #flash {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--ink);
+    pointer-events: none;
+    display: none;
+  }
+  #flash.on { display: block; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="in">
+    <span class="mark"><span class="dia">◆</span> TERRADEX</span>
+    <span class="tally" id="tally"></span>
+  </div>
+</div>
+
+<div class="wrap"><main id="view"></main></div>
+
+<div id="nav">
+  <div class="in">
+    <button id="nav-dex" onclick="go('#/dex')">DEX</button>
+    <button id="nav-map" onclick="go('#/map')">MAP</button>
+    <button id="nav-info" onclick="go('#/info')">INFO</button>
+  </div>
+</div>
+
+<div id="flash"></div>
+
+<script src="data.js"></script>
+<script src="map-data.js"></script>
+<script>
+/* ============================================================
+   TERRADEX — a Pokédex for places, in e-ink.
+   ============================================================ */
+const KEY = 'terradex-v1';
+const store = {
+  load() { try { return JSON.parse(localStorage.getItem(KEY)) || { collected: {} }; } catch { return { collected: {} }; } },
+  save(s) { localStorage.setItem(KEY, JSON.stringify(s)); },
+};
+
+const pad3 = n => String(n).padStart(3, '0');
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const STATUS_LABEL = { visited: 'COLLECTED', upcoming: 'EN ROUTE', wishlist: 'UNCHARTED' };
+const STATUS_GLYPH = { visited: '◆', upcoming: '◈', wishlist: '◇' };
+
+function effStatus(e) {
+  const s = store.load();
+  if (s.collected[e.id]) return 'visited';
+  return e.status;
+}
+function collectedDate(e) {
+  const s = store.load();
+  return s.collected[e.id] || (e.status === 'visited' ? e.visitedDate || '' : '');
+}
+function counts() {
+  const total = DEX.length;
+  const got = DEX.filter(e => effStatus(e) === 'visited').length;
+  return { got, total };
+}
+
+/* ---------- sprite (pixel art) ---------- */
+const SPRITE_COLOR = { '#': 'var(--ink)', 'R': 'var(--red)', 'G': 'var(--green)', 'g': 'var(--gray)' };
+function spriteSVG(sprite) {
+  const rows = sprite.length, cols = Math.max(...sprite.map(r => r.length));
+  let rects = '';
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < sprite[r].length; c++) {
+      const ch = sprite[r][c];
+      if (ch in SPRITE_COLOR) rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="${SPRITE_COLOR[ch]}"/>`;
+    }
+  }
+  return `<svg viewBox="0 0 ${cols} ${rows}" shape-rendering="crispEdges" role="img">${rects}</svg>`;
+}
+
+/* ---------- views ---------- */
+function viewDex() {
+  const { got, total } = counts();
+  const rows = DEX.map(e => {
+    const st = effStatus(e);
+    return `<button class="dexrow" onclick="go('#/entry/${e.id}')">
+      <span class="num">#${pad3(e.num)}</span>
+      <span class="mid">
+        <div class="nm">${esc(e.name.toUpperCase())}</div>
+        <div class="sub">${esc(e.region.toUpperCase())}</div>
+        <div class="chips">${e.types.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>
+      </span>
+      <span class="glyph g-${st}" title="${STATUS_LABEL[st]}">${STATUS_GLYPH[st]}</span>
+    </button>`;
+  }).join('');
+
+  let unknown = '';
+  const nextNum = (DEX[DEX.length - 1]?.num || 0) + 1;
+  for (let i = 0; i < (typeof DEX_UNKNOWN_SLOTS === 'number' ? DEX_UNKNOWN_SLOTS : 0); i++) {
+    unknown += `<div class="dexrow unknown">
+      <span class="num">#${pad3(nextNum + i)}</span>
+      <span class="mid"><div class="nm">???</div><div class="sub">NOT YET LOGGED</div></span>
+      <span class="glyph">·</span>
+    </div>`;
+  }
+
+  return `
+    <div class="dexcount">
+      <div class="panel"><span class="n" style="color:var(--red)">${pad3(got)}</span><span class="l">COLLECTED</span></div>
+      <div class="panel"><span class="n">${pad3(total)}</span><span class="l">LOGGED</span></div>
+      <div class="panel"><span class="n" style="color:var(--gray)">???</span><span class="l">OUT THERE</span></div>
+    </div>
+    ${rows}${unknown}`;
+}
+
+function viewEntry(id) {
+  const e = DEX.find(x => x.id === id);
+  if (!e) return `<div class="panel"><div class="panel-body">ENTRY NOT FOUND.</div></div>`;
+  const st = effStatus(e);
+  const date = collectedDate(e);
+  const tab = state.tab;
+
+  const statsHTML = Object.entries(e.stats).map(([k, v]) =>
+    `<div><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('');
+
+  let body = '';
+  if (tab === 'facts') {
+    body = `<ul class="facts">${e.facts.map(f => `<li><span class="bullet">▪</span><span>${esc(f)}</span></li>`).join('')}</ul>`;
+  } else {
+    const items = tab === 'history' ? e.history : e.deepTime;
+    const cls = tab === 'deep' ? 'tl-item deep' : 'tl-item';
+    body = `<div class="tl">${items.map(i =>
+      `<div class="${cls}"><span class="era">${esc(i.era)}</span><div class="t">${esc(i.title)}</div><div class="x">${esc(i.text)}</div></div>`).join('')}</div>`;
+  }
+
+  const lat = e.coords.lat, lon = e.coords.lon;
+  const coordStr = `${Math.abs(lat).toFixed(2)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(2)}°${lon >= 0 ? 'E' : 'W'}`;
+
+  const collectUI = st === 'visited'
+    ? `<div class="collected-line">◆ COLLECTED${date ? ' · ' + esc(date) : ''}</div>
+       <button class="collectbtn undo" onclick="unmark('${e.id}')">UNMARK</button>`
+    : `<button class="collectbtn" onclick="mark('${e.id}')">◆ MARK COLLECTED</button>`;
+
+  return `
+    <button class="crumb" onclick="go('#/dex')">← DEX</button>
+    <div class="e-head">
+      <div>
+        <span class="chip inv">#${pad3(e.num)}</span>
+        <h1>${esc(e.name.toUpperCase())}</h1>
+        <div class="region">${esc(e.region.toUpperCase())}</div>
+      </div>
+      <span class="stamp st-${st}">${STATUS_LABEL[st]}</span>
+    </div>
+    <div class="panel spritebox">
+      <div class="panel-head"><span>FIELD SPRITE</span><span>${e.types.map(t => esc(t)).join(' / ')}</span></div>
+      ${spriteSVG(e.sprite)}
+      <span class="coords">${coordStr}</span>
+    </div>
+    <div class="flavor">${esc(e.flavor)}</div>
+    <div class="panel">
+      <div class="panel-head"><span>STATS</span></div>
+      <div class="stats">${statsHTML}</div>
+    </div>
+    <div class="tabs">
+      <button class="${tab === 'facts' ? 'on' : ''}" onclick="setTab('facts')">FACTS</button>
+      <button class="${tab === 'history' ? 'on' : ''}" onclick="setTab('history')">HISTORY</button>
+      <button class="${tab === 'deep' ? 'on' : ''}" onclick="setTab('deep')">DEEP TIME</button>
+    </div>
+    <div class="panel"><div class="panel-body" style="padding:2px 10px">${body}</div></div>
+    ${collectUI}`;
+}
+
+function mapSVG() {
+  const G = MAP_GRID;
+  let dots = '';
+  for (let r = 0; r < G.rows; r++) {
+    const row = G.land[r];
+    for (let c = 0; c < G.cols; c++) {
+      if (row[c] === '#') dots += `<rect x="${c + 0.18}" y="${r + 0.18}" width="0.64" height="0.64" fill="var(--gray)"/>`;
+    }
+  }
+  const toXY = (lat, lon) => [
+    (lon - G.lonMin) / (G.lonMax - G.lonMin) * G.cols,
+    (G.latMax - lat) / (G.latMax - G.latMin) * G.rows,
+  ];
+  let marks = '';
+  for (const e of DEX) {
+    const st = effStatus(e);
+    const [x, y] = toXY(e.coords.lat, e.coords.lon);
+    const d = `M ${x} ${y - 1.7} L ${x + 1.7} ${y} L ${x} ${y + 1.7} L ${x - 1.7} ${y} Z`;
+    const color = st === 'wishlist' ? 'var(--ink)' : st === 'upcoming' ? 'var(--green)' : 'var(--red)';
+    const fill = st === 'visited' ? color : 'var(--paper)';
+    marks += `<g onclick="go('#/entry/${e.id}')" style="cursor:pointer">
+      <rect x="${x - 3}" y="${y - 3}" width="6" height="6" fill="transparent"/>
+      <path d="${d}" fill="${fill}" stroke="${color}" stroke-width="0.55"/>
+    </g>`;
+  }
+  return `<svg viewBox="0 0 ${G.cols} ${G.rows}" shape-rendering="crispEdges">${dots}${marks}</svg>`;
+}
+
+function viewMap() {
+  const { got, total } = counts();
+  const pins = DEX.map(e => {
+    const st = effStatus(e);
+    return `<button class="pinrow" onclick="go('#/entry/${e.id}')">
+      <span class="glyph g-${st}">${STATUS_GLYPH[st]}</span>
+      <span class="nm">${esc(e.name.toUpperCase())}</span>
+      <span class="sub">${esc(e.region.toUpperCase())}</span>
+    </button>`;
+  }).join('');
+  return `
+    <div class="panel mapbox">
+      <div class="panel-head"><span>WORLD GRID</span><span>${pad3(got)}/${pad3(total)}</span></div>
+      ${mapSVG()}
+      <div class="legend">
+        <span><span class="glyph g-visited">◆</span>COLLECTED</span>
+        <span><span class="glyph g-upcoming">◈</span>EN ROUTE</span>
+        <span><span class="glyph g-wishlist">◇</span>UNCHARTED</span>
+      </div>
+    </div>
+    ${pins}`;
+}
+
+function viewInfo() {
+  return `
+    <div class="panel">
+      <div class="panel-head dither"><span>ABOUT THIS UNIT</span></div>
+      <div class="panel-body prose">
+        <p><b>TERRADEX</b> is a field guide to places — visited, en route, and uncharted. Every entry logs the facts, the human history, and the deep time underneath: what stood on that ground when dinosaurs walked, and long before.</p>
+        <p>New entries are forged in code. Bring a destination to Claude, and a researched page ships to the dex as a commit.</p>
+        <p>Mark a place <b>◆ COLLECTED</b> when you have stood on its ground. Collections live on this device.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><span>SPEC</span></div>
+      <div class="panel-body kv">
+        <div><span class="k">FIRMWARE</span><span id="fw">v1</span></div>
+        <div><span class="k">DISPLAY</span><span>SIMULATED E-INK · 5 COLORS</span></div>
+        <div><span class="k">STORAGE</span><span>ON-DEVICE (LOCALSTORAGE)</span></div>
+        <div><span class="k">NETWORK</span><span>WORKS OFFLINE</span></div>
+        <div><span class="k">FUTURE HW</span><span>POCKET E-INK PANEL</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><span>INSTALL</span></div>
+      <div class="panel-body prose">
+        <p style="margin:0">On iPhone: open in Safari → Share → <b>Add to Home Screen</b>. It runs full-screen and offline, like a device of its own.</p>
+      </div>
+    </div>`;
+}
+
+/* ---------- router ---------- */
+const state = { tab: 'facts' };
+
+function route() {
+  const h = location.hash || '#/dex';
+  if (h.startsWith('#/entry/')) return { view: 'entry', id: h.slice(8) };
+  if (h === '#/map') return { view: 'map' };
+  if (h === '#/info') return { view: 'info' };
+  return { view: 'dex' };
+}
+
+function render() {
+  const r = route();
+  const el = document.getElementById('view');
+  if (r.view === 'entry') el.innerHTML = viewEntry(r.id);
+  else if (r.view === 'map') el.innerHTML = viewMap();
+  else if (r.view === 'info') el.innerHTML = viewInfo();
+  else el.innerHTML = viewDex();
+
+  for (const n of ['dex', 'map', 'info']) {
+    document.getElementById('nav-' + n).classList.toggle('on', r.view === n || (n === 'dex' && r.view === 'entry'));
+  }
+  const { got, total } = counts();
+  document.getElementById('tally').innerHTML = `<b>${pad3(got)}</b>/${pad3(total)} COLLECTED`;
+}
+
+/* e-ink page flip: hard black flash, then the new page is simply there */
+let flashTimer = null;
+function flip(fn) {
+  const f = document.getElementById('flash');
+  f.classList.add('on');
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => {
+    fn();
+    window.scrollTo(0, 0);
+    setTimeout(() => f.classList.remove('on'), 60);
+  }, 90);
+}
+
+function go(hash) {
+  if (location.hash === hash) return;
+  state.tab = 'facts';
+  location.hash = hash; // hashchange listener does the flip+render
+}
+function setTab(t) {
+  state.tab = t;
+  render(); // tab change is a partial refresh — no full flash, like e-ink partial update
+}
+
+function mark(id) {
+  const s = store.load();
+  s.collected[id] = new Date().toISOString().slice(0, 10);
+  store.save(s);
+  flip(render);
+}
+function unmark(id) {
+  const s = store.load();
+  delete s.collected[id];
+  store.save(s);
+  flip(render);
+}
+
+window.addEventListener('hashchange', () => flip(render));
+render();
+
+/* ---------- PWA ---------- */
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>

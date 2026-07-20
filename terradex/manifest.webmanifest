@@ -1,0 +1,15 @@
+{
+  "name": "Terradex",
+  "short_name": "Terradex",
+  "description": "A field guide to places — facts, history, and deep time.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#EDEBE3",
+  "theme_color": "#EDEBE3",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
