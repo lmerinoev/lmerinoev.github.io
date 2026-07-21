@@ -1,7 +1,11 @@
-const CACHE = 'terradex-v7';
+const CACHE = 'terradex-v9';
 const SHELL = [
   './', './index.html', './data.js', './map-data.js',
   './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-512.png',
+  './img/missoula-mt.jpg', './img/firestone-co.jpg', './img/estes-park-co.jpg',
+  './img/rochester-ny.jpg', './img/geneseo-ny.jpg', './img/leavenworth-ks.jpg',
+  './img/washington-dc.jpg', './img/atchison-ks.jpg', './img/hamilton-mt.jpg',
+  './img/los-angeles-ca.jpg',
 ];
 
 self.addEventListener('install', e => {

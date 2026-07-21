@@ -13,6 +13,8 @@
 //   url(#dt) stipple · url(#wl) gray water · url(#wg) green water
 //   url(#wv) vertical fall lines. Colors via var(--ink/--gray/--red/
 //   --green/--paper).
+// photo: hand-picked Unsplash image committed to img/ (offline-safe),
+//   with photographer credit and the entry's pastel tint.
 // deepTime / history: chronological, oldest first.
 // ============================================================
 
@@ -26,6 +28,7 @@ const DEX = [
     types: ['RIVER VALLEY', 'COLLEGE TOWN'],
     status: 'upcoming',
     coords: { lat: 46.8721, lon: -113.994 },
+    photo: { src: 'img/missoula-mt.jpg', credit: 'Matthew Lancaster', tint: '#CBE4CE' },
     art: `
       <!-- Mt Jumbo, far, with Glacial Lake Missoula strandlines -->
       <path d="M0 100 L58 58 L112 88 L168 42 L238 92 L400 92" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
@@ -92,6 +95,7 @@ const DEX = [
     types: ['HIGH PLAINS', 'COAL TOWN'],
     status: 'visited',
     coords: { lat: 40.1128, lon: -104.9367 },
+    photo: { src: 'img/firestone-co.jpg', credit: 'Mark Hessling', tint: '#EFE3C3' },
     art: `
       <!-- red plains sun -->
       <circle cx="322" cy="46" r="20" fill="var(--red)"/>
@@ -159,6 +163,7 @@ const DEX = [
     types: ['ALPINE VALLEY', 'PARK GATEWAY'],
     status: 'visited',
     coords: { lat: 40.3772, lon: -105.5217 },
+    photo: { src: 'img/estes-park-co.jpg', credit: 'Justin Wang', tint: '#C9E0E8' },
     art: `
       <!-- Longs Peak with the hatched Diamond face -->
       <path d="M0 96 L54 66 L92 82 L150 26 L216 92 L258 74 L306 96" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
@@ -238,6 +243,7 @@ const DEX = [
     types: ['CANAL CITY', 'FALLS CITY'],
     status: 'visited',
     coords: { lat: 43.1566, lon: -77.6088 },
+    photo: { src: 'img/rochester-ny.jpg', credit: 'Lokesh Paduchuri', tint: '#DAD3EC' },
     art: `
       <!-- mill buildings flanking High Falls -->
       <g stroke="var(--ink)" stroke-width="2" fill="var(--paper)">
@@ -311,6 +317,7 @@ const DEX = [
     types: ['VALLEY VILLAGE', 'COLLEGE TOWN'],
     status: 'visited',
     coords: { lat: 42.7959, lon: -77.817 },
+    photo: { src: 'img/geneseo-ny.jpg', credit: 'Stephen Crane', tint: '#F3CFD8' },
     art: `
       <!-- valley walls, seen from the hilltop -->
       <path d="M0 66 C70 46 150 44 220 54 C290 64 340 60 400 44" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
@@ -387,6 +394,7 @@ const DEX = [
     types: ['RIVER BLUFF', 'GARRISON TOWN'],
     status: 'visited',
     coords: { lat: 39.3111, lon: -94.9225 },
+    photo: { src: 'img/leavenworth-ks.jpg', credit: 'Samantha Sheppard', tint: '#F7D9BC' },
     art: `
       <!-- the Missouri below the bluff -->
       <path d="M0 140 C90 128 200 132 400 122 L400 170 L0 170 Z" fill="url(#wl)" stroke="var(--ink)" stroke-width="1.6"/>
@@ -461,6 +469,7 @@ const DEX = [
     types: ['CAPITAL', 'FALL LINE'],
     status: 'visited',
     coords: { lat: 38.9072, lon: -77.0369 },
+    photo: { src: 'img/washington-dc.jpg', credit: 'Andy He', tint: '#F3CFD8' },
     art: `
       <!-- cherry branch across the sky -->
       <path d="M0 22 C60 30 110 26 150 44 M64 27 C80 20 92 20 104 14 M118 32 C132 30 140 24 148 20"
@@ -537,6 +546,7 @@ const DEX = [
     types: ['RIVER BLUFF', 'RAIL TOWN'],
     status: 'visited',
     coords: { lat: 39.5631, lon: -95.1216 },
+    photo: { src: 'img/atchison-ks.jpg', credit: 'Andrew Benefield', tint: '#EFE3C3' },
     art: `
       <!-- the river and loess bluffs below -->
       <path d="M0 132 C60 122 140 128 220 120 C300 112 350 118 400 110 L400 170 L0 170 Z" fill="url(#wl)" stroke="var(--ink)" stroke-width="1.6"/>
@@ -606,6 +616,7 @@ const DEX = [
     types: ['VALLEY TOWN', 'BITTERROOT'],
     status: 'upcoming',
     coords: { lat: 46.2466, lon: -114.1593 },
+    photo: { src: 'img/hamilton-mt.jpg', credit: 'Roger Lipera', tint: '#CBE4CE' },
     art: `
       <!-- the Bitterroot front: canyon-notched wall -->
       <path d="M0 108 L36 44 L70 84 L104 36 L140 86 L176 40 L212 88 L248 34 L284 84 L318 46 L352 88 L378 62 L400 84"
@@ -678,6 +689,7 @@ const DEX = [
     types: ['BASIN CITY', 'PACIFIC COAST'],
     status: 'upcoming',
     coords: { lat: 34.0522, lon: -118.2437 },
+    photo: { src: 'img/los-angeles-ca.jpg', credit: 'Jake Blucker', tint: '#F7D9BC' },
     art: `
       <!-- low red sun over the Pacific -->
       <circle cx="86" cy="84" r="24" fill="var(--red)"/>

@@ -4,49 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#F2F2EF">
+<meta name="theme-color" content="#FFFFFF">
 <title>Terradex</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Terradex">
 <style>
   /* ---------------------------------------------------------
-     POSTER — every place is a gig poster. Giant outlined
-     numerals bleeding off the edge, 900-weight names slammed
-     over them, one circular status sticker, thick ink rules,
-     square corners. Reading content stays quiet underneath.
-     Five colors. No gradients, no eased motion. Pages flip.
+     SHOWCASE — photo-forward and airy. White ground, chunky
+     geometric display type, full-bleed image cards with white
+     overlays, rounded sheet detail pages, black pill actions,
+     anchored black dock.
      --------------------------------------------------------- */
   :root {
-    --paper: #F2F2EF;
-    --ink: #17171A;
-    --gray: #9A9A97;
-    --faint: #DCDCD7;
-    --stroke: #C7C7C2;
-    --red: #DB3B26;
-    --green: #2C7C46;
-    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --bg: #FFFFFF;
+    --ink: #141518;
+    --mut: #9A9FA6;
+    --soft: #F3F4F2;
+    --line: #ECEDEA;
+    --display: 'Futura', 'Century Gothic', 'Poppins', 'Trebuchet MS', -apple-system, sans-serif;
+    --body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   }
 
-  * { box-sizing: border-box; transition: none !important; animation: none; }
+  * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: auto; }
   body {
-    font-family: var(--sans);
-    background: var(--paper);
-    background-image: radial-gradient(rgba(23, 23, 26, 0.04) 1px, transparent 1px);
-    background-size: 3px 3px;
+    font-family: var(--body);
+    background: var(--bg);
     color: var(--ink);
     font-size: 15px;
     line-height: 1.55;
-    letter-spacing: -0.005em;
     margin: 0;
     min-height: 100vh;
   }
-  ::selection { background: var(--ink); color: var(--paper); }
+  ::selection { background: var(--ink); color: #fff; }
 
   button {
     font-family: inherit;
@@ -59,419 +53,377 @@
     -webkit-tap-highlight-color: transparent;
     text-align: left;
   }
-  button:focus-visible, a:focus-visible { outline: 3px solid var(--red); outline-offset: -3px; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; border-radius: 10px; }
   a { color: inherit; }
+  img { display: block; }
   .hidden { display: none !important; }
-  .mono { font-family: var(--mono); }
 
-  .bignum {
-    position: absolute;
-    right: -8px;
-    top: -16px;
-    font-size: 96px;
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1.5px var(--stroke);
-    pointer-events: none;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .stick {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 17px;
-    transform: rotate(8deg);
-    flex: none;
-  }
-  .stick.s-visited { background: var(--red); color: var(--paper); }
-  .stick.s-upcoming { background: var(--green); color: var(--paper); }
-  .stick.s-wishlist { background: none; color: var(--gray); border: 2px dashed var(--gray); }
-
-  .g-visited { color: var(--red); }
-  .g-upcoming { color: var(--green); }
-  .g-wishlist { color: var(--gray); }
-
-  /* ---------- chrome ---------- */
-  #topbar {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    background: var(--paper);
-    border-bottom: 2px solid var(--ink);
-    padding: calc(10px + env(safe-area-inset-top)) 16px 9px;
-  }
-  #topbar .in {
+  .wrap {
     max-width: 430px;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+    padding: 0 0 calc(96px + env(safe-area-inset-bottom));
   }
-  #topbar .mark { font-size: 16px; font-weight: 900; letter-spacing: 0.06em; }
-  #topbar .mark .dia { color: var(--red); font-size: 13px; }
-  #topbar .tally { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--gray); }
-  #topbar .tally b { color: var(--ink); }
+  .pagepad { padding: calc(18px + env(safe-area-inset-top)) 20px 0; }
 
+  /* ---------- dock ---------- */
   #nav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 5;
-    background: var(--paper);
-    border-top: 2px solid var(--ink);
+    z-index: 20;
+    background: var(--ink);
+    border-radius: 26px 26px 0 0;
   }
-  #nav .in { max-width: 430px; margin: 0 auto; display: flex; }
-  #nav button {
-    flex: 1;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gray);
-    /* buttons run through the home-indicator area so the bar meets the screen edge */
-    padding: 14px 0 calc(13px + env(safe-area-inset-bottom));
-  }
-  #nav button + button { border-left: 2px solid var(--ink); }
-  #nav button.on { background: var(--ink); color: var(--paper); }
-
-  .wrap {
+  #nav .in {
     max-width: 430px;
     margin: 0 auto;
-    padding: 0 0 calc(78px + env(safe-area-inset-bottom));
-  }
-  main { display: flex; flex-direction: column; }
-
-  /* ---------- masthead (dex) ---------- */
-  .masthead {
-    position: relative;
-    overflow: hidden;
-    padding: 22px 16px 16px;
-    border-bottom: 2px solid var(--ink);
-  }
-  .masthead .mh-big {
-    font-size: 78px;
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    line-height: 0.95;
-    color: var(--red);
-    font-variant-numeric: tabular-nums;
-  }
-  .masthead .mh-big i {
-    font-style: normal;
-    color: transparent;
-    -webkit-text-stroke: 2px var(--ink);
-  }
-  .masthead .mh-label {
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin: 2px 0 10px;
-  }
-  .masthead .dots { font-size: 15px; letter-spacing: 0.3em; }
-  .dots .d-visited { color: var(--red); }
-  .dots .d-upcoming { color: var(--green); }
-  .dots .d-wishlist, .dots .d-unknown { color: var(--gray); }
-
-  /* ---------- poster rows ---------- */
-  .prow {
-    position: relative;
-    overflow: hidden;
-    display: block;
-    width: 100%;
-    padding: 20px 16px 14px;
-    border-bottom: 2px solid var(--ink);
-  }
-  .prow:active { background: var(--ink); color: var(--paper); }
-  .prow:active .bignum { -webkit-text-stroke-color: #4B4B47; }
-  .prow:active .rg { color: var(--paper); }
-  .prow .nm {
-    position: relative;
-    font-size: 30px;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 0.95;
-    text-transform: uppercase;
-    max-width: 76%;
-  }
-  .prow .rg {
-    position: relative;
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gray);
-    margin-top: 6px;
-  }
-  .prow .stick { position: absolute; right: 14px; bottom: 14px; }
-  .prow.unknown .nm { color: var(--gray); }
-  .prow.unknown:active { background: none; color: inherit; }
-
-  .prow.sm { padding: 14px 16px 12px; }
-  .prow.sm .bignum { font-size: 60px; top: -10px; }
-  .prow.sm .nm { font-size: 21px; }
-  .prow.sm .stick { width: 34px; height: 34px; font-size: 13px; bottom: 12px; }
-
-  /* ---------- entry ---------- */
-  .crumb {
-    display: block;
-    width: 100%;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gray);
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--faint);
-  }
-  .crumb:active { color: var(--ink); }
-
-  .phero {
-    position: relative;
-    overflow: hidden;
-    padding: 26px 16px 18px;
-  }
-  .phero .bignum { font-size: 150px; top: -26px; right: -12px; -webkit-text-stroke-width: 2px; }
-  .phero h1 {
-    position: relative;
-    margin: 0;
-    font-size: 44px;
-    font-weight: 900;
-    letter-spacing: -0.035em;
-    line-height: 0.95;
-    text-transform: uppercase;
-    max-width: 88%;
-  }
-  .phero .rg {
-    position: relative;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gray);
-    margin-top: 8px;
-  }
-  .phero .stickline { position: relative; display: flex; align-items: center; gap: 10px; margin-top: 14px; }
-  .phero .stick { width: 40px; height: 40px; font-size: 15px; }
-  .phero .stlabel { font-size: 11px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; }
-
-  .plate { margin: 0; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
-  .plate svg { display: block; width: 100%; height: auto; }
-  .plate figcaption {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    letter-spacing: 0.12em;
-    color: var(--gray);
-    text-transform: uppercase;
-    padding: 8px 16px;
     display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    border-top: 1px solid var(--faint);
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 26px calc(12px + env(safe-area-inset-bottom));
   }
-
-  .flavor {
-    margin: 0;
-    padding: 22px 26px;
-    font-size: 17px;
-    font-weight: 600;
-    font-style: italic;
-    line-height: 1.55;
-    text-align: center;
-  }
-  .flavor::before {
-    content: '◆';
-    display: block;
-    font-style: normal;
-    font-size: 11px;
-    color: var(--red);
-    margin-bottom: 8px;
-  }
-
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 2px solid var(--ink);
-    border-bottom: 2px solid var(--ink);
-  }
-  .stats > div { padding: 10px 16px 9px; border-top: 2px solid var(--ink); }
-  .stats > div:nth-child(-n+2) { border-top: none; }
-  .stats > div:nth-child(odd) { border-right: 2px solid var(--ink); }
-  .stats .k {
-    font-family: var(--mono);
-    font-size: 8.5px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
-  .stats .v { font-size: 18px; font-weight: 900; letter-spacing: -0.02em; margin-top: 1px; }
-
-  .tabs { display: flex; gap: 22px; padding: 18px 16px 0; }
-  .tabs button {
-    font-size: 14px;
-    font-weight: 900;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--gray);
-    padding-bottom: 6px;
-    border-bottom: 4px solid transparent;
-  }
-  .tabs button.on { color: var(--ink); border-bottom-color: var(--ink); }
-
-  .tabbody { padding: 4px 16px 8px; }
-  .facts { margin: 0; padding: 0; list-style: none; }
-  .facts li { padding: 13px 0; display: flex; gap: 12px; font-size: 14.5px; line-height: 1.6; }
-  .facts li + li { border-top: 1px solid var(--faint); }
-  .facts .bullet { color: var(--red); flex: none; font-size: 10px; padding-top: 4px; }
-
-  .tl-item { padding: 14px 0; }
-  .tl-item + .tl-item { border-top: 1px solid var(--faint); }
-  .tl-item .era {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
-  .tl-item.deep .era { color: var(--green); }
-  .tl-item .t { font-weight: 800; font-size: 16px; letter-spacing: -0.015em; margin: 3px 0 3px; }
-  .tl-item .x { font-size: 14.5px; line-height: 1.6; }
-
-  .collectwrap { margin-top: 12px; }
-  .collectbtn {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: var(--red);
-    color: var(--paper);
-    font-size: 15px;
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 18px 0;
-    border-top: 2px solid var(--ink);
-  }
-  .collectbtn:active { background: var(--ink); }
-
-  .collected-wrap { text-align: center; padding: 10px 0 26px; border-top: 2px solid var(--ink); }
-  .bigstick {
-    width: 132px;
-    height: 132px;
+  #nav button {
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
-    background: var(--red);
-    color: var(--paper);
-    display: inline-flex;
-    flex-direction: column;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    transform: rotate(-9deg);
-    margin-top: 16px;
-    position: relative;
+    color: #8D9096;
   }
-  .bigstick::after {
+  #nav button svg { width: 22px; height: 22px; display: block; }
+  #nav button.on { background: #fff; color: var(--ink); }
+
+  /* ---------- dex ---------- */
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .roundbtn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+  }
+  .roundbtn:active { background: var(--line); }
+  .brandmark { font-family: var(--display); font-weight: 700; font-size: 15px; letter-spacing: 0.02em; }
+
+  .h1 {
+    font-family: var(--display);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.12;
+    margin: 0 0 4px;
+    max-width: 10ch;
+  }
+  .sub { font-family: var(--display); font-size: 13px; color: var(--mut); margin-bottom: 18px; }
+  .sub b { color: var(--ink); font-weight: 700; }
+
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chips button {
+    font-family: var(--display);
+    flex: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mut);
+    background: var(--soft);
+    border-radius: 999px;
+    padding: 10px 18px;
+  }
+  .chips button.on { background: var(--ink); color: #fff; }
+
+  .searchrow { margin: 0 0 14px; }
+  .searchrow input {
+    width: 100%;
+    border: none;
+    background: var(--soft);
+    border-radius: 999px;
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 13px 20px;
+  }
+  .searchrow input::placeholder { color: var(--mut); }
+
+  .cards { display: flex; flex-direction: column; gap: 16px; }
+  .placecard {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .placecard img { width: 100%; aspect-ratio: 4 / 4.4; object-fit: cover; }
+  .placecard::after {
     content: '';
     position: absolute;
-    inset: 7px;
-    border: 2px dashed var(--paper);
-    border-radius: 50%;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 38%, rgba(0,0,0,0) 62%, rgba(0,0,0,0.30) 100%);
+    pointer-events: none;
   }
-  .bigstick .g { font-size: 20px; line-height: 1; }
-  .bigstick .w { font-size: 12px; font-weight: 900; letter-spacing: 0.16em; }
-  .bigstick .d { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; }
-  .unmark {
-    display: block;
-    margin: 14px auto 0;
+  .placecard .nm {
+    position: absolute;
+    top: 16px;
+    left: 18px;
+    z-index: 1;
+    color: #fff;
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.15;
+    max-width: 60%;
+  }
+  .placecard .no {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    z-index: 1;
+    color: #fff;
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.95;
+  }
+  .placecard .view {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    z-index: 1;
+    background: #fff;
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 11px 20px;
+  }
+  .placecard .stat {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    z-index: 1;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .stat.s-visited { background: #fff; color: var(--ink); }
+  .stat.s-upcoming { background: rgba(255,255,255,0.28); color: #fff; border: 1.5px solid rgba(255,255,255,0.9); }
+  .stat.s-wishlist { background: rgba(255,255,255,0.28); color: #fff; border: 1.5px dashed rgba(255,255,255,0.9); }
+  .placecard:active img { opacity: 0.85; }
+
+  .unknowncard {
+    border: 2px dashed var(--line);
+    border-radius: 24px;
+    padding: 26px;
     text-align: center;
+    color: var(--mut);
+    font-family: var(--display);
+  }
+  .unknowncard .q { font-size: 26px; font-weight: 700; }
+  .unknowncard .t { font-size: 13px; font-weight: 600; margin-top: 2px; }
+  .noresults { text-align: center; color: var(--mut); font-family: var(--display); font-weight: 600; padding: 30px 0; }
+
+  /* ---------- entry ---------- */
+  .hero {
+    position: relative;
+    height: 47vh;
+    min-height: 320px;
+  }
+  .hero img { width: 100%; height: 100%; object-fit: cover; }
+  .hero .fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 30%);
+    pointer-events: none;
+  }
+  .fbtn {
+    position: absolute;
+    top: calc(14px + env(safe-area-inset-top));
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.82);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--ink);
+    z-index: 2;
+  }
+  .fbtn.l { left: 16px; }
+  .fbtn.r { right: 16px; font-size: 15px; }
+  .fbtn:active { background: #fff; }
+
+  .sheet {
+    position: relative;
+    background: var(--bg);
+    border-radius: 28px 28px 0 0;
+    margin-top: -30px;
+    padding: 24px 20px 8px;
+  }
+  .collectfab {
+    position: absolute;
+    top: -27px;
+    right: 22px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .collectfab.done { background: var(--ink); color: #fff; }
+  .sheet h1 {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 3px;
+    max-width: 84%;
+  }
+  .sheet .rg { font-family: var(--display); font-size: 13px; font-weight: 600; color: var(--mut); }
+  .sheet .credit { font-size: 10.5px; color: var(--mut); margin-top: 3px; }
+  .sheet .flavor { font-size: 14px; color: #5B5F66; line-height: 1.65; margin: 12px 0 0; }
+
+  .statchips { display: flex; gap: 10px; overflow-x: auto; margin: 16px -20px 0; padding: 0 20px 6px; scrollbar-width: none; }
+  .statchips::-webkit-scrollbar { display: none; }
+  .statchip {
+    flex: none;
+    background: var(--soft);
+    border-radius: 16px;
+    padding: 11px 15px 10px;
+    min-width: 92px;
+  }
+  .statchip .v { font-family: var(--display); font-size: 14.5px; font-weight: 700; white-space: nowrap; }
+  .statchip .k { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mut); margin-top: 1px; white-space: nowrap; }
+
+  .tabchips { display: flex; gap: 8px; overflow-x: auto; margin: 18px 0 14px; scrollbar-width: none; }
+  .tabchips::-webkit-scrollbar { display: none; }
+  .tabchips button {
+    font-family: var(--display);
+    flex: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--mut);
+    background: var(--soft);
+    border-radius: 999px;
+    padding: 9px 16px;
+  }
+  .tabchips button.on { background: var(--ink); color: #fff; }
+
+  .facts { margin: 0; padding: 0; list-style: none; }
+  .facts li { padding: 12px 0; display: flex; gap: 11px; font-size: 14px; line-height: 1.6; color: #3C4046; }
+  .facts li + li { border-top: 1px solid var(--line); }
+  .facts .bullet { flex: none; font-size: 10px; padding-top: 4px; color: var(--ink); }
+
+  .tl-item { padding: 12px 0; }
+  .tl-item + .tl-item { border-top: 1px solid var(--line); }
+  .tl-item .era {
+    display: inline-block;
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--gray);
+    background: var(--soft);
+    color: var(--mut);
+    border-radius: 999px;
+    padding: 3px 10px;
   }
+  .tl-item .t { font-family: var(--display); font-weight: 700; font-size: 15.5px; margin: 7px 0 2px; }
+  .tl-item .x { font-size: 14px; line-height: 1.6; color: #3C4046; }
+
+  .plateframe { border-radius: 18px; overflow: hidden; margin: 4px 0 6px; }
+  .plateframe svg { display: block; width: 100%; height: auto; }
+  .platecap { font-size: 10.5px; font-weight: 600; color: var(--mut); text-align: center; padding: 6px 0 10px; }
+
+  .actionrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 18px 0 10px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .actionrow .price .v { font-family: var(--display); font-size: 19px; font-weight: 700; }
+  .actionrow .price .k { font-size: 11px; color: var(--mut); font-weight: 600; }
+  .bookbtn {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 16px 30px;
+  }
+  .bookbtn:active { opacity: 0.8; }
+  .unmark { font-size: 11px; font-weight: 600; color: var(--mut); }
 
   /* ---------- map ---------- */
-  .secthead {
+  .mapcard { background: var(--soft); border-radius: 22px; padding: 14px; margin-bottom: 14px; }
+  .mapcard .mh { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px 10px; font-family: var(--display); }
+  .mapcard .mh .t { font-size: 15px; font-weight: 700; }
+  .mapcard .mh .c { font-size: 12px; font-weight: 600; color: var(--mut); }
+  .mapcard svg { display: block; width: 100%; height: auto; border-radius: 12px; background: #fff; }
+  .legend { display: flex; justify-content: center; gap: 16px; padding: 10px 0 0; font-size: 10.5px; font-weight: 600; color: var(--mut); font-family: var(--display); }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+
+  .pinrow {
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 20px 16px 10px;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    background: var(--soft);
+    border-radius: 20px;
+    padding: 10px 16px 10px 10px;
+    margin-bottom: 10px;
   }
-  .secthead h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-  }
-  .secthead .cnt { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: 0.08em; }
-  .mapblock { border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
-  .mapblock svg { display: block; width: 100%; height: auto; }
-  .legend {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 12px 0 4px;
-    font-size: 9.5px;
-    font-weight: 900;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
-  .legend span { display: flex; align-items: center; gap: 6px; }
-  .pinlist { margin-top: 14px; border-top: 2px solid var(--ink); }
+  .pinrow:active { background: var(--line); }
+  .pinrow img { width: 54px; height: 54px; object-fit: cover; border-radius: 14px; flex: none; }
+  .pinrow .mid { flex: 1; min-width: 0; }
+  .pinrow .nm { font-family: var(--display); font-size: 16px; font-weight: 700; }
+  .pinrow .rg { font-size: 11.5px; font-weight: 600; color: var(--mut); }
+  .pinrow .st { font-size: 15px; flex: none; }
 
   /* ---------- info ---------- */
-  .prose { font-size: 14.5px; line-height: 1.7; padding: 6px 16px 14px; }
-  .prose p { margin: 10px 0 0; }
-  .kv { padding: 0 16px 10px; }
-  .kv div {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--faint);
-    font-size: 14px;
-    font-weight: 700;
-  }
+  .infocard { background: var(--soft); border-radius: 22px; padding: 18px 20px; margin-bottom: 14px; }
+  .infocard h3 { margin: 0 0 6px; font-family: var(--display); font-size: 15px; font-weight: 700; }
+  .prose { font-size: 14px; line-height: 1.65; color: #3C4046; }
+  .prose p { margin: 8px 0 0; }
+  .kv div { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E1; font-size: 13.5px; font-weight: 600; }
   .kv div:last-child { border-bottom: none; }
-  .kv .k {
-    font-family: var(--mono);
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
-
+  .kv .k { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mut); }
 </style>
 </head>
 <body>
-
-<div id="topbar">
-  <div class="in">
-    <span class="mark"><span class="dia">◆</span> TERRADEX</span>
-    <span class="tally" id="tally"></span>
-  </div>
-</div>
 
 <div class="wrap"><main id="view"></main></div>
 
 <div id="nav">
   <div class="in">
-    <button id="nav-dex" onclick="go('#/dex')">Dex</button>
-    <button id="nav-map" onclick="go('#/map')">Map</button>
-    <button id="nav-info" onclick="go('#/info')">Info</button>
+    <button id="nav-dex" onclick="go('#/dex')" aria-label="Dex">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.5 21.5 12 12 21.5 2.5 12Z"/></svg>
+    </button>
+    <button id="nav-map" onclick="go('#/map')" aria-label="Map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Z"/><path d="M9 4v13M15 6.5v13"/></svg>
+    </button>
+    <button id="nav-info" onclick="go('#/info')" aria-label="Info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r="0.6" fill="currentColor"/></svg>
+    </button>
   </div>
 </div>
 
@@ -479,7 +431,7 @@
 <script src="map-data.js"></script>
 <script>
 /* ============================================================
-   TERRADEX — a Pokédex for places, as a poster wall.
+   TERRADEX — a Pokédex for places. Showcase edition.
    ============================================================ */
 const KEY = 'terradex-v1';
 const store = {
@@ -508,113 +460,124 @@ function counts() {
   return { got, total };
 }
 
-/* ---------- field plates (engraved-style SVG illustrations) ---------- */
+/* ---------- field plates (engraved SVG, shown in Deep time) ---------- */
 const ART_DEFS = `<defs>
-  <pattern id="hg" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--gray)" stroke-width="1"/></pattern>
+  <pattern id="hg" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--mut)" stroke-width="1"/></pattern>
   <pattern id="hi" width="3.5" height="3.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3.5" stroke="var(--ink)" stroke-width="1"/></pattern>
-  <pattern id="hx" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6M6 0L0 6" stroke="var(--gray)" stroke-width="0.7" fill="none"/></pattern>
-  <pattern id="dt" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.4" cy="1.4" r="0.9" fill="var(--gray)"/><circle cx="4.4" cy="4.4" r="0.9" fill="var(--gray)"/></pattern>
-  <pattern id="wl" width="9" height="5" patternUnits="userSpaceOnUse"><line x1="0" y1="1.5" x2="6" y2="1.5" stroke="var(--gray)" stroke-width="1"/></pattern>
-  <pattern id="wg" width="9" height="5" patternUnits="userSpaceOnUse"><line x1="0" y1="1.5" x2="6" y2="1.5" stroke="var(--green)" stroke-width="1.1"/></pattern>
-  <pattern id="wv" width="5" height="9" patternUnits="userSpaceOnUse"><line x1="1.5" y1="0" x2="1.5" y2="7" stroke="var(--gray)" stroke-width="1"/></pattern>
+  <pattern id="hx" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6M6 0L0 6" stroke="var(--mut)" stroke-width="0.7" fill="none"/></pattern>
+  <pattern id="dt" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.4" cy="1.4" r="0.9" fill="var(--mut)"/><circle cx="4.4" cy="4.4" r="0.9" fill="var(--mut)"/></pattern>
+  <pattern id="wl" width="9" height="5" patternUnits="userSpaceOnUse"><line x1="0" y1="1.5" x2="6" y2="1.5" stroke="var(--mut)" stroke-width="1"/></pattern>
+  <pattern id="wg" width="9" height="5" patternUnits="userSpaceOnUse"><line x1="0" y1="1.5" x2="6" y2="1.5" stroke="#6E8F6E" stroke-width="1.1"/></pattern>
+  <pattern id="wv" width="5" height="9" patternUnits="userSpaceOnUse"><line x1="1.5" y1="0" x2="1.5" y2="7" stroke="var(--mut)" stroke-width="1"/></pattern>
 </defs>`;
 function artSVG(art) {
-  return `<svg viewBox="0 0 400 170" role="img">${ART_DEFS}${art}</svg>`;
+  return `<svg viewBox="0 0 400 170" role="img"
+    style="--gray:#A9ADA6; --red:#C8705C; --green:#6E8F6E; --paper:#F3F4F2; background:#F3F4F2">${ART_DEFS}${art}</svg>`;
 }
 
 /* ---------- views ---------- */
+const FILTERS = [
+  { key: 'all', label: 'All' },
+  { key: 'visited', label: 'Collected' },
+  { key: 'upcoming', label: 'En route' },
+];
+
 function viewDex() {
   const { got, total } = counts();
-  const unknownSlots = typeof DEX_UNKNOWN_SLOTS === 'number' ? DEX_UNKNOWN_SLOTS : 0;
-  const dots = DEX.map(e => `<span class="d-${effStatus(e)}">${STATUS_GLYPH[effStatus(e)]}</span>`).join('')
-    + `<span class="d-unknown">${'·'.repeat(unknownSlots)}</span>`;
+  const q = state.q.trim().toLowerCase();
+  let list = DEX.filter(e => state.filter === 'all' || effStatus(e) === state.filter);
+  if (q) {
+    list = list.filter(e => e.name.toLowerCase().includes(q)
+      || e.region.toLowerCase().includes(q)
+      || pad3(e.num).includes(q)
+      || e.types.join(' ').toLowerCase().includes(q));
+  }
 
-  const rows = DEX.map(e => {
+  const cards = list.map(e => {
     const st = effStatus(e);
-    return `<button class="prow" onclick="go('#/entry/${e.id}')">
-      <span class="bignum">${pad3(e.num)}</span>
-      <div class="nm">${esc(e.name)}</div>
-      <div class="rg">${esc(e.region)} · ${STATUS_LABEL[st]}</div>
-      <span class="stick s-${st}">${STATUS_GLYPH[st]}</span>
+    return `<button class="placecard" onclick="go('#/entry/${e.id}')">
+      <img src="${e.photo.src}" alt="${esc(e.name)}" loading="lazy">
+      <span class="nm">${esc(e.name)}</span>
+      <span class="no">Nº ${pad3(e.num)}</span>
+      <span class="view">View place</span>
+      <span class="stat s-${st}">${STATUS_GLYPH[st]}</span>
     </button>`;
   }).join('');
 
-  let unknown = '';
-  const nextNum = (DEX[DEX.length - 1]?.num || 0) + 1;
-  for (let i = 0; i < unknownSlots; i++) {
-    unknown += `<div class="prow unknown">
-      <span class="bignum">${pad3(nextNum + i)}</span>
-      <div class="nm">???</div>
-      <div class="rg">Not yet logged</div>
-      <span class="stick s-wishlist">?</span>
-    </div>`;
-  }
+  const unknown = (!q && state.filter === 'all')
+    ? `<div class="unknowncard"><div class="q">?</div><div class="t">Nº ${pad3((DEX[DEX.length - 1]?.num || 0) + 1)} awaits — name a place</div></div>`
+    : '';
 
   return `
-    <div class="masthead">
-      <span class="bignum">DEX</span>
-      <div class="mh-big">${got}<i>/${total}</i></div>
-      <div class="mh-label">Places collected</div>
-      <div class="dots">${dots}</div>
-    </div>
-    ${rows}${unknown}`;
+    <div class="pagepad">
+      <div class="topbar">
+        <span class="brandmark">◆ Terradex</span>
+        <button class="roundbtn" onclick="toggleSearch()" aria-label="Search">⌕</button>
+      </div>
+      <h1 class="h1">Find Your Next Place</h1>
+      <div class="sub">A field guide to everywhere — <b>${got} of ${total}</b> collected</div>
+      ${state.search ? `<div class="searchrow"><input id="q" type="search" placeholder="Name, number, or type"
+        value="${esc(state.q)}" oninput="setQuery(this.value)" autocomplete="off"></div>` : ''}
+      <div class="chips">${FILTERS.map(f =>
+        `<button class="${state.filter === f.key ? 'on' : ''}" onclick="setFilter('${f.key}')">${f.label}</button>`).join('')}
+      </div>
+      <div class="cards">${cards || `<div class="noresults">Nothing matches yet.</div>`}${unknown}</div>
+    </div>`;
 }
 
 function viewEntry(id) {
   const e = DEX.find(x => x.id === id);
-  if (!e) return `<div class="prose">Entry not found.</div>`;
+  if (!e) return `<div class="pagepad prose">Entry not found.</div>`;
   const st = effStatus(e);
   const date = collectedDate(e);
   const tab = state.tab;
-
-  const statsHTML = Object.entries(e.stats).map(([k, v]) =>
-    `<div><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('');
 
   let body = '';
   if (tab === 'facts') {
     body = `<ul class="facts">${e.facts.map(f => `<li><span class="bullet">◆</span><span>${esc(f)}</span></li>`).join('')}</ul>`;
   } else {
-    const items = tab === 'history' ? e.history : e.deepTime;
-    const cls = tab === 'deep' ? 'tl-item deep' : 'tl-item';
-    body = items.map(i =>
-      `<div class="${cls}"><span class="era">${esc(i.era)}</span><div class="t">${esc(i.title)}</div><div class="x">${esc(i.text)}</div></div>`).join('');
+    const deep = tab === 'deep';
+    const items = deep ? e.deepTime : e.history;
+    const plate = deep
+      ? `<div class="plateframe">${artSVG(e.art)}</div>
+         <div class="platecap">Field plate Nº ${pad3(e.num)} — the deep-time scene, engraved</div>`
+      : '';
+    body = plate + items.map(i =>
+      `<div class="tl-item"><span class="era">${esc(i.era)}</span><div class="t">${esc(i.title)}</div><div class="x">${esc(i.text)}</div></div>`).join('');
   }
 
-  const lat = e.coords.lat, lon = e.coords.lon;
-  const coordStr = `${Math.abs(lat).toFixed(2)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(2)}°${lon >= 0 ? 'E' : 'W'}`;
-
   const userCollected = !!store.load().collected[e.id];
-  const collectUI = st === 'visited'
-    ? `<div class="collected-wrap">
-         <div class="bigstick"><span class="g">◆</span><span class="w">COLLECTED</span>${date ? `<span class="d">${esc(date)}</span>` : ''}</div>
-         ${userCollected ? `<button class="unmark" onclick="unmark('${e.id}')">Unmark</button>` : ''}
-       </div>`
-    : `<button class="collectbtn" onclick="mark('${e.id}')">◆ Mark collected</button>`;
+  const action = st === 'visited'
+    ? `<div class="price"><div class="v">◆ Collected</div><div class="k">${date ? esc(date) : 'in the bag'}${userCollected ? ` · <button class="unmark" onclick="unmark('${e.id}')">unmark</button>` : ''}</div></div>
+       <button class="bookbtn" onclick="go('#/map')">See map</button>`
+    : `<div class="price"><div class="v">${STATUS_GLYPH[st]} ${STATUS_LABEL[st]}</div><div class="k">${st === 'upcoming' ? 'trip coming up' : 'someday'}</div></div>
+       <button class="bookbtn" onclick="mark('${e.id}')">◆ Collect</button>`;
 
   return `
-    <button class="crumb" onclick="go('#/dex')">← Dex</button>
-    <header class="phero">
-      <span class="bignum">${pad3(e.num)}</span>
+    <div class="hero">
+      <img src="${e.photo.src}" alt="${esc(e.name)}">
+      <div class="fade"></div>
+      <button class="fbtn l" onclick="go('#/dex')" aria-label="Back">←</button>
+      <span class="fbtn r" title="${STATUS_LABEL[st]}">${STATUS_GLYPH[st]}</span>
+    </div>
+    <div class="sheet">
+      <button class="collectfab ${st === 'visited' ? 'done' : ''}" aria-label="Collect"
+        onclick="${st === 'visited' ? `go('#/map')` : `mark('${e.id}')`}">◆</button>
       <h1>${esc(e.name)}</h1>
-      <div class="rg">${esc(e.region)} · ${e.types.map(esc).join(' / ')}</div>
-      <div class="stickline">
-        <span class="stick s-${st}">${STATUS_GLYPH[st]}</span>
-        <span class="stlabel g-${st}">${STATUS_LABEL[st]}</span>
+      <div class="rg">Nº ${pad3(e.num)} · ${esc(e.region)}</div>
+      <div class="credit">photo: ${esc(e.photo.credit)} / Unsplash</div>
+      <p class="flavor">${esc(e.flavor)}</p>
+      <div class="statchips">${Object.entries(e.stats).map(([k, v]) =>
+        `<div class="statchip"><div class="v">${esc(v)}</div><div class="k">${esc(k)}</div></div>`).join('')}
       </div>
-    </header>
-    <figure class="plate">
-      ${artSVG(e.art)}
-      <figcaption><span>Field plate Nº ${pad3(e.num)}</span><span>${coordStr}</span></figcaption>
-    </figure>
-    <p class="flavor">${esc(e.flavor)}</p>
-    <section class="stats">${statsHTML}</section>
-    <nav class="tabs">
-      <button class="${tab === 'facts' ? 'on' : ''}" onclick="setTab('facts')">Facts</button>
-      <button class="${tab === 'history' ? 'on' : ''}" onclick="setTab('history')">History</button>
-      <button class="${tab === 'deep' ? 'on' : ''}" onclick="setTab('deep')">Deep time</button>
-    </nav>
-    <div class="tabbody">${body}</div>
-    <div class="collectwrap">${collectUI}</div>`;
+      <div class="tabchips">
+        <button class="${tab === 'facts' ? 'on' : ''}" onclick="setTab('facts')">Facts</button>
+        <button class="${tab === 'history' ? 'on' : ''}" onclick="setTab('history')">History</button>
+        <button class="${tab === 'deep' ? 'on' : ''}" onclick="setTab('deep')">Deep time</button>
+      </div>
+      ${body}
+      <div class="actionrow">${action}</div>
+    </div>`;
 }
 
 function mapSVG(G, size) {
@@ -622,7 +585,7 @@ function mapSVG(G, size) {
   for (let r = 0; r < G.rows; r++) {
     const row = G.land[r];
     for (let c = 0; c < G.cols; c++) {
-      if (row[c] === '#') dots += `<rect x="${c + 0.18}" y="${r + 0.18}" width="0.64" height="0.64" fill="var(--gray)"/>`;
+      if (row[c] === '#') dots += `<rect x="${c + 0.18}" y="${r + 0.18}" width="0.64" height="0.64" fill="#C9CCC6"/>`;
     }
   }
   const inBounds = e => e.coords.lon >= G.lonMin && e.coords.lon <= G.lonMax
@@ -636,11 +599,11 @@ function mapSVG(G, size) {
     const st = effStatus(e);
     const [x, y] = toXY(e.coords.lat, e.coords.lon);
     const d = `M ${x} ${y - size} L ${x + size} ${y} L ${x} ${y + size} L ${x - size} ${y} Z`;
-    const color = st === 'wishlist' ? 'var(--ink)' : st === 'upcoming' ? 'var(--green)' : 'var(--red)';
-    const fill = st === 'visited' ? color : 'var(--paper)';
+    const color = st === 'wishlist' ? '#9A9FA6' : '#141518';
+    const fill = st === 'visited' ? '#141518' : '#FFFFFF';
     marks += `<g onclick="go('#/entry/${e.id}')" style="cursor:pointer">
       <rect x="${x - 3}" y="${y - 3}" width="6" height="6" fill="transparent"/>
-      <path d="${d}" fill="${fill}" stroke="${color}" stroke-width="0.55"/>
+      <path d="${d}" fill="${fill}" stroke="${color}" stroke-width="0.6"/>
     </g>`;
   }
   return `<svg viewBox="0 0 ${G.cols} ${G.rows}" shape-rendering="crispEdges">${dots}${marks}</svg>`;
@@ -650,53 +613,70 @@ function viewMap() {
   const { got, total } = counts();
   const pins = DEX.map(e => {
     const st = effStatus(e);
-    return `<button class="prow sm" onclick="go('#/entry/${e.id}')">
-      <span class="bignum">${pad3(e.num)}</span>
-      <div class="nm">${esc(e.name)}</div>
-      <div class="rg">${esc(e.region)}</div>
-      <span class="stick s-${st}">${STATUS_GLYPH[st]}</span>
+    return `<button class="pinrow" onclick="go('#/entry/${e.id}')">
+      <img src="${e.photo.src}" alt="" loading="lazy">
+      <span class="mid">
+        <div class="nm">${esc(e.name)}</div>
+        <div class="rg">${esc(e.region)}</div>
+      </span>
+      <span class="st">${STATUS_GLYPH[st]}</span>
     </button>`;
   }).join('');
   const usPins = typeof MAP_GRID_US !== 'undefined'
     && DEX.some(e => e.coords.lon >= MAP_GRID_US.lonMin && e.coords.lon <= MAP_GRID_US.lonMax
       && e.coords.lat >= MAP_GRID_US.latMin && e.coords.lat <= MAP_GRID_US.latMax);
   return `
-    <div class="secthead"><h2>World grid</h2><span class="cnt">${pad3(got)}/${pad3(total)}</span></div>
-    <div class="mapblock">${mapSVG(MAP_GRID, 1.7)}</div>
-    <div class="legend">
-      <span><span class="g-visited">◆</span>Collected</span>
-      <span><span class="g-upcoming">◈</span>En route</span>
-      <span><span class="g-wishlist">◇</span>Uncharted</span>
-    </div>
-    ${usPins ? `<div class="secthead"><h2>Region · USA</h2></div>
-    <div class="mapblock">${mapSVG(MAP_GRID_US, 1.5)}</div>` : ''}
-    <div class="pinlist">${pins}</div>`;
+    <div class="pagepad">
+      <h1 class="h1">Your Map So Far</h1>
+      <div class="sub"><b>${got} of ${total}</b> diamonds filled in</div>
+      <div class="mapcard">
+        <div class="mh"><span class="t">World</span><span class="c">${got}/${total}</span></div>
+        ${mapSVG(MAP_GRID, 1.7)}
+        <div class="legend">
+          <span>◆ Collected</span><span>◇ En route</span>
+        </div>
+      </div>
+      ${usPins ? `<div class="mapcard">
+        <div class="mh"><span class="t">USA</span></div>
+        ${mapSVG(MAP_GRID_US, 1.5)}
+      </div>` : ''}
+      ${pins}
+    </div>`;
 }
 
 function viewInfo() {
   return `
-    <div class="secthead"><h2>About this unit</h2></div>
-    <div class="prose" style="padding-top:0">
-      <p style="margin-top:0"><b>Terradex</b> is a field guide to places — visited, en route, and uncharted. Every entry logs the facts, the human history, and the deep time underneath: what stood on that ground when dinosaurs walked, and long before.</p>
-      <p>New entries are forged in code. Bring a destination to Claude, and a researched page ships to the dex as a commit.</p>
-      <p>Mark a place <b style="color:var(--red)">◆ collected</b> when you have stood on its ground. Collections live on this device.</p>
-    </div>
-    <div class="secthead"><h2>Spec</h2></div>
-    <div class="kv">
-      <div><span class="k">Firmware</span><span>v7 · POSTER</span></div>
-      <div><span class="k">Display</span><span>Simulated e-ink · 5 colors</span></div>
-      <div><span class="k">Storage</span><span>On-device (localStorage)</span></div>
-      <div><span class="k">Network</span><span>Works offline</span></div>
-      <div><span class="k">Future HW</span><span>Pocket e-ink panel</span></div>
-    </div>
-    <div class="secthead"><h2>Install</h2></div>
-    <div class="prose" style="padding-top:0">
-      <p style="margin:0">On iPhone: open in Safari → Share → <b>Add to Home Screen</b>. It runs full-screen and offline, like a device of its own.</p>
+    <div class="pagepad">
+      <h1 class="h1">About This Guide</h1>
+      <div class="sub">A Pokédex for places</div>
+      <div class="infocard">
+        <h3>How it works</h3>
+        <div class="prose">
+          <p style="margin-top:0">Every entry logs the facts, the human history, and the deep time underneath: what stood on that ground when dinosaurs walked, and long before.</p>
+          <p>New entries are forged in code. Bring a destination to Claude, and a researched page — photo, facts, deep time and all — ships to the dex as a commit.</p>
+          <p>Tap <b>◆ Collect</b> when you have stood on a place's ground. Collections live on this device.</p>
+        </div>
+      </div>
+      <div class="infocard">
+        <h3>Spec</h3>
+        <div class="kv">
+          <div><span class="k">Firmware</span><span>v9 · Showcase</span></div>
+          <div><span class="k">Photos</span><span>Unsplash, bundled offline</span></div>
+          <div><span class="k">Storage</span><span>On-device</span></div>
+          <div><span class="k">Network</span><span>Works offline</span></div>
+        </div>
+      </div>
+      <div class="infocard">
+        <h3>Install</h3>
+        <div class="prose">
+          <p style="margin:0">On iPhone: open in Safari → Share → <b>Add to Home Screen</b>. Runs full-screen and offline.</p>
+        </div>
+      </div>
     </div>`;
 }
 
 /* ---------- router ---------- */
-const state = { tab: 'facts' };
+const state = { tab: 'facts', q: '', filter: 'all', search: false };
 
 function route() {
   const h = location.hash || '#/dex';
@@ -717,18 +697,32 @@ function render() {
   for (const n of ['dex', 'map', 'info']) {
     document.getElementById('nav-' + n).classList.toggle('on', r.view === n || (n === 'dex' && r.view === 'entry'));
   }
-  const { got, total } = counts();
-  document.getElementById('tally').innerHTML = `<b>${pad3(got)}</b>/${pad3(total)}`;
 }
 
 function go(hash) {
-  if (location.hash === hash) return;
+  if (location.hash === hash) {
+    render();
+    window.scrollTo(0, 0);
+    return;
+  }
   state.tab = 'facts';
-  location.hash = hash; // hashchange listener renders
+  location.hash = hash;
 }
-function setTab(t) {
-  state.tab = t;
+function setTab(t) { state.tab = t; render(); }
+function setFilter(f) { state.filter = f; render(); }
+function toggleSearch() {
+  state.search = !state.search;
+  if (!state.search) state.q = '';
   render();
+  if (state.search) document.getElementById('q')?.focus();
+}
+function setQuery(v) {
+  state.q = v;
+  const cards = document.querySelector('.cards');
+  if (!cards) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = viewDex();
+  cards.replaceWith(tmp.querySelector('.cards'));
 }
 
 function mark(id) {
