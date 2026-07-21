@@ -61,31 +61,30 @@
   .wrap {
     max-width: 430px;
     margin: 0 auto;
-    padding: 0 0 calc(96px + env(safe-area-inset-bottom));
+    padding: 0 0 calc(112px + env(safe-area-inset-bottom));
   }
   .pagepad { padding: calc(18px + env(safe-area-inset-top)) 20px 0; }
 
-  /* ---------- dock ---------- */
+  /* ---------- floating dock, like the reference ---------- */
   #nav {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 20;
     background: var(--ink);
-    border-radius: 26px 26px 0 0;
+    border-radius: 999px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
   }
   #nav .in {
-    max-width: 430px;
-    margin: 0 auto;
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    padding: 12px 26px calc(12px + env(safe-area-inset-bottom));
+    gap: 22px;
+    padding: 8px 12px;
   }
   #nav button {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -660,7 +659,7 @@ function viewInfo() {
       <div class="infocard">
         <h3>Spec</h3>
         <div class="kv">
-          <div><span class="k">Firmware</span><span>v9 · Showcase</span></div>
+          <div><span class="k">Firmware</span><span>v10 · Showcase</span></div>
           <div><span class="k">Photos</span><span>Unsplash, bundled offline</span></div>
           <div><span class="k">Storage</span><span>On-device</span></div>
           <div><span class="k">Network</span><span>Works offline</span></div>
