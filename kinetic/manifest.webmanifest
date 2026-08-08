@@ -1,0 +1,15 @@
+{
+  "name": "Kinetic",
+  "short_name": "Kinetic",
+  "description": "A week of no-equipment indoor workouts. Fat burn, cardio, zero excuses.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#FFF6EA",
+  "theme_color": "#FFF6EA",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
