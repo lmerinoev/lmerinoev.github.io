@@ -1,5 +1,10 @@
-const CACHE = 'kinetic-v1';
-const SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-512.png'];
+const CACHE = 'kinetic-v2';
+const SHELL = [
+  './', './index.html', './manifest.webmanifest',
+  './ghost.js', './anims.js', './anims-core.js', './anims-a.js', './anims-b.js', './anims-c.js',
+  './vendor/three.module.min.js',
+  './icon.svg', './icon-180.png', './icon-512.png',
+];
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', e => {

@@ -1,12 +1,12 @@
 {
   "name": "Kinetic",
   "short_name": "Kinetic",
-  "description": "A week of no-equipment indoor workouts. Fat burn, cardio, zero excuses.",
+  "description": "A week of no-equipment indoor workouts, coached by Boo the ghost.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
-  "background_color": "#FFF6EA",
-  "theme_color": "#FFF6EA",
+  "background_color": "#131028",
+  "theme_color": "#131028",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
