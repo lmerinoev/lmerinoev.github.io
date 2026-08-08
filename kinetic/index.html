@@ -4,265 +4,293 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#FFF6EA">
+<meta name="theme-color" content="#131028">
 <title>Kinetic</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Kinetic">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ground: #FFF6EA;
-    --ink: #2D2A32;
-    --ink-soft: rgba(45, 42, 50, 0.55);
-    --card: #FFFFFF;
-    --coral: #FF6B6B;
-    --sun: #FFD166;
-    --mint: #06D6A0;
-    --sky: #4CC9F0;
-    --grape: #A78BFA;
-    --peach: #FFB4A2;
-    --line: #2D2A32;
-    --r-card: 22px;
-    --r-pill: 999px;
-    --shadow: 0 4px 0 var(--ink);
-    --display: 'Fredoka', sans-serif;
-    --body: 'Quicksand', sans-serif;
+    --bg0: #131028;
+    --bg1: #1d1840;
+    --card: rgba(255, 255, 255, 0.055);
+    --card-edge: rgba(255, 255, 255, 0.09);
+    --ink: #F2EFFF;
+    --ink-dim: rgba(242, 239, 255, 0.55);
+    --mint: #6EE7C8;
+    --lav: #A78BFA;
+    --pink: #FF8FAB;
+    --gold: #FFD97D;
+    --sky: #7DD3FC;
+    --r: 22px;
+    --display: 'Baloo 2', sans-serif;
+    --body: 'Nunito', sans-serif;
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; padding: 0; }
   body {
-    background: var(--ground);
+    background: var(--bg0);
+    background-image: radial-gradient(1100px 600px at 80% -10%, #2a2159 0%, transparent 60%),
+                      radial-gradient(900px 500px at -20% 30%, #1e1a4d 0%, transparent 55%);
+    background-attachment: fixed;
     color: var(--ink);
     font-family: var(--body);
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.45;
     touch-action: manipulation;
     -webkit-font-smoothing: antialiased;
     overscroll-behavior-y: none;
   }
-  button { font-family: inherit; color: inherit; }
+  button { font-family: inherit; color: inherit; background: none; border: none; padding: 0; }
 
   .screen { display: none; min-height: 100dvh; }
   .screen.on { display: block; }
-  .wrap { max-width: 480px; margin: 0 auto; padding: calc(var(--sat) + 18px) 18px calc(var(--sab) + 28px); }
+  .wrap { max-width: 480px; margin: 0 auto; padding: calc(var(--sat) + 16px) 18px calc(var(--sab) + 28px); }
+
+  .glass {
+    background: var(--card);
+    border: 1px solid var(--card-edge);
+    border-radius: var(--r);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
 
   /* ---------- HOME ---------- */
-  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
-  .brand .bolt {
-    width: 46px; height: 46px; border-radius: 14px; background: var(--coral);
-    border: 3px solid var(--ink); box-shadow: var(--shadow);
-    display: grid; place-items: center; transform: rotate(-6deg);
-  }
+  .hero { position: relative; text-align: center; padding-top: 4px; }
+  #booHome { width: 100%; height: 215px; display: block; }
   h1 {
-    font-family: var(--display); font-weight: 700; font-size: 34px;
-    letter-spacing: 0.5px; margin: 0;
+    font-family: var(--display); font-weight: 800; font-size: 40px; margin: -6px 0 0;
+    letter-spacing: 0.5px;
+    background: linear-gradient(100deg, var(--mint), var(--sky) 45%, var(--lav));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .tagline { color: var(--ink-soft); font-weight: 600; margin: 2px 0 18px; font-size: 15px; }
+  .tagline { color: var(--ink-dim); margin: 2px 0 18px; font-size: 14.5px; }
 
-  .hero {
-    background: var(--sun); border: 3px solid var(--ink); border-radius: var(--r-card);
-    box-shadow: var(--shadow); padding: 16px 18px; margin-bottom: 18px;
-    display: flex; align-items: center; gap: 14px;
-  }
-  .ring { position: relative; width: 64px; height: 64px; flex: none; }
-  .ring svg { transform: rotate(-90deg); }
+  .stats { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-bottom: 20px; }
+  .ring { position: relative; width: 62px; height: 62px; flex: none; }
+  .ring svg { transform: rotate(-90deg); display: block; }
   .ring .num {
     position: absolute; inset: 0; display: grid; place-items: center;
-    font-family: var(--display); font-weight: 700; font-size: 17px;
+    font-family: var(--display); font-weight: 700; font-size: 15px;
   }
-  .hero .msg { font-weight: 700; font-size: 15.5px; }
-  .hero .sub { font-weight: 600; font-size: 13px; color: rgba(45,42,50,0.6); margin-top: 2px; }
+  .stats .msg { text-align: left; }
+  .stats .msg b { font-family: var(--display); font-weight: 700; font-size: 15.5px; display: block; }
+  .stats .msg span { font-size: 12.5px; color: var(--ink-dim); }
 
-  .daylist { display: flex; flex-direction: column; gap: 14px; }
+  .sec-label {
+    font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--ink-dim); margin: 0 4px 10px;
+  }
+  .daylist { display: flex; flex-direction: column; gap: 11px; margin-bottom: 24px; }
   .daycard {
-    width: 100%; text-align: left; border: 3px solid var(--ink); border-radius: var(--r-card);
-    box-shadow: var(--shadow); padding: 15px 16px; cursor: pointer;
-    display: flex; align-items: center; gap: 14px; background: var(--card);
+    width: 100%; text-align: left; padding: 13px 15px; cursor: pointer;
+    display: flex; align-items: center; gap: 13px; position: relative;
     transition: transform 0.08s ease;
   }
-  .daycard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+  .daycard:active { transform: scale(0.98); }
   .daycard .dow {
-    flex: none; width: 54px; height: 54px; border-radius: 16px; border: 3px solid var(--ink);
-    display: grid; place-items: center; text-align: center;
-    font-family: var(--display); font-weight: 600; line-height: 1.05;
+    flex: none; width: 50px; height: 50px; border-radius: 16px;
+    display: grid; place-items: center; text-align: center; line-height: 1.02;
+    font-family: var(--display); color: #17132e;
   }
-  .daycard .dow b { display: block; font-size: 18px; font-weight: 700; }
-  .daycard .dow span { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .daycard .dow b { display: block; font-size: 19px; font-weight: 800; }
+  .daycard .dow span { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
   .daycard .info { flex: 1; min-width: 0; }
-  .daycard .t { display: block; font-family: var(--display); font-weight: 600; font-size: 17.5px; }
-  .daycard .m { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-top: 1px; }
-  .daycard .check {
-    flex: none; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--ink);
-    display: grid; place-items: center; font-size: 16px; background: var(--ground);
-    font-weight: 700;
-  }
-  .daycard.done .check { background: var(--mint); }
-  .daycard.today { position: relative; }
+  .daycard .t { display: block; font-family: var(--display); font-weight: 700; font-size: 16.5px; }
+  .daycard .m { display: block; font-size: 12.5px; color: var(--ink-dim); }
+  .daycard .st { flex: none; font-size: 17px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; }
+  .daycard.done .st { background: rgba(110, 231, 200, 0.16); color: var(--mint); }
+  .daycard.today { border-color: rgba(110, 231, 200, 0.55); box-shadow: 0 0 22px rgba(110, 231, 200, 0.14); }
   .todaytag {
-    position: absolute; top: -12px; right: 14px; background: var(--coral); color: #fff;
-    border: 2.5px solid var(--ink); border-radius: var(--r-pill); padding: 2px 11px;
-    font-family: var(--display); font-weight: 600; font-size: 11.5px; letter-spacing: 0.8px;
-    transform: rotate(2deg); text-transform: uppercase;
+    position: absolute; top: -9px; right: 14px;
+    background: linear-gradient(90deg, var(--mint), var(--sky)); color: #123;
+    border-radius: 99px; padding: 2px 11px;
+    font-family: var(--display); font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
   }
 
-  .settings { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
-  .toggle {
-    background: var(--card); border: 3px solid var(--ink); border-radius: var(--r-card);
-    box-shadow: var(--shadow); padding: 13px 16px; width: 100%;
-    display: flex; align-items: center; gap: 12px; cursor: pointer;
-  }
+  .toggles { display: flex; flex-direction: column; gap: 11px; }
+  .toggle { padding: 13px 15px; width: 100%; display: flex; align-items: center; gap: 12px; cursor: pointer; }
   .toggle .tt { flex: 1; text-align: left; }
-  .toggle .tt b { font-family: var(--display); font-weight: 600; font-size: 15.5px; display: block; }
-  .toggle .tt span { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .toggle .tt b { font-family: var(--display); font-weight: 700; font-size: 15px; display: block; }
+  .toggle .tt span { font-size: 12px; color: var(--ink-dim); }
   .knob {
-    flex: none; width: 52px; height: 30px; border-radius: var(--r-pill); border: 3px solid var(--ink);
-    background: #E8E0D4; position: relative; transition: background 0.15s;
+    flex: none; width: 48px; height: 28px; border-radius: 99px;
+    background: rgba(255,255,255,0.12); position: relative; transition: background 0.18s;
   }
   .knob::after {
-    content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
-    border-radius: 50%; background: #fff; border: 2.5px solid var(--ink); transition: left 0.15s;
+    content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
+    border-radius: 50%; background: #fff; transition: left 0.18s;
   }
   .toggle.on .knob { background: var(--mint); }
-  .toggle.on .knob::after { left: 24px; }
+  .toggle.on .knob::after { left: 23px; }
 
-  .fineprint { margin-top: 20px; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); text-align: center; }
-  .fineprint a { color: inherit; }
+  .fineprint { margin-top: 22px; font-size: 12px; color: var(--ink-dim); text-align: center; }
 
   /* ---------- DAY DETAIL ---------- */
-  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
   .backbtn {
-    width: 44px; height: 44px; border-radius: 14px; border: 3px solid var(--ink);
-    background: var(--card); box-shadow: var(--shadow); font-size: 19px; cursor: pointer;
+    width: 42px; height: 42px; border-radius: 14px; font-size: 18px; cursor: pointer;
     display: grid; place-items: center; flex: none;
+    background: var(--card); border: 1px solid var(--card-edge);
   }
-  .backbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
-  .dayhero {
-    border: 3px solid var(--ink); border-radius: var(--r-card); box-shadow: var(--shadow);
-    padding: 20px 18px; margin-bottom: 16px;
+  .dayhero { padding: 18px; margin-bottom: 14px; position: relative; overflow: hidden; }
+  .dayhero::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    background: var(--tint); opacity: 0.16; pointer-events: none;
   }
-  .dayhero .k { font-family: var(--display); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.75; }
-  .dayhero h2 { font-family: var(--display); font-weight: 700; font-size: 27px; margin: 3px 0 7px; }
-  .dayhero p { margin: 0; font-weight: 600; font-size: 14.5px; }
+  .dayhero .k { font-family: var(--display); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--ink-dim); }
+  .dayhero h2 { font-family: var(--display); font-weight: 800; font-size: 25px; margin: 2px 0 6px; }
+  .dayhero p { margin: 0; font-size: 14px; color: rgba(242,239,255,0.8); }
   .chips { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
   .chip {
-    background: rgba(255,255,255,0.65); border: 2.5px solid var(--ink); border-radius: var(--r-pill);
-    padding: 4px 12px; font-family: var(--display); font-weight: 600; font-size: 12.5px;
+    background: rgba(255,255,255,0.08); border-radius: 99px; padding: 4px 12px;
+    font-family: var(--display); font-weight: 600; font-size: 12px;
   }
-  .blocks { display: flex; flex-direction: column; gap: 14px; margin-bottom: 110px; }
-  .block {
-    background: var(--card); border: 3px solid var(--ink); border-radius: var(--r-card);
-    box-shadow: var(--shadow); padding: 15px 16px;
+  .blocks { display: flex; flex-direction: column; gap: 13px; margin-bottom: 110px; }
+  .block { padding: 14px 15px; }
+  .block h3 { font-family: var(--display); font-weight: 700; font-size: 15.5px; margin: 0 0 2px; }
+  .block .meta { font-size: 12px; font-weight: 700; color: var(--ink-dim); margin-bottom: 8px; }
+  .exrow {
+    display: flex; align-items: center; gap: 10px; padding: 9px 0; width: 100%;
+    border-top: 1px solid rgba(255,255,255,0.06); cursor: pointer; text-align: left;
   }
-  .block h3 {
-    font-family: var(--display); font-weight: 600; font-size: 16px; margin: 0 0 3px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .block .meta { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); margin-bottom: 10px; }
-  .exrow { display: flex; align-items: baseline; gap: 10px; padding: 6.5px 0; border-top: 2px dashed #EDE4D6; }
   .exrow:first-of-type { border-top: none; }
-  .exrow .nm { flex: 1; font-weight: 700; font-size: 14.5px; }
-  .exrow .nm small { display: block; font-weight: 600; font-size: 12px; color: var(--ink-soft); }
-  .exrow .sc { font-family: var(--display); font-weight: 600; font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+  .exrow .play {
+    flex: none; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(167, 139, 250, 0.16); color: var(--lav);
+    display: grid; place-items: center; font-size: 11px; padding-left: 2px;
+  }
+  .exrow .nm { flex: 1; font-weight: 800; font-size: 14px; }
+  .exrow .nm small { display: block; font-weight: 700; font-size: 11px; color: var(--mint); }
+  .exrow .sc { font-size: 11.5px; color: var(--ink-dim); text-align: right; max-width: 42%; }
   .notecard {
-    background: var(--sky); border: 3px solid var(--ink); border-radius: var(--r-card);
-    box-shadow: var(--shadow); padding: 14px 16px; font-weight: 700; font-size: 14px;
+    padding: 13px 15px; font-size: 13.5px; font-weight: 700;
+    border-color: rgba(125, 211, 252, 0.35); background: rgba(125, 211, 252, 0.08);
   }
-  .benchcard { background: var(--grape); }
-  .benchcard .bench-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
-  .benchcard label { display: block; font-family: var(--display); font-weight: 600; font-size: 12px; margin-bottom: 4px; }
-  .benchcard input {
-    width: 100%; border: 3px solid var(--ink); border-radius: 12px; padding: 9px 6px;
+  .benchcard { border-color: rgba(167, 139, 250, 0.4); background: rgba(167, 139, 250, 0.1); }
+  .bench-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .bench-grid label { display: block; font-family: var(--display); font-weight: 700; font-size: 11.5px; margin-bottom: 4px; color: var(--ink-dim); }
+  .bench-grid input {
+    width: 100%; border: 1px solid rgba(255,255,255,0.16); border-radius: 12px; padding: 9px 6px;
     font-family: var(--display); font-weight: 700; font-size: 18px; text-align: center;
-    background: #fff; color: var(--ink); appearance: none;
+    background: rgba(0,0,0,0.25); color: var(--ink); appearance: none;
   }
-  .benchcard input:focus { outline: 3px solid var(--sun); }
-  .delta { margin-top: 10px; font-weight: 700; font-size: 13.5px; }
+  .bench-grid input:focus { outline: 2px solid var(--lav); }
+  .delta { margin-top: 10px; font-weight: 800; font-size: 13px; color: var(--mint); }
 
   .startdock {
     position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 18px calc(var(--sab) + 14px);
-    background: linear-gradient(to top, var(--ground) 65%, transparent);
+    background: linear-gradient(to top, var(--bg0) 55%, transparent);
     display: flex; justify-content: center; z-index: 5;
   }
   .bigbtn {
-    width: 100%; max-width: 444px; border: 3px solid var(--ink); border-radius: var(--r-pill);
-    background: var(--coral); color: #fff; box-shadow: 0 5px 0 var(--ink);
-    font-family: var(--display); font-weight: 700; font-size: 19px; letter-spacing: 0.5px;
-    padding: 16px; cursor: pointer;
+    width: 100%; max-width: 444px; border-radius: 99px;
+    background: linear-gradient(95deg, var(--mint), var(--sky) 55%, var(--lav)); color: #141031;
+    font-family: var(--display); font-weight: 800; font-size: 18px; letter-spacing: 0.4px;
+    padding: 16px; cursor: pointer; box-shadow: 0 6px 28px rgba(110, 231, 200, 0.28);
   }
-  .bigbtn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink); }
+  .bigbtn:active { transform: scale(0.98); }
+
+  /* ---------- DEMO SHEET ---------- */
+  #sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    transform: translateY(105%); transition: transform 0.28s cubic-bezier(0.32, 0.72, 0.25, 1);
+  }
+  #sheet.on { transform: translateY(0); }
+  #sheetInner {
+    max-width: 480px; margin: 0 auto; background: #211c46;
+    border: 1px solid rgba(255,255,255,0.12); border-bottom: none;
+    border-radius: 26px 26px 0 0; padding: 10px 20px calc(var(--sab) + 20px);
+    box-shadow: 0 -18px 60px rgba(0, 0, 0, 0.5);
+  }
+  .grab { width: 40px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.22); margin: 2px auto 6px; }
+  #sheetCanvas { width: 100%; height: 250px; display: block; }
+  #sheetName { font-family: var(--display); font-weight: 800; font-size: 20px; text-align: center; margin: 0; }
+  #sheetCue { font-size: 13.5px; color: var(--ink-dim); text-align: center; margin: 3px 0 0; min-height: 20px; }
+  #sheetBackdrop {
+    position: fixed; inset: 0; z-index: 39; background: rgba(10, 8, 24, 0.6);
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  #sheetBackdrop.on { opacity: 1; pointer-events: auto; }
 
   /* ---------- PLAYER ---------- */
-  #player { position: fixed; inset: 0; z-index: 20; transition: background 0.35s ease; }
+  #player { position: fixed; inset: 0; z-index: 20; background: var(--bg0); }
+  #player::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; transition: opacity 0.4s;
+    background: radial-gradient(700px 480px at 50% 26%, var(--phase-glow) 0%, transparent 65%);
+    opacity: 0.34;
+  }
   #player .pwrap {
-    height: 100dvh; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column;
-    padding: calc(var(--sat) + 14px) 20px calc(var(--sab) + 18px);
+    position: relative; height: 100dvh; max-width: 480px; margin: 0 auto;
+    display: flex; flex-direction: column;
+    padding: calc(var(--sat) + 12px) 20px calc(var(--sab) + 16px);
   }
   .phead { display: flex; align-items: center; gap: 12px; }
   .phead .xbtn {
-    width: 42px; height: 42px; border-radius: 13px; border: 3px solid var(--ink);
-    background: rgba(255,255,255,0.85); box-shadow: 0 3px 0 var(--ink);
-    font-size: 17px; cursor: pointer; flex: none; display: grid; place-items: center;
+    width: 40px; height: 40px; border-radius: 13px; background: rgba(255,255,255,0.08);
+    font-size: 15px; cursor: pointer; flex: none; display: grid; place-items: center;
   }
-  .pbar { flex: 1; height: 16px; border: 3px solid var(--ink); border-radius: var(--r-pill); background: rgba(255,255,255,0.55); overflow: hidden; }
-  .pbar i { display: block; height: 100%; width: 0%; background: var(--ink); border-radius: var(--r-pill); transition: width 0.3s linear; }
-  .pcount { font-family: var(--display); font-weight: 600; font-size: 13.5px; white-space: nowrap; }
+  .pbar { flex: 1; height: 7px; border-radius: 99px; background: rgba(255,255,255,0.1); overflow: hidden; }
+  .pbar i { display: block; height: 100%; width: 0%; background: var(--phase); border-radius: 99px; transition: width 0.3s linear, background 0.4s; }
+  .pcount { font-family: var(--display); font-weight: 700; font-size: 13px; color: var(--ink-dim); }
 
-  .pmain { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 6px; }
+  #booPlay { width: 100%; height: 32dvh; min-height: 190px; display: block; }
+
+  .pmain { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 10px; text-align: center; gap: 4px; min-height: 0; }
   .phase {
-    font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: 2.5px;
-    text-transform: uppercase; background: rgba(255,255,255,0.7); border: 2.5px solid var(--ink);
-    border-radius: var(--r-pill); padding: 4px 16px;
+    font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--phase);
   }
   .ptime {
-    font-family: var(--display); font-weight: 700; font-size: clamp(88px, 30vw, 132px);
-    line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: 1px;
-    margin: 6px 0 2px;
+    font-family: var(--display); font-weight: 800; font-size: clamp(72px, 24vw, 104px);
+    line-height: 1; font-variant-numeric: tabular-nums; margin: 0;
+    text-shadow: 0 0 44px var(--phase-glow);
   }
-  .pex { font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1.15; max-width: 320px; }
-  .pcue { font-weight: 700; font-size: 14.5px; max-width: 300px; opacity: 0.8; min-height: 40px; margin-top: 4px; }
+  .pex { font-family: var(--display); font-weight: 800; font-size: 23px; line-height: 1.15; max-width: 330px; }
+  .pcue { font-size: 13.5px; max-width: 300px; color: var(--ink-dim); min-height: 38px; margin-top: 2px; }
   .pnext {
-    margin-top: 10px; font-weight: 700; font-size: 13.5px;
-    background: rgba(255,255,255,0.7); border: 2.5px solid var(--ink);
-    border-radius: var(--r-pill); padding: 5px 14px; max-width: 90%;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-top: 8px; font-weight: 800; font-size: 12.5px; color: var(--ink-dim);
+    background: rgba(255,255,255,0.07); border-radius: 99px; padding: 5px 14px;
+    max-width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  .pctrls { display: flex; gap: 12px; align-items: center; justify-content: center; }
+  .pctrls { display: flex; gap: 14px; align-items: center; justify-content: center; padding-top: 8px; }
   .cbtn {
-    border: 3px solid var(--ink); border-radius: 18px; background: rgba(255,255,255,0.85);
-    box-shadow: 0 4px 0 var(--ink); cursor: pointer; font-family: var(--display); font-weight: 700;
-    display: grid; place-items: center;
+    border-radius: 20px; background: rgba(255,255,255,0.09); cursor: pointer;
+    font-size: 19px; display: grid; place-items: center;
   }
-  .cbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
-  .cbtn.side { width: 62px; height: 62px; font-size: 21px; }
-  .cbtn.mid { width: 92px; height: 92px; border-radius: 26px; font-size: 33px; background: #fff; }
+  .cbtn:active { transform: scale(0.94); }
+  .cbtn.side { width: 60px; height: 60px; }
+  .cbtn.mid {
+    width: 86px; height: 86px; border-radius: 26px; font-size: 30px;
+    background: var(--phase); color: #141031; transition: background 0.4s;
+    box-shadow: 0 0 34px var(--phase-glow);
+  }
 
   /* ---------- DONE ---------- */
-  #done { position: fixed; inset: 0; z-index: 30; background: var(--mint); display: none; }
+  #done { position: fixed; inset: 0; z-index: 50; background: var(--bg0); display: none; }
   #done.on { display: block; }
   #done .dwrap {
     height: 100dvh; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; padding: 24px; gap: 10px;
+    align-items: center; justify-content: center; text-align: center; padding: 24px; gap: 4px;
     position: relative; z-index: 2;
   }
-  #done .big { font-size: 74px; }
-  #done h2 { font-family: var(--display); font-weight: 700; font-size: 36px; margin: 0; }
-  #done p { font-weight: 700; font-size: 16px; margin: 0 0 16px; max-width: 300px; }
-  #confetti { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-
-  @media (min-width: 500px) {
-    body { background: #F6E9D6; }
-    .screen.on { min-height: 100vh; }
+  #booDone { width: 100%; height: 250px; display: block; }
+  #done h2 {
+    font-family: var(--display); font-weight: 800; font-size: 34px; margin: 0;
+    background: linear-gradient(100deg, var(--gold), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent;
   }
+  #done p { font-weight: 700; font-size: 15px; margin: 4px 0 22px; max-width: 300px; color: var(--ink-dim); }
+  #confetti { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -270,60 +298,67 @@
 <!-- ================= HOME ================= -->
 <section id="home" class="screen on">
   <div class="wrap">
-    <div class="brand">
-      <div class="bolt">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M13.5 2 5 13.5h5L9.5 22 19 9.5h-5.5L13.5 2Z" fill="#FFF6EA" stroke="#2D2A32" stroke-width="1.6" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <h1>Kinetic</h1>
-    </div>
-    <p class="tagline">Your week of no-equipment fire. Anywhere with a floor.</p>
-
     <div class="hero">
+      <canvas id="booHome"></canvas>
+      <h1>Kinetic</h1>
+      <p class="tagline">Boo coaches. You sweat. No equipment, anywhere.</p>
+    </div>
+
+    <div class="stats glass">
       <div class="ring">
-        <svg width="64" height="64" viewBox="0 0 64 64">
-          <circle cx="32" cy="32" r="26" fill="#FFF6EA" stroke="#2D2A32" stroke-width="5" opacity="0.35"/>
-          <circle id="ringFg" cx="32" cy="32" r="26" fill="none" stroke="#2D2A32" stroke-width="5"
-                  stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36"/>
+        <svg width="62" height="62" viewBox="0 0 62 62">
+          <circle cx="31" cy="31" r="25" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="6"/>
+          <circle id="ringFg" cx="31" cy="31" r="25" fill="none" stroke="#6EE7C8" stroke-width="6"
+                  stroke-linecap="round" stroke-dasharray="157.08" stroke-dashoffset="157.08"/>
         </svg>
         <div class="num" id="ringNum">0/8</div>
       </div>
-      <div>
-        <div class="msg" id="heroMsg">Saturday to Saturday. Eight sessions.</div>
-        <div class="sub" id="heroSub">Benchmark on day 1, retest on day 8 — watch the numbers climb.</div>
+      <div class="msg">
+        <b id="heroMsg">Saturday to Saturday. Eight sessions.</b>
+        <span id="heroSub">Benchmark day 1 · retest day 8 · watch the numbers climb</span>
       </div>
     </div>
 
+    <p class="sec-label">The week</p>
     <div class="daylist" id="daylist"></div>
 
-    <div class="settings">
-      <button class="toggle" id="quietToggle">
-        <div class="tt"><b>Quiet mode 🤫</b><span>No jumping — Airbnb-neighbor-approved swaps</span></div>
+    <p class="sec-label">Settings</p>
+    <div class="toggles">
+      <button class="toggle glass" id="quietToggle">
+        <div class="tt"><b>Quiet mode 🤫</b><span>No jumping — downstairs neighbors stay happy</span></div>
         <div class="knob"></div>
       </button>
-      <button class="toggle" id="soundToggle">
+      <button class="toggle glass" id="soundToggle">
         <div class="tt"><b>Sound cues 🔔</b><span>Beeps for countdowns and switches</span></div>
         <div class="knob"></div>
       </button>
     </div>
 
     <p class="fineprint">Reusable any week — hotel rooms, rainy days, tiny apartments.<br>
-    Works offline once installed. Add to Home Screen from Safari’s share menu.</p>
+    Works offline once installed: Share → Add to Home Screen.</p>
   </div>
 </section>
 
 <!-- ================= DAY DETAIL ================= -->
 <section id="day" class="screen">
   <div class="wrap">
-    <div class="topbar">
-      <button class="backbtn" id="dayBack">←</button>
-    </div>
-    <div class="dayhero" id="dayHero"></div>
+    <div class="topbar"><button class="backbtn" id="dayBack">←</button></div>
+    <div class="dayhero glass" id="dayHero"></div>
     <div class="blocks" id="dayBlocks"></div>
   </div>
-  <div class="startdock"><button class="bigbtn" id="startBtn">Start workout ⚡</button></div>
+  <div class="startdock"><button class="bigbtn" id="startBtn">Start with Boo ⚡</button></div>
 </section>
+
+<!-- ================= DEMO SHEET ================= -->
+<div id="sheetBackdrop"></div>
+<div id="sheet">
+  <div id="sheetInner">
+    <div class="grab"></div>
+    <canvas id="sheetCanvas"></canvas>
+    <p id="sheetName"></p>
+    <p id="sheetCue"></p>
+  </div>
+</div>
 
 <!-- ================= PLAYER ================= -->
 <section id="player" class="screen">
@@ -333,6 +368,7 @@
       <div class="pbar"><i id="pbarFill"></i></div>
       <div class="pcount" id="pcount">1/1</div>
     </div>
+    <canvas id="booPlay"></canvas>
     <div class="pmain">
       <div class="phase" id="pphase">GET READY</div>
       <div class="ptime" id="ptime">0:10</div>
@@ -352,41 +388,43 @@
 <section id="done">
   <canvas id="confetti"></canvas>
   <div class="dwrap">
-    <div class="big">🎉</div>
+    <canvas id="booDone"></canvas>
     <h2 id="doneTitle">Crushed it!</h2>
     <p id="doneMsg">Another one in the books.</p>
     <button class="bigbtn" id="doneBtn" style="max-width:280px">Back to the week</button>
   </div>
 </section>
 
-<script>
+<script type="module">
 /* =====================================================================
-   KINETIC — a week of indoor, no-equipment fat-burn & cardio
-   Sat → Sat. Benchmark day 1, retest day 8.
+   KINETIC — a week of indoor, no-equipment fat-burn & cardio,
+   demonstrated live by Boo the ghost. Sat → Sat, benchmark → retest.
    ===================================================================== */
+import { GhostScene } from './ghost.js';
+import { ANIMS } from './anims.js';
 
-// ---------- exercise helper: {n:name, c:cue, q:quiet-mode swap} ----------
-const M = (n, c, q) => ({ n, c, q: q || null });
+// ---------- move helper: {n:name, c:cue, a:anim id, q:quiet swap, qa:quiet anim} ----------
+const M = (n, c, a, q, qa) => ({ n, c, a, q: q || null, qa: qa || null });
 
 const WARMUP = {
   kind: 'flow', title: 'Warm-up', icon: '🔥', work: 35, moves: [
-    M('March in place', 'Big arm swings, easy breathing'),
-    M('Arm circles', 'Forward 15s, then backward'),
-    M('Hip circles', 'Hands on hips, both directions'),
-    M('Good mornings', 'Hinge at the hips, flat back'),
-    M('Half squats', 'Smooth and springy'),
-    M('Torso twists', 'Loose arms, let them whip'),
-    M('Easy jacks', 'Light bounce, warm the calves', 'Step-out jacks'),
+    M('March in place', 'Big arm swings, easy breathing', 'march'),
+    M('Arm circles', 'Forward 15s, then backward', 'armcircles'),
+    M('Hip circles', 'Hands on hips, both directions', 'hipcircles'),
+    M('Good mornings', 'Hinge at the hips, flat back', 'goodmorning'),
+    M('Half squats', 'Smooth and springy', 'squat'),
+    M('Torso twists', 'Loose arms, let them whip', 'torsotwist'),
+    M('Easy jacks', 'Light bounce, warm the calves', 'jack', 'Step-out jacks', 'sidestep'),
   ]
 };
 
 const COOLDOWN = {
   kind: 'flow', title: 'Cool-down', icon: '🧊', work: 40, moves: [
-    M('Standing quad stretch', 'Hold the wall, swap halfway'),
-    M('Forward fold', 'Soft knees, hang heavy'),
-    M('Hip flexor lunge stretch', 'Swap sides halfway, squeeze the glute'),
-    M('Chest opener', 'Hands behind back, lift the heart'),
-    M('Child’s pose', 'Long arms, slow breaths out'),
+    M('Standing quad stretch', 'Hold the wall, swap halfway', 'quadstretch'),
+    M('Forward fold', 'Soft knees, hang heavy', 'forwardfold'),
+    M('Hip flexor lunge stretch', 'Swap sides halfway, squeeze the glute', 'hipflexorstretch'),
+    M('Chest opener', 'Hands behind back, lift the heart', 'chestopener'),
+    M('Child’s pose', 'Long arms, slow breaths out', 'childpose'),
   ]
 };
 
@@ -394,186 +432,186 @@ const BENCHMARK = {
   kind: 'bench', title: 'Benchmark', icon: '📊',
   note: 'Count every rep. You’ll log the numbers after — day 8 is the rematch.',
   moves: [
-    M('MAX air squats', 'Full depth, count out loud'),
-    M('MAX push-ups', 'Knees totally fine — just count'),
-    M('MAX burpees', 'Steady rhythm beats sprinting', 'Walk-out burpees, no jump'),
+    M('MAX air squats', 'Full depth, count out loud', 'squat'),
+    M('MAX push-ups', 'Knees totally fine — just count', 'pushup'),
+    M('MAX burpees', 'Steady rhythm beats sprinting', 'burpee', 'Walk-out burpees, no jump'),
   ]
 };
 
 const DAYS = [
   {
-    id: 'd1', dow: 'SAT', num: 1, color: 'var(--coral)', emoji: '🚀',
+    id: 'd1', dow: 'SAT', num: 1, tint: 'linear-gradient(135deg,#FF8FAB,#FFD97D)', emoji: '🚀',
     title: 'Kickoff + Benchmark',
     focus: 'Plant the flag. Test where you are today, then a full-body burner.',
     blocks: [
       WARMUP,
       BENCHMARK,
       { kind: 'hiit', title: 'Full-body Ignition', icon: '⚡', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
-        M('Air squats', 'Chest proud, heels down'),
-        M('Push-ups', 'Elbows ~45°, drop to knees anytime'),
-        M('Mountain climbers', 'Hips low, drive the knees'),
-        M('Reverse lunges', 'Alternate legs, soft landing'),
-        M('Plank shoulder taps', 'Hips quiet, feet wide'),
-        M('Jumping jacks', 'Full arm swing overhead', 'Step-out jacks'),
+        M('Air squats', 'Chest proud, heels down', 'squat'),
+        M('Push-ups', 'Elbows ~45°, drop to knees anytime', 'pushup'),
+        M('Mountain climbers', 'Hips low, drive the knees', 'climber'),
+        M('Reverse lunges', 'Alternate legs, soft landing', 'reverselunge'),
+        M('Plank shoulder taps', 'Hips quiet, feet wide', 'planktap'),
+        M('Jumping jacks', 'Full arm swing overhead', 'jack', 'Step-out jacks', 'sidestep'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd2', dow: 'SUN', num: 2, color: 'var(--sun)', emoji: '🔥',
+    id: 'd2', dow: 'SUN', num: 2, tint: 'linear-gradient(135deg,#FFD97D,#FF8FAB)', emoji: '🔥',
     title: 'Cardio Furnace',
     focus: 'Pure engine work. Keep moving, keep breathing — this is your indoor run.',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'The Furnace', icon: '🔥', work: 40, rest: 20, rounds: 3, breather: 60, moves: [
-        M('High knees', 'Tall chest, quick feet', 'Power march'),
-        M('Skaters', 'Push side to side, stick the landing', 'Side taps'),
-        M('Shadow boxing', 'Fast hands, stay bouncy'),
-        M('Mountain climbers', 'Even pace, breathe'),
-        M('Fast feet', 'Low squat, sprint the feet', 'Quick march'),
-        M('Squat to punch', 'Squat, stand, jab-cross'),
+        M('High knees', 'Tall chest, quick feet', 'highknees', 'Power march', 'march'),
+        M('Skaters', 'Push side to side, stick the landing', 'skater', 'Side taps', 'sidestep'),
+        M('Shadow boxing', 'Fast hands, stay bouncy', 'shadowbox'),
+        M('Mountain climbers', 'Even pace, breathe', 'climber'),
+        M('Fast feet', 'Low squat, sprint the feet', 'fastfeet', 'Quick march', 'march'),
+        M('Squat to punch', 'Squat, stand, jab-cross', 'squatpunch'),
       ]},
       { kind: 'hiit', title: 'Tabata Finisher', icon: '🏁', work: 20, rest: 10, rounds: 4, breather: 0, moves: [
-        M('Jumping jacks', 'Empty the tank', 'Step-out jacks'),
+        M('Jumping jacks', 'Empty the tank', 'jack', 'Step-out jacks', 'sidestep'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd3', dow: 'MON', num: 3, color: 'var(--grape)', emoji: '🦵',
+    id: 'd3', dow: 'MON', num: 3, tint: 'linear-gradient(135deg,#A78BFA,#7DD3FC)', emoji: '🦵',
     title: 'Strong Legs',
     focus: 'Hiking legs, no trail needed. Strength-endurance for the lower half.',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'Leg Builder', icon: '🦵', work: 45, rest: 15, rounds: 2, breather: 60, moves: [
-        M('Air squats', 'Slow down, control up'),
-        M('Alternating reverse lunges', 'Knee kisses the floor'),
-        M('Glute bridges', 'Squeeze hard at the top'),
-        M('Side lunges — left', 'Sit back into the hip'),
-        M('Side lunges — right', 'Chest up, push off strong'),
-        M('Wall sit', 'Thighs parallel, hands off legs'),
-        M('Calf raises', 'Pause up top, full stretch down'),
-        M('Squat pulses', 'Stay low, tiny bounces'),
+        M('Air squats', 'Slow down, control up', 'squat'),
+        M('Alternating reverse lunges', 'Knee kisses the floor', 'reverselunge'),
+        M('Glute bridges', 'Squeeze hard at the top', 'glutebridge'),
+        M('Side lunges — left', 'Sit back into the hip', 'sidelunge'),
+        M('Side lunges — right', 'Chest up, push off strong', 'sidelunge'),
+        M('Wall sit', 'Thighs parallel, hands off legs', 'wallsit'),
+        M('Calf raises', 'Pause up top, full stretch down', 'calfraise'),
+        M('Squat pulses', 'Stay low, tiny bounces', 'squatpulse'),
       ]},
       { kind: 'hiit', title: 'Finisher', icon: '🏁', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
-        M('Wall sit', 'One minute. Sing something.'),
+        M('Wall sit', 'One minute. Sing something.', 'wallsit'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd4', dow: 'TUE', num: 4, color: 'var(--sky)', emoji: '🌊',
+    id: 'd4', dow: 'TUE', num: 4, tint: 'linear-gradient(135deg,#7DD3FC,#6EE7C8)', emoji: '🌊',
     title: 'Recovery Flow',
     focus: 'Active recovery. Loosen up, light core, then get your LA steps in.',
     note: 'Bonus mission: a long city walk today — aim for 8–10k steps. Sightseeing counts.',
     blocks: [
       { kind: 'flow', title: 'Mobility Flow', icon: '🌊', work: 45, moves: [
-        M('Cat-cow', 'Move with your breath'),
-        M('World’s greatest stretch — L', 'Lunge, twist, reach for the sky'),
-        M('World’s greatest stretch — R', 'Slow is the whole point'),
-        M('Hip flexor stretch — L', 'Tuck the pelvis, lean gently'),
-        M('Hip flexor stretch — R', 'Breathe into it'),
-        M('Hamstring fold', 'Hinge, soft knees, hang'),
-        M('Figure-4 stretch — L', 'On your back, pull the leg in'),
-        M('Figure-4 stretch — R', 'Relax the shoulders'),
-        M('Thoracic rotations', 'On all fours, open the chest'),
-        M('Child’s pose', 'Longest exhales of the day'),
+        M('Cat-cow', 'Move with your breath', 'catcow'),
+        M('World’s greatest stretch — L', 'Lunge, twist, reach for the sky', 'worldsgreatest'),
+        M('World’s greatest stretch — R', 'Slow is the whole point', 'worldsgreatest'),
+        M('Hip flexor stretch — L', 'Tuck the pelvis, lean gently', 'hipflexorstretch'),
+        M('Hip flexor stretch — R', 'Breathe into it', 'hipflexorstretch'),
+        M('Hamstring fold', 'Hinge, soft knees, hang', 'forwardfold'),
+        M('Figure-4 stretch — L', 'On your back, pull the leg in', 'figure4'),
+        M('Figure-4 stretch — R', 'Relax the shoulders', 'figure4'),
+        M('Thoracic rotations', 'On all fours, open the chest', 'thoracicrot'),
+        M('Child’s pose', 'Longest exhales of the day', 'childpose'),
       ]},
       { kind: 'hiit', title: 'Gentle Core', icon: '🧘', work: 30, rest: 15, rounds: 2, breather: 45, moves: [
-        M('Dead bugs', 'Low back glued to the floor'),
-        M('Bird dogs', 'Slow, long lines, no wobble'),
-        M('Glute bridges', 'Smooth reps, squeeze up top'),
-        M('Side plank — left', 'Knees down is perfect'),
-        M('Side plank — right', 'Straight line, proud chest'),
+        M('Dead bugs', 'Low back glued to the floor', 'deadbug'),
+        M('Bird dogs', 'Slow, long lines, no wobble', 'birddog'),
+        M('Glute bridges', 'Smooth reps, squeeze up top', 'glutebridge'),
+        M('Side plank — left', 'Knees down is perfect', 'sideplank'),
+        M('Side plank — right', 'Straight line, proud chest', 'sideplank'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd5', dow: 'WED', num: 5, color: 'var(--coral)', emoji: '⛰️',
+    id: 'd5', dow: 'WED', num: 5, tint: 'linear-gradient(135deg,#FF8FAB,#A78BFA)', emoji: '⛰️',
     title: 'The Pyramid',
     focus: 'Climb up, climb down. Four moves, five rounds, intervals that grow then shrink.',
     blocks: [
       WARMUP,
       { kind: 'pyramid', title: 'Pyramid Climb', icon: '⛰️',
         steps: [[20,10],[30,15],[40,20],[30,15],[20,10]], breather: 45, moves: [
-        M('Burpees', 'Your pace, just keep moving', 'Walk-out burpees, no jump'),
-        M('Squat jumps', 'Land soft like a cat', 'Squat + calf-raise pop'),
-        M('Push-ups', 'Quality over speed'),
-        M('Mountain climbers', 'Finish every round strong'),
+        M('Burpees', 'Your pace, just keep moving', 'burpee', 'Walk-out burpees, no jump'),
+        M('Squat jumps', 'Land soft like a cat', 'squatjump', 'Squat + calf-raise pop', 'calfraise'),
+        M('Push-ups', 'Quality over speed', 'pushup'),
+        M('Mountain climbers', 'Finish every round strong', 'climber'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd6', dow: 'THU', num: 6, color: 'var(--mint)', emoji: '💪',
+    id: 'd6', dow: 'THU', num: 6, tint: 'linear-gradient(135deg,#6EE7C8,#A78BFA)', emoji: '💪',
     title: 'Push & Core',
     focus: 'Upper body and midsection. The hike-photo muscles.',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'Push Party', icon: '💪', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
-        M('Push-ups', 'Full range, knees anytime'),
-        M('Pike push-ups', 'Hips high, head toward floor'),
-        M('Plank', 'Squeeze everything, steady breath'),
-        M('Side plank — left', 'Stack or stagger the feet'),
-        M('Side plank — right', 'Hips high and proud'),
-        M('Supermans', 'Lift arms and legs, pause up top'),
-        M('Bicycle crunches', 'Slow, elbow to opposite knee'),
-        M('Hollow hold', 'Low back down, arms by ears — or knees tucked'),
+        M('Push-ups', 'Full range, knees anytime', 'pushup'),
+        M('Pike push-ups', 'Hips high, head toward floor', 'pikepushup'),
+        M('Plank', 'Squeeze everything, steady breath', 'plank'),
+        M('Side plank — left', 'Stack or stagger the feet', 'sideplank'),
+        M('Side plank — right', 'Hips high and proud', 'sideplank'),
+        M('Supermans', 'Lift arms and legs, pause up top', 'superman'),
+        M('Bicycle crunches', 'Slow, elbow to opposite knee', 'bicycle'),
+        M('Hollow hold', 'Low back down — or knees tucked', 'hollowhold'),
       ]},
       { kind: 'hiit', title: 'Finisher', icon: '🏁', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
-        M('MAX push-ups', 'One minute, count them, remember the number'),
+        M('MAX push-ups', 'One minute, count them, remember the number', 'pushup'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd7', dow: 'FRI', num: 7, color: 'var(--sun)', emoji: '🔋',
+    id: 'd7', dow: 'FRI', num: 7, tint: 'linear-gradient(135deg,#FFD97D,#6EE7C8)', emoji: '🔋',
     title: 'Endurance Engine',
     focus: 'Long steady burn — the indoor version of your Montana hikes. Conversational pace, no stopping.',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'Engine Round 1', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
-        M('March or jog in place', 'Settle into a rhythm'),
-        M('Step-back lunges', 'Steady tempo, no rush'),
-        M('Standing punches', 'Light feet, relaxed shoulders'),
-        M('High knees — cruising', 'Comfortably hard, not sprinting', 'Brisk power march'),
-        M('Air squats — steady', 'Metronome pace'),
-        M('Side steps + reach', 'Wide steps, reach overhead'),
+        M('March or jog in place', 'Settle into a rhythm', 'march'),
+        M('Step-back lunges', 'Steady tempo, no rush', 'reverselunge'),
+        M('Standing punches', 'Light feet, relaxed shoulders', 'shadowbox'),
+        M('High knees — cruising', 'Comfortably hard, not sprinting', 'highknees', 'Brisk power march', 'march'),
+        M('Air squats — steady', 'Metronome pace', 'squat'),
+        M('Side steps + reach', 'Wide steps, reach overhead', 'sidestep'),
       ]},
       { kind: 'hiit', title: 'Engine Round 2', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
-        M('March or jog in place', 'Find the rhythm again'),
-        M('Step-back lunges', 'Smooth, quiet landings'),
-        M('Standing punches', 'Faster hands this round'),
-        M('High knees — cruising', 'Hold the pace', 'Brisk power march'),
-        M('Air squats — steady', 'Keep the depth honest'),
-        M('Slow mountain climbers', 'Controlled, hips level'),
+        M('March or jog in place', 'Find the rhythm again', 'march'),
+        M('Step-back lunges', 'Smooth, quiet landings', 'reverselunge'),
+        M('Standing punches', 'Faster hands this round', 'shadowbox'),
+        M('High knees — cruising', 'Hold the pace', 'highknees', 'Brisk power march', 'march'),
+        M('Air squats — steady', 'Keep the depth honest', 'squat'),
+        M('Slow mountain climbers', 'Controlled, hips level', 'climber'),
       ]},
       { kind: 'hiit', title: 'Engine Round 3', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
-        M('March or jog in place', 'Last climb, enjoy it'),
-        M('Step-back lunges', 'Strong to the end'),
-        M('Standing punches', 'Finish like a boxer'),
-        M('High knees — cruising', 'You’ve got one more gear', 'Brisk power march'),
-        M('Air squats — steady', 'Every rep full depth'),
-        M('Fast feet', 'Empty the tank — 60 seconds', 'Quick march'),
+        M('March or jog in place', 'Last climb, enjoy it', 'march'),
+        M('Step-back lunges', 'Strong to the end', 'reverselunge'),
+        M('Standing punches', 'Finish like a boxer', 'shadowbox'),
+        M('High knees — cruising', 'You’ve got one more gear', 'highknees', 'Brisk power march', 'march'),
+        M('Air squats — steady', 'Every rep full depth', 'squat'),
+        M('Fast feet', 'Empty the tank — 60 seconds', 'fastfeet', 'Quick march', 'march'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd8', dow: 'SAT', num: 8, color: 'var(--mint)', emoji: '🏆',
+    id: 'd8', dow: 'SAT', num: 8, tint: 'linear-gradient(135deg,#6EE7C8,#FFD97D)', emoji: '🏆',
     title: 'Retest + Victory Lap',
     focus: 'The rematch. Same benchmark as day 1 — beat your numbers, then take a lap.',
     blocks: [
       WARMUP,
       BENCHMARK,
       { kind: 'hiit', title: 'Victory Lap', icon: '🏆', work: 40, rest: 20, rounds: 1, breather: 0, moves: [
-        M('Jumping jacks', 'Celebration cardio', 'Step-out jacks'),
-        M('Air squats', 'Compare these to day 1 — smoother, right?'),
-        M('Push-ups', 'Stronger than last Saturday'),
-        M('Skaters', 'Glide, you athlete', 'Side taps'),
-        M('Plank shoulder taps', 'Rock solid now'),
-        M('High knees', 'Sprint into the finish line', 'Power march'),
+        M('Jumping jacks', 'Celebration cardio', 'jack', 'Step-out jacks', 'sidestep'),
+        M('Air squats', 'Compare these to day 1 — smoother, right?', 'squat'),
+        M('Push-ups', 'Stronger than last Saturday', 'pushup'),
+        M('Skaters', 'Glide, you athlete', 'skater', 'Side taps', 'sidestep'),
+        M('Plank shoulder taps', 'Rock solid now', 'planktap'),
+        M('High knees', 'Sprint into the finish line', 'highknees', 'Power march', 'march'),
       ]},
       COOLDOWN,
     ]
@@ -581,41 +619,42 @@ const DAYS = [
 ];
 
 // ---------- expand a day into timed player steps ----------
+const moveName = (m, quiet) => (quiet && m.q) ? m.q : m.n;
+const moveAnim = (m, quiet) => (quiet && m.qa) ? m.qa : m.a;
+
 function buildSteps(day, quiet) {
   const steps = [];
-  const name = (m) => (quiet && m.q) ? m.q : m.n;
-  const push = (kind, label, secs, cue) => steps.push({ kind, label, secs, cue });
-
-  push('prep', 'Get ready', 10, day.title);
+  const push = (kind, label, secs, cue, anim) => steps.push({ kind, label, secs, cue, anim });
+  push('prep', 'Get ready', 10, day.title, 'idle');
 
   for (const b of day.blocks) {
     if (b.kind === 'flow') {
-      b.moves.forEach(m => push('flow', name(m), b.work, m.c));
+      b.moves.forEach(m => push('flow', moveName(m, quiet), b.work, m.c, moveAnim(m, quiet)));
     } else if (b.kind === 'bench') {
       b.moves.forEach((m, i) => {
-        push('work', name(m), 60, m.c);
-        if (i < b.moves.length - 1) push('rest', 'Rest + recover', 90, 'Shake it out, note your count');
+        push('work', moveName(m, quiet), 60, m.c, moveAnim(m, quiet));
+        if (i < b.moves.length - 1) push('rest', 'Rest + recover', 90, 'Shake it out, note your count', 'idle');
       });
     } else if (b.kind === 'hiit') {
       for (let r = 0; r < b.rounds; r++) {
         b.moves.forEach((m, i) => {
-          push('work', name(m), b.work, m.c);
+          push('work', moveName(m, quiet), b.work, m.c, moveAnim(m, quiet));
           const last = (i === b.moves.length - 1);
-          if (!last && b.rest > 0) push('rest', 'Rest', b.rest, 'Breathe — next: ' + name(b.moves[i + 1]));
+          if (!last && b.rest > 0) push('rest', 'Rest', b.rest, 'Breathe — next: ' + moveName(b.moves[i + 1], quiet), 'idle');
           if (last && r < b.rounds - 1) {
-            if (b.rest > 0) push('rest', 'Rest', b.rest, 'Round ' + (r + 2) + ' incoming');
-            if (b.breather > 0) push('rest', 'Breather', b.breather, 'Water break — round ' + (r + 2) + ' of ' + b.rounds);
+            if (b.rest > 0) push('rest', 'Rest', b.rest, 'Round ' + (r + 2) + ' incoming', 'idle');
+            if (b.breather > 0) push('rest', 'Breather', b.breather, 'Water break — round ' + (r + 2) + ' of ' + b.rounds, 'idle');
           }
         });
       }
-      if (b.breather > 0 && b.rounds === 1) push('rest', 'Breather', b.breather, 'Recover before the next block');
+      if (b.breather > 0 && b.rounds === 1) push('rest', 'Breather', b.breather, 'Recover before the next block', 'idle');
     } else if (b.kind === 'pyramid') {
       b.steps.forEach(([w, rst], r) => {
         b.moves.forEach((m, i) => {
-          push('work', name(m), w, m.c + '  ·  level ' + (r + 1) + '/' + b.steps.length);
+          push('work', moveName(m, quiet), w, m.c + '  ·  level ' + (r + 1) + '/' + b.steps.length, moveAnim(m, quiet));
           const last = (i === b.moves.length - 1);
-          if (!last) push('rest', 'Rest', rst, 'Next: ' + name(b.moves[i + 1]));
-          if (last && r < b.steps.length - 1) push('rest', 'Breather', b.breather, 'Level ' + (r + 2) + ': ' + b.steps[r + 1][0] + 's work');
+          if (!last) push('rest', 'Rest', rst, 'Next: ' + moveName(b.moves[i + 1], quiet), 'idle');
+          if (last && r < b.steps.length - 1) push('rest', 'Breather', b.breather, 'Level ' + (r + 2) + ': ' + b.steps[r + 1][0] + 's work', 'idle');
         });
       });
     }
@@ -634,8 +673,13 @@ let S = Object.assign({ done: {}, bench: {}, quiet: false, sound: true }, store.
 const persist = () => store.save(S);
 
 const $ = (id) => document.getElementById(id);
-const KINDCOLOR = { prep: 'var(--sun)', work: 'var(--coral)', rest: 'var(--mint)', flow: 'var(--sky)' };
-const KINDLABEL = { prep: 'Get ready', work: 'Work', rest: 'Rest', flow: 'Flow' };
+const PHASE = {
+  prep: { c: '#FFD97D', glow: 'rgba(255,217,125,0.5)', label: 'Get ready' },
+  work: { c: '#FF8FAB', glow: 'rgba(255,143,171,0.5)', label: 'Work' },
+  rest: { c: '#6EE7C8', glow: 'rgba(110,231,200,0.5)', label: 'Rest' },
+  flow: { c: '#A78BFA', glow: 'rgba(167,139,250,0.5)', label: 'Flow' },
+};
+const anim = (id) => ANIMS[id] || ANIMS.idle;
 
 // ---------- audio cues ----------
 let AC = null;
@@ -659,9 +703,16 @@ async function grabWakeLock() {
   try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
 }
 function dropWakeLock() { wakeLock?.release().catch(() => {}); wakeLock = null; }
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && player.running) grabWakeLock();
-});
+
+// ---------- ghost scenes (created lazily, one per canvas) ----------
+const boo = { home: null, sheet: null, play: null, done: null };
+function ghost(which, canvasId, opts) {
+  if (!boo[which]) {
+    boo[which] = new GhostScene($(canvasId), opts);
+  }
+  boo[which].resize();
+  return boo[which];
+}
 
 // ---------- screens ----------
 function show(id) {
@@ -674,12 +725,12 @@ function show(id) {
 function renderHome() {
   const doneCount = DAYS.filter(d => S.done[d.id]).length;
   $('ringNum').textContent = doneCount + '/8';
-  $('ringFg').style.strokeDashoffset = 163.36 * (1 - doneCount / 8);
+  $('ringFg').style.strokeDashoffset = 157.08 * (1 - doneCount / 8);
   if (doneCount === 8) {
     $('heroMsg').textContent = 'Full week complete. Legend. 🏆';
-    $('heroSub').textContent = 'Reset below to run it back, anywhere, any week.';
+    $('heroSub').textContent = 'Reset anytime — Boo is always up for a rematch.';
   } else if (doneCount > 0) {
-    $('heroMsg').textContent = doneCount + ' down, ' + (8 - doneCount) + ' to go. Keep the streak.';
+    $('heroMsg').textContent = doneCount + ' down, ' + (8 - doneCount) + ' to go.';
     $('heroSub').textContent = 'Fitness trends up when you show up.';
   }
 
@@ -687,14 +738,14 @@ function renderHome() {
   $('daylist').innerHTML = DAYS.map(d => {
     const done = !!S.done[d.id];
     const today = next && next.id === d.id;
-    return `<button class="daycard ${done ? 'done' : ''} ${today ? 'today' : ''}" data-day="${d.id}">
+    return `<button class="daycard glass ${done ? 'done' : ''} ${today ? 'today' : ''}" data-day="${d.id}">
       ${today ? '<span class="todaytag">Up next</span>' : ''}
-      <span class="dow" style="background:${d.color}"><span><b>${d.num}</b><span>${d.dow}</span></span></span>
+      <span class="dow" style="background:${d.tint}"><span><b>${d.num}</b><span>${d.dow}</span></span></span>
       <span class="info">
         <span class="t">${d.emoji} ${d.title}</span>
         <span class="m">${dayMinutes(d)} min · no equipment</span>
       </span>
-      <span class="check">${done ? '✓' : ''}</span>
+      <span class="st">${done ? '✓' : ''}</span>
     </button>`;
   }).join('');
   document.querySelectorAll('.daycard').forEach(el =>
@@ -712,20 +763,20 @@ let currentDay = null;
 function openDay(id) {
   currentDay = DAYS.find(d => d.id === id);
   const d = currentDay;
-  const mins = dayMinutes(d);
-  $('dayHero').style.background = d.color;
+  $('dayHero').style.setProperty('--tint', d.tint);
   $('dayHero').innerHTML = `
     <div class="k">Day ${d.num} · ${d.dow === 'SAT' && d.num === 8 ? 'Final Saturday' : d.dow}</div>
     <h2>${d.emoji} ${d.title}</h2>
     <p>${d.focus}</p>
     <div class="chips">
-      <span class="chip">⏱ ~${mins} min</span>
+      <span class="chip">⏱ ~${dayMinutes(d)} min</span>
       <span class="chip">🧳 zero equipment</span>
+      <span class="chip">👆 tap a move — Boo demos it</span>
       ${S.quiet ? '<span class="chip">🤫 quiet mode on</span>' : ''}
     </div>`;
 
   let html = '';
-  if (d.note) html += `<div class="notecard">🌴 ${d.note}</div>`;
+  if (d.note) html += `<div class="notecard glass">🌴 ${d.note}</div>`;
 
   for (const b of d.blocks) {
     if (b.kind === 'bench') { html += benchCard(d, b); continue; }
@@ -733,17 +784,34 @@ function openDay(id) {
       b.kind === 'flow' ? `${b.work}s each · no rest, just flow` :
       b.kind === 'pyramid' ? `levels: ${b.steps.map(s => s[0] + 's').join(' → ')} · rest scales with work` :
       (b.rounds > 1 ? b.rounds + ' rounds · ' : '') + b.work + 's on' + (b.rest ? ' / ' + b.rest + 's off' : '');
-    html += `<div class="block"><h3>${b.icon} ${b.title}</h3><div class="meta">${meta}</div>` +
-      b.moves.map(m => {
-        const nm = (S.quiet && m.q) ? m.q : m.n;
-        const swapped = S.quiet && m.q;
-        return `<div class="exrow"><span class="nm">${nm}${swapped ? ' <small>quiet swap 🤫</small>' : ''}</span><span class="sc">${m.c}</span></div>`;
-      }).join('') + '</div>';
+    html += `<div class="block glass"><h3>${b.icon} ${b.title}</h3><div class="meta">${meta}</div>` +
+      b.moves.map((m, i) => exRow(m, `${d.blocks.indexOf(b)}-${i}`)).join('') + '</div>';
   }
   $('dayBlocks').innerHTML = html;
+  wireExRows(d);
   wireBenchInputs(d);
-  $('startBtn').textContent = S.done[d.id] ? 'Do it again ⚡' : 'Start workout ⚡';
+  $('startBtn').textContent = S.done[d.id] ? 'Run it back with Boo ⚡' : 'Start with Boo ⚡';
   show('day');
+}
+
+function exRow(m, key) {
+  const nm = moveName(m, S.quiet);
+  const swapped = S.quiet && m.q;
+  return `<button class="exrow" data-ex="${key}">
+    <span class="play">▶</span>
+    <span class="nm">${nm}${swapped ? ' <small>quiet swap 🤫</small>' : ''}</span>
+    <span class="sc">${m.c}</span>
+  </button>`;
+}
+
+function findMove(d, key) {
+  const [bi, mi] = key.split('-').map(Number);
+  return d.blocks[bi].moves[mi];
+}
+
+function wireExRows(d) {
+  document.querySelectorAll('[data-ex]').forEach(el =>
+    el.addEventListener('click', () => openSheet(findMove(d, el.dataset.ex))));
 }
 
 const BENCH_FIELDS = [['squats', 'Squats'], ['pushups', 'Push-ups'], ['burpees', 'Burpees']];
@@ -760,9 +828,10 @@ function benchCard(d, b) {
     }).filter(Boolean);
     if (deltas.length) extra = `<div class="delta">📈 vs day 1 — ${deltas.join(' · ')}</div>`;
   }
-  return `<div class="block benchcard"><h3>${b.icon} ${b.title} — 60s max each</h3>
-    <div class="meta" style="color:rgba(45,42,50,0.65)">${b.note}</div>
-    ${b.moves.map(m => `<div class="exrow"><span class="nm">${(S.quiet && m.q) ? m.q : m.n}</span><span class="sc">${m.c}</span></div>`).join('')}
+  const bi = d.blocks.indexOf(b);
+  return `<div class="block glass benchcard"><h3>${b.icon} ${b.title} — 60s max each</h3>
+    <div class="meta">${b.note}</div>
+    ${b.moves.map((m, i) => exRow(m, `${bi}-${i}`)).join('')}
     <div class="bench-grid">
       ${BENCH_FIELDS.map(([k, label]) =>
         `<div><label>${label}</label><input type="number" inputmode="numeric" min="0" max="999" placeholder="—" data-bench="${k}" value="${mine[k] ?? ''}"></div>`).join('')}
@@ -781,8 +850,26 @@ function wireBenchInputs(d) {
 
 $('dayBack').addEventListener('click', () => { renderHome(); show('home'); });
 
+// ---------- demo sheet ----------
+function openSheet(m) {
+  $('sheetName').textContent = moveName(m, S.quiet);
+  $('sheetCue').textContent = m.c;
+  $('sheet').classList.add('on');
+  $('sheetBackdrop').classList.add('on');
+  const g = ghost('sheet', 'sheetCanvas');
+  g.setAnim(anim(moveAnim(m, S.quiet)));
+  g.start();
+}
+function closeSheet() {
+  $('sheet').classList.remove('on');
+  $('sheetBackdrop').classList.remove('on');
+  boo.sheet?.stop();
+}
+$('sheetBackdrop').addEventListener('click', closeSheet);
+$('sheet').addEventListener('click', closeSheet);
+
 // ---------- player ----------
-const player = { steps: [], i: 0, remaining: 0, total: 0, elapsedBefore: 0, timer: null, running: false, paused: false, lastTs: 0 };
+const player = { steps: [], i: 0, remaining: 0, total: 0, elapsedBefore: 0, running: false, paused: false, lastTs: 0 };
 
 $('startBtn').addEventListener('click', () => {
   if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch {} }
@@ -791,13 +878,16 @@ $('startBtn').addEventListener('click', () => {
 });
 
 function startWorkout(day) {
+  closeSheet();
   player.steps = buildSteps(day, S.quiet);
   player.total = player.steps.reduce((s, x) => s + x.secs, 0);
-  player.i = 0;
   player.running = true;
   grabWakeLock();
-  enterStep(0);
   show('player');
+  boo.home?.stop();
+  const g = ghost('play', 'booPlay');
+  g.start();
+  enterStep(0);
   setPaused(false);
 }
 
@@ -806,21 +896,28 @@ function enterStep(i) {
   const st = player.steps[i];
   player.remaining = st.secs;
   player.elapsedBefore = player.steps.slice(0, i).reduce((s, x) => s + x.secs, 0);
-  $('player').style.background = KINDCOLOR[st.kind];
-  $('pphase').textContent = KINDLABEL[st.kind];
+  const ph = PHASE[st.kind];
+  const pl = $('player');
+  pl.style.setProperty('--phase', ph.c);
+  pl.style.setProperty('--phase-glow', ph.glow);
+  $('pphase').textContent = ph.label;
   $('pex').textContent = st.label;
   $('pcue').textContent = st.cue || '';
   $('pcount').textContent = (i + 1) + '/' + player.steps.length;
   const nxt = player.steps[i + 1];
   $('pnext').textContent = nxt ? 'Next: ' + nxt.label : 'Last one — finish strong!';
+  boo.play?.setAnim(anim(st.anim));
   paint();
   if (st.kind === 'work') ding(); else if (i > 0) beep(520, 0.15);
 }
 
-function fmt(s) { return Math.floor(s / 60) + ':' + String(Math.ceil(s % 60) === 60 ? 0 : Math.ceil(s % 60)).padStart(2, '0'); }
+function fmt(s) {
+  const whole = Math.max(0, Math.ceil(s));
+  return Math.floor(whole / 60) + ':' + String(whole % 60).padStart(2, '0');
+}
 
 function paint() {
-  $('ptime').textContent = fmt(Math.max(0, player.remaining));
+  $('ptime').textContent = fmt(player.remaining);
   const done = player.elapsedBefore + (player.steps[player.i].secs - player.remaining);
   $('pbarFill').style.width = Math.min(100, done / player.total * 100) + '%';
 }
@@ -845,7 +942,7 @@ function setPaused(p) {
   player.paused = p;
   player.lastTs = 0;
   $('pauseBtn').textContent = p ? '▶' : '⏸';
-  if (!p) requestAnimationFrame(loop);
+  if (p) boo.play?.stop(); else { boo.play?.start(); requestAnimationFrame(loop); }
 }
 
 $('pauseBtn').addEventListener('click', () => setPaused(!player.paused));
@@ -856,8 +953,16 @@ $('skipBtn').addEventListener('click', () => {
 $('prevBtn').addEventListener('click', () => { player.lastTs = 0; enterStep(Math.max(0, player.i - 1)); });
 $('quitBtn').addEventListener('click', () => {
   player.running = false;
+  boo.play?.stop();
   dropWakeLock();
   openDay(currentDay.id);
+  homeGhost();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    if (player.running) { grabWakeLock(); if (!player.paused) { player.lastTs = 0; requestAnimationFrame(loop); } }
+  }
 });
 
 // ---------- done ----------
@@ -870,6 +975,7 @@ const PRAISE = [
 ];
 function finishWorkout() {
   player.running = false;
+  boo.play?.stop();
   dropWakeLock();
   const first = !S.done[currentDay.id];
   S.done[currentDay.id] = Date.now();
@@ -881,12 +987,18 @@ function finishWorkout() {
     : (first ? doneCount + '/8 done. ' : '') + PRAISE[Math.floor(Math.random() * PRAISE.length)];
   fanfare();
   $('done').classList.add('on');
+  const g = ghost('done', 'booDone');
+  g.setAnim(anim('jack'));
+  g.speed = 1.15;
+  g.start();
   confettiBurst();
 }
 $('doneBtn').addEventListener('click', () => {
   $('done').classList.remove('on');
+  boo.done?.stop();
   if (currentDay.id === 'd1' || currentDay.id === 'd8') openDay(currentDay.id);
   else { renderHome(); show('home'); }
+  homeGhost();
 });
 
 // ---------- confetti ----------
@@ -896,15 +1008,15 @@ function confettiBurst() {
   cv.height = cv.offsetHeight * devicePixelRatio;
   ctx.scale(devicePixelRatio, devicePixelRatio);
   const W = cv.offsetWidth, H = cv.offsetHeight;
-  const colors = ['#FF6B6B', '#FFD166', '#4CC9F0', '#A78BFA', '#FFFFFF', '#2D2A32'];
-  const bits = Array.from({ length: 120 }, () => ({
-    x: W / 2 + (Math.random() - 0.5) * 80, y: H * 0.42,
+  const colors = ['#FF8FAB', '#FFD97D', '#7DD3FC', '#A78BFA', '#6EE7C8', '#FFFFFF'];
+  const bits = Array.from({ length: 130 }, () => ({
+    x: W / 2 + (Math.random() - 0.5) * 90, y: H * 0.4,
     vx: (Math.random() - 0.5) * 11, vy: -Math.random() * 13 - 3,
     s: Math.random() * 7 + 4, r: Math.random() * Math.PI,
     vr: (Math.random() - 0.5) * 0.3, c: colors[Math.floor(Math.random() * colors.length)]
   }));
   let frames = 0;
-  (function anim() {
+  (function animate() {
     ctx.clearRect(0, 0, W, H);
     bits.forEach(b => {
       b.x += b.vx; b.y += b.vy; b.vy += 0.32; b.r += b.vr;
@@ -912,13 +1024,20 @@ function confettiBurst() {
       ctx.fillStyle = b.c; ctx.fillRect(-b.s / 2, -b.s / 2, b.s, b.s * 0.6);
       ctx.restore();
     });
-    if (++frames < 160 && $('done').classList.contains('on')) requestAnimationFrame(anim);
+    if (++frames < 170 && $('done').classList.contains('on')) requestAnimationFrame(animate);
     else ctx.clearRect(0, 0, W, H);
   })();
 }
 
 // ---------- boot ----------
+function homeGhost() {
+  const g = ghost('home', 'booHome', { camY: 1.35, camZ: 4.9, lookY: 0.8 });
+  g.setAnim(anim('idle'));
+  g.start();
+}
 renderHome();
+homeGhost();
+window.addEventListener('resize', () => Object.values(boo).forEach(g => g?.resize()));
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
 </body>
