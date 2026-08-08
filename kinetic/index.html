@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFF6EA">
+<title>Kinetic</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kinetic">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ground: #FFF6EA;
+    --ink: #2D2A32;
+    --ink-soft: rgba(45, 42, 50, 0.55);
+    --card: #FFFFFF;
+    --coral: #FF6B6B;
+    --sun: #FFD166;
+    --mint: #06D6A0;
+    --sky: #4CC9F0;
+    --grape: #A78BFA;
+    --peach: #FFB4A2;
+    --line: #2D2A32;
+    --r-card: 22px;
+    --r-pill: 999px;
+    --shadow: 0 4px 0 var(--ink);
+    --display: 'Fredoka', sans-serif;
+    --body: 'Quicksand', sans-serif;
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-weight: 500;
+    line-height: 1.45;
+    touch-action: manipulation;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
+  button { font-family: inherit; color: inherit; }
+
+  .screen { display: none; min-height: 100dvh; }
+  .screen.on { display: block; }
+  .wrap { max-width: 480px; margin: 0 auto; padding: calc(var(--sat) + 18px) 18px calc(var(--sab) + 28px); }
+
+  /* ---------- HOME ---------- */
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .brand .bolt {
+    width: 46px; height: 46px; border-radius: 14px; background: var(--coral);
+    border: 3px solid var(--ink); box-shadow: var(--shadow);
+    display: grid; place-items: center; transform: rotate(-6deg);
+  }
+  h1 {
+    font-family: var(--display); font-weight: 700; font-size: 34px;
+    letter-spacing: 0.5px; margin: 0;
+  }
+  .tagline { color: var(--ink-soft); font-weight: 600; margin: 2px 0 18px; font-size: 15px; }
+
+  .hero {
+    background: var(--sun); border: 3px solid var(--ink); border-radius: var(--r-card);
+    box-shadow: var(--shadow); padding: 16px 18px; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .ring { position: relative; width: 64px; height: 64px; flex: none; }
+  .ring svg { transform: rotate(-90deg); }
+  .ring .num {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font-family: var(--display); font-weight: 700; font-size: 17px;
+  }
+  .hero .msg { font-weight: 700; font-size: 15.5px; }
+  .hero .sub { font-weight: 600; font-size: 13px; color: rgba(45,42,50,0.6); margin-top: 2px; }
+
+  .daylist { display: flex; flex-direction: column; gap: 14px; }
+  .daycard {
+    width: 100%; text-align: left; border: 3px solid var(--ink); border-radius: var(--r-card);
+    box-shadow: var(--shadow); padding: 15px 16px; cursor: pointer;
+    display: flex; align-items: center; gap: 14px; background: var(--card);
+    transition: transform 0.08s ease;
+  }
+  .daycard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+  .daycard .dow {
+    flex: none; width: 54px; height: 54px; border-radius: 16px; border: 3px solid var(--ink);
+    display: grid; place-items: center; text-align: center;
+    font-family: var(--display); font-weight: 600; line-height: 1.05;
+  }
+  .daycard .dow b { display: block; font-size: 18px; font-weight: 700; }
+  .daycard .dow span { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .daycard .info { flex: 1; min-width: 0; }
+  .daycard .t { display: block; font-family: var(--display); font-weight: 600; font-size: 17.5px; }
+  .daycard .m { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-top: 1px; }
+  .daycard .check {
+    flex: none; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--ink);
+    display: grid; place-items: center; font-size: 16px; background: var(--ground);
+    font-weight: 700;
+  }
+  .daycard.done .check { background: var(--mint); }
+  .daycard.today { position: relative; }
+  .todaytag {
+    position: absolute; top: -12px; right: 14px; background: var(--coral); color: #fff;
+    border: 2.5px solid var(--ink); border-radius: var(--r-pill); padding: 2px 11px;
+    font-family: var(--display); font-weight: 600; font-size: 11.5px; letter-spacing: 0.8px;
+    transform: rotate(2deg); text-transform: uppercase;
+  }
+
+  .settings { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+  .toggle {
+    background: var(--card); border: 3px solid var(--ink); border-radius: var(--r-card);
+    box-shadow: var(--shadow); padding: 13px 16px; width: 100%;
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+  }
+  .toggle .tt { flex: 1; text-align: left; }
+  .toggle .tt b { font-family: var(--display); font-weight: 600; font-size: 15.5px; display: block; }
+  .toggle .tt span { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .knob {
+    flex: none; width: 52px; height: 30px; border-radius: var(--r-pill); border: 3px solid var(--ink);
+    background: #E8E0D4; position: relative; transition: background 0.15s;
+  }
+  .knob::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff; border: 2.5px solid var(--ink); transition: left 0.15s;
+  }
+  .toggle.on .knob { background: var(--mint); }
+  .toggle.on .knob::after { left: 24px; }
+
+  .fineprint { margin-top: 20px; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); text-align: center; }
+  .fineprint a { color: inherit; }
+
+  /* ---------- DAY DETAIL ---------- */
+  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .backbtn {
+    width: 44px; height: 44px; border-radius: 14px; border: 3px solid var(--ink);
+    background: var(--card); box-shadow: var(--shadow); font-size: 19px; cursor: pointer;
+    display: grid; place-items: center; flex: none;
+  }
+  .backbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+  .dayhero {
+    border: 3px solid var(--ink); border-radius: var(--r-card); box-shadow: var(--shadow);
+    padding: 20px 18px; margin-bottom: 16px;
+  }
+  .dayhero .k { font-family: var(--display); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.75; }
+  .dayhero h2 { font-family: var(--display); font-weight: 700; font-size: 27px; margin: 3px 0 7px; }
+  .dayhero p { margin: 0; font-weight: 600; font-size: 14.5px; }
+  .chips { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .chip {
+    background: rgba(255,255,255,0.65); border: 2.5px solid var(--ink); border-radius: var(--r-pill);
+    padding: 4px 12px; font-family: var(--display); font-weight: 600; font-size: 12.5px;
+  }
+  .blocks { display: flex; flex-direction: column; gap: 14px; margin-bottom: 110px; }
+  .block {
+    background: var(--card); border: 3px solid var(--ink); border-radius: var(--r-card);
+    box-shadow: var(--shadow); padding: 15px 16px;
+  }
+  .block h3 {
+    font-family: var(--display); font-weight: 600; font-size: 16px; margin: 0 0 3px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .block .meta { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); margin-bottom: 10px; }
+  .exrow { display: flex; align-items: baseline; gap: 10px; padding: 6.5px 0; border-top: 2px dashed #EDE4D6; }
+  .exrow:first-of-type { border-top: none; }
+  .exrow .nm { flex: 1; font-weight: 700; font-size: 14.5px; }
+  .exrow .nm small { display: block; font-weight: 600; font-size: 12px; color: var(--ink-soft); }
+  .exrow .sc { font-family: var(--display); font-weight: 600; font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+  .notecard {
+    background: var(--sky); border: 3px solid var(--ink); border-radius: var(--r-card);
+    box-shadow: var(--shadow); padding: 14px 16px; font-weight: 700; font-size: 14px;
+  }
+  .benchcard { background: var(--grape); }
+  .benchcard .bench-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .benchcard label { display: block; font-family: var(--display); font-weight: 600; font-size: 12px; margin-bottom: 4px; }
+  .benchcard input {
+    width: 100%; border: 3px solid var(--ink); border-radius: 12px; padding: 9px 6px;
+    font-family: var(--display); font-weight: 700; font-size: 18px; text-align: center;
+    background: #fff; color: var(--ink); appearance: none;
+  }
+  .benchcard input:focus { outline: 3px solid var(--sun); }
+  .delta { margin-top: 10px; font-weight: 700; font-size: 13.5px; }
+
+  .startdock {
+    position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 18px calc(var(--sab) + 14px);
+    background: linear-gradient(to top, var(--ground) 65%, transparent);
+    display: flex; justify-content: center; z-index: 5;
+  }
+  .bigbtn {
+    width: 100%; max-width: 444px; border: 3px solid var(--ink); border-radius: var(--r-pill);
+    background: var(--coral); color: #fff; box-shadow: 0 5px 0 var(--ink);
+    font-family: var(--display); font-weight: 700; font-size: 19px; letter-spacing: 0.5px;
+    padding: 16px; cursor: pointer;
+  }
+  .bigbtn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink); }
+
+  /* ---------- PLAYER ---------- */
+  #player { position: fixed; inset: 0; z-index: 20; transition: background 0.35s ease; }
+  #player .pwrap {
+    height: 100dvh; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column;
+    padding: calc(var(--sat) + 14px) 20px calc(var(--sab) + 18px);
+  }
+  .phead { display: flex; align-items: center; gap: 12px; }
+  .phead .xbtn {
+    width: 42px; height: 42px; border-radius: 13px; border: 3px solid var(--ink);
+    background: rgba(255,255,255,0.85); box-shadow: 0 3px 0 var(--ink);
+    font-size: 17px; cursor: pointer; flex: none; display: grid; place-items: center;
+  }
+  .pbar { flex: 1; height: 16px; border: 3px solid var(--ink); border-radius: var(--r-pill); background: rgba(255,255,255,0.55); overflow: hidden; }
+  .pbar i { display: block; height: 100%; width: 0%; background: var(--ink); border-radius: var(--r-pill); transition: width 0.3s linear; }
+  .pcount { font-family: var(--display); font-weight: 600; font-size: 13.5px; white-space: nowrap; }
+
+  .pmain { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 6px; }
+  .phase {
+    font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: 2.5px;
+    text-transform: uppercase; background: rgba(255,255,255,0.7); border: 2.5px solid var(--ink);
+    border-radius: var(--r-pill); padding: 4px 16px;
+  }
+  .ptime {
+    font-family: var(--display); font-weight: 700; font-size: clamp(88px, 30vw, 132px);
+    line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: 1px;
+    margin: 6px 0 2px;
+  }
+  .pex { font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1.15; max-width: 320px; }
+  .pcue { font-weight: 700; font-size: 14.5px; max-width: 300px; opacity: 0.8; min-height: 40px; margin-top: 4px; }
+  .pnext {
+    margin-top: 10px; font-weight: 700; font-size: 13.5px;
+    background: rgba(255,255,255,0.7); border: 2.5px solid var(--ink);
+    border-radius: var(--r-pill); padding: 5px 14px; max-width: 90%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .pctrls { display: flex; gap: 12px; align-items: center; justify-content: center; }
+  .cbtn {
+    border: 3px solid var(--ink); border-radius: 18px; background: rgba(255,255,255,0.85);
+    box-shadow: 0 4px 0 var(--ink); cursor: pointer; font-family: var(--display); font-weight: 700;
+    display: grid; place-items: center;
+  }
+  .cbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+  .cbtn.side { width: 62px; height: 62px; font-size: 21px; }
+  .cbtn.mid { width: 92px; height: 92px; border-radius: 26px; font-size: 33px; background: #fff; }
+
+  /* ---------- DONE ---------- */
+  #done { position: fixed; inset: 0; z-index: 30; background: var(--mint); display: none; }
+  #done.on { display: block; }
+  #done .dwrap {
+    height: 100dvh; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 24px; gap: 10px;
+    position: relative; z-index: 2;
+  }
+  #done .big { font-size: 74px; }
+  #done h2 { font-family: var(--display); font-weight: 700; font-size: 36px; margin: 0; }
+  #done p { font-weight: 700; font-size: 16px; margin: 0 0 16px; max-width: 300px; }
+  #confetti { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+  @media (min-width: 500px) {
+    body { background: #F6E9D6; }
+    .screen.on { min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HOME ================= -->
+<section id="home" class="screen on">
+  <div class="wrap">
+    <div class="brand">
+      <div class="bolt">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M13.5 2 5 13.5h5L9.5 22 19 9.5h-5.5L13.5 2Z" fill="#FFF6EA" stroke="#2D2A32" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1>Kinetic</h1>
+    </div>
+    <p class="tagline">Your week of no-equipment fire. Anywhere with a floor.</p>
+
+    <div class="hero">
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="26" fill="#FFF6EA" stroke="#2D2A32" stroke-width="5" opacity="0.35"/>
+          <circle id="ringFg" cx="32" cy="32" r="26" fill="none" stroke="#2D2A32" stroke-width="5"
+                  stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36"/>
+        </svg>
+        <div class="num" id="ringNum">0/8</div>
+      </div>
+      <div>
+        <div class="msg" id="heroMsg">Saturday to Saturday. Eight sessions.</div>
+        <div class="sub" id="heroSub">Benchmark on day 1, retest on day 8 — watch the numbers climb.</div>
+      </div>
+    </div>
+
+    <div class="daylist" id="daylist"></div>
+
+    <div class="settings">
+      <button class="toggle" id="quietToggle">
+        <div class="tt"><b>Quiet mode 🤫</b><span>No jumping — Airbnb-neighbor-approved swaps</span></div>
+        <div class="knob"></div>
+      </button>
+      <button class="toggle" id="soundToggle">
+        <div class="tt"><b>Sound cues 🔔</b><span>Beeps for countdowns and switches</span></div>
+        <div class="knob"></div>
+      </button>
+    </div>
+
+    <p class="fineprint">Reusable any week — hotel rooms, rainy days, tiny apartments.<br>
+    Works offline once installed. Add to Home Screen from Safari’s share menu.</p>
+  </div>
+</section>
+
+<!-- ================= DAY DETAIL ================= -->
+<section id="day" class="screen">
+  <div class="wrap">
+    <div class="topbar">
+      <button class="backbtn" id="dayBack">←</button>
+    </div>
+    <div class="dayhero" id="dayHero"></div>
+    <div class="blocks" id="dayBlocks"></div>
+  </div>
+  <div class="startdock"><button class="bigbtn" id="startBtn">Start workout ⚡</button></div>
+</section>
+
+<!-- ================= PLAYER ================= -->
+<section id="player" class="screen">
+  <div class="pwrap">
+    <div class="phead">
+      <button class="xbtn" id="quitBtn">✕</button>
+      <div class="pbar"><i id="pbarFill"></i></div>
+      <div class="pcount" id="pcount">1/1</div>
+    </div>
+    <div class="pmain">
+      <div class="phase" id="pphase">GET READY</div>
+      <div class="ptime" id="ptime">0:10</div>
+      <div class="pex" id="pex">First move coming up</div>
+      <div class="pcue" id="pcue"></div>
+      <div class="pnext" id="pnext"></div>
+    </div>
+    <div class="pctrls">
+      <button class="cbtn side" id="prevBtn">⏮</button>
+      <button class="cbtn mid" id="pauseBtn">⏸</button>
+      <button class="cbtn side" id="skipBtn">⏭</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DONE ================= -->
+<section id="done">
+  <canvas id="confetti"></canvas>
+  <div class="dwrap">
+    <div class="big">🎉</div>
+    <h2 id="doneTitle">Crushed it!</h2>
+    <p id="doneMsg">Another one in the books.</p>
+    <button class="bigbtn" id="doneBtn" style="max-width:280px">Back to the week</button>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   KINETIC — a week of indoor, no-equipment fat-burn & cardio
+   Sat → Sat. Benchmark day 1, retest day 8.
+   ===================================================================== */
+
+// ---------- exercise helper: {n:name, c:cue, q:quiet-mode swap} ----------
+const M = (n, c, q) => ({ n, c, q: q || null });
+
+const WARMUP = {
+  kind: 'flow', title: 'Warm-up', icon: '🔥', work: 35, moves: [
+    M('March in place', 'Big arm swings, easy breathing'),
+    M('Arm circles', 'Forward 15s, then backward'),
+    M('Hip circles', 'Hands on hips, both directions'),
+    M('Good mornings', 'Hinge at the hips, flat back'),
+    M('Half squats', 'Smooth and springy'),
+    M('Torso twists', 'Loose arms, let them whip'),
+    M('Easy jacks', 'Light bounce, warm the calves', 'Step-out jacks'),
+  ]
+};
+
+const COOLDOWN = {
+  kind: 'flow', title: 'Cool-down', icon: '🧊', work: 40, moves: [
+    M('Standing quad stretch', 'Hold the wall, swap halfway'),
+    M('Forward fold', 'Soft knees, hang heavy'),
+    M('Hip flexor lunge stretch', 'Swap sides halfway, squeeze the glute'),
+    M('Chest opener', 'Hands behind back, lift the heart'),
+    M('Child’s pose', 'Long arms, slow breaths out'),
+  ]
+};
+
+const BENCHMARK = {
+  kind: 'bench', title: 'Benchmark', icon: '📊',
+  note: 'Count every rep. You’ll log the numbers after — day 8 is the rematch.',
+  moves: [
+    M('MAX air squats', 'Full depth, count out loud'),
+    M('MAX push-ups', 'Knees totally fine — just count'),
+    M('MAX burpees', 'Steady rhythm beats sprinting', 'Walk-out burpees, no jump'),
+  ]
+};
+
+const DAYS = [
+  {
+    id: 'd1', dow: 'SAT', num: 1, color: 'var(--coral)', emoji: '🚀',
+    title: 'Kickoff + Benchmark',
+    focus: 'Plant the flag. Test where you are today, then a full-body burner.',
+    blocks: [
+      WARMUP,
+      BENCHMARK,
+      { kind: 'hiit', title: 'Full-body Ignition', icon: '⚡', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
+        M('Air squats', 'Chest proud, heels down'),
+        M('Push-ups', 'Elbows ~45°, drop to knees anytime'),
+        M('Mountain climbers', 'Hips low, drive the knees'),
+        M('Reverse lunges', 'Alternate legs, soft landing'),
+        M('Plank shoulder taps', 'Hips quiet, feet wide'),
+        M('Jumping jacks', 'Full arm swing overhead', 'Step-out jacks'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+  {
+    id: 'd2', dow: 'SUN', num: 2, color: 'var(--sun)', emoji: '🔥',
+    title: 'Cardio Furnace',
+    focus: 'Pure engine work. Keep moving, keep breathing — this is your indoor run.',
+    blocks: [
+      WARMUP,
+      { kind: 'hiit', title: 'The Furnace', icon: '🔥', work: 40, rest: 20, rounds: 3, breather: 60, moves: [
+        M('High knees', 'Tall chest, quick feet', 'Power march'),
+        M('Skaters', 'Push side to side, stick the landing', 'Side taps'),
+        M('Shadow boxing', 'Fast hands, stay bouncy'),
+        M('Mountain climbers', 'Even pace, breathe'),
+        M('Fast feet', 'Low squat, sprint the feet', 'Quick march'),
+        M('Squat to punch', 'Squat, stand, jab-cross'),
+      ]},
+      { kind: 'hiit', title: 'Tabata Finisher', icon: '🏁', work: 20, rest: 10, rounds: 4, breather: 0, moves: [
+        M('Jumping jacks', 'Empty the tank', 'Step-out jacks'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+  {
+    id: 'd3', dow: 'MON', num: 3, color: 'var(--grape)', emoji: '🦵',
+    title: 'Strong Legs',
+    focus: 'Hiking legs, no trail needed. Strength-endurance for the lower half.',
+    blocks: [
+      WARMUP,
+      { kind: 'hiit', title: 'Leg Builder', icon: '🦵', work: 45, rest: 15, rounds: 2, breather: 60, moves: [
+        M('Air squats', 'Slow down, control up'),
+        M('Alternating reverse lunges', 'Knee kisses the floor'),
+        M('Glute bridges', 'Squeeze hard at the top'),
+        M('Side lunges — left', 'Sit back into the hip'),
+        M('Side lunges — right', 'Chest up, push off strong'),
+        M('Wall sit', 'Thighs parallel, hands off legs'),
+        M('Calf raises', 'Pause up top, full stretch down'),
+        M('Squat pulses', 'Stay low, tiny bounces'),
+      ]},
+      { kind: 'hiit', title: 'Finisher', icon: '🏁', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
+        M('Wall sit', 'One minute. Sing something.'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+  {
+    id: 'd4', dow: 'TUE', num: 4, color: 'var(--sky)', emoji: '🌊',
+    title: 'Recovery Flow',
+    focus: 'Active recovery. Loosen up, light core, then get your LA steps in.',
+    note: 'Bonus mission: a long city walk today — aim for 8–10k steps. Sightseeing counts.',
+    blocks: [
+      { kind: 'flow', title: 'Mobility Flow', icon: '🌊', work: 45, moves: [
+        M('Cat-cow', 'Move with your breath'),
+        M('World’s greatest stretch — L', 'Lunge, twist, reach for the sky'),
+        M('World’s greatest stretch — R', 'Slow is the whole point'),
+        M('Hip flexor stretch — L', 'Tuck the pelvis, lean gently'),
+        M('Hip flexor stretch — R', 'Breathe into it'),
+        M('Hamstring fold', 'Hinge, soft knees, hang'),
+        M('Figure-4 stretch — L', 'On your back, pull the leg in'),
+        M('Figure-4 stretch — R', 'Relax the shoulders'),
+        M('Thoracic rotations', 'On all fours, open the chest'),
+        M('Child’s pose', 'Longest exhales of the day'),
+      ]},
+      { kind: 'hiit', title: 'Gentle Core', icon: '🧘', work: 30, rest: 15, rounds: 2, breather: 45, moves: [
+        M('Dead bugs', 'Low back glued to the floor'),
+        M('Bird dogs', 'Slow, long lines, no wobble'),
+        M('Glute bridges', 'Smooth reps, squeeze up top'),
+        M('Side plank — left', 'Knees down is perfect'),
+        M('Side plank — right', 'Straight line, proud chest'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+  {
+    id: 'd5', dow: 'WED', num: 5, color: 'var(--coral)', emoji: '⛰️',
+    title: 'The Pyramid',
+    focus: 'Climb up, climb down. Four moves, five rounds, intervals that grow then shrink.',
+    blocks: [
+      WARMUP,
+      { kind: 'pyramid', title: 'Pyramid Climb', icon: '⛰️',
+        steps: [[20,10],[30,15],[40,20],[30,15],[20,10]], breather: 45, moves: [
+        M('Burpees', 'Your pace, just keep moving', 'Walk-out burpees, no jump'),
+        M('Squat jumps', 'Land soft like a cat', 'Squat + calf-raise pop'),
+        M('Push-ups', 'Quality over speed'),
+        M('Mountain climbers', 'Finish every round strong'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+  {
+    id: 'd6', dow: 'THU', num: 6, color: 'var(--mint)', emoji: '💪',
+    title: 'Push & Core',
+    focus: 'Upper body and midsection. The hike-photo muscles.',
+    blocks: [
+      WARMUP,
+      { kind: 'hiit', title: 'Push Party', icon: '💪', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
+        M('Push-ups', 'Full range, knees anytime'),
+        M('Pike push-ups', 'Hips high, head toward floor'),
+        M('Plank', 'Squeeze everything, steady breath'),
+        M('Side plank — left', 'Stack or stagger the feet'),
+        M('Side plank — right', 'Hips high and proud'),
+        M('Supermans', 'Lift arms and legs, pause up top'),
+        M('Bicycle crunches', 'Slow, elbow to opposite knee'),
+        M('Hollow hold', 'Low back down, arms by ears — or knees tucked'),
+      ]},
+      { kind: 'hiit', title: 'Finisher', icon: '🏁', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
+        M('MAX push-ups', 'One minute, count them, remember the number'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+  {
+    id: 'd7', dow: 'FRI', num: 7, color: 'var(--sun)', emoji: '🔋',
+    title: 'Endurance Engine',
+    focus: 'Long steady burn — the indoor version of your Montana hikes. Conversational pace, no stopping.',
+    blocks: [
+      WARMUP,
+      { kind: 'hiit', title: 'Engine Round 1', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
+        M('March or jog in place', 'Settle into a rhythm'),
+        M('Step-back lunges', 'Steady tempo, no rush'),
+        M('Standing punches', 'Light feet, relaxed shoulders'),
+        M('High knees — cruising', 'Comfortably hard, not sprinting', 'Brisk power march'),
+        M('Air squats — steady', 'Metronome pace'),
+        M('Side steps + reach', 'Wide steps, reach overhead'),
+      ]},
+      { kind: 'hiit', title: 'Engine Round 2', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
+        M('March or jog in place', 'Find the rhythm again'),
+        M('Step-back lunges', 'Smooth, quiet landings'),
+        M('Standing punches', 'Faster hands this round'),
+        M('High knees — cruising', 'Hold the pace', 'Brisk power march'),
+        M('Air squats — steady', 'Keep the depth honest'),
+        M('Slow mountain climbers', 'Controlled, hips level'),
+      ]},
+      { kind: 'hiit', title: 'Engine Round 3', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
+        M('March or jog in place', 'Last climb, enjoy it'),
+        M('Step-back lunges', 'Strong to the end'),
+        M('Standing punches', 'Finish like a boxer'),
+        M('High knees — cruising', 'You’ve got one more gear', 'Brisk power march'),
+        M('Air squats — steady', 'Every rep full depth'),
+        M('Fast feet', 'Empty the tank — 60 seconds', 'Quick march'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+  {
+    id: 'd8', dow: 'SAT', num: 8, color: 'var(--mint)', emoji: '🏆',
+    title: 'Retest + Victory Lap',
+    focus: 'The rematch. Same benchmark as day 1 — beat your numbers, then take a lap.',
+    blocks: [
+      WARMUP,
+      BENCHMARK,
+      { kind: 'hiit', title: 'Victory Lap', icon: '🏆', work: 40, rest: 20, rounds: 1, breather: 0, moves: [
+        M('Jumping jacks', 'Celebration cardio', 'Step-out jacks'),
+        M('Air squats', 'Compare these to day 1 — smoother, right?'),
+        M('Push-ups', 'Stronger than last Saturday'),
+        M('Skaters', 'Glide, you athlete', 'Side taps'),
+        M('Plank shoulder taps', 'Rock solid now'),
+        M('High knees', 'Sprint into the finish line', 'Power march'),
+      ]},
+      COOLDOWN,
+    ]
+  },
+];
+
+// ---------- expand a day into timed player steps ----------
+function buildSteps(day, quiet) {
+  const steps = [];
+  const name = (m) => (quiet && m.q) ? m.q : m.n;
+  const push = (kind, label, secs, cue) => steps.push({ kind, label, secs, cue });
+
+  push('prep', 'Get ready', 10, day.title);
+
+  for (const b of day.blocks) {
+    if (b.kind === 'flow') {
+      b.moves.forEach(m => push('flow', name(m), b.work, m.c));
+    } else if (b.kind === 'bench') {
+      b.moves.forEach((m, i) => {
+        push('work', name(m), 60, m.c);
+        if (i < b.moves.length - 1) push('rest', 'Rest + recover', 90, 'Shake it out, note your count');
+      });
+    } else if (b.kind === 'hiit') {
+      for (let r = 0; r < b.rounds; r++) {
+        b.moves.forEach((m, i) => {
+          push('work', name(m), b.work, m.c);
+          const last = (i === b.moves.length - 1);
+          if (!last && b.rest > 0) push('rest', 'Rest', b.rest, 'Breathe — next: ' + name(b.moves[i + 1]));
+          if (last && r < b.rounds - 1) {
+            if (b.rest > 0) push('rest', 'Rest', b.rest, 'Round ' + (r + 2) + ' incoming');
+            if (b.breather > 0) push('rest', 'Breather', b.breather, 'Water break — round ' + (r + 2) + ' of ' + b.rounds);
+          }
+        });
+      }
+      if (b.breather > 0 && b.rounds === 1) push('rest', 'Breather', b.breather, 'Recover before the next block');
+    } else if (b.kind === 'pyramid') {
+      b.steps.forEach(([w, rst], r) => {
+        b.moves.forEach((m, i) => {
+          push('work', name(m), w, m.c + '  ·  level ' + (r + 1) + '/' + b.steps.length);
+          const last = (i === b.moves.length - 1);
+          if (!last) push('rest', 'Rest', rst, 'Next: ' + name(b.moves[i + 1]));
+          if (last && r < b.steps.length - 1) push('rest', 'Breather', b.breather, 'Level ' + (r + 2) + ': ' + b.steps[r + 1][0] + 's work');
+        });
+      });
+    }
+  }
+  return steps;
+}
+
+const dayMinutes = (day) => Math.round(buildSteps(day, false).reduce((s, x) => s + x.secs, 0) / 60);
+
+// ---------- state ----------
+const store = {
+  load() { try { return JSON.parse(localStorage.getItem('kinetic-v1')) || {}; } catch { return {}; } },
+  save(s) { localStorage.setItem('kinetic-v1', JSON.stringify(s)); }
+};
+let S = Object.assign({ done: {}, bench: {}, quiet: false, sound: true }, store.load());
+const persist = () => store.save(S);
+
+const $ = (id) => document.getElementById(id);
+const KINDCOLOR = { prep: 'var(--sun)', work: 'var(--coral)', rest: 'var(--mint)', flow: 'var(--sky)' };
+const KINDLABEL = { prep: 'Get ready', work: 'Work', rest: 'Rest', flow: 'Flow' };
+
+// ---------- audio cues ----------
+let AC = null;
+function beep(freq, dur, when = 0, gain = 0.22) {
+  if (!S.sound || !AC) return;
+  const t = AC.currentTime + when;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = 'sine'; o.frequency.value = freq;
+  g.gain.setValueAtTime(gain, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  o.connect(g).connect(AC.destination);
+  o.start(t); o.stop(t + dur + 0.02);
+}
+const tick = () => beep(660, 0.1);
+const ding = () => { beep(880, 0.12); beep(1320, 0.22, 0.12); };
+const fanfare = () => { [660, 880, 1100, 1320].forEach((f, i) => beep(f, 0.18, i * 0.13)); };
+
+// ---------- wake lock ----------
+let wakeLock = null;
+async function grabWakeLock() {
+  try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
+}
+function dropWakeLock() { wakeLock?.release().catch(() => {}); wakeLock = null; }
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && player.running) grabWakeLock();
+});
+
+// ---------- screens ----------
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+  window.scrollTo(0, 0);
+}
+
+// ---------- home ----------
+function renderHome() {
+  const doneCount = DAYS.filter(d => S.done[d.id]).length;
+  $('ringNum').textContent = doneCount + '/8';
+  $('ringFg').style.strokeDashoffset = 163.36 * (1 - doneCount / 8);
+  if (doneCount === 8) {
+    $('heroMsg').textContent = 'Full week complete. Legend. 🏆';
+    $('heroSub').textContent = 'Reset below to run it back, anywhere, any week.';
+  } else if (doneCount > 0) {
+    $('heroMsg').textContent = doneCount + ' down, ' + (8 - doneCount) + ' to go. Keep the streak.';
+    $('heroSub').textContent = 'Fitness trends up when you show up.';
+  }
+
+  const next = DAYS.find(d => !S.done[d.id]);
+  $('daylist').innerHTML = DAYS.map(d => {
+    const done = !!S.done[d.id];
+    const today = next && next.id === d.id;
+    return `<button class="daycard ${done ? 'done' : ''} ${today ? 'today' : ''}" data-day="${d.id}">
+      ${today ? '<span class="todaytag">Up next</span>' : ''}
+      <span class="dow" style="background:${d.color}"><span><b>${d.num}</b><span>${d.dow}</span></span></span>
+      <span class="info">
+        <span class="t">${d.emoji} ${d.title}</span>
+        <span class="m">${dayMinutes(d)} min · no equipment</span>
+      </span>
+      <span class="check">${done ? '✓' : ''}</span>
+    </button>`;
+  }).join('');
+  document.querySelectorAll('.daycard').forEach(el =>
+    el.addEventListener('click', () => openDay(el.dataset.day)));
+
+  $('quietToggle').classList.toggle('on', S.quiet);
+  $('soundToggle').classList.toggle('on', S.sound);
+}
+
+$('quietToggle').addEventListener('click', () => { S.quiet = !S.quiet; persist(); renderHome(); });
+$('soundToggle').addEventListener('click', () => { S.sound = !S.sound; persist(); renderHome(); });
+
+// ---------- day detail ----------
+let currentDay = null;
+function openDay(id) {
+  currentDay = DAYS.find(d => d.id === id);
+  const d = currentDay;
+  const mins = dayMinutes(d);
+  $('dayHero').style.background = d.color;
+  $('dayHero').innerHTML = `
+    <div class="k">Day ${d.num} · ${d.dow === 'SAT' && d.num === 8 ? 'Final Saturday' : d.dow}</div>
+    <h2>${d.emoji} ${d.title}</h2>
+    <p>${d.focus}</p>
+    <div class="chips">
+      <span class="chip">⏱ ~${mins} min</span>
+      <span class="chip">🧳 zero equipment</span>
+      ${S.quiet ? '<span class="chip">🤫 quiet mode on</span>' : ''}
+    </div>`;
+
+  let html = '';
+  if (d.note) html += `<div class="notecard">🌴 ${d.note}</div>`;
+
+  for (const b of d.blocks) {
+    if (b.kind === 'bench') { html += benchCard(d, b); continue; }
+    const meta =
+      b.kind === 'flow' ? `${b.work}s each · no rest, just flow` :
+      b.kind === 'pyramid' ? `levels: ${b.steps.map(s => s[0] + 's').join(' → ')} · rest scales with work` :
+      (b.rounds > 1 ? b.rounds + ' rounds · ' : '') + b.work + 's on' + (b.rest ? ' / ' + b.rest + 's off' : '');
+    html += `<div class="block"><h3>${b.icon} ${b.title}</h3><div class="meta">${meta}</div>` +
+      b.moves.map(m => {
+        const nm = (S.quiet && m.q) ? m.q : m.n;
+        const swapped = S.quiet && m.q;
+        return `<div class="exrow"><span class="nm">${nm}${swapped ? ' <small>quiet swap 🤫</small>' : ''}</span><span class="sc">${m.c}</span></div>`;
+      }).join('') + '</div>';
+  }
+  $('dayBlocks').innerHTML = html;
+  wireBenchInputs(d);
+  $('startBtn').textContent = S.done[d.id] ? 'Do it again ⚡' : 'Start workout ⚡';
+  show('day');
+}
+
+const BENCH_FIELDS = [['squats', 'Squats'], ['pushups', 'Push-ups'], ['burpees', 'Burpees']];
+
+function benchCard(d, b) {
+  const mine = S.bench[d.id] || {};
+  let extra = '';
+  if (d.id === 'd8' && S.bench.d1) {
+    const deltas = BENCH_FIELDS.map(([k, label]) => {
+      const a = +S.bench.d1[k] || 0, z = +mine[k] || 0;
+      if (!a || !z) return null;
+      const diff = z - a;
+      return `${label}: ${a} → ${z} (${diff >= 0 ? '+' : ''}${diff})`;
+    }).filter(Boolean);
+    if (deltas.length) extra = `<div class="delta">📈 vs day 1 — ${deltas.join(' · ')}</div>`;
+  }
+  return `<div class="block benchcard"><h3>${b.icon} ${b.title} — 60s max each</h3>
+    <div class="meta" style="color:rgba(45,42,50,0.65)">${b.note}</div>
+    ${b.moves.map(m => `<div class="exrow"><span class="nm">${(S.quiet && m.q) ? m.q : m.n}</span><span class="sc">${m.c}</span></div>`).join('')}
+    <div class="bench-grid">
+      ${BENCH_FIELDS.map(([k, label]) =>
+        `<div><label>${label}</label><input type="number" inputmode="numeric" min="0" max="999" placeholder="—" data-bench="${k}" value="${mine[k] ?? ''}"></div>`).join('')}
+    </div>${extra}</div>`;
+}
+
+function wireBenchInputs(d) {
+  document.querySelectorAll('[data-bench]').forEach(inp => {
+    inp.addEventListener('input', () => {
+      S.bench[d.id] = S.bench[d.id] || {};
+      S.bench[d.id][inp.dataset.bench] = inp.value;
+      persist();
+    });
+  });
+}
+
+$('dayBack').addEventListener('click', () => { renderHome(); show('home'); });
+
+// ---------- player ----------
+const player = { steps: [], i: 0, remaining: 0, total: 0, elapsedBefore: 0, timer: null, running: false, paused: false, lastTs: 0 };
+
+$('startBtn').addEventListener('click', () => {
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch {} }
+  AC?.resume?.();
+  startWorkout(currentDay);
+});
+
+function startWorkout(day) {
+  player.steps = buildSteps(day, S.quiet);
+  player.total = player.steps.reduce((s, x) => s + x.secs, 0);
+  player.i = 0;
+  player.running = true;
+  grabWakeLock();
+  enterStep(0);
+  show('player');
+  setPaused(false);
+}
+
+function enterStep(i) {
+  player.i = i;
+  const st = player.steps[i];
+  player.remaining = st.secs;
+  player.elapsedBefore = player.steps.slice(0, i).reduce((s, x) => s + x.secs, 0);
+  $('player').style.background = KINDCOLOR[st.kind];
+  $('pphase').textContent = KINDLABEL[st.kind];
+  $('pex').textContent = st.label;
+  $('pcue').textContent = st.cue || '';
+  $('pcount').textContent = (i + 1) + '/' + player.steps.length;
+  const nxt = player.steps[i + 1];
+  $('pnext').textContent = nxt ? 'Next: ' + nxt.label : 'Last one — finish strong!';
+  paint();
+  if (st.kind === 'work') ding(); else if (i > 0) beep(520, 0.15);
+}
+
+function fmt(s) { return Math.floor(s / 60) + ':' + String(Math.ceil(s % 60) === 60 ? 0 : Math.ceil(s % 60)).padStart(2, '0'); }
+
+function paint() {
+  $('ptime').textContent = fmt(Math.max(0, player.remaining));
+  const done = player.elapsedBefore + (player.steps[player.i].secs - player.remaining);
+  $('pbarFill').style.width = Math.min(100, done / player.total * 100) + '%';
+}
+
+function loop(ts) {
+  if (!player.running || player.paused) return;
+  if (!player.lastTs) player.lastTs = ts;
+  const dt = (ts - player.lastTs) / 1000;
+  player.lastTs = ts;
+  const before = Math.ceil(player.remaining);
+  player.remaining -= dt;
+  const after = Math.ceil(player.remaining);
+  if (after !== before && after > 0 && after <= 3) tick();
+  if (player.remaining <= 0) {
+    if (player.i + 1 < player.steps.length) enterStep(player.i + 1);
+    else return finishWorkout();
+  } else paint();
+  requestAnimationFrame(loop);
+}
+
+function setPaused(p) {
+  player.paused = p;
+  player.lastTs = 0;
+  $('pauseBtn').textContent = p ? '▶' : '⏸';
+  if (!p) requestAnimationFrame(loop);
+}
+
+$('pauseBtn').addEventListener('click', () => setPaused(!player.paused));
+$('skipBtn').addEventListener('click', () => {
+  if (player.i + 1 < player.steps.length) { player.lastTs = 0; enterStep(player.i + 1); }
+  else finishWorkout();
+});
+$('prevBtn').addEventListener('click', () => { player.lastTs = 0; enterStep(Math.max(0, player.i - 1)); });
+$('quitBtn').addEventListener('click', () => {
+  player.running = false;
+  dropWakeLock();
+  openDay(currentDay.id);
+});
+
+// ---------- done ----------
+const PRAISE = [
+  'Sweat delivered. Neighbors undisturbed.',
+  'That’s vacation cardio done right.',
+  'Montana legs, LA living room.',
+  'Trend line: still going up. 📈',
+  'Wife-approved workout: complete.',
+];
+function finishWorkout() {
+  player.running = false;
+  dropWakeLock();
+  const first = !S.done[currentDay.id];
+  S.done[currentDay.id] = Date.now();
+  persist();
+  const doneCount = DAYS.filter(d => S.done[d.id]).length;
+  $('doneTitle').textContent = currentDay.id === 'd8' ? 'Week complete!' : 'Crushed it!';
+  $('doneMsg').textContent = currentDay.id === 'd8'
+    ? 'Eight for eight. Log your retest numbers on the day 8 page and admire the gains.'
+    : (first ? doneCount + '/8 done. ' : '') + PRAISE[Math.floor(Math.random() * PRAISE.length)];
+  fanfare();
+  $('done').classList.add('on');
+  confettiBurst();
+}
+$('doneBtn').addEventListener('click', () => {
+  $('done').classList.remove('on');
+  if (currentDay.id === 'd1' || currentDay.id === 'd8') openDay(currentDay.id);
+  else { renderHome(); show('home'); }
+});
+
+// ---------- confetti ----------
+function confettiBurst() {
+  const cv = $('confetti'), ctx = cv.getContext('2d');
+  cv.width = cv.offsetWidth * devicePixelRatio;
+  cv.height = cv.offsetHeight * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = cv.offsetWidth, H = cv.offsetHeight;
+  const colors = ['#FF6B6B', '#FFD166', '#4CC9F0', '#A78BFA', '#FFFFFF', '#2D2A32'];
+  const bits = Array.from({ length: 120 }, () => ({
+    x: W / 2 + (Math.random() - 0.5) * 80, y: H * 0.42,
+    vx: (Math.random() - 0.5) * 11, vy: -Math.random() * 13 - 3,
+    s: Math.random() * 7 + 4, r: Math.random() * Math.PI,
+    vr: (Math.random() - 0.5) * 0.3, c: colors[Math.floor(Math.random() * colors.length)]
+  }));
+  let frames = 0;
+  (function anim() {
+    ctx.clearRect(0, 0, W, H);
+    bits.forEach(b => {
+      b.x += b.vx; b.y += b.vy; b.vy += 0.32; b.r += b.vr;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r);
+      ctx.fillStyle = b.c; ctx.fillRect(-b.s / 2, -b.s / 2, b.s, b.s * 0.6);
+      ctx.restore();
+    });
+    if (++frames < 160 && $('done').classList.contains('on')) requestAnimationFrame(anim);
+    else ctx.clearRect(0, 0, W, H);
+  })();
+}
+
+// ---------- boot ----------
+renderHome();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
