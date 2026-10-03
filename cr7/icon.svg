@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0a0a0a"/>
+  <rect x="0" y="0" width="205" height="14" fill="#0B6B3A"/>
+  <rect x="205" y="0" width="307" height="14" fill="#C8102E"/>
+  <!-- a heavy condensed seven -->
+  <path d="M150 112 H366 V170 L268 420 H190 L282 176 H150 Z" fill="#C8102E"/>
+  <rect x="150" y="452" width="212" height="4" fill="#EDE8DF" opacity="0.5"/>
+</svg>

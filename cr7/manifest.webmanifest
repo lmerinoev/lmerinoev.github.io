@@ -1,0 +1,15 @@
+{
+  "name": "Sete — a CR7 mentality program",
+  "short_name": "Sete",
+  "description": "Seven no-equipment sessions built around Cristiano Ronaldo's published words on work and discipline. Fan-made tribute.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
