@@ -1,7 +1,7 @@
-const CACHE = 'kinetic-v2';
+const CACHE = 'kinetic-cr7-v1';
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
-  './ghost.js', './anims.js', './anims-core.js', './anims-a.js', './anims-b.js', './anims-c.js',
+  './coach.js', './anims.js', './anims-core.js', './anims-a.js', './anims-b.js', './anims-c.js', './anims-cr7.js',
   './vendor/three.module.min.js',
   './icon.svg', './icon-180.png', './icon-512.png',
 ];

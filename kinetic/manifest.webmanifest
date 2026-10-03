@@ -1,12 +1,12 @@
 {
-  "name": "Kinetic",
-  "short_name": "Kinetic",
-  "description": "A week of no-equipment indoor workouts, coached by Boo the ghost.",
+  "name": "Kinetic · CR7 Edition",
+  "short_name": "CR7",
+  "description": "A week of no-equipment indoor workouts, coached by a chibi #7 footballer. Fan-made tribute.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
-  "background_color": "#131028",
-  "theme_color": "#131028",
+  "background_color": "#0d0a0b",
+  "theme_color": "#0d0a0b",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },

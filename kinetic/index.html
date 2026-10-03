@@ -4,34 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#131028">
-<title>Kinetic</title>
+<meta name="theme-color" content="#0d0a0b">
+<title>Kinetic CR7</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Kinetic">
+<meta name="apple-mobile-web-app-title" content="CR7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg0: #131028;
-    --bg1: #1d1840;
-    --card: rgba(255, 255, 255, 0.055);
+    --bg0: #0d0a0b;
+    --bg1: #1a1213;
+    --card: rgba(255, 255, 255, 0.05);
     --card-edge: rgba(255, 255, 255, 0.09);
-    --ink: #F2EFFF;
-    --ink-dim: rgba(242, 239, 255, 0.55);
-    --mint: #6EE7C8;
-    --lav: #A78BFA;
-    --pink: #FF8FAB;
-    --gold: #FFD97D;
-    --sky: #7DD3FC;
-    --r: 22px;
-    --display: 'Baloo 2', sans-serif;
-    --body: 'Nunito', sans-serif;
+    --ink: #FBF5EE;
+    --ink-dim: rgba(251, 245, 238, 0.56);
+    --green: #2BD97B;
+    --crimson: #FF4D5E;
+    --red: #E4002B;
+    --gold: #F5C451;
+    --cream: #FFE9B0;
+    --r: 18px;
+    --headline: 'Anton', 'Impact', sans-serif;
+    --display: 'Barlow Condensed', sans-serif;
+    --body: 'Barlow', sans-serif;
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
   }
@@ -39,8 +40,8 @@
   html, body { margin: 0; padding: 0; }
   body {
     background: var(--bg0);
-    background-image: radial-gradient(1100px 600px at 80% -10%, #2a2159 0%, transparent 60%),
-                      radial-gradient(900px 500px at -20% 30%, #1e1a4d 0%, transparent 55%);
+    background-image: radial-gradient(1000px 560px at 85% -12%, #4a0d16 0%, transparent 60%),
+                      radial-gradient(900px 520px at -25% 34%, #0a3320 0%, transparent 55%);
     background-attachment: fixed;
     color: var(--ink);
     font-family: var(--body);
@@ -66,11 +67,17 @@
 
   /* ---------- HOME ---------- */
   .hero { position: relative; text-align: center; padding-top: 4px; }
-  #booHome { width: 100%; height: 215px; display: block; }
+  #coachHome { width: 100%; height: 235px; display: block; cursor: pointer; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: -18px;
+    font-family: var(--display); font-weight: 700; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold);
+  }
+  .eyebrow i { width: 18px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--green) 50%, var(--red) 50%); }
   h1 {
-    font-family: var(--display); font-weight: 800; font-size: 40px; margin: -6px 0 0;
-    letter-spacing: 0.5px;
-    background: linear-gradient(100deg, var(--mint), var(--sky) 45%, var(--lav));
+    font-family: var(--headline); font-weight: 400; font-size: 68px; line-height: 1; margin: 2px 0 0;
+    letter-spacing: 1px;
+    background: linear-gradient(180deg, #FFF3C9, var(--gold) 55%, #C98E1E);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .tagline { color: var(--ink-dim); margin: 2px 0 18px; font-size: 14.5px; }
@@ -100,19 +107,19 @@
   .daycard .dow {
     flex: none; width: 50px; height: 50px; border-radius: 16px;
     display: grid; place-items: center; text-align: center; line-height: 1.02;
-    font-family: var(--display); color: #17132e;
+    font-family: var(--display); color: #1a0d0f;
   }
   .daycard .dow b { display: block; font-size: 19px; font-weight: 800; }
   .daycard .dow span { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
   .daycard .info { flex: 1; min-width: 0; }
-  .daycard .t { display: block; font-family: var(--display); font-weight: 700; font-size: 16.5px; }
+  .daycard .t { display: block; font-family: var(--display); font-weight: 700; font-size: 19px; letter-spacing: 0.2px; }
   .daycard .m { display: block; font-size: 12.5px; color: var(--ink-dim); }
   .daycard .st { flex: none; font-size: 17px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; }
-  .daycard.done .st { background: rgba(110, 231, 200, 0.16); color: var(--mint); }
-  .daycard.today { border-color: rgba(110, 231, 200, 0.55); box-shadow: 0 0 22px rgba(110, 231, 200, 0.14); }
+  .daycard.done .st { background: rgba(43, 217, 123, 0.16); color: var(--green); }
+  .daycard.today { border-color: rgba(43, 217, 123, 0.55); box-shadow: 0 0 22px rgba(43, 217, 123, 0.14); }
   .todaytag {
     position: absolute; top: -9px; right: 14px;
-    background: linear-gradient(90deg, var(--mint), var(--sky)); color: #123;
+    background: linear-gradient(90deg, var(--green), #8FF0B8); color: #06200f;
     border-radius: 99px; padding: 2px 11px;
     font-family: var(--display); font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
   }
@@ -130,10 +137,11 @@
     content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
     border-radius: 50%; background: #fff; transition: left 0.18s;
   }
-  .toggle.on .knob { background: var(--mint); }
+  .toggle.on .knob { background: var(--green); }
   .toggle.on .knob::after { left: 23px; }
 
   .fineprint { margin-top: 22px; font-size: 12px; color: var(--ink-dim); text-align: center; }
+  .disclaimer { display: inline-block; margin-top: 8px; opacity: 0.7; font-size: 11px; }
 
   /* ---------- DAY DETAIL ---------- */
   .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
@@ -148,8 +156,8 @@
     background: var(--tint); opacity: 0.16; pointer-events: none;
   }
   .dayhero .k { font-family: var(--display); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--ink-dim); }
-  .dayhero h2 { font-family: var(--display); font-weight: 800; font-size: 25px; margin: 2px 0 6px; }
-  .dayhero p { margin: 0; font-size: 14px; color: rgba(242,239,255,0.8); }
+  .dayhero h2 { font-family: var(--headline); font-weight: 400; font-size: 30px; letter-spacing: 0.5px; margin: 2px 0 6px; }
+  .dayhero p { margin: 0; font-size: 14px; color: rgba(251,245,238,0.8); }
   .chips { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
   .chip {
     background: rgba(255,255,255,0.08); border-radius: 99px; padding: 4px 12px;
@@ -166,17 +174,17 @@
   .exrow:first-of-type { border-top: none; }
   .exrow .play {
     flex: none; width: 30px; height: 30px; border-radius: 50%;
-    background: rgba(167, 139, 250, 0.16); color: var(--lav);
+    background: rgba(255, 77, 94, 0.16); color: var(--crimson);
     display: grid; place-items: center; font-size: 11px; padding-left: 2px;
   }
   .exrow .nm { flex: 1; font-weight: 800; font-size: 14px; }
-  .exrow .nm small { display: block; font-weight: 700; font-size: 11px; color: var(--mint); }
+  .exrow .nm small { display: block; font-weight: 700; font-size: 11px; color: var(--green); }
   .exrow .sc { font-size: 11.5px; color: var(--ink-dim); text-align: right; max-width: 42%; }
   .notecard {
     padding: 13px 15px; font-size: 13.5px; font-weight: 700;
-    border-color: rgba(125, 211, 252, 0.35); background: rgba(125, 211, 252, 0.08);
+    border-color: rgba(245, 196, 81, 0.35); background: rgba(245, 196, 81, 0.08);
   }
-  .benchcard { border-color: rgba(167, 139, 250, 0.4); background: rgba(167, 139, 250, 0.1); }
+  .benchcard { border-color: rgba(255, 77, 94, 0.4); background: rgba(255, 77, 94, 0.1); }
   .bench-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
   .bench-grid label { display: block; font-family: var(--display); font-weight: 700; font-size: 11.5px; margin-bottom: 4px; color: var(--ink-dim); }
   .bench-grid input {
@@ -184,8 +192,8 @@
     font-family: var(--display); font-weight: 700; font-size: 18px; text-align: center;
     background: rgba(0,0,0,0.25); color: var(--ink); appearance: none;
   }
-  .bench-grid input:focus { outline: 2px solid var(--lav); }
-  .delta { margin-top: 10px; font-weight: 800; font-size: 13px; color: var(--mint); }
+  .bench-grid input:focus { outline: 2px solid var(--crimson); }
+  .delta { margin-top: 10px; font-weight: 800; font-size: 13px; color: var(--green); }
 
   .startdock {
     position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 18px calc(var(--sab) + 14px);
@@ -194,9 +202,9 @@
   }
   .bigbtn {
     width: 100%; max-width: 444px; border-radius: 99px;
-    background: linear-gradient(95deg, var(--mint), var(--sky) 55%, var(--lav)); color: #141031;
-    font-family: var(--display); font-weight: 800; font-size: 18px; letter-spacing: 0.4px;
-    padding: 16px; cursor: pointer; box-shadow: 0 6px 28px rgba(110, 231, 200, 0.28);
+    background: linear-gradient(95deg, #FFE38A, var(--gold) 50%, #E0A630); color: #1a0d0f;
+    font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 16px; cursor: pointer; box-shadow: 0 6px 28px rgba(245, 196, 81, 0.3);
   }
   .bigbtn:active { transform: scale(0.98); }
 
@@ -207,7 +215,7 @@
   }
   #sheet.on { transform: translateY(0); }
   #sheetInner {
-    max-width: 480px; margin: 0 auto; background: #211c46;
+    max-width: 480px; margin: 0 auto; background: #1c1314;
     border: 1px solid rgba(255,255,255,0.12); border-bottom: none;
     border-radius: 26px 26px 0 0; padding: 10px 20px calc(var(--sab) + 20px);
     box-shadow: 0 -18px 60px rgba(0, 0, 0, 0.5);
@@ -217,7 +225,7 @@
   #sheetName { font-family: var(--display); font-weight: 800; font-size: 20px; text-align: center; margin: 0; }
   #sheetCue { font-size: 13.5px; color: var(--ink-dim); text-align: center; margin: 3px 0 0; min-height: 20px; }
   #sheetBackdrop {
-    position: fixed; inset: 0; z-index: 39; background: rgba(10, 8, 24, 0.6);
+    position: fixed; inset: 0; z-index: 39; background: rgba(8, 4, 5, 0.65);
     opacity: 0; pointer-events: none; transition: opacity 0.25s;
   }
   #sheetBackdrop.on { opacity: 1; pointer-events: auto; }
@@ -243,7 +251,7 @@
   .pbar i { display: block; height: 100%; width: 0%; background: var(--phase); border-radius: 99px; transition: width 0.3s linear, background 0.4s; }
   .pcount { font-family: var(--display); font-weight: 700; font-size: 13px; color: var(--ink-dim); }
 
-  #booPlay { width: 100%; height: 32dvh; min-height: 190px; display: block; }
+  #coachPlay { width: 100%; height: 32dvh; min-height: 190px; display: block; }
 
   .pmain { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 10px; text-align: center; gap: 4px; min-height: 0; }
   .phase {
@@ -251,11 +259,11 @@
     text-transform: uppercase; color: var(--phase);
   }
   .ptime {
-    font-family: var(--display); font-weight: 800; font-size: clamp(72px, 24vw, 104px);
+    font-family: var(--headline); font-weight: 400; font-size: clamp(80px, 26vw, 116px);
     line-height: 1; font-variant-numeric: tabular-nums; margin: 0;
     text-shadow: 0 0 44px var(--phase-glow);
   }
-  .pex { font-family: var(--display); font-weight: 800; font-size: 23px; line-height: 1.15; max-width: 330px; }
+  .pex { font-family: var(--display); font-weight: 800; font-size: 27px; line-height: 1.15; max-width: 330px; }
   .pcue { font-size: 13.5px; max-width: 300px; color: var(--ink-dim); min-height: 38px; margin-top: 2px; }
   .pnext {
     margin-top: 8px; font-weight: 800; font-size: 12.5px; color: var(--ink-dim);
@@ -272,7 +280,7 @@
   .cbtn.side { width: 60px; height: 60px; }
   .cbtn.mid {
     width: 86px; height: 86px; border-radius: 26px; font-size: 30px;
-    background: var(--phase); color: #141031; transition: background 0.4s;
+    background: var(--phase); color: #1a0d0f; transition: background 0.4s;
     box-shadow: 0 0 34px var(--phase-glow);
   }
 
@@ -284,10 +292,10 @@
     align-items: center; justify-content: center; text-align: center; padding: 24px; gap: 4px;
     position: relative; z-index: 2;
   }
-  #booDone { width: 100%; height: 250px; display: block; }
+  #coachDone { width: 100%; height: 250px; display: block; }
   #done h2 {
-    font-family: var(--display); font-weight: 800; font-size: 34px; margin: 0;
-    background: linear-gradient(100deg, var(--gold), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-family: var(--headline); font-weight: 400; font-size: 54px; letter-spacing: 1px; margin: 0;
+    background: linear-gradient(180deg, #FFF3C9, var(--gold) 55%, #C98E1E); -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   #done p { font-weight: 700; font-size: 15px; margin: 4px 0 22px; max-width: 300px; color: var(--ink-dim); }
   #confetti { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
@@ -299,27 +307,28 @@
 <section id="home" class="screen on">
   <div class="wrap">
     <div class="hero">
-      <canvas id="booHome"></canvas>
-      <h1>Kinetic</h1>
-      <p class="tagline">Boo coaches. You sweat. No equipment, anywhere.</p>
+      <canvas id="coachHome"></canvas>
+      <div class="eyebrow"><i></i>Kinetic · CR7 Edition<i></i></div>
+      <h1>CR7</h1>
+      <p class="tagline">Eight sessions. Zero equipment. Every one ends in a Siuuu.</p>
     </div>
 
     <div class="stats glass">
       <div class="ring">
         <svg width="62" height="62" viewBox="0 0 62 62">
           <circle cx="31" cy="31" r="25" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="6"/>
-          <circle id="ringFg" cx="31" cy="31" r="25" fill="none" stroke="#6EE7C8" stroke-width="6"
+          <circle id="ringFg" cx="31" cy="31" r="25" fill="none" stroke="#F5C451" stroke-width="6"
                   stroke-linecap="round" stroke-dasharray="157.08" stroke-dashoffset="157.08"/>
         </svg>
         <div class="num" id="ringNum">0/8</div>
       </div>
       <div class="msg">
-        <b id="heroMsg">Saturday to Saturday. Eight sessions.</b>
-        <span id="heroSub">Benchmark day 1 · retest day 8 · watch the numbers climb</span>
+        <b id="heroMsg">Saturday to Saturday. Eight matchdays.</b>
+        <span id="heroSub">Benchmark day 1 · retest day 8 · tap the coach for a Siuuu</span>
       </div>
     </div>
 
-    <p class="sec-label">The week</p>
+    <p class="sec-label">Matchweek</p>
     <div class="daylist" id="daylist"></div>
 
     <p class="sec-label">Settings</p>
@@ -329,13 +338,14 @@
         <div class="knob"></div>
       </button>
       <button class="toggle glass" id="soundToggle">
-        <div class="tt"><b>Sound cues 🔔</b><span>Beeps for countdowns and switches</span></div>
+        <div class="tt"><b>Whistle cues 📣</b><span>Ref whistle on every work interval</span></div>
         <div class="knob"></div>
       </button>
     </div>
 
     <p class="fineprint">Reusable any week — hotel rooms, rainy days, tiny apartments.<br>
-    Works offline once installed: Share → Add to Home Screen.</p>
+    Works offline once installed: Share → Add to Home Screen.<br>
+    <span class="disclaimer">Fan-made tribute. Not affiliated with or endorsed by Cristiano Ronaldo.</span></p>
   </div>
 </section>
 
@@ -346,7 +356,7 @@
     <div class="dayhero glass" id="dayHero"></div>
     <div class="blocks" id="dayBlocks"></div>
   </div>
-  <div class="startdock"><button class="bigbtn" id="startBtn">Start with Boo ⚡</button></div>
+  <div class="startdock"><button class="bigbtn" id="startBtn">Kick off ⚽</button></div>
 </section>
 
 <!-- ================= DEMO SHEET ================= -->
@@ -368,7 +378,7 @@
       <div class="pbar"><i id="pbarFill"></i></div>
       <div class="pcount" id="pcount">1/1</div>
     </div>
-    <canvas id="booPlay"></canvas>
+    <canvas id="coachPlay"></canvas>
     <div class="pmain">
       <div class="phase" id="pphase">GET READY</div>
       <div class="ptime" id="ptime">0:10</div>
@@ -388,8 +398,8 @@
 <section id="done">
   <canvas id="confetti"></canvas>
   <div class="dwrap">
-    <canvas id="booDone"></canvas>
-    <h2 id="doneTitle">Crushed it!</h2>
+    <canvas id="coachDone"></canvas>
+    <h2 id="doneTitle">SIUUU!</h2>
     <p id="doneMsg">Another one in the books.</p>
     <button class="bigbtn" id="doneBtn" style="max-width:280px">Back to the week</button>
   </div>
@@ -397,10 +407,11 @@
 
 <script type="module">
 /* =====================================================================
-   KINETIC — a week of indoor, no-equipment fat-burn & cardio,
-   demonstrated live by Boo the ghost. Sat → Sat, benchmark → retest.
+   KINETIC · CR7 EDITION — a week of indoor, no-equipment fat-burn &
+   cardio, demoed live by a chibi #7 footballer. Sat → Sat, benchmark →
+   retest, and every session ends in a Siuuu. Fan-made tribute.
    ===================================================================== */
-import { GhostScene } from './ghost.js';
+import { CoachScene } from './coach.js';
 import { ANIMS } from './anims.js';
 
 // ---------- move helper: {n:name, c:cue, a:anim id, q:quiet swap, qa:quiet anim} ----------
@@ -440,13 +451,13 @@ const BENCHMARK = {
 
 const DAYS = [
   {
-    id: 'd1', dow: 'SAT', num: 1, tint: 'linear-gradient(135deg,#FF8FAB,#FFD97D)', emoji: '🚀',
+    id: 'd1', dow: 'SAT', num: 1, tint: 'linear-gradient(135deg,#FF4D5E,#F5C451)', emoji: '⚽',
     title: 'Kickoff + Benchmark',
-    focus: 'Plant the flag. Test where you are today, then a full-body burner.',
+    focus: 'First whistle. Test where you are today, then a full-body burner.',
     blocks: [
       WARMUP,
       BENCHMARK,
-      { kind: 'hiit', title: 'Full-body Ignition', icon: '⚡', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
+      { kind: 'hiit', title: 'Full-body Pressing', icon: '⚡', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
         M('Air squats', 'Chest proud, heels down', 'squat'),
         M('Push-ups', 'Elbows ~45°, drop to knees anytime', 'pushup'),
         M('Mountain climbers', 'Hips low, drive the knees', 'climber'),
@@ -458,12 +469,12 @@ const DAYS = [
     ]
   },
   {
-    id: 'd2', dow: 'SUN', num: 2, tint: 'linear-gradient(135deg,#FFD97D,#FF8FAB)', emoji: '🔥',
-    title: 'Cardio Furnace',
-    focus: 'Pure engine work. Keep moving, keep breathing — this is your indoor run.',
+    id: 'd2', dow: 'SUN', num: 2, tint: 'linear-gradient(135deg,#F5C451,#E4002B)', emoji: '⚡',
+    title: 'Counter-Attack',
+    focus: 'Pure engine work. Sprint back, sprint forward — this is your indoor run.',
     blocks: [
       WARMUP,
-      { kind: 'hiit', title: 'The Furnace', icon: '🔥', work: 40, rest: 20, rounds: 3, breather: 60, moves: [
+      { kind: 'hiit', title: 'The Break', icon: '⚡', work: 40, rest: 20, rounds: 3, breather: 60, moves: [
         M('High knees', 'Tall chest, quick feet', 'highknees', 'Power march', 'march'),
         M('Skaters', 'Push side to side, stick the landing', 'skater', 'Side taps', 'sidestep'),
         M('Shadow boxing', 'Fast hands, stay bouncy', 'shadowbox'),
@@ -471,19 +482,19 @@ const DAYS = [
         M('Fast feet', 'Low squat, sprint the feet', 'fastfeet', 'Quick march', 'march'),
         M('Squat to punch', 'Squat, stand, jab-cross', 'squatpunch'),
       ]},
-      { kind: 'hiit', title: 'Tabata Finisher', icon: '🏁', work: 20, rest: 10, rounds: 4, breather: 0, moves: [
+      { kind: 'hiit', title: 'Stoppage-Time Tabata', icon: '⏱️', work: 20, rest: 10, rounds: 4, breather: 0, moves: [
         M('Jumping jacks', 'Empty the tank', 'jack', 'Step-out jacks', 'sidestep'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd3', dow: 'MON', num: 3, tint: 'linear-gradient(135deg,#A78BFA,#7DD3FC)', emoji: '🦵',
-    title: 'Strong Legs',
-    focus: 'Hiking legs, no trail needed. Strength-endurance for the lower half.',
+    id: 'd3', dow: 'MON', num: 3, tint: 'linear-gradient(135deg,#2BD97B,#0B6B3A)', emoji: '🎯',
+    title: 'Free-Kick Legs',
+    focus: 'Legs that launch knuckleballs — and climb trails. Strength-endurance for the lower half.',
     blocks: [
       WARMUP,
-      { kind: 'hiit', title: 'Leg Builder', icon: '🦵', work: 45, rest: 15, rounds: 2, breather: 60, moves: [
+      { kind: 'hiit', title: 'Leg Day', icon: '🦵', work: 45, rest: 15, rounds: 2, breather: 60, moves: [
         M('Air squats', 'Slow down, control up', 'squat'),
         M('Alternating reverse lunges', 'Knee kisses the floor', 'reverselunge'),
         M('Glute bridges', 'Squeeze hard at the top', 'glutebridge'),
@@ -493,16 +504,16 @@ const DAYS = [
         M('Calf raises', 'Pause up top, full stretch down', 'calfraise'),
         M('Squat pulses', 'Stay low, tiny bounces', 'squatpulse'),
       ]},
-      { kind: 'hiit', title: 'Finisher', icon: '🏁', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
-        M('Wall sit', 'One minute. Sing something.', 'wallsit'),
+      { kind: 'hiit', title: 'The Wall', icon: '🧱', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
+        M('Wall sit', 'One minute. Hum the anthem.', 'wallsit'),
       ]},
       COOLDOWN,
     ]
   },
   {
-    id: 'd4', dow: 'TUE', num: 4, tint: 'linear-gradient(135deg,#7DD3FC,#6EE7C8)', emoji: '🌊',
-    title: 'Recovery Flow',
-    focus: 'Active recovery. Loosen up, light core, then get your LA steps in.',
+    id: 'd4', dow: 'TUE', num: 4, tint: 'linear-gradient(135deg,#FFE9B0,#2BD97B)', emoji: '🧊',
+    title: 'Recovery Day',
+    focus: 'Ice-bath energy, minus the ice. Loosen up, light core, then get your LA steps in.',
     note: 'Bonus mission: a long city walk today — aim for 8–10k steps. Sightseeing counts.',
     blocks: [
       { kind: 'flow', title: 'Mobility Flow', icon: '🌊', work: 45, moves: [
@@ -528,9 +539,9 @@ const DAYS = [
     ]
   },
   {
-    id: 'd5', dow: 'WED', num: 5, tint: 'linear-gradient(135deg,#FF8FAB,#A78BFA)', emoji: '⛰️',
-    title: 'The Pyramid',
-    focus: 'Climb up, climb down. Four moves, five rounds, intervals that grow then shrink.',
+    id: 'd5', dow: 'WED', num: 5, tint: 'linear-gradient(135deg,#E4002B,#7A0A1A)', emoji: '🏔️',
+    title: 'Road to 900',
+    focus: 'Climb up, climb down. Four moves, five levels — intervals that grow then shrink.',
     blocks: [
       WARMUP,
       { kind: 'pyramid', title: 'Pyramid Climb', icon: '⛰️',
@@ -544,12 +555,12 @@ const DAYS = [
     ]
   },
   {
-    id: 'd6', dow: 'THU', num: 6, tint: 'linear-gradient(135deg,#6EE7C8,#A78BFA)', emoji: '💪',
-    title: 'Push & Core',
-    focus: 'Upper body and midsection. The hike-photo muscles.',
+    id: 'd6', dow: 'THU', num: 6, tint: 'linear-gradient(135deg,#F5C451,#2BD97B)', emoji: '🔱',
+    title: 'Six-Pack Protocol',
+    focus: 'Upper body and midsection. The famous abs don’t build themselves.',
     blocks: [
       WARMUP,
-      { kind: 'hiit', title: 'Push Party', icon: '💪', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
+      { kind: 'hiit', title: 'Push & Core', icon: '💪', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
         M('Push-ups', 'Full range, knees anytime', 'pushup'),
         M('Pike push-ups', 'Hips high, head toward floor', 'pikepushup'),
         M('Plank', 'Squeeze everything, steady breath', 'plank'),
@@ -566,12 +577,12 @@ const DAYS = [
     ]
   },
   {
-    id: 'd7', dow: 'FRI', num: 7, tint: 'linear-gradient(135deg,#FFD97D,#6EE7C8)', emoji: '🔋',
-    title: 'Endurance Engine',
+    id: 'd7', dow: 'FRI', num: 7, tint: 'linear-gradient(135deg,#0B6B3A,#F5C451)', emoji: '⏱️',
+    title: 'The Full 90',
     focus: 'Long steady burn — the indoor version of your Montana hikes. Conversational pace, no stopping.',
     blocks: [
       WARMUP,
-      { kind: 'hiit', title: 'Engine Round 1', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
+      { kind: 'hiit', title: 'First Half', icon: '1️⃣', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
         M('March or jog in place', 'Settle into a rhythm', 'march'),
         M('Step-back lunges', 'Steady tempo, no rush', 'reverselunge'),
         M('Standing punches', 'Light feet, relaxed shoulders', 'shadowbox'),
@@ -579,7 +590,7 @@ const DAYS = [
         M('Air squats — steady', 'Metronome pace', 'squat'),
         M('Side steps + reach', 'Wide steps, reach overhead', 'sidestep'),
       ]},
-      { kind: 'hiit', title: 'Engine Round 2', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
+      { kind: 'hiit', title: 'Second Half', icon: '2️⃣', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
         M('March or jog in place', 'Find the rhythm again', 'march'),
         M('Step-back lunges', 'Smooth, quiet landings', 'reverselunge'),
         M('Standing punches', 'Faster hands this round', 'shadowbox'),
@@ -587,7 +598,7 @@ const DAYS = [
         M('Air squats — steady', 'Keep the depth honest', 'squat'),
         M('Slow mountain climbers', 'Controlled, hips level', 'climber'),
       ]},
-      { kind: 'hiit', title: 'Engine Round 3', icon: '🔋', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
+      { kind: 'hiit', title: 'Extra Time', icon: '⏱️', work: 60, rest: 0, rounds: 1, breather: 0, moves: [
         M('March or jog in place', 'Last climb, enjoy it', 'march'),
         M('Step-back lunges', 'Strong to the end', 'reverselunge'),
         M('Standing punches', 'Finish like a boxer', 'shadowbox'),
@@ -599,9 +610,9 @@ const DAYS = [
     ]
   },
   {
-    id: 'd8', dow: 'SAT', num: 8, tint: 'linear-gradient(135deg,#6EE7C8,#FFD97D)', emoji: '🏆',
-    title: 'Retest + Victory Lap',
-    focus: 'The rematch. Same benchmark as day 1 — beat your numbers, then take a lap.',
+    id: 'd8', dow: 'SAT', num: 8, tint: 'linear-gradient(135deg,#F5C451,#FFE9B0)', emoji: '🏆',
+    title: 'Retest + Siuuu',
+    focus: 'The rematch. Same benchmark as day 1 — beat your numbers, then celebrate like you mean it.',
     blocks: [
       WARMUP,
       BENCHMARK,
@@ -612,6 +623,7 @@ const DAYS = [
         M('Skaters', 'Glide, you athlete', 'skater', 'Side taps', 'sidestep'),
         M('Plank shoulder taps', 'Rock solid now', 'planktap'),
         M('High knees', 'Sprint into the finish line', 'highknees', 'Power march', 'march'),
+        M('Siuuu jumps', 'Jump, spin, land wide — shout it', 'siu', 'Siuuu pose, no jump', 'stance'),
       ]},
       COOLDOWN,
     ]
@@ -674,10 +686,10 @@ const persist = () => store.save(S);
 
 const $ = (id) => document.getElementById(id);
 const PHASE = {
-  prep: { c: '#FFD97D', glow: 'rgba(255,217,125,0.5)', label: 'Get ready' },
-  work: { c: '#FF8FAB', glow: 'rgba(255,143,171,0.5)', label: 'Work' },
-  rest: { c: '#6EE7C8', glow: 'rgba(110,231,200,0.5)', label: 'Rest' },
-  flow: { c: '#A78BFA', glow: 'rgba(167,139,250,0.5)', label: 'Flow' },
+  prep: { c: '#F5C451', glow: 'rgba(245,196,81,0.5)', label: 'Get ready' },
+  work: { c: '#FF4D5E', glow: 'rgba(228,0,43,0.55)', label: 'Work' },
+  rest: { c: '#2BD97B', glow: 'rgba(43,217,123,0.45)', label: 'Rest' },
+  flow: { c: '#FFE9B0', glow: 'rgba(255,233,176,0.4)', label: 'Flow' },
 };
 const anim = (id) => ANIMS[id] || ANIMS.idle;
 
@@ -693,9 +705,35 @@ function beep(freq, dur, when = 0, gain = 0.22) {
   o.connect(g).connect(AC.destination);
   o.start(t); o.stop(t + dur + 0.02);
 }
+// referee whistle: a high tone with a fast warble (the pea rattling)
+function whistle(dur, when = 0, gain = 0.12) {
+  if (!S.sound || !AC) return;
+  const t = AC.currentTime + when;
+  const o = AC.createOscillator(), g = AC.createGain();
+  const lfo = AC.createOscillator(), depth = AC.createGain();
+  o.type = 'triangle'; o.frequency.value = 2650;
+  lfo.frequency.value = 38; depth.gain.value = 140;
+  lfo.connect(depth).connect(o.frequency);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.02);
+  g.gain.setValueAtTime(gain, t + dur - 0.04);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g).connect(AC.destination);
+  o.start(t); lfo.start(t); o.stop(t + dur + 0.02); lfo.stop(t + dur + 0.02);
+}
 const tick = () => beep(660, 0.1);
-const ding = () => { beep(880, 0.12); beep(1320, 0.22, 0.12); };
-const fanfare = () => { [660, 880, 1100, 1320].forEach((f, i) => beep(f, 0.18, i * 0.13)); };
+const ding = () => { whistle(0.14); whistle(0.34, 0.2); };
+const fanfare = () => {
+  whistle(0.22); whistle(0.22, 0.3); whistle(0.7, 0.6);
+  // and the crowd goes…
+  try {
+    if (S.sound && 'speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance('Siiiuuuu!');
+      u.rate = 0.7; u.pitch = 0.8;
+      setTimeout(() => speechSynthesis.speak(u), 1300);
+    }
+  } catch {}
+};
 
 // ---------- wake lock ----------
 let wakeLock = null;
@@ -704,14 +742,14 @@ async function grabWakeLock() {
 }
 function dropWakeLock() { wakeLock?.release().catch(() => {}); wakeLock = null; }
 
-// ---------- ghost scenes (created lazily, one per canvas) ----------
-const boo = { home: null, sheet: null, play: null, done: null };
-function ghost(which, canvasId, opts) {
-  if (!boo[which]) {
-    boo[which] = new GhostScene($(canvasId), opts);
+// ---------- coach scenes (created lazily, one per canvas) ----------
+const coach = { home: null, sheet: null, play: null, done: null };
+function coachIn(which, canvasId, opts) {
+  if (!coach[which]) {
+    coach[which] = new CoachScene($(canvasId), opts);
   }
-  boo[which].resize();
-  return boo[which];
+  coach[which].resize();
+  return coach[which];
 }
 
 // ---------- screens ----------
@@ -727,11 +765,11 @@ function renderHome() {
   $('ringNum').textContent = doneCount + '/8';
   $('ringFg').style.strokeDashoffset = 157.08 * (1 - doneCount / 8);
   if (doneCount === 8) {
-    $('heroMsg').textContent = 'Full week complete. Legend. 🏆';
-    $('heroSub').textContent = 'Reset anytime — Boo is always up for a rematch.';
+    $('heroMsg').textContent = 'Full week complete. Campeão. 🏆';
+    $('heroSub').textContent = 'Reset anytime — there’s always another season.';
   } else if (doneCount > 0) {
     $('heroMsg').textContent = doneCount + ' down, ' + (8 - doneCount) + ' to go.';
-    $('heroSub').textContent = 'Fitness trends up when you show up.';
+    $('heroSub').textContent = 'Talent is nothing without the work. Show up.';
   }
 
   const next = DAYS.find(d => !S.done[d.id]);
@@ -771,7 +809,7 @@ function openDay(id) {
     <div class="chips">
       <span class="chip">⏱ ~${dayMinutes(d)} min</span>
       <span class="chip">🧳 zero equipment</span>
-      <span class="chip">👆 tap a move — Boo demos it</span>
+      <span class="chip">👆 tap a move for a demo</span>
       ${S.quiet ? '<span class="chip">🤫 quiet mode on</span>' : ''}
     </div>`;
 
@@ -790,7 +828,7 @@ function openDay(id) {
   $('dayBlocks').innerHTML = html;
   wireExRows(d);
   wireBenchInputs(d);
-  $('startBtn').textContent = S.done[d.id] ? 'Run it back with Boo ⚡' : 'Start with Boo ⚡';
+  $('startBtn').textContent = S.done[d.id] ? 'Run it back ⚽' : 'Kick off ⚽';
   show('day');
 }
 
@@ -856,14 +894,14 @@ function openSheet(m) {
   $('sheetCue').textContent = m.c;
   $('sheet').classList.add('on');
   $('sheetBackdrop').classList.add('on');
-  const g = ghost('sheet', 'sheetCanvas');
+  const g = coachIn('sheet', 'sheetCanvas');
   g.setAnim(anim(moveAnim(m, S.quiet)));
   g.start();
 }
 function closeSheet() {
   $('sheet').classList.remove('on');
   $('sheetBackdrop').classList.remove('on');
-  boo.sheet?.stop();
+  coach.sheet?.stop();
 }
 $('sheetBackdrop').addEventListener('click', closeSheet);
 $('sheet').addEventListener('click', closeSheet);
@@ -884,8 +922,8 @@ function startWorkout(day) {
   player.running = true;
   grabWakeLock();
   show('player');
-  boo.home?.stop();
-  const g = ghost('play', 'booPlay');
+  coach.home?.stop();
+  const g = coachIn('play', 'coachPlay');
   g.start();
   enterStep(0);
   setPaused(false);
@@ -906,7 +944,7 @@ function enterStep(i) {
   $('pcount').textContent = (i + 1) + '/' + player.steps.length;
   const nxt = player.steps[i + 1];
   $('pnext').textContent = nxt ? 'Next: ' + nxt.label : 'Last one — finish strong!';
-  boo.play?.setAnim(anim(st.anim));
+  coach.play?.setAnim(anim(st.anim));
   paint();
   if (st.kind === 'work') ding(); else if (i > 0) beep(520, 0.15);
 }
@@ -942,7 +980,7 @@ function setPaused(p) {
   player.paused = p;
   player.lastTs = 0;
   $('pauseBtn').textContent = p ? '▶' : '⏸';
-  if (p) boo.play?.stop(); else { boo.play?.start(); requestAnimationFrame(loop); }
+  if (p) coach.play?.stop(); else { coach.play?.start(); requestAnimationFrame(loop); }
 }
 
 $('pauseBtn').addEventListener('click', () => setPaused(!player.paused));
@@ -953,10 +991,10 @@ $('skipBtn').addEventListener('click', () => {
 $('prevBtn').addEventListener('click', () => { player.lastTs = 0; enterStep(Math.max(0, player.i - 1)); });
 $('quitBtn').addEventListener('click', () => {
   player.running = false;
-  boo.play?.stop();
+  coach.play?.stop();
   dropWakeLock();
   openDay(currentDay.id);
-  homeGhost();
+  homeCoach();
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -968,37 +1006,37 @@ document.addEventListener('visibilitychange', () => {
 // ---------- done ----------
 const PRAISE = [
   'Sweat delivered. Neighbors undisturbed.',
-  'That’s vacation cardio done right.',
+  'Another clean sheet for your discipline.',
   'Montana legs, LA living room.',
-  'Trend line: still going up. 📈',
+  'Hat-trick energy. Trend line: up. 📈',
   'Wife-approved workout: complete.',
+  'Recovery starts now — sleep like a pro.',
 ];
 function finishWorkout() {
   player.running = false;
-  boo.play?.stop();
+  coach.play?.stop();
   dropWakeLock();
   const first = !S.done[currentDay.id];
   S.done[currentDay.id] = Date.now();
   persist();
   const doneCount = DAYS.filter(d => S.done[d.id]).length;
-  $('doneTitle').textContent = currentDay.id === 'd8' ? 'Week complete!' : 'Crushed it!';
+  $('doneTitle').textContent = currentDay.id === 'd8' ? 'CAMPEÃO!' : 'SIUUU!';
   $('doneMsg').textContent = currentDay.id === 'd8'
     ? 'Eight for eight. Log your retest numbers on the day 8 page and admire the gains.'
     : (first ? doneCount + '/8 done. ' : '') + PRAISE[Math.floor(Math.random() * PRAISE.length)];
   fanfare();
   $('done').classList.add('on');
-  const g = ghost('done', 'booDone');
-  g.setAnim(anim('jack'));
-  g.speed = 1.15;
+  const g = coachIn('done', 'coachDone');
+  g.setAnim(anim('siu'));
   g.start();
   confettiBurst();
 }
 $('doneBtn').addEventListener('click', () => {
   $('done').classList.remove('on');
-  boo.done?.stop();
+  coach.done?.stop();
   if (currentDay.id === 'd1' || currentDay.id === 'd8') openDay(currentDay.id);
   else { renderHome(); show('home'); }
-  homeGhost();
+  homeCoach();
 });
 
 // ---------- confetti ----------
@@ -1008,7 +1046,7 @@ function confettiBurst() {
   cv.height = cv.offsetHeight * devicePixelRatio;
   ctx.scale(devicePixelRatio, devicePixelRatio);
   const W = cv.offsetWidth, H = cv.offsetHeight;
-  const colors = ['#FF8FAB', '#FFD97D', '#7DD3FC', '#A78BFA', '#6EE7C8', '#FFFFFF'];
+  const colors = ['#E4002B', '#FF4D5E', '#F5C451', '#FFE9B0', '#2BD97B', '#FFFFFF'];
   const bits = Array.from({ length: 130 }, () => ({
     x: W / 2 + (Math.random() - 0.5) * 90, y: H * 0.4,
     vx: (Math.random() - 0.5) * 11, vy: -Math.random() * 13 - 3,
@@ -1030,14 +1068,23 @@ function confettiBurst() {
 }
 
 // ---------- boot ----------
-function homeGhost() {
-  const g = ghost('home', 'booHome', { camY: 1.35, camZ: 4.9, lookY: 0.8 });
-  g.setAnim(anim('idle'));
+function homeCoach() {
+  const g = coachIn('home', 'coachHome', { camY: 1.35, camZ: 4.9, lookY: 0.85 });
+  g.setAnim(anim('stance'));
   g.start();
 }
+// tap the coach on the home screen for one Siuuu, then back to the stance
+let siuTimer = 0;
+$('coachHome').addEventListener('click', () => {
+  const g = coach.home;
+  if (!g) return;
+  clearTimeout(siuTimer);
+  g.setAnim(anim('siu'));
+  siuTimer = setTimeout(() => g.setAnim(anim('stance')), anim('siu').dur * 1000 * 0.86);
+});
 renderHome();
-homeGhost();
-window.addEventListener('resize', () => Object.values(boo).forEach(g => g?.resize()));
+homeCoach();
+window.addEventListener('resize', () => Object.values(coach).forEach(g => g?.resize()));
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
 </body>
