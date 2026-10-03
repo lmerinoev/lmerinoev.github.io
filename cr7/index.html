@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0a">
+<title>Sete</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sete">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #121212;
+    --paper: #EDE8DF;
+    --dim: rgba(237, 232, 223, 0.52);
+    --faint: rgba(237, 232, 223, 0.28);
+    --line: rgba(237, 232, 223, 0.12);
+    --red: #C8102E;
+    --red-hi: #E4002B;
+    --green: #0B6B3A;
+    --gold: #B8975A;
+    --display: 'Big Shoulders Display', 'Impact', sans-serif;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'Inter Tight', system-ui, sans-serif;
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --tabh: 64px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--paper);
+    font-family: var(--sans); font-weight: 500; font-size: 15px; line-height: 1.45;
+    -webkit-font-smoothing: antialiased; touch-action: manipulation; overscroll-behavior-y: none;
+  }
+  button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; text-align: inherit; }
+
+  .screen { display: none; min-height: 100dvh; }
+  .screen.on { display: block; }
+  .wrap { max-width: 480px; margin: 0 auto; padding: calc(var(--sat) + 14px) 20px calc(var(--sab) + var(--tabh) + 28px); }
+
+  /* flag hairline: green | red, the only time green appears */
+  .flag { height: 3px; display: flex; }
+  .flag i:first-child { flex: 2; background: var(--green); }
+  .flag i:last-child { flex: 3; background: var(--red); }
+
+  .kicker { font-family: var(--sans); font-weight: 600; font-size: 11px; letter-spacing: 2.6px; text-transform: uppercase; color: var(--dim); }
+  .rule { height: 1px; background: var(--line); margin: 22px 0; }
+
+  /* ---------- top bar ---------- */
+  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .wordmark { font-family: var(--display); font-weight: 900; font-size: 22px; letter-spacing: 5px; }
+  .wordmark b { color: var(--red); }
+
+  /* ---------- home hero ---------- */
+  .hero { position: relative; height: 330px; margin: 0 -20px; overflow: hidden; }
+  .hero .seven {
+    position: absolute; right: -14px; top: -38px; z-index: 0;
+    font-family: var(--display); font-weight: 900; font-size: 400px; line-height: 1;
+    color: transparent; -webkit-text-stroke: 1.5px rgba(200, 16, 46, 0.55);
+    user-select: none; pointer-events: none;
+  }
+  #figHome { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; display: block; }
+  .hero .caption { position: absolute; left: 20px; bottom: 16px; z-index: 2; }
+  .hero h1 {
+    font-family: var(--display); font-weight: 900; font-size: 64px; line-height: 0.86; margin: 0;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .hero h1 em { font-style: normal; color: var(--red); }
+
+  .quote { margin: 4px 0 0; }
+  .quote q {
+    display: block; quotes: none;
+    font-family: var(--serif); font-style: italic; font-size: 30px; line-height: 1.12; letter-spacing: -0.2px;
+  }
+  .quote q::before { content: '“'; color: var(--red); }
+  .quote q::after { content: '”'; color: var(--red); }
+  .quote cite { display: block; margin-top: 10px; font-style: normal; }
+  .quote cite b { font-weight: 600; color: var(--paper); }
+  .quote cite span { color: var(--dim); }
+  .cite { font-size: 12px; letter-spacing: 0.3px; }
+
+  /* consistency meter */
+  .meter { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .meter .big { font-family: var(--display); font-weight: 900; font-size: 56px; line-height: 0.85; }
+  .meter .big span { color: var(--faint); }
+  .bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 12px; }
+  .bars i { height: 6px; background: rgba(237,232,223,0.1); }
+  .bars i.on { background: var(--red); }
+
+  /* chapters */
+  .chapters { margin-top: 6px; }
+  .chap {
+    width: 100%; display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 14px;
+    padding: 16px 0; border-top: 1px solid var(--line); position: relative;
+  }
+  .chap:last-child { border-bottom: 1px solid var(--line); }
+  .chap .n { font-family: var(--display); font-weight: 900; font-size: 46px; line-height: 0.8; color: var(--faint); }
+  .chap .where { font-size: 11px; font-weight: 600; letter-spacing: 2.2px; text-transform: uppercase; color: var(--dim); }
+  .chap .t { display: block; font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1; text-transform: uppercase; margin-top: 3px; }
+  .chap .m { font-size: 12px; color: var(--dim); margin-top: 4px; display: block; }
+  .chap .st { font-family: var(--display); font-weight: 800; font-size: 13px; letter-spacing: 1.5px; color: var(--faint); }
+  .chap.next .n { color: var(--paper); }
+  .chap.next::before { content: ''; position: absolute; left: -20px; top: 16px; bottom: 16px; width: 3px; background: var(--red); }
+  .chap.next .st { color: var(--red-hi); }
+  .chap.done .n { color: var(--red); }
+  .chap.done .st { color: var(--paper); }
+  .chap.extra .n { font-size: 40px; }
+
+  .settings { display: flex; flex-direction: column; }
+  .toggle { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); width: 100%; }
+  .toggle:last-child { border-bottom: 1px solid var(--line); }
+  .toggle .tt { flex: 1; }
+  .toggle .tt b { display: block; font-weight: 600; font-size: 15px; }
+  .toggle .tt span { font-size: 12.5px; color: var(--dim); }
+  .knob { width: 44px; height: 24px; border: 1.5px solid var(--faint); position: relative; flex: none; transition: border-color 0.15s; }
+  .knob::after { content: ''; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; background: var(--faint); transition: left 0.15s, background 0.15s; }
+  .toggle.on .knob { border-color: var(--red); }
+  .toggle.on .knob::after { left: 22px; background: var(--red); }
+
+  .fine { margin-top: 26px; font-size: 11.5px; color: var(--faint); line-height: 1.6; }
+
+  /* ---------- section headers (code / heritage) ---------- */
+  .pagehead { padding: 18px 0 8px; }
+  .pagehead h2 { font-family: var(--display); font-weight: 900; font-size: 76px; line-height: 0.84; margin: 8px 0 14px; text-transform: uppercase; }
+  .pagehead h2 em { font-style: normal; color: var(--red); }
+  .pagehead p { margin: 0; color: var(--dim); font-size: 14.5px; max-width: 360px; }
+
+  /* the code */
+  .law { padding: 22px 0; border-top: 1px solid var(--line); }
+  .law .head { display: flex; align-items: baseline; gap: 12px; }
+  .law .num { font-family: var(--display); font-weight: 900; font-size: 15px; color: var(--red); letter-spacing: 1px; }
+  .law h3 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1; text-transform: uppercase; }
+  .law .quote q { font-size: 23px; margin-top: 12px; }
+  .law .why { margin: 12px 0 0; font-size: 14px; color: var(--dim); }
+  .habits { margin: 0; padding: 0; list-style: none; counter-reset: h; }
+  .habits li { display: grid; grid-template-columns: 34px 1fr; padding: 14px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .habits li::before { counter-increment: h; content: counter(h, decimal-leading-zero); font-family: var(--display); font-weight: 800; color: var(--red); font-size: 15px; }
+  .habits li b { display: block; font-weight: 600; color: var(--paper); }
+  .habits li span { color: var(--dim); }
+  .habits li small { display: block; color: var(--faint); font-size: 11px; margin-top: 4px; }
+
+  /* heritage */
+  .tl { position: relative; margin-top: 10px; }
+  .tl::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--line); }
+  .ev { position: relative; padding: 0 0 26px 22px; }
+  .ev::before { content: ''; position: absolute; left: -4px; top: 9px; width: 9px; height: 9px; background: var(--bg); border: 1.5px solid var(--faint); }
+  .ev.key::before { background: var(--red); border-color: var(--red); }
+  .ev .yr { font-family: var(--display); font-weight: 900; font-size: 34px; line-height: 1; }
+  .ev.key .yr { color: var(--red-hi); }
+  .ev .place { font-size: 11px; font-weight: 600; letter-spacing: 2.2px; text-transform: uppercase; color: var(--dim); margin-top: 2px; }
+  .ev p { margin: 6px 0 0; font-size: 14.5px; color: rgba(237,232,223,0.82); }
+  .ev .quote q { font-size: 21px; margin-top: 10px; }
+
+  /* ---------- tab bar ---------- */
+  .tabs {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    background: rgba(10,10,10,0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line); padding-bottom: var(--sab);
+  }
+  .tabs .in { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); height: var(--tabh); }
+  .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 10.5px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--faint); position: relative; }
+  .tab .g { font-family: var(--display); font-weight: 900; font-size: 20px; line-height: 1; letter-spacing: 0; }
+  .tab.on { color: var(--paper); }
+  .tab.on::before { content: ''; position: absolute; top: -1px; left: 30%; right: 30%; height: 2px; background: var(--red); }
+  .tabs.hide { display: none; }
+
+  /* ---------- session detail ---------- */
+  .back { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line); font-size: 18px; }
+  .chaphead { padding: 18px 0 6px; position: relative; }
+  .chaphead .bg { position: absolute; right: -24px; top: -26px; font-family: var(--display); font-weight: 900; font-size: 230px; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(237,232,223,0.12); pointer-events: none; }
+  .chaphead h2 { position: relative; font-family: var(--display); font-weight: 900; font-size: 58px; line-height: 0.86; text-transform: uppercase; margin: 8px 0 12px; }
+  .chaphead .story { position: relative; margin: 0; font-size: 15px; color: rgba(237,232,223,0.84); max-width: 380px; }
+  .chaphead .focus { position: relative; margin: 12px 0 0; font-size: 13.5px; color: var(--dim); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; position: relative; }
+  .chip { border: 1px solid var(--line); padding: 4px 10px; font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--dim); }
+  .chaphead .quote { margin-top: 22px; position: relative; }
+  .chaphead .quote q { font-size: 25px; }
+
+  .block { padding: 18px 0 6px; border-top: 1px solid var(--line); }
+  .block h3 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 24px; text-transform: uppercase; line-height: 1; }
+  .block .meta { font-size: 12px; color: var(--dim); margin: 5px 0 6px; letter-spacing: 0.3px; }
+  .block .note { font-size: 13.5px; color: rgba(237,232,223,0.8); margin: 4px 0 8px; }
+  .ex { display: grid; grid-template-columns: 26px 1fr auto; align-items: center; gap: 12px; width: 100%; padding: 11px 0; border-top: 1px solid rgba(237,232,223,0.06); }
+  .ex:first-of-type { border-top: none; }
+  .ex .pl { width: 26px; height: 26px; border: 1px solid rgba(200,16,46,0.6); display: grid; place-items: center; font-size: 9px; color: var(--red-hi); padding-left: 2px; }
+  .ex .nm { font-weight: 600; font-size: 15px; }
+  .ex .nm small { display: block; font-size: 11px; color: var(--gold); font-weight: 600; letter-spacing: 0.5px; }
+  .ex .cue { font-size: 12px; color: var(--dim); text-align: right; max-width: 150px; }
+  .bench { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 8px; }
+  .bench label { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--dim); margin-bottom: 5px; }
+  .bench input {
+    width: 100%; background: transparent; border: none; border-bottom: 1.5px solid var(--faint); color: var(--paper);
+    font-family: var(--display); font-weight: 900; font-size: 38px; padding: 0 0 2px; appearance: none; border-radius: 0;
+  }
+  .bench input:focus { outline: none; border-bottom-color: var(--red); }
+  .bench input::placeholder { color: rgba(237,232,223,0.15); }
+  .delta { font-size: 13px; font-weight: 600; color: var(--paper); margin-bottom: 10px; }
+  .delta b { color: var(--red-hi); }
+
+  .dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; padding: 14px 20px calc(var(--sab) + 16px); background: linear-gradient(to top, var(--bg) 60%, transparent); }
+  .go {
+    display: block; width: 100%; max-width: 440px; margin: 0 auto; background: var(--red); color: var(--paper);
+    font-family: var(--display); font-weight: 900; font-size: 22px; letter-spacing: 4px; text-transform: uppercase;
+    padding: 18px; text-align: center;
+  }
+  .go:active { background: var(--red-hi); }
+  .spacer { height: 110px; }
+
+  /* ---------- demo sheet ---------- */
+  #sheetBackdrop { position: fixed; inset: 0; z-index: 39; background: rgba(0,0,0,0.7); opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+  #sheetBackdrop.on { opacity: 1; pointer-events: auto; }
+  #sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; transform: translateY(105%); transition: transform 0.28s cubic-bezier(0.32, 0.72, 0.25, 1); }
+  #sheet.on { transform: none; }
+  #sheet .in { max-width: 480px; margin: 0 auto; background: var(--bg2); border-top: 3px solid var(--red); padding: 8px 20px calc(var(--sab) + 22px); }
+  #sheetCanvas { width: 100%; height: 260px; display: block; }
+  #sheetName { font-family: var(--display); font-weight: 900; font-size: 30px; text-transform: uppercase; margin: 0; line-height: 1; }
+  #sheetCue { color: var(--dim); margin: 6px 0 0; font-size: 14px; }
+
+  /* ---------- player ---------- */
+  #player { position: fixed; inset: 0; z-index: 20; background: var(--bg); }
+  #player .pw { height: 100dvh; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; padding: calc(var(--sat) + 12px) 20px calc(var(--sab) + 18px); }
+  .ph { display: flex; align-items: center; gap: 14px; }
+  .ph .x { width: 38px; height: 38px; border: 1px solid var(--line); display: grid; place-items: center; font-size: 14px; flex: none; }
+  .pbar { flex: 1; height: 3px; background: rgba(237,232,223,0.1); }
+  .pbar i { display: block; height: 100%; width: 0; background: var(--phase, var(--red)); transition: width 0.3s linear; }
+  .pc { font-family: var(--display); font-weight: 800; font-size: 14px; color: var(--dim); letter-spacing: 1px; }
+  #figPlay { width: 100%; height: 30dvh; min-height: 180px; display: block; }
+  .pm { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .pphase { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--phase); display: flex; align-items: center; gap: 8px; }
+  .pphase::before { content: ''; width: 8px; height: 8px; background: var(--phase); }
+  .ptime { font-family: var(--display); font-weight: 900; font-size: clamp(110px, 36vw, 160px); line-height: 0.82; margin: 6px 0 4px; font-variant-numeric: tabular-nums; letter-spacing: -2px; }
+  .pex { font-family: var(--display); font-weight: 800; font-size: 32px; line-height: 0.95; text-transform: uppercase; }
+  .pcue { color: var(--dim); font-size: 14px; margin-top: 6px; min-height: 20px; }
+  .pq { margin-top: 14px; display: none; }
+  .pq.on { display: block; }
+  .pq q { font-size: 22px !important; }
+  .pnext { margin-top: auto; padding-top: 10px; font-size: 12px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--faint); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pnext b { color: var(--paper); font-weight: 600; }
+  .pctl { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 8px; margin-top: 14px; }
+  .pctl button { height: 64px; border: 1px solid var(--line); font-size: 18px; display: grid; place-items: center; }
+  .pctl .mid { background: var(--paper); color: var(--bg); border: none; font-size: 22px; }
+
+  /* ---------- done ---------- */
+  #done { position: fixed; inset: 0; z-index: 50; background: var(--bg); display: none; }
+  #done.on { display: block; }
+  #done .dw { height: 100dvh; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; padding: calc(var(--sat) + 18px) 20px calc(var(--sab) + 20px); }
+  #figDone { width: 100%; height: 34dvh; display: block; }
+  #done h2 { font-family: var(--display); font-weight: 900; font-size: 104px; line-height: 0.82; margin: 8px 0 0; color: var(--red); letter-spacing: -1px; }
+  #done .sub { font-family: var(--display); font-weight: 800; font-size: 22px; text-transform: uppercase; margin-top: 10px; }
+  #done .quote { margin-top: 18px; }
+  #done .quote q { font-size: 24px; }
+  #done .go { margin-top: auto; }
+
+  @media (min-width: 420px) { .hero h1 { font-size: 70px; } }
+</style>
+</head>
+<body>
+
+<!-- ================= PROGRAM ================= -->
+<section id="home" class="screen on">
+  <div class="flag"><i></i><i></i></div>
+  <div class="wrap">
+    <div class="top">
+      <div class="wordmark">SET<b>E</b></div>
+      <div class="kicker">A CR7 mentality program</div>
+    </div>
+    <div class="hero">
+      <div class="seven">7</div>
+      <canvas id="figHome"></canvas>
+      <div class="caption">
+        <div class="kicker" style="margin-bottom:8px">Seven sessions · zero equipment</div>
+        <h1>No<br>shortcuts.<br><em>Ever.</em></h1>
+      </div>
+    </div>
+
+    <div class="rule" style="margin-top:6px"></div>
+    <div class="kicker" style="margin-bottom:10px">Today’s words</div>
+    <div class="quote" id="dailyQuote"></div>
+
+    <div class="rule"></div>
+    <div class="meter">
+      <div>
+        <div class="kicker" style="margin-bottom:8px">Consistency</div>
+        <div class="big" id="meterNum">0<span>/7</span></div>
+      </div>
+      <div class="cite" id="meterMsg" style="color:var(--dim);text-align:right;max-width:190px">Funchal to the final. One chapter at a time.</div>
+    </div>
+    <div class="bars" id="bars"></div>
+
+    <div class="rule"></div>
+    <div class="kicker">The chapters</div>
+    <div class="chapters" id="chapters"></div>
+
+    <div class="rule"></div>
+    <div class="kicker" style="margin-bottom:6px">Settings</div>
+    <div class="settings">
+      <button class="toggle" id="quietToggle">
+        <div class="tt"><b>Quiet mode</b><span>No jumping. Downstairs neighbours stay friends.</span></div>
+        <div class="knob"></div>
+      </button>
+      <button class="toggle" id="soundToggle">
+        <div class="tt"><b>Whistle</b><span>Referee whistle on work, ticks on the last three seconds</span></div>
+        <div class="knob"></div>
+      </button>
+    </div>
+
+    <p class="fine">Fan-made tribute to Cristiano Ronaldo’s work ethic. Not affiliated with, endorsed by or connected to Cristiano Ronaldo, CR7 or any club. Quotes are his published words, credited to their source.<br>
+    Works offline once installed: Share → Add to Home Screen.</p>
+  </div>
+</section>
+
+<!-- ================= THE CODE ================= -->
+<section id="code" class="screen">
+  <div class="flag"><i></i><i></i></div>
+  <div class="wrap">
+    <div class="pagehead">
+      <div class="kicker">The mentality</div>
+      <h2>The<br><em>Code</em></h2>
+      <p>Not a highlight reel. The habits behind two decades at the top — in his own words.</p>
+    </div>
+    <div id="laws"></div>
+    <div class="rule"></div>
+    <div class="kicker" style="margin-bottom:4px">The routine</div>
+    <p style="color:var(--dim);font-size:13.5px;margin:6px 0 10px">What he has said, and what has been reported, about how he lives.</p>
+    <ul class="habits" id="habits"></ul>
+    <p class="fine">Fan-made. Not affiliated with or endorsed by Cristiano Ronaldo.</p>
+  </div>
+</section>
+
+<!-- ================= HERITAGE ================= -->
+<section id="heritage" class="screen">
+  <div class="flag"><i></i><i></i></div>
+  <div class="wrap">
+    <div class="pagehead">
+      <div class="kicker">Funchal → the world</div>
+      <h2>Heri&shy;tage</h2>
+      <p id="heritageIntro">A boy from Santo António, Madeira. The rest he built.</p>
+    </div>
+    <div class="rule" style="margin:14px 0 24px"></div>
+    <div class="tl" id="timeline"></div>
+    <p class="fine">Fan-made. Not affiliated with or endorsed by Cristiano Ronaldo.</p>
+  </div>
+</section>
+
+<!-- ================= SESSION ================= -->
+<section id="session" class="screen">
+  <div class="flag"><i></i><i></i></div>
+  <div class="wrap" style="padding-bottom:0">
+    <button class="back" id="sessBack">←</button>
+    <div class="chaphead" id="chapHead"></div>
+    <div id="blocks"></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="dock"><button class="go" id="goBtn">Begin</button></div>
+</section>
+
+<!-- ================= DEMO SHEET ================= -->
+<div id="sheetBackdrop"></div>
+<div id="sheet">
+  <div class="in">
+    <canvas id="sheetCanvas"></canvas>
+    <p id="sheetName"></p>
+    <p id="sheetCue"></p>
+  </div>
+</div>
+
+<!-- ================= PLAYER ================= -->
+<section id="player" class="screen">
+  <div class="pw">
+    <div class="ph">
+      <button class="x" id="quitBtn">✕</button>
+      <div class="pbar"><i id="pbar"></i></div>
+      <div class="pc" id="pcount">1/1</div>
+    </div>
+    <canvas id="figPlay"></canvas>
+    <div class="pm">
+      <div class="pphase" id="pphase">Get ready</div>
+      <div class="ptime" id="ptime">0:10</div>
+      <div class="pex" id="pex"></div>
+      <div class="pcue" id="pcue"></div>
+      <div class="pq quote" id="pquote"></div>
+      <div class="pnext" id="pnext"></div>
+    </div>
+    <div class="pctl">
+      <button id="prevBtn">⏮</button>
+      <button class="mid" id="pauseBtn">❚❚</button>
+      <button id="skipBtn">⏭</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DONE ================= -->
+<section id="done">
+  <div class="dw">
+    <canvas id="figDone"></canvas>
+    <div class="kicker" id="doneKicker">Chapter complete</div>
+    <h2>SIUUU.</h2>
+    <div class="sub" id="doneSub"></div>
+    <div class="quote" id="doneQuote"></div>
+    <button class="go" id="doneBtn">Done</button>
+  </div>
+</section>
+
+<!-- ================= TABS ================= -->
+<nav class="tabs" id="tabs">
+  <div class="in">
+    <button class="tab on" data-tab="home"><span class="g">07</span>Program</button>
+    <button class="tab" data-tab="code"><span class="g">§</span>The Code</button>
+    <button class="tab" data-tab="heritage"><span class="g">85</span>Heritage</button>
+  </div>
+</nav>
+
+<script type="module">
+/* =====================================================================
+   SETE — seven no-equipment sessions, each a chapter of Cristiano
+   Ronaldo's career, built around his published words on work, discipline
+   and consistency. Fan-made tribute; not affiliated with him.
+   ===================================================================== */
+import { FigureScene } from './figure.js';
+import { ANIMS } from './anims.js';
+import { QUOTES, LAWS, HABITS, TIMELINE, HERITAGE_INTRO } from './content.js';
+import { CHAPTERS, RECOVERY, buildSteps, sessionMinutes, moveName, moveAnim, BENCH_FIELDS } from './program.js';
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const anim = (id) => ANIMS[id] || ANIMS.idle;
+const ALL = [...CHAPTERS, RECOVERY];
+
+// ---------- state ----------
+const KEY = 'sete-v1';
+const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+let S = Object.assign({ done: {}, bench: {}, quiet: false, sound: true }, load());
+const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
+
+// ---------- quotes ----------
+const Q = Object.fromEntries(QUOTES.map(q => [q.id, q]));
+function quoteHTML(q) {
+  if (!q) return '';
+  return `<q>${esc(q.text)}</q><cite class="cite"><b>Cristiano Ronaldo</b> <span>· ${esc(q.source)}</span></cite>`;
+}
+const dayIndex = Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
+const dailyQuote = () => QUOTES[dayIndex % QUOTES.length];
+const restPool = QUOTES.filter(q => q.rest);
+let restCursor = Math.floor(Math.random() * Math.max(1, restPool.length));
+const nextRestQuote = () => restPool[(restCursor++) % restPool.length];
+
+// ---------- figure scenes (lazy, one per canvas) ----------
+const fig = {};
+function figure(which, canvasId, opts) {
+  if (!fig[which]) fig[which] = new FigureScene($(canvasId), opts);
+  fig[which].resize();
+  return fig[which];
+}
+
+// ---------- navigation ----------
+let tab = 'home';
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+  $('tabs').classList.toggle('hide', !['home', 'code', 'heritage'].includes(id));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
+  tab = b.dataset.tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === b));
+  show(tab);
+  if (tab === 'home') fig.home?.start(); else fig.home?.stop();
+}));
+
+// ---------- program (home) ----------
+function renderHome() {
+  $('dailyQuote').innerHTML = quoteHTML(dailyQuote());
+  const n = CHAPTERS.filter(c => S.done[c.id]).length;
+  $('meterNum').innerHTML = `${n}<span>/7</span>`;
+  $('bars').innerHTML = CHAPTERS.map(c => `<i class="${S.done[c.id] ? 'on' : ''}"></i>`).join('');
+  $('meterMsg').textContent =
+    n === 0 ? 'Funchal to the final. One chapter at a time.' :
+    n === 7 ? 'Seven for seven. Start again — he always does.' :
+    `${7 - n} to go. Show up tomorrow too.`;
+
+  const next = CHAPTERS.find(c => !S.done[c.id]);
+  $('chapters').innerHTML = ALL.map(c => {
+    const done = !!S.done[c.id];
+    const isNext = next && next.id === c.id;
+    const st = c.extra ? 'ANYTIME' : done ? 'DONE ✓' : isNext ? 'NEXT' : '';
+    return `<button class="chap ${done ? 'done' : ''} ${isNext ? 'next' : ''} ${c.extra ? 'extra' : ''}" data-id="${c.id}">
+      <span class="n">${c.num}</span>
+      <span><span class="where">${esc(c.place)} · ${esc(c.year)}</span>
+        <span class="t">${esc(c.title)}</span>
+        <span class="m">${sessionMinutes(c)} min · ${esc(c.tag)}</span></span>
+      <span class="st">${st}</span>
+    </button>`;
+  }).join('');
+  document.querySelectorAll('.chap').forEach(el => el.addEventListener('click', () => openSession(el.dataset.id)));
+  $('quietToggle').classList.toggle('on', S.quiet);
+  $('soundToggle').classList.toggle('on', S.sound);
+}
+$('quietToggle').addEventListener('click', () => { S.quiet = !S.quiet; persist(); renderHome(); });
+$('soundToggle').addEventListener('click', () => { S.sound = !S.sound; persist(); renderHome(); });
+
+// ---------- the code ----------
+function renderCode() {
+  $('laws').innerHTML = LAWS.map((l, i) => `
+    <div class="law">
+      <div class="head"><span class="num">${String(i + 1).padStart(2, '0')}</span><h3>${esc(l.title)}</h3></div>
+      <div class="quote">${quoteHTML(Q[l.quote])}</div>
+      <p class="why">${esc(l.why)}</p>
+    </div>`).join('');
+  $('habits').innerHTML = HABITS.map(h =>
+    `<li><div><b>${esc(h.title)}</b><span>${esc(h.text)}</span>${h.source ? `<small>${esc(h.source)}</small>` : ''}</div></li>`).join('');
+}
+
+// ---------- heritage ----------
+function renderHeritage() {
+  $('heritageIntro').textContent = HERITAGE_INTRO;
+  $('timeline').innerHTML = TIMELINE.map(e => `
+    <div class="ev ${e.key ? 'key' : ''}">
+      <div class="yr">${esc(e.year)}</div>
+      <div class="place">${esc(e.place)}</div>
+      <p>${esc(e.text)}</p>
+      ${e.quote && Q[e.quote] ? `<div class="quote">${quoteHTML(Q[e.quote])}</div>` : ''}
+    </div>`).join('');
+}
+
+// ---------- session ----------
+let current = null;
+function openSession(id) {
+  current = ALL.find(c => c.id === id);
+  const c = current;
+  $('chapHead').innerHTML = `
+    <div class="bg">${c.num}</div>
+    <div class="kicker">${c.extra ? 'Recovery' : 'Chapter ' + c.num} · ${esc(c.place)} · ${esc(c.year)}</div>
+    <h2>${esc(c.title)}</h2>
+    <p class="story">${esc(c.story)}</p>
+    <p class="focus">${esc(c.focus)}</p>
+    <div class="chips">
+      <span class="chip">~${sessionMinutes(c)} min</span>
+      <span class="chip">No equipment</span>
+      <span class="chip">Tap a move to see it</span>
+      ${S.quiet ? '<span class="chip">Quiet mode</span>' : ''}
+    </div>
+    <div class="quote">${quoteHTML(Q[c.quote])}</div>`;
+
+  $('blocks').innerHTML = c.blocks.map((b, bi) => {
+    if (b.kind === 'bench') return benchBlock(c, b, bi);
+    const meta =
+      b.kind === 'flow' ? `${b.work}s each · continuous` :
+      b.kind === 'pyramid' ? `${b.steps.map(s => s[0] + 's').join(' → ')} · rest scales with work` :
+      (b.rounds > 1 ? b.rounds + ' rounds · ' : '') + b.work + 's on' + (b.rest ? ' / ' + b.rest + 's off' : '');
+    return `<div class="block"><h3>${esc(b.title)}</h3><div class="meta">${meta}</div>` +
+      b.moves.map((m, mi) => exRow(m, bi, mi)).join('') + '</div>';
+  }).join('');
+  document.querySelectorAll('[data-ex]').forEach(el => el.addEventListener('click', () => {
+    const [bi, mi] = el.dataset.ex.split('-').map(Number);
+    openSheet(c.blocks[bi].moves[mi]);
+  }));
+  document.querySelectorAll('[data-bench]').forEach(inp => inp.addEventListener('input', () => {
+    S.bench[c.id] = S.bench[c.id] || {};
+    S.bench[c.id][inp.dataset.bench] = inp.value;
+    persist();
+  }));
+  $('goBtn').textContent = S.done[c.id] ? 'Again' : 'Begin';
+  fig.home?.stop();
+  show('session');
+}
+
+function exRow(m, bi, mi) {
+  const swapped = S.quiet && m.q;
+  return `<button class="ex" data-ex="${bi}-${mi}">
+    <span class="pl">▶</span>
+    <span class="nm">${esc(moveName(m, S.quiet))}${swapped ? '<small>QUIET SWAP</small>' : ''}</span>
+    <span class="cue">${esc(m.c)}</span>
+  </button>`;
+}
+
+function benchBlock(c, b, bi) {
+  const mine = S.bench[c.id] || {};
+  let delta = '';
+  if (c.retest && S.bench[c.retest]) {
+    const base = S.bench[c.retest];
+    const parts = BENCH_FIELDS.map(([k, label]) => {
+      const a = +base[k] || 0, z = +mine[k] || 0;
+      if (!a || !z) return null;
+      const d = z - a;
+      return `${label} ${a} → ${z} <b>(${d >= 0 ? '+' : ''}${d})</b>`;
+    }).filter(Boolean);
+    if (parts.length) delta = `<div class="delta">vs chapter 01 — ${parts.join(' · ')}</div>`;
+  }
+  return `<div class="block"><h3>${esc(b.title)}</h3><div class="meta">60s max each · log your reps</div>
+    <p class="note">${esc(b.note)}</p>
+    ${b.moves.map((m, mi) => exRow(m, bi, mi)).join('')}
+    <div class="bench">${BENCH_FIELDS.map(([k, label]) =>
+      `<div><label>${label}</label><input type="number" inputmode="numeric" min="0" max="999" placeholder="00" data-bench="${k}" value="${esc(mine[k] ?? '')}"></div>`).join('')}
+    </div>${delta}</div>`;
+}
+
+$('sessBack').addEventListener('click', () => { renderHome(); show('home'); fig.home?.start(); });
+
+// ---------- demo sheet ----------
+function openSheet(m) {
+  $('sheetName').textContent = moveName(m, S.quiet);
+  $('sheetCue').textContent = m.c;
+  $('sheet').classList.add('on');
+  $('sheetBackdrop').classList.add('on');
+  const g = figure('sheet', 'sheetCanvas');
+  g.setAnim(anim(moveAnim(m, S.quiet)));
+  g.start();
+}
+function closeSheet() {
+  $('sheet').classList.remove('on');
+  $('sheetBackdrop').classList.remove('on');
+  fig.sheet?.stop();
+}
+$('sheetBackdrop').addEventListener('click', closeSheet);
+$('sheet').addEventListener('click', closeSheet);
+
+// ---------- audio ----------
+let AC = null;
+function tone(freq, dur, when = 0, gain = 0.2, type = 'sine') {
+  if (!S.sound || !AC) return;
+  const t = AC.currentTime + when;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(gain, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  o.connect(g).connect(AC.destination);
+  o.start(t); o.stop(t + dur + 0.02);
+}
+// referee whistle: a high tone with a fast warble (the pea rattling)
+function whistle(dur, when = 0, gain = 0.12) {
+  if (!S.sound || !AC) return;
+  const t = AC.currentTime + when;
+  const o = AC.createOscillator(), g = AC.createGain();
+  const lfo = AC.createOscillator(), depth = AC.createGain();
+  o.type = 'triangle'; o.frequency.value = 2650;
+  lfo.frequency.value = 38; depth.gain.value = 140;
+  lfo.connect(depth).connect(o.frequency);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.02);
+  g.gain.setValueAtTime(gain, t + dur - 0.04);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g).connect(AC.destination);
+  o.start(t); lfo.start(t); o.stop(t + dur + 0.02); lfo.stop(t + dur + 0.02);
+}
+const tick = () => tone(700, 0.08, 0, 0.18, 'square');
+const workCue = () => { whistle(0.14); whistle(0.34, 0.2); };
+const restCue = () => tone(440, 0.18, 0, 0.16);
+const fullTime = () => { whistle(0.3); whistle(0.3, 0.42); whistle(0.9, 0.84); };
+
+// ---------- wake lock ----------
+let wakeLock = null;
+async function grabWakeLock() { try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {} }
+function dropWakeLock() { wakeLock?.release().catch(() => {}); wakeLock = null; }
+
+// ---------- player ----------
+const PHASE = {
+  prep: { c: '#B8975A', label: 'Get ready' },
+  work: { c: '#E4002B', label: 'Work' },
+  rest: { c: '#EDE8DF', label: 'Rest' },
+  flow: { c: '#B8975A', label: 'Flow' },
+};
+const P = { steps: [], i: 0, remaining: 0, total: 0, before: 0, running: false, paused: false, lastTs: 0 };
+
+$('goBtn').addEventListener('click', () => {
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch {} }
+  AC?.resume?.();
+  closeSheet();
+  P.steps = buildSteps(current, S.quiet);
+  P.total = P.steps.reduce((s, x) => s + x.secs, 0);
+  P.running = true;
+  grabWakeLock();
+  show('player');
+  figure('play', 'figPlay').start();
+  enter(0);
+  setPaused(false);
+});
+
+function enter(i) {
+  P.i = i;
+  const st = P.steps[i];
+  P.remaining = st.secs;
+  P.before = P.steps.slice(0, i).reduce((s, x) => s + x.secs, 0);
+  const ph = PHASE[st.kind];
+  $('player').style.setProperty('--phase', ph.c);
+  $('pphase').textContent = ph.label;
+  $('pex').textContent = st.label;
+  $('pcue').textContent = st.cue || '';
+  $('pcount').textContent = `${i + 1}/${P.steps.length}`;
+  // long rests carry his words instead of silence
+  const showQuote = st.kind === 'rest' && st.secs >= 20 && restPool.length;
+  $('pquote').classList.toggle('on', !!showQuote);
+  $('pquote').innerHTML = showQuote ? quoteHTML(nextRestQuote()) : '';
+  const nx = P.steps[i + 1];
+  $('pnext').innerHTML = nx ? `Next <b>${esc(nx.label)}</b>` : '<b>Last one. Finish it.</b>';
+  fig.play?.setAnim(anim(st.anim));
+  paint();
+  if (st.kind === 'work') workCue(); else if (i > 0) restCue();
+}
+
+const fmt = (s) => { const w = Math.max(0, Math.ceil(s)); return Math.floor(w / 60) + ':' + String(w % 60).padStart(2, '0'); };
+function paint() {
+  $('ptime').textContent = fmt(P.remaining);
+  const done = P.before + (P.steps[P.i].secs - P.remaining);
+  $('pbar').style.width = Math.min(100, done / P.total * 100) + '%';
+}
+function loop(ts) {
+  if (!P.running || P.paused) return;
+  if (!P.lastTs) P.lastTs = ts;
+  const dt = (ts - P.lastTs) / 1000;
+  P.lastTs = ts;
+  const before = Math.ceil(P.remaining);
+  P.remaining -= dt;
+  const after = Math.ceil(P.remaining);
+  if (after !== before && after > 0 && after <= 3) tick();
+  if (P.remaining <= 0) {
+    if (P.i + 1 < P.steps.length) enter(P.i + 1);
+    else return finish();
+  } else paint();
+  requestAnimationFrame(loop);
+}
+function setPaused(p) {
+  P.paused = p;
+  P.lastTs = 0;
+  $('pauseBtn').textContent = p ? '▶' : '❚❚';
+  if (p) fig.play?.stop(); else { fig.play?.start(); requestAnimationFrame(loop); }
+}
+$('pauseBtn').addEventListener('click', () => setPaused(!P.paused));
+$('skipBtn').addEventListener('click', () => { if (P.i + 1 < P.steps.length) { P.lastTs = 0; enter(P.i + 1); } else finish(); });
+$('prevBtn').addEventListener('click', () => { P.lastTs = 0; enter(Math.max(0, P.i - 1)); });
+$('quitBtn').addEventListener('click', () => {
+  P.running = false;
+  fig.play?.stop();
+  dropWakeLock();
+  openSession(current.id);
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && P.running) {
+    grabWakeLock();
+    if (!P.paused) { P.lastTs = 0; requestAnimationFrame(loop); }
+  }
+});
+
+// ---------- done ----------
+function finish() {
+  P.running = false;
+  fig.play?.stop();
+  dropWakeLock();
+  S.done[current.id] = Date.now();
+  persist();
+  const n = CHAPTERS.filter(c => S.done[c.id]).length;
+  $('doneKicker').textContent = current.extra ? 'Recovery complete' : `Chapter ${current.num} complete · ${current.place}`;
+  $('doneSub').textContent = current.extra ? 'Recovery is part of the work.' :
+    n === 7 ? 'Seven for seven.' : `${n} of 7. Same time tomorrow.`;
+  $('doneQuote').innerHTML = quoteHTML(Q[current.doneQuote] || dailyQuote());
+  fullTime();
+  $('done').classList.add('on');
+  const g = figure('done', 'figDone', { camY: 1.2, camZ: 4.6, lookY: 0.75 });
+  g.setAnim(anim('siu'));
+  g.start();
+}
+$('doneBtn').addEventListener('click', () => {
+  $('done').classList.remove('on');
+  fig.done?.stop();
+  if (current.blocks.some(b => b.kind === 'bench')) openSession(current.id);
+  else { renderHome(); show('home'); fig.home?.start(); }
+});
+
+// ---------- boot ----------
+renderHome();
+renderCode();
+renderHeritage();
+const home = figure('home', 'figHome', { camX: 1.3, camY: 1.15, camZ: 4.3, lookY: 0.62, lookX: -0.6 });
+home.setAnim(anim('stance'));
+home.start();
+// tap the figure for the celebration, then back to the stance
+let siuTimer = 0;
+$('figHome').addEventListener('click', () => {
+  clearTimeout(siuTimer);
+  home.setAnim(anim('siu'));
+  siuTimer = setTimeout(() => home.setAnim(anim('stance')), anim('siu').dur * 1000 * 0.86);
+});
+window.addEventListener('resize', () => Object.values(fig).forEach(g => g?.resize()));
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>

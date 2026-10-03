@@ -1,7 +1,8 @@
-const CACHE = 'kinetic-v2';
+const CACHE = 'sete-v1';
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
-  './ghost.js', './anims.js', './anims-core.js', './anims-a.js', './anims-b.js', './anims-c.js',
+  './figure.js', './program.js', './content.js',
+  './anims.js', './anims-core.js', './anims-a.js', './anims-b.js', './anims-c.js', './anims-signature.js',
   './vendor/three.module.min.js',
   './icon.svg', './icon-180.png', './icon-512.png',
 ];
@@ -24,7 +25,7 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
 
-  // Fonts: cache-first — they never change, and we want them mid-flight offline.
+  // Fonts: cache-first — they never change, and we want them offline.
   if (FONT_HOSTS.includes(url.hostname)) {
     e.respondWith(
       caches.match(e.request).then(m => m || fetch(e.request).then(res => {
@@ -46,8 +47,6 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(e.request, copy));
         return res;
       })
-      .catch(() =>
-        caches.match(e.request).then(m => m || caches.match('./index.html'))
-      )
+      .catch(() => caches.match(e.request).then(m => m || caches.match('./index.html')))
   );
 });

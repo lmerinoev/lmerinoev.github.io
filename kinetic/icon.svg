@@ -1,20 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="30%" r="80%">
-      <stop offset="0%" stop-color="#3a0b13"/>
-      <stop offset="100%" stop-color="#0d0a0b"/>
+    <radialGradient id="glow" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#2c2361"/>
+      <stop offset="100%" stop-color="#131028"/>
     </radialGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFF3C9"/>
-      <stop offset="55%" stop-color="#F5C451"/>
-      <stop offset="100%" stop-color="#C98E1E"/>
-    </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
-  <!-- jersey -->
-  <path d="M176 92 L220 76 Q256 104 292 76 L336 92 L420 140 L388 222 L348 204 L348 430 L164 430 L164 204 L124 222 L92 140 Z" fill="#C8102E"/>
-  <path d="M220 76 Q256 104 292 76 L284 72 Q256 94 228 72 Z" fill="#0B6B3A"/>
-  <path d="M92 140 L124 222 L138 216 L106 134 Z M420 140 L388 222 L374 216 L406 134 Z" fill="#0B6B3A"/>
-  <!-- the number -->
-  <path d="M196 170 H320 V202 L262 384 H218 L274 210 H196 Z" fill="url(#gold)"/>
+  <rect width="512" height="512" rx="116" fill="url(#glow)"/>
+  <circle cx="118" cy="112" r="9" fill="#6EE7C8"/>
+  <circle cx="408" cy="150" r="7" fill="#A78BFA"/>
+  <circle cx="96" cy="380" r="6" fill="#FFD97D"/>
+  <circle cx="420" cy="392" r="8" fill="#FF8FAB"/>
+  <ellipse cx="256" cy="420" rx="120" ry="26" fill="#000" opacity="0.35"/>
+  <!-- Boo -->
+  <g>
+    <ellipse cx="256" cy="248" rx="130" ry="148" fill="#F2F4FF"/>
+    <circle cx="270" cy="92" r="22" fill="#F2F4FF"/>
+    <circle cx="292" cy="78" r="13" fill="#F2F4FF"/>
+    <!-- stubby arms up like a cheer -->
+    <ellipse cx="112" cy="196" rx="26" ry="58" fill="#F2F4FF" transform="rotate(32 112 196)"/>
+    <ellipse cx="400" cy="196" rx="26" ry="58" fill="#F2F4FF" transform="rotate(-32 400 196)"/>
+    <!-- feet -->
+    <ellipse cx="212" cy="402" rx="30" ry="24" fill="#F2F4FF"/>
+    <ellipse cx="300" cy="402" rx="30" ry="24" fill="#F2F4FF"/>
+    <!-- face -->
+    <ellipse cx="216" cy="238" rx="15" ry="24" fill="#23213A"/>
+    <ellipse cx="296" cy="238" rx="15" ry="24" fill="#23213A"/>
+    <ellipse cx="256" cy="288" rx="14" ry="10" fill="#23213A"/>
+    <ellipse cx="178" cy="272" rx="17" ry="11" fill="#FFA8C0"/>
+    <ellipse cx="334" cy="272" rx="17" ry="11" fill="#FFA8C0"/>
+  </g>
+  <!-- little bolt -->
+  <path d="M388 296 362 342h20l-14 40 40-52h-22l16-34Z" fill="#FFD97D"/>
 </svg>
