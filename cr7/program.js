@@ -40,9 +40,9 @@ export const BENCH_FIELDS = [['squats', 'Squats'], ['pushups', 'Push-ups'], ['bu
 export const CHAPTERS = [
   {
     id: 'c1', num: '01', place: 'Funchal', year: '1985', title: 'Origins', tag: 'benchmark + full body',
-    story: 'Born on Madeira, raised in Santo António. A small house, a big family, a ball in the street until dark.',
+    story: 'Born on Madeira, the youngest of four, sharing one room with his siblings in Santo António. His father was kit man at the local club.',
     focus: 'Find out exactly where you are today. Write it down. Then a full-body session to set the standard.',
-    quote: 'work', doneQuote: 'better',
+    quote: 'skies', doneQuote: 'work',
     blocks: [
       WARMUP,
       BENCHMARK('Count every rep. Log the numbers after — chapter 07 is the rematch.'),
@@ -59,9 +59,9 @@ export const CHAPTERS = [
   },
   {
     id: 'c2', num: '02', place: 'Lisboa', year: '1997', title: 'Hunger', tag: 'speed + engine',
-    story: 'Twelve years old, alone on a plane to Lisbon for Sporting’s academy. Homesick, and faster than everyone.',
+    story: 'Twelve years old, alone in Lisbon at Sporting’s academy. At fifteen, heart surgery — and back training within days.',
     focus: 'Pure engine work. Sprint, recover, sprint again. This is your indoor run.',
-    quote: 'dreams', doneQuote: 'nothing-to-prove',
+    quote: 'left-family', doneQuote: 'passion',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'Sprint work', work: 40, rest: 20, rounds: 3, breather: 60, moves: [
@@ -80,9 +80,9 @@ export const CHAPTERS = [
   },
   {
     id: 'c3', num: '03', place: 'Manchester', year: '2003', title: 'The Seven', tag: 'legs + power',
-    story: 'Eighteen, handed the number seven at Old Trafford. Skinny when he arrived. Built himself into a different athlete.',
+    story: 'Eighteen, handed the number seven worn by Best, Cantona and Beckham. Five years later: Champions League winner and his first Ballon d’Or.',
     focus: 'Legs that last ninety minutes. Strength-endurance for the lower half.',
-    quote: 'nothing-to-prove', doneQuote: 'work',
+    quote: 'discipline', doneQuote: 'mind',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'Leg strength', work: 45, rest: 15, rounds: 2, breather: 60, moves: [
@@ -103,9 +103,9 @@ export const CHAPTERS = [
   },
   {
     id: 'c4', num: '04', place: 'Madrid', year: '2009', title: 'The Machine', tag: 'pyramid',
-    story: 'Nine seasons at the Bernabéu. Goals at a rate the game had never seen, season after season after season.',
+    story: 'A world-record transfer, then nine seasons at the Bernabéu. Four Champions Leagues. Goals at a rate the game had never seen.',
     focus: 'Climb up, climb down. Four moves, five levels — intervals that grow then shrink.',
-    quote: 'best', doneQuote: 'love-hate',
+    quote: 'best-history', doneQuote: 'records',
     blocks: [
       WARMUP,
       { kind: 'pyramid', title: 'Pyramid', steps: [[20, 10], [30, 15], [40, 20], [30, 15], [20, 10]], breather: 45, moves: [
@@ -119,9 +119,9 @@ export const CHAPTERS = [
   },
   {
     id: 'c5', num: '05', place: 'Torino', year: '2018', title: 'Control', tag: 'push + core',
-    story: 'Thirty-three and starting over in a new league, a new language. The body was the constant.',
+    story: 'Thirty-three and starting over in a new league, a new language. Two Serie A titles. The body was the constant.',
     focus: 'Upper body and midsection. Slow reps, full control, no swinging.',
-    quote: 'consistency', doneQuote: 'better',
+    quote: 'consistence', doneQuote: 'consistency-hard',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'Push & core', work: 40, rest: 20, rounds: 2, breather: 60, moves: [
@@ -142,9 +142,9 @@ export const CHAPTERS = [
   },
   {
     id: 'c6', num: '06', place: 'Riyadh', year: '2023', title: 'Longevity', tag: 'endurance',
-    story: 'Thirty-seven when he landed, and still scoring years later. Proof that the habits compound.',
+    story: 'Thirty-seven when he landed. A league-record 35 goals the next season, the title at 41. Proof that the habits compound.',
     focus: 'Long steady burn. Conversational pace, no stopping, three halves.',
-    quote: 'age', doneQuote: 'consistency',
+    quote: 'young', doneQuote: 'after30',
     blocks: [
       WARMUP,
       { kind: 'hiit', title: 'First half', work: 60, rest: 0, rounds: 1, breather: 90, moves: [
@@ -178,7 +178,7 @@ export const CHAPTERS = [
     id: 'c7', num: '07', place: 'Seleção', year: '2016', title: 'The Final', tag: 'retest + finish', retest: 'c1',
     story: 'Paris, Euro 2016. Injured and off in the first half of the final — then on the touchline, driving the team to the trophy.',
     focus: 'The rematch. Same benchmark as chapter 01. Beat your numbers, then finish like it’s a final.',
-    quote: 'never-give-up', doneQuote: 'siu',
+    quote: 'euro', doneQuote: 'siu',
     blocks: [
       WARMUP,
       BENCHMARK('Same three tests as chapter 01. Your old numbers are on the board below — go past them.'),
@@ -198,9 +198,9 @@ export const CHAPTERS = [
 
 export const RECOVERY = {
   id: 'rec', num: 'R', extra: true, place: 'Any day', year: 'Rest', title: 'Recovery', tag: 'mobility + light core',
-  story: 'He has called recovery and sleep as important as training. This session is how you earn tomorrow.',
+  story: 'Sleep, cold water, routine. He treats recovery as part of the work. This session is how you earn tomorrow.',
   focus: 'Loosen up, light core, then go for a long walk. No intensity today.',
-  quote: 'sleep', doneQuote: 'sleep',
+  quote: 'recover', doneQuote: 'passion',
   blocks: [
     { kind: 'flow', title: 'Mobility', work: 45, moves: [
       M('Cat-cow', 'Move with your breath', 'catcow'),
