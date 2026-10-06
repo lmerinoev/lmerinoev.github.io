@@ -63,6 +63,30 @@ Good design is innovative, useful, aesthetic, understandable, unobtrusive, hones
 9. Help people recognize, diagnose, and recover from errors in plain language.
 10. Help and documentation where it's needed, short and task-focused.
 
+## Avoiding AI slop
+
+From "How to de-slopify your designs" (UX Collective). Slop is design produced without considered decisions: formulaic layouts, unnecessary elements, and parts that make sense alone but feel off in combination. Telling an AI to "make it less generic" does not work. Specific decisions do.
+
+The process, in order:
+
+1. **Write the real content first.** Design around actual text, formulas and data, never placeholders.
+2. **Name references before designing.** Pick two or three real sources (books, sites, objects) and write down the one specific thing taken from each. Describe them; don't copy someone else's work.
+3. **Make specific choices and record them.** A named font pairing, a palette where each colour has a stated job, one icon set (for example Lucide) or none. Put them in the project's tokens or design notes.
+4. **Do a subtraction pass.** For every border, box, label, icon and animation, ask what breaks if it's removed. If nothing, remove it.
+5. **For anything large, sketch the layout first** (or have the user sketch it) and build to the sketch.
+
+Tells to remove on sight unless there is a stated reason:
+
+- Every block in its own bordered, rounded card. Use space and type to group instead.
+- Small uppercase, letter-spaced labels above every section.
+- Leading-zero numbering (01, 02) and big-number stat tiles that aren't the point of the page.
+- Glassmorphism: blurred translucent bars and panels.
+- Coloured dots, pills and badges used as decoration.
+- A heavy, tightly tracked hero headline that could sit on any SaaS landing page.
+- Gradients, glows and soft shadows applied everywhere.
+- Emoji or generic icons as section markers.
+- Every component given the same radius, shadow and padding, so nothing stands out.
+
 ## Concrete checks before shipping any UI
 
 - Text contrast at least 4.5:1 (3:1 for large text and UI component edges) in both light and dark mode.
