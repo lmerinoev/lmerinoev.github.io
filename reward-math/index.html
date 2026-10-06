@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reward Math</title>
+<meta name="description" content="A study site on how large language models are trained, focused on the math of reward and preference training.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('reward-math:theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="assets/modules.js"></script>
+<script defer src="assets/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="name" href="index.html">Reward Math</a>
+  <nav aria-label="Site">
+    <a href="index.html" aria-current="page">Contents</a>
+    <a href="glossary.html">Glossary</a>
+    <a href="resources.html">Resources</a>
+    <button type="button" id="theme" hidden>Dark</button>
+  </nav>
+</header>
+<main id="main">
+  <div class="cat-anchor"><svg class="cat cat-margin sit" viewBox="0 0 64 72" aria-hidden="true" focusable="false"><use href="#cat-sit"/></svg></div>
+  <div class="col">
+    <h1>How language models are trained on human preferences</h1>
+    <p>Eight modules, in order, from the basics of neural networks to reward hacking. Each one explains an idea in plain words, gives the formulas with every symbol defined, works a small example by hand, and ends with exercises. Each term is defined before it is used, and the <a href="glossary.html">glossary</a> links back to where.</p>
+    <p class="legend">Formulas use five colors, always with the same meaning: <span class="c-win">green</span> for the preferred response, <span class="c-lose">red</span> for the rejected one, <span class="c-model">blue</span> for the model being trained, <span class="c-fn">violet</span> for fixed functions such as σ and log, and <span class="c-ref">amber</span> for the reference model and penalty terms.</p>
+    <p>Each module ends with links to the matching parts of the <a href="resources.html">resources</a>, which are listed there in a suggested reading order.</p>
+    <div class="progress">
+      <p><span id="progress-sum">Progress is saved in this browser only.</span> Progress is not shared between devices. To move it, export it to a file here and import that file on the other device.</p>
+      <div id="io" hidden>
+        <button type="button" class="linkbtn" id="export">Export progress</button> &nbsp;·&nbsp;
+        <button type="button" class="linkbtn" id="import">Import progress</button>
+        <input type="file" id="import-file" accept=".json,application/json" hidden>
+        <p class="status" id="io-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+  <div class="contents-wrap">
+    <ol class="contents"><li><span class="n">1</span><a class="t" href="neural-networks.html">Neural network basics</a><span class="s" data-status="neural-networks"></span><p class="d">Parameters, loss functions, gradients, backpropagation and gradient descent, explained with one neuron.</p><div class="e" data-tex="\Cm{\theta} \leftarrow \Cm{\theta} - \eta\,\nabla_{\Cm{\theta}}\mathcal{L}(\Cm{\theta})">{\theta} \leftarrow {\theta} - \eta\,\nabla_{{\theta}}\mathcal{L}({\theta})</div></li><li><span class="n">2</span><a class="t" href="pretraining.html">Pretraining</a><span class="s" data-status="pretraining"></span><p class="d">Next-token prediction, softmax and the cross-entropy loss that pretraining minimizes.</p><div class="e" data-tex="\mathcal{L}(\Cm{\theta}) = -\textstyle\sum_t \Cf{\log}\,p_{\Cm{\theta}}(x_t \mid x_{&lt;t})">\mathcal{L}({\theta}) = -\textstyle\sum_t {\log}\,p_{{\theta}}(x_t \mid x_{&lt;t})</div></li><li><span class="n">3</span><a class="t" href="reinforcement-learning.html">Reinforcement learning basics</a><span class="s" data-status="reinforcement-learning"></span><p class="d">Agents, policies, rewards, expected return and the REINFORCE policy gradient.</p><div class="e" data-tex="\nabla_{\Cm{\theta}} J = \mathbb{E}\big[\textstyle\sum_t \nabla_{\Cm{\theta}}\Cf{\log}\,\Cm{\pi_\theta}(a_t\mid s_t)\,R(\tau)\big]">\nabla_{{\theta}} J = \mathbb{E}\big[\textstyle\sum_t \nabla_{{\theta}}{\log}\,{\pi_\theta}(a_t\mid s_t)\,R(\tau)\big]</div></li><li><span class="n">4</span><a class="t" href="reward-models.html">Reward models</a><span class="s" data-status="reward-models"></span><p class="d">Turning “A is better than B” judgments into a scoring function with the Bradley-Terry model.</p><div class="e" data-tex="P(\Cw{y_w}\succ \Cl{y_l}) = \Cf{\sigma}\big(\Cm{r_\phi}(x,\Cw{y_w}) - \Cm{r_\phi}(x,\Cl{y_l})\big)">P({y_w}\succ {y_l}) = {\sigma}\big({r_\phi}(x,{y_w}) - {r_\phi}(x,{y_l})\big)</div></li><li><span class="n">5</span><a class="t" href="rlhf.html">RLHF policy optimization</a><span class="s" data-status="rlhf"></span><p class="d">The RLHF objective, what the KL penalty does, and how PPO optimizes it.</p><div class="e" data-tex="\max_{\Cm{\theta}}\ \mathbb{E}[r_\phi(x,y)] - \Cr{\beta}\,\mathrm{KL}(\Cm{\pi_\theta}\,\|\,\Cr{\pi_{\mathrm{ref}}})">\max_{{\theta}}\ \mathbb{E}[r_\phi(x,y)] - {\beta}\,\mathrm{KL}({\pi_\theta}\,\|\,{\pi_{\mathrm{ref}}})</div></li><li><span class="n">6</span><a class="t" href="dpo.html">DPO</a><span class="s" data-status="dpo"></span><p class="d">Direct preference optimization: solving the RLHF objective on paper and training on preferences with no separate reward model.</p><div class="e" data-tex="\Cr{\beta}\,\Cf{\log}\dfrac{\Cm{\pi_\theta}(y\mid x)}{\Cr{\pi_{\mathrm{ref}}}(y\mid x)}">{\beta}\,{\log}\dfrac{{\pi_\theta}(y\mid x)}{{\pi_{\mathrm{ref}}}(y\mid x)}</div></li><li><span class="n">7</span><a class="t" href="verifiable-rewards.html">Verifiable rewards</a><span class="s" data-status="verifiable-rewards"></span><p class="d">Binary rewards for math and code: 1 when the answer is right or the tests pass, otherwise 0.</p><div class="e" data-tex="r(x,y) = \mathbb{1}[\,\text{tests pass}\,]">r(x,y) = \mathbb{1}[\,\text{tests pass}\,]</div></li><li><span class="n">8</span><a class="t" href="reward-hacking.html">Reward hacking and overoptimization</a><span class="s" data-status="reward-hacking"></span><p class="d">Why optimizing a learned reward amplifies whatever raters favored, and how that produces recognizable habits in model writing.</p><div class="e" data-tex="d = \sqrt{\mathbb{D}_{\mathrm{KL}}(\Cm{\pi}\,\|\,\Cr{\pi_{\mathrm{init}}})}">d = \sqrt{\mathbb{D}_{\mathrm{KL}}({\pi}\,\|\,{\pi_{\mathrm{init}}})}</div></li></ol>
+    <svg class="cat cat-list" viewBox="0 0 90 46" aria-hidden="true" focusable="false"><use href="#cat-sleep"/></svg>
+  </div>
+</main>
+<footer class="foot">
+  <p>A study site on the math of reward and preference training. Progress is saved only in this browser. There are no accounts, analytics or tracking. Formulas are rendered with KaTeX.</p>
+</footer>
+</body>
+</html>
