@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1d1b22">
+<title>Talking Cat</title>
+<meta name="description" content="Ask the cat anything — it answers yes, no, purrs, hisses, or repeats you in a squeaky voice.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Talking Cat">
+<style>
+  :root {
+    --bg: #1d1b22;
+    --panel: rgba(29, 27, 34, 0.72);
+    --ink: #fdfcf8;
+    --muted: rgba(253, 252, 248, 0.62);
+    --green: #a8d43a;
+    --green-deep: #6f9a17;
+    --red: #e3363f;
+    --bubble: #ffffff;
+    --bubble-ink: #1d1b22;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink);
+    font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-user-select: none; user-select: none; overscroll-behavior: none; touch-action: manipulation;
+  }
+  #stage { position: fixed; inset: 0; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+  /* top bar */
+  .top {
+    position: fixed; left: 0; right: 0; top: 0; z-index: 5;
+    padding: calc(env(safe-area-inset-top) + 10px) 16px 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    pointer-events: none;
+  }
+  .status {
+    pointer-events: none; background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-radius: 999px; padding: 8px 14px; font-size: 14px; font-weight: 600; letter-spacing: .01em;
+    display: flex; align-items: center; gap: 8px; max-width: 70vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #777; flex: none; transition: background .2s; }
+  .dot.live { background: var(--green); box-shadow: 0 0 0 0 rgba(168,212,58,.6); animation: pulse 1.6s infinite; }
+  .dot.hear { background: var(--red); }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(168,212,58,0); } 100% { box-shadow: 0 0 0 0 rgba(168,212,58,0); } }
+
+  .modes {
+    pointer-events: auto; display: flex; background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-radius: 999px; padding: 4px;
+  }
+  .modes button {
+    border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 700; font-size: 13px;
+    padding: 7px 12px; border-radius: 999px; cursor: pointer;
+  }
+  .modes button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+  /* speech bubble */
+  #bubble {
+    position: fixed; z-index: 4; left: 50%; top: calc(env(safe-area-inset-top) + 70px);
+    transform: translate(-50%, 8px) scale(.9); opacity: 0; transition: opacity .15s, transform .2s cubic-bezier(.3,1.6,.5,1);
+    background: var(--bubble); color: var(--bubble-ink); font-weight: 800; font-size: clamp(22px, 7vw, 34px);
+    padding: 10px 22px; border-radius: 26px; box-shadow: 0 8px 30px rgba(0,0,0,.35); pointer-events: none; white-space: nowrap;
+  }
+  #bubble.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  #bubble::after {
+    content: ""; position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%);
+    border: 11px solid transparent; border-top-color: var(--bubble); border-bottom: 0;
+  }
+
+  /* bottom controls */
+  .bottom {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+    padding: 18px 16px calc(env(safe-area-inset-bottom) + 18px);
+    background: linear-gradient(to top, rgba(29,27,34,.92) 30%, rgba(29,27,34,0));
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px;
+  }
+  .side { display: flex; gap: 10px; }
+  .side.right { justify-content: flex-end; }
+  .act {
+    border: 0; cursor: pointer; width: 58px; height: 58px; border-radius: 18px; background: var(--panel);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--ink);
+    display: grid; place-items: center; font: inherit; font-size: 11px; font-weight: 700; padding: 6px 0 4px; gap: 1px;
+    transition: transform .1s;
+  }
+  .act span { font-size: 24px; line-height: 1; }
+  .act:active { transform: scale(.92); }
+  #mic {
+    position: relative; width: 84px; height: 84px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--green); color: #1d2a05; display: grid; place-items: center;
+    box-shadow: 0 6px 24px rgba(168,212,58,.35); transition: transform .1s, background .2s;
+  }
+  #mic:active { transform: scale(.94); }
+  #mic svg { width: 34px; height: 34px; }
+  #mic.on { background: var(--red); color: #fff; box-shadow: 0 6px 24px rgba(227,54,63,.4); }
+  #ring {
+    position: absolute; inset: -8px; border-radius: 50%; border: 4px solid rgba(255,255,255,.75);
+    transform: scale(1); opacity: 0; pointer-events: none;
+  }
+  #mic.on #ring { opacity: 1; }
+  .hint { position: absolute; left: 0; right: 0; bottom: calc(100% - 6px); text-align: center; font-size: 13px; color: var(--muted); }
+
+  /* floaters (hearts, zzz, fish) */
+  .float {
+    position: fixed; z-index: 3; pointer-events: none; font-size: 34px; will-change: transform, opacity;
+    animation: rise 1.6s ease-out forwards;
+  }
+  @keyframes rise {
+    0% { transform: translate(-50%, 0) scale(.6); opacity: 0; }
+    15% { opacity: 1; transform: translate(-50%, -20px) scale(1.1); }
+    100% { transform: translate(calc(-50% + var(--dx, 0px)), -170px) scale(1); opacity: 0; }
+  }
+
+  /* start overlay */
+  #start {
+    position: fixed; inset: 0; z-index: 10; display: grid; place-items: end center; cursor: pointer;
+    background: linear-gradient(to top, rgba(29,27,34,.95) 18%, rgba(29,27,34,.15) 60%, rgba(29,27,34,0));
+    padding: 0 24px calc(env(safe-area-inset-bottom) + 48px); text-align: center; border: 0; color: var(--ink); font: inherit; width: 100%;
+  }
+  #start h1 { margin: 0 0 6px; font-size: clamp(34px, 10vw, 48px); letter-spacing: -.02em; }
+  #start p { margin: 0 0 22px; color: var(--muted); font-size: 16px; line-height: 1.4; max-width: 340px; }
+  #start .go {
+    display: inline-block; background: var(--green); color: #1d2a05; font-weight: 800; font-size: 18px;
+    padding: 15px 34px; border-radius: 999px; box-shadow: 0 6px 24px rgba(168,212,58,.35);
+  }
+  #start.gone { opacity: 0; pointer-events: none; transition: opacity .3s; }
+
+  #toast {
+    position: fixed; z-index: 11; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 130px); transform: translateX(-50%);
+    background: #fff; color: #1d1b22; font-weight: 600; font-size: 14px; padding: 10px 16px; border-radius: 14px;
+    max-width: calc(100vw - 32px); text-align: center; opacity: 0; transition: opacity .2s; pointer-events: none;
+  }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="cv" aria-label="Your cat. Tap the head to poke, tap the body to pet."></canvas></div>
+
+<div class="top">
+  <div class="status"><span class="dot" id="dot"></span><span id="status">Tap the mic and talk</span></div>
+  <div class="modes" role="group" aria-label="Mode">
+    <button id="mode-ask" aria-pressed="true">Ask</button>
+    <button id="mode-copy" aria-pressed="false">Copy</button>
+  </div>
+</div>
+
+<div id="bubble"></div>
+
+<div class="bottom">
+  <div class="side">
+    <button class="act" id="btn-pet" aria-label="Pet"><span>🤚</span>Pet</button>
+    <button class="act" id="btn-poke" aria-label="Poke"><span>👉</span>Poke</button>
+  </div>
+  <button id="mic" aria-label="Start listening">
+    <div class="hint" id="hint"></div>
+    <div id="ring"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="21.5"/></svg>
+  </button>
+  <div class="side right">
+    <button class="act" id="btn-treat" aria-label="Treat"><span>🐟</span>Treat</button>
+    <button class="act" id="btn-meow" aria-label="Meow"><span>😺</span>Meow</button>
+  </div>
+</div>
+
+<button id="start">
+  <div>
+    <h1>Talking Cat</h1>
+    <p>Ask a yes-or-no question and the cat answers. Switch to <b>Copy</b> and it repeats you in a squeaky voice.</p>
+    <span class="go">Wake up the cat</span>
+  </div>
+</button>
+<div id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ------------------------------------------------------------------
+   Photo geometry (pixels in cat.jpg, 1200×1600)
+   ------------------------------------------------------------------ */
+const IMG_W = 1200, IMG_H = 1600;
+const FACE = {
+  focus: { x: 560, y: 760 },               // what we keep centred on screen
+  mouthY: 582,                             // line under the nose where the jaw splits
+  mouthX: 537,
+  chin: { x: 537, y: 603, rx: 58, ry: 27 },// the patch that drops when talking
+  eyes: [ { x: 485, y: 465, rx: 27, ry: 23 }, { x: 637, y: 462, rx: 27, ry: 23 } ],
+  head: { x: 560, y: 470, r: 210 },        // tap zone for poking
+  body: { x1: 330, y1: 700, x2: 900, y2: 1350 } // tap zone for petting
+};
+const JAW_MAX = 26;
+
+/* ------------------------------------------------------------------
+   DOM
+   ------------------------------------------------------------------ */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), g = cv.getContext('2d');
+const statusEl = $('status'), dot = $('dot'), bubble = $('bubble'), mic = $('mic'), ring = $('ring'), hint = $('hint'), toastEl = $('toast');
+
+const img = new Image();
+img.src = 'cat.jpg';
+let chinPatch = null;
+img.onload = () => { chinPatch = makeChinPatch(); };
+
+/* Pre-cut the chin with a feathered edge so the jaw drop blends into the fur. */
+function makeChinPatch() {
+  const { x, y, rx, ry } = FACE.chin;
+  const pad = 6, w = rx * 2 + pad * 2, h = ry * 2 + pad * 2;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const cx = c.getContext('2d');
+  cx.drawImage(img, x - rx - pad, y - ry - pad, w, h, 0, 0, w, h);
+  cx.globalCompositeOperation = 'destination-in';
+  cx.save();
+  cx.translate(w / 2, h / 2);
+  cx.scale(1, ry / rx);
+  const grd = cx.createRadialGradient(0, 0, rx * 0.72, 0, 0, rx);
+  grd.addColorStop(0, 'rgba(0,0,0,1)');
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  cx.fillStyle = grd;
+  cx.beginPath(); cx.arc(0, 0, rx, 0, Math.PI * 2); cx.fill();
+  cx.restore();
+  return { canvas: c, ox: x - rx - pad, oy: y - ry - pad };
+}
+
+/* ------------------------------------------------------------------
+   Animation state
+   ------------------------------------------------------------------ */
+const S = {
+  mouth: 0,          // 0..1 smoothed
+  mouthTarget: 0,
+  fakeTalk: false,   // when speechSynthesis talks we can't analyse it, so we fake syllables
+  tilt: 0, tiltTarget: 0,
+  shake: 0,          // decays
+  bob: 0,            // purr bob amount
+  squash: 0,         // chomp
+  blink: 0,          // 0 open .. 1 closed
+  nextBlink: performance.now() + 2500,
+  asleep: false,
+  content: false,    // half-closed happy eyes while purring
+  lastActivity: performance.now(),
+};
+
+let dpr = 1, view = { s: 1, ox: 0, oy: 0 };
+function resize() {
+  dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  cv.width = Math.round(innerWidth * dpr);
+  cv.height = Math.round(innerHeight * dpr);
+  const cw = cv.width, ch = cv.height;
+  // cover-fit, then nudge so the face sits a bit above centre (controls live at the bottom)
+  const s = Math.max(cw / IMG_W, ch / IMG_H) * (innerWidth > innerHeight ? 1 : 1.04);
+  let ox = cw / 2 - FACE.focus.x * s;
+  let oy = ch * 0.47 - FACE.focus.y * s;
+  ox = Math.min(0, Math.max(cw - IMG_W * s, ox));
+  oy = Math.min(0, Math.max(ch - IMG_H * s, oy));
+  view = { s, ox, oy };
+}
+addEventListener('resize', resize);
+resize();
+
+function toImage(clientX, clientY) {
+  return { x: (clientX * dpr - view.ox) / view.s, y: (clientY * dpr - view.oy) / view.s };
+}
+function toScreen(x, y) {
+  return { x: (x * view.s + view.ox) / dpr, y: (y * view.s + view.oy) / dpr };
+}
+
+function ellipsePath(ctx, x, y, rx, ry) { ctx.beginPath(); ctx.ellipse(x, y, Math.max(rx, .1), Math.max(ry, .1), 0, 0, Math.PI * 2); }
+
+let lastT = performance.now();
+function frame(t) {
+  const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t;
+
+  // mouth: read output level, or fake it while the speech synth talks
+  let level = outLevel();
+  if (S.fakeTalk) {
+    const syl = Math.max(0, Math.sin(t / 1000 * 14)) * (0.55 + 0.45 * Math.sin(t / 1000 * 3.1));
+    level = Math.max(level, syl);
+  }
+  S.mouthTarget = Math.min(1, level);
+  const k = S.mouthTarget > S.mouth ? 28 : 12;          // fast open, softer close
+  S.mouth += (S.mouthTarget - S.mouth) * Math.min(1, k * dt);
+  if (S.debugMouth != null) S.mouth = S.debugMouth;
+
+  S.tilt += (S.tiltTarget - S.tilt) * Math.min(1, 6 * dt);
+  S.shake = Math.max(0, S.shake - dt * 2.2);
+  S.squash = Math.max(0, S.squash - dt * 3);
+
+  // blinking (or sleeping)
+  if (S.asleep) S.blink += (1 - S.blink) * Math.min(1, 4 * dt);
+  else if (S.debugBlink != null) S.blink = S.debugBlink;
+  else if (S.content) S.blink += (0.55 - S.blink) * Math.min(1, 5 * dt);
+  else if (t > S.nextBlink) {
+    const p = (t - S.nextBlink) / 170;
+    S.blink = p < .5 ? p * 2 : Math.max(0, 2 - p * 2);
+    if (p >= 1) { S.blink = 0; S.nextBlink = t + 1800 + Math.random() * 3800; }
+  } else S.blink += (0 - S.blink) * Math.min(1, 10 * dt);
+
+  draw(t / 1000);
+
+  // mic ring follows input level
+  if (micOn) ring.style.transform = `scale(${1 + Math.min(0.35, inLevel * 4)})`;
+
+  // falls asleep if ignored for a while
+  if (!S.asleep && t - S.lastActivity > 45000 && !busy) sleep();
+
+  requestAnimationFrame(frame);
+}
+
+function draw(time) {
+  const W = cv.width, H = cv.height;
+  g.fillStyle = '#1d1b22';
+  g.fillRect(0, 0, W, H);
+  if (!img.complete || !img.naturalWidth) return;
+
+  g.save();
+  g.translate(view.ox, view.oy);
+  g.scale(view.s, view.s);
+
+  // whole-body motion around the paws
+  const px = 600, py = 1560;
+  const shakeA = S.shake > 0 ? Math.sin(time * 55) * S.shake * 0.05 : 0;
+  const breathe = Math.sin(time * (S.asleep ? 1.4 : 2.1)) * (S.asleep ? 0.006 : 0.003);
+  const purrJ = S.bob > 0 ? Math.sin(time * 70) * 0.0025 * S.bob : 0;
+  g.translate(px, py);
+  g.rotate(S.tilt + shakeA + purrJ);
+  g.scale(1 + breathe + S.squash * 0.02, 1 - breathe - S.squash * 0.03);
+  g.translate(-px, -py);
+
+  g.drawImage(img, 0, 0, IMG_W, IMG_H);
+
+  // ---- mouth: dark opening + dropped chin
+  const d = S.mouth * JAW_MAX;
+  if (d > 0.6 && chinPatch) {
+    const mx = FACE.mouthX, my = FACE.mouthY;
+    const rx = 24 + d * 0.5, ry = d * 0.62 + 3;
+    const cy = my + d * 0.55;
+    const grd = g.createLinearGradient(0, my, 0, my + d * 1.3 + 4);
+    grd.addColorStop(0, '#160709');
+    grd.addColorStop(0.65, '#3a1015');
+    grd.addColorStop(1, '#5c1d25');
+    g.fillStyle = grd;
+    g.shadowColor = 'rgba(15,6,8,.7)'; g.shadowBlur = 6 * view.s;
+    ellipsePath(g, mx, cy, rx, ry); g.fill();
+    g.shadowBlur = 0; g.shadowColor = 'transparent';
+    // tongue
+    if (d > 8) {
+      g.fillStyle = '#c8606b';
+      ellipsePath(g, mx, cy + ry * 0.45, rx * 0.55, ry * 0.42); g.fill();
+    }
+    // upper lip shadow so the seam reads as a mouth
+    g.fillStyle = 'rgba(30,22,22,0.35)';
+    ellipsePath(g, mx, my + 1, rx * 0.9, 2.2); g.fill();
+    // the chin itself, pushed down
+    g.drawImage(chinPatch.canvas, chinPatch.ox, chinPatch.oy + d);
+  }
+
+  // ---- eyelids: slide the real fur from above each eye down over it
+  if (S.blink > 0.02) {
+    for (const e of FACE.eyes) {
+      const rx = e.rx + 3, ry = e.ry + 3;
+      const h = ry * 2 * S.blink;           // how far the lid has come down
+      const top = e.y - ry;
+      g.save();
+      ellipsePath(g, e.x, e.y, rx, ry); g.clip();
+      // fur strip taken from just above the eye, shifted down to the lid edge
+      g.drawImage(img, e.x - rx, top - ry * 2 + 4, rx * 2, ry * 2, e.x - rx, top + h - ry * 2, rx * 2, ry * 2);
+      // lid edge: soft shadow + dark lash line
+      const edge = top + h;
+      const sh = g.createLinearGradient(0, edge - 6, 0, edge + 4);
+      sh.addColorStop(0, 'rgba(20,14,12,0)'); sh.addColorStop(0.7, 'rgba(20,14,12,.45)'); sh.addColorStop(1, 'rgba(20,14,12,0)');
+      g.fillStyle = sh; g.fillRect(e.x - rx, edge - 6, rx * 2, 10);
+      g.restore();
+      if (S.blink > 0.4) {
+        g.strokeStyle = `rgba(22,16,14,${Math.min(.85, (S.blink - .4) * 1.6)})`;
+        g.lineWidth = 3; g.lineCap = 'round';
+        const ey = Math.min(edge, e.y + ry * 0.55);
+        g.beginPath(); g.moveTo(e.x - rx * 0.85, ey - 3); g.quadraticCurveTo(e.x, ey + 5, e.x + rx * 0.85, ey - 3); g.stroke();
+      }
+    }
+  }
+  g.restore();
+}
+
+/* ------------------------------------------------------------------
+   Audio engine
+   ------------------------------------------------------------------ */
+let ctx = null, outBus = null, outAn = null, outBuf = null;
+function ensureAudio() {
+  if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  outBus = ctx.createGain(); outBus.gain.value = 1;
+  outAn = ctx.createAnalyser(); outAn.fftSize = 512; outAn.smoothingTimeConstant = 0.3;
+  outBuf = new Float32Array(outAn.fftSize);
+  outBus.connect(outAn); outAn.connect(ctx.destination);
+  // iOS: play a silent buffer inside the gesture to unlock output
+  const b = ctx.createBuffer(1, 1, 22050), s = ctx.createBufferSource(); s.buffer = b; s.connect(ctx.destination); s.start(0);
+  return ctx;
+}
+function outLevel() {
+  if (!outAn) return 0;
+  outAn.getFloatTimeDomainData(outBuf);
+  let sum = 0; for (let i = 0; i < outBuf.length; i++) sum += outBuf[i] * outBuf[i];
+  const rms = Math.sqrt(sum / outBuf.length);
+  return Math.max(0, Math.min(1, (rms - 0.012) * 6));
+}
+
+function noiseBuffer(sec, kind = 'white') {
+  const n = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < n; i++) {
+    const w = Math.random() * 2 - 1;
+    if (kind === 'brown') { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w;
+  }
+  return b;
+}
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+/* A synthesised meow: a voiced source swept through two moving formants. */
+function meow({ dur = 0.75, pitch = 1, angry = false } = {}) {
+  const t0 = ctx.currentTime + 0.01;
+  const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+  const f0 = 430 * pitch;
+  osc.frequency.setValueAtTime(f0 * 0.85, t0);
+  osc.frequency.linearRampToValueAtTime(f0 * 1.35, t0 + dur * 0.35);
+  osc.frequency.linearRampToValueAtTime(f0 * 0.75, t0 + dur);
+  const vib = ctx.createOscillator(), vibG = ctx.createGain();
+  vib.frequency.value = 6.5; vibG.gain.value = f0 * 0.025; vib.connect(vibG); vibG.connect(osc.frequency);
+
+  const f1 = ctx.createBiquadFilter(); f1.type = 'bandpass'; f1.Q.value = 6;
+  f1.frequency.setValueAtTime(700, t0); f1.frequency.linearRampToValueAtTime(1500, t0 + dur * 0.35); f1.frequency.linearRampToValueAtTime(800, t0 + dur);
+  const f2 = ctx.createBiquadFilter(); f2.type = 'bandpass'; f2.Q.value = 8;
+  f2.frequency.setValueAtTime(1800, t0); f2.frequency.linearRampToValueAtTime(3000, t0 + dur * 0.35); f2.frequency.linearRampToValueAtTime(1600, t0 + dur);
+  const g1 = ctx.createGain(); g1.gain.value = 1.0;
+  const g2 = ctx.createGain(); g2.gain.value = 0.45;
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0.0001, t0);
+  env.gain.exponentialRampToValueAtTime(angry ? 0.9 : 0.7, t0 + 0.06);
+  env.gain.setValueAtTime(angry ? 0.9 : 0.7, t0 + dur * 0.6);
+  env.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  osc.connect(f1); osc.connect(f2); f1.connect(g1); f2.connect(g2); g1.connect(env); g2.connect(env); env.connect(outBus);
+  osc.start(t0); vib.start(t0); osc.stop(t0 + dur + 0.05); vib.stop(t0 + dur + 0.05);
+  return wait(dur * 1000 + 60);
+}
+
+function hiss(dur = 1.0) {
+  const t0 = ctx.currentTime + 0.01;
+  const src = ctx.createBufferSource(); src.buffer = noiseBuffer(dur + 0.1);
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2500;
+  const pk = ctx.createBiquadFilter(); pk.type = 'peaking'; pk.frequency.value = 5500; pk.gain.value = 8;
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0.0001, t0); env.gain.exponentialRampToValueAtTime(0.5, t0 + 0.04);
+  env.gain.setValueAtTime(0.5, t0 + dur * 0.5); env.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  src.connect(hp); hp.connect(pk); pk.connect(env); env.connect(outBus);
+  src.start(t0); src.stop(t0 + dur + 0.05);
+  return wait(dur * 1000 + 50);
+}
+
+function purr(dur = 2.6) {
+  const t0 = ctx.currentTime + 0.01;
+  const src = ctx.createBufferSource(); src.buffer = noiseBuffer(dur + 0.1, 'brown');
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420;
+  const am = ctx.createGain(); am.gain.value = ctx.createConstantSource ? 0 : 0.5;
+  const lfo = ctx.createOscillator(); lfo.frequency.value = 26;
+  const lfoG = ctx.createGain(); lfoG.gain.value = 0.5; lfo.connect(lfoG); lfoG.connect(am.gain);
+  const bias = ctx.createConstantSource ? ctx.createConstantSource() : null;
+  if (bias) { bias.offset.value = 0.5; bias.connect(am.gain); bias.start(t0); bias.stop(t0 + dur + 0.05); }
+  const env = ctx.createGain();
+  // breathing in/out
+  env.gain.setValueAtTime(0.0001, t0);
+  const cycles = Math.max(1, Math.round(dur / 1.3));
+  for (let i = 0; i < cycles; i++) {
+    const a = t0 + i * dur / cycles;
+    env.gain.exponentialRampToValueAtTime(1.1, a + dur / cycles * 0.4);
+    env.gain.exponentialRampToValueAtTime(0.35, a + dur / cycles * 0.95);
+  }
+  env.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  src.connect(lp); lp.connect(am); am.connect(env); env.connect(outBus);
+  src.start(t0); lfo.start(t0); src.stop(t0 + dur + 0.05); lfo.stop(t0 + dur + 0.05);
+  return wait(dur * 1000 + 50);
+}
+
+function crunch(n = 4) {
+  const t0 = ctx.currentTime + 0.02;
+  for (let i = 0; i < n; i++) {
+    const t = t0 + i * 0.26 + Math.random() * 0.04;
+    const src = ctx.createBufferSource(); src.buffer = noiseBuffer(0.12);
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400 + Math.random() * 1600; bp.Q.value = 1.2;
+    const env = ctx.createGain();
+    env.gain.setValueAtTime(0.0001, t); env.gain.exponentialRampToValueAtTime(0.9, t + 0.005); env.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    src.connect(bp); bp.connect(env); env.connect(outBus); src.start(t); src.stop(t + 0.13);
+    setTimeout(() => { S.squash = 1; }, (t - ctx.currentTime) * 1000);
+  }
+  return wait(n * 260 + 200);
+}
+
+/* Spoken answers use the device voice, pitched down to sound grumpy. */
+let voice = null;
+function pickVoice() {
+  if (!('speechSynthesis' in window)) return;
+  const vs = speechSynthesis.getVoices();
+  if (!vs.length) return;
+  const en = vs.filter(v => /^en/i.test(v.lang));
+  const pref = ['Daniel', 'Fred', 'Alex', 'Google UK English Male', 'Microsoft Guy', 'Aaron', 'Arthur', 'Ralph', 'Male'];
+  voice = pref.map(p => en.find(v => v.name.includes(p))).find(Boolean) || en[0] || vs[0];
+}
+if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+
+function say(text, { pitch = 0.55, rate = 0.85 } = {}) {
+  if (!('speechSynthesis' in window)) return meow({ dur: 0.5 });
+  return new Promise(resolve => {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    if (voice) u.voice = voice;
+    u.pitch = pitch; u.rate = rate; u.volume = 1;
+    let done = false;
+    const finish = () => { if (done) return; done = true; S.fakeTalk = false; resolve(); };
+    u.onstart = () => { S.fakeTalk = true; };
+    u.onend = finish; u.onerror = finish;
+    speechSynthesis.speak(u);
+    S.fakeTalk = true;
+    setTimeout(finish, 600 + text.length * 140); // some engines never fire onend
+  });
+}
+
+/* ------------------------------------------------------------------
+   Mic + voice activity detection
+   ------------------------------------------------------------------ */
+let micOn = false, stream = null, micSrc = null, proc = null, micAn = null, micFreq = null, sink = null;
+let busy = false;        // cat is responding → ignore the mic (no feedback loops)
+let inLevel = 0;
+const VAD = {
+  floor: 0.004, speaking: false, voicedFrames: 0, silentMs: 0, voicedMs: 0,
+  chunks: [], preroll: [], startedAt: 0,
+};
+const PREROLL = 8, END_SILENCE_MS = 750, MAX_UTTER_MS = 9000, MIN_VOICED_MS = 220;
+
+async function startMic() {
+  ensureAudio();
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    toast('This browser can’t use the microphone. Try Safari or Chrome over https.');
+    return;
+  }
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 }
+    });
+  } catch (err) {
+    toast('Microphone blocked — allow it in your browser settings to talk to the cat.');
+    return;
+  }
+  micSrc = ctx.createMediaStreamSource(stream);
+  micAn = ctx.createAnalyser(); micAn.fftSize = 1024; micAn.smoothingTimeConstant = 0.2;
+  micFreq = new Float32Array(micAn.frequencyBinCount);
+  proc = ctx.createScriptProcessor(2048, 1, 1);
+  sink = ctx.createGain(); sink.gain.value = 0;
+  micSrc.connect(micAn); micSrc.connect(proc); proc.connect(sink); sink.connect(ctx.destination);
+  proc.onaudioprocess = onMicChunk;
+  Object.assign(VAD, { speaking: false, voicedFrames: 0, silentMs: 0, chunks: [], preroll: [], floor: 0.004 });
+  micOn = true;
+  mic.classList.add('on'); mic.setAttribute('aria-label', 'Stop listening');
+  activity();
+  setIdleStatus();
+}
+
+function stopMic() {
+  micOn = false;
+  if (proc) { proc.onaudioprocess = null; try { proc.disconnect(); } catch {} }
+  if (micSrc) try { micSrc.disconnect(); } catch {}
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = micSrc = proc = null;
+  VAD.speaking = false;
+  S.tiltTarget = 0;
+  mic.classList.remove('on'); mic.setAttribute('aria-label', 'Start listening');
+  ring.style.transform = '';
+  setStatus('Tap the mic and talk', '');
+}
+
+/* Fraction of energy in the human-voice band (≈80–5000 Hz) — rejects rumble and hiss. */
+function voiceBandRatio() {
+  micAn.getFloatFrequencyData(micFreq);
+  const binHz = ctx.sampleRate / micAn.fftSize;
+  let band = 0, total = 0;
+  for (let i = 1; i < micFreq.length; i++) {
+    const p = Math.pow(10, micFreq[i] / 10);
+    total += p;
+    const f = i * binHz;
+    if (f >= 80 && f <= 5000) band += p;
+  }
+  return total > 0 ? band / total : 0;
+}
+
+function onMicChunk(e) {
+  const data = e.inputBuffer.getChannelData(0);
+  const chunk = new Float32Array(data);
+  const chunkMs = chunk.length / ctx.sampleRate * 1000;
+  let sum = 0; for (let i = 0; i < chunk.length; i++) sum += chunk[i] * chunk[i];
+  const rms = Math.sqrt(sum / chunk.length);
+  inLevel = busy ? 0 : rms;
+
+  if (busy) { VAD.preroll = []; return; }
+
+  const onT = Math.max(VAD.floor * 3.2, 0.012);
+  const offT = Math.max(VAD.floor * 2.0, 0.008);
+
+  if (!VAD.speaking) {
+    // adaptive noise floor: drop quickly, rise slowly
+    VAD.floor = rms < VAD.floor ? VAD.floor * 0.85 + rms * 0.15 : VAD.floor * 0.995 + rms * 0.005;
+    VAD.floor = Math.max(0.0015, Math.min(0.05, VAD.floor));
+    VAD.preroll.push(chunk); if (VAD.preroll.length > PREROLL) VAD.preroll.shift();
+
+    if (rms > onT && voiceBandRatio() > 0.6) VAD.voicedFrames++;
+    else VAD.voicedFrames = Math.max(0, VAD.voicedFrames - 1);
+
+    if (VAD.voicedFrames >= 3) {
+      VAD.speaking = true;
+      VAD.chunks = VAD.preroll.slice();
+      VAD.preroll = [];
+      VAD.silentMs = 0; VAD.voicedMs = VAD.voicedFrames * chunkMs; VAD.startedAt = performance.now();
+      onSpeechStart();
+    }
+    return;
+  }
+
+  VAD.chunks.push(chunk);
+  if (rms < offT) VAD.silentMs += chunkMs;
+  else { VAD.silentMs = 0; VAD.voicedMs += chunkMs; }
+
+  const len = performance.now() - VAD.startedAt;
+  if (VAD.silentMs >= END_SILENCE_MS || len >= MAX_UTTER_MS) {
+    VAD.speaking = false; VAD.voicedFrames = 0;
+    const chunks = VAD.chunks; VAD.chunks = [];
+    if (VAD.voicedMs < MIN_VOICED_MS) { onSpeechCancel(); return; }
+    // trim most of the trailing silence
+    const dropChunks = Math.max(0, Math.floor((VAD.silentMs - 150) / chunkMs));
+    onSpeechEnd(chunks.slice(0, Math.max(1, chunks.length - dropChunks)));
+  }
+}
+
+/* ------------------------------------------------------------------
+   Behaviour
+   ------------------------------------------------------------------ */
+let mode = 'ask';
+const ANSWERS = [
+  { w: 30, kind: 'yes' }, { w: 30, kind: 'no' }, { w: 14, kind: 'laugh' },
+  { w: 12, kind: 'ugh' }, { w: 9, kind: 'meow' }, { w: 5, kind: 'hiss' },
+];
+function pick(list) {
+  const tot = list.reduce((a, b) => a + b.w, 0);
+  let r = Math.random() * tot;
+  for (const it of list) { if ((r -= it.w) <= 0) return it; }
+  return list[0];
+}
+let lastAnswer = null;
+
+function onSpeechStart() {
+  activity();
+  if (S.asleep) wake();
+  S.tiltTarget = -0.045;  // lean in to listen
+  setStatus('Listening…', 'hear');
+}
+function onSpeechCancel() { S.tiltTarget = 0; setIdleStatus(); }
+
+async function onSpeechEnd(chunks) {
+  S.tiltTarget = 0;
+  if (mode === 'copy') await respond(() => playBack(chunks));
+  else await respond(answer);
+}
+
+async function respond(fn, label) {
+  if (busy) return;
+  busy = true; activity();
+  setStatus(label || (mode === 'copy' ? 'Repeating…' : 'Thinking…'), 'live');
+  try { await fn(); } catch (e) { console.warn(e); }
+  await wait(350);
+  busy = false; activity();
+  setIdleStatus();
+}
+
+async function answer() {
+  await wait(250 + Math.random() * 300);
+  let a = pick(ANSWERS);
+  if (lastAnswer && a.kind === lastAnswer && Math.random() < 0.5) a = pick(ANSWERS); // less repetition
+  lastAnswer = a.kind;
+  switch (a.kind) {
+    case 'yes': showBubble('Yes.'); await say('Yes.', { pitch: 0.5, rate: 0.8 }); break;
+    case 'no': showBubble('No.'); await say('No.', { pitch: 0.5, rate: 0.8 }); break;
+    case 'laugh': showBubble('Heh heh heh'); await say('Heh heh heh heh.', { pitch: 0.45, rate: 0.95 }); break;
+    case 'ugh': showBubble('Ugh.'); await say('Uuugh.', { pitch: 0.4, rate: 0.7 }); break;
+    case 'meow': showBubble('Meow.'); await meow({ pitch: 0.9 }); break;
+    case 'hiss': showBubble('Hssss!'); S.shake = 0.6; await hiss(0.9); break;
+  }
+  hideBubble(500);
+}
+
+/* Copy mode: play the recording back faster & higher. */
+async function playBack(chunks) {
+  const len = chunks.reduce((a, c) => a + c.length, 0);
+  if (!len) return;
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  let o = 0, peak = 0;
+  for (const c of chunks) { d.set(c, o); o += c.length; }
+  for (let i = 0; i < len; i++) peak = Math.max(peak, Math.abs(d[i]));
+  const gain = peak > 0 ? Math.min(6, 0.9 / peak) : 1; // normalise quiet speech
+  // short fades to avoid clicks
+  const fade = Math.min(400, len >> 3);
+  for (let i = 0; i < fade; i++) { d[i] *= i / fade; d[len - 1 - i] *= i / fade; }
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const rate = 1.55;
+  src.playbackRate.value = rate;
+  const gn = ctx.createGain(); gn.gain.value = gain;
+  src.connect(gn); gn.connect(outBus);
+  await wait(150);
+  src.start();
+  await wait(len / ctx.sampleRate / rate * 1000 + 80);
+}
+
+/* Taps on the cat and buttons */
+async function poke() {
+  if (busy) return;
+  ensureAudio(); if (S.asleep) wake(); activity();
+  await respond(async () => {
+    S.shake = 1;
+    if (Math.random() < 0.55) { showBubble('Hssss!'); await hiss(0.8); }
+    else { showBubble('MRRAOW!'); await meow({ pitch: 1.2, dur: 0.55, angry: true }); }
+    hideBubble(300);
+  }, 'Grr…');
+}
+async function pet(x, y) {
+  if (busy) return;
+  ensureAudio(); if (S.asleep) wake(); activity();
+  const pos = x != null ? { x, y } : toScreen(FACE.chin.x, FACE.chin.y + 300);
+  for (let i = 0; i < 5; i++) setTimeout(() => floater(['❤️', '💚', '❤️'][i % 3], pos.x + (Math.random() - .5) * 80, pos.y), i * 220);
+  await respond(async () => {
+    S.bob = 1; S.content = true;
+    showBubble('Prrrrr…');
+    await purr(2.6);
+    S.bob = 0; S.content = false;
+    hideBubble(200);
+  }, 'Purring…');
+}
+async function treat() {
+  if (busy) return;
+  ensureAudio(); if (S.asleep) wake(); activity();
+  const p = toScreen(FACE.mouthX, FACE.mouthY + 60);
+  floater('🐟', p.x, p.y + 120);
+  await respond(async () => {
+    S.mouthTarget = 1;
+    const chomp = setInterval(() => { S.mouth = S.mouth > 0.4 ? 0.1 : 0.85; }, 130);
+    await crunch(4);
+    clearInterval(chomp);
+    showBubble('Mmm!');
+    await say('Mmmm.', { pitch: 0.6, rate: 0.8 });
+    hideBubble(300);
+  }, 'Munching…');
+}
+async function meowBtn() {
+  if (busy) return;
+  ensureAudio(); if (S.asleep) wake(); activity();
+  await respond(async () => { showBubble('Meow?'); await meow({ pitch: 1 + Math.random() * .25 }); hideBubble(300); }, 'Meowing…');
+}
+
+let zzzTimer = null;
+function sleep() {
+  S.asleep = true;
+  setStatus('Asleep — talk to wake it', micOn ? 'live' : '');
+  const p = () => { const s = toScreen(FACE.eyes[1].x + 60, FACE.eyes[1].y - 40); floater('💤', s.x, s.y); };
+  p(); zzzTimer = setInterval(p, 1800);
+}
+function wake() {
+  S.asleep = false; clearInterval(zzzTimer);
+  S.blink = 0; S.shake = 0.5;
+}
+function activity() { S.lastActivity = performance.now(); }
+
+/* ------------------------------------------------------------------
+   UI helpers
+   ------------------------------------------------------------------ */
+function setStatus(text, state) {
+  statusEl.textContent = text;
+  dot.className = 'dot' + (state ? ' ' + state : '');
+}
+function setIdleStatus() {
+  if (S.asleep) return;
+  if (!micOn) return setStatus('Tap the mic and talk', '');
+  setStatus(mode === 'copy' ? 'Say something — I’ll copy you' : 'Ask me a yes-or-no question', 'live');
+}
+let bubbleT = null;
+function showBubble(text) { clearTimeout(bubbleT); bubble.textContent = text; bubble.classList.add('show'); }
+function hideBubble(delay = 0) { clearTimeout(bubbleT); bubbleT = setTimeout(() => bubble.classList.remove('show'), delay); }
+function floater(ch, x, y) {
+  const el = document.createElement('div');
+  el.className = 'float'; el.textContent = ch;
+  el.style.left = x + 'px'; el.style.top = y + 'px';
+  el.style.setProperty('--dx', ((Math.random() - .5) * 90).toFixed(0) + 'px');
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1700);
+}
+let toastT = null;
+function toast(msg) {
+  toastEl.textContent = msg; toastEl.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('show'), 4200);
+}
+
+function setMode(m) {
+  mode = m;
+  $('mode-ask').setAttribute('aria-pressed', m === 'ask');
+  $('mode-copy').setAttribute('aria-pressed', m === 'copy');
+  try { localStorage.setItem('talkingcat.mode', m); } catch {}
+  setIdleStatus();
+}
+try { const m = localStorage.getItem('talkingcat.mode'); if (m === 'copy' || m === 'ask') mode = m; } catch {}
+setMode(mode);
+
+/* ------------------------------------------------------------------
+   Wiring
+   ------------------------------------------------------------------ */
+$('start').addEventListener('click', () => {
+  ensureAudio();
+  $('start').classList.add('gone');
+  setTimeout(() => $('start').remove(), 400);
+  // a little hello, then start listening
+  respond(async () => { showBubble('Mrrp?'); await meow({ dur: 0.5, pitch: 1.15 }); hideBubble(400); }, 'Waking up…');
+  startMic();
+});
+mic.addEventListener('click', () => { ensureAudio(); micOn ? stopMic() : startMic(); });
+$('mode-ask').addEventListener('click', () => setMode('ask'));
+$('mode-copy').addEventListener('click', () => setMode('copy'));
+$('btn-pet').addEventListener('click', () => pet());
+$('btn-poke').addEventListener('click', poke);
+$('btn-treat').addEventListener('click', treat);
+$('btn-meow').addEventListener('click', meowBtn);
+
+cv.addEventListener('pointerdown', e => {
+  const p = toImage(e.clientX, e.clientY);
+  const h = FACE.head;
+  if (Math.hypot(p.x - h.x, p.y - h.y) < h.r) poke();
+  else if (p.x > FACE.body.x1 && p.x < FACE.body.x2 && p.y > FACE.body.y1 && p.y < FACE.body.y2) pet(e.clientX, e.clientY);
+});
+
+// pause the mic when the app is backgrounded; resume on return
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { if (micOn) { stopMic(); resumeMic = true; } }
+  else if (resumeMic) { resumeMic = false; startMic(); }
+});
+let resumeMic = false;
+
+window.__cat = S; window.__vad = VAD; // handy for debugging in the console
+requestAnimationFrame(frame);
+
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+})();
+</script>
+</body>
+</html>
