@@ -402,6 +402,7 @@ function ensureAudio() {
   outBus.connect(outAn); outAn.connect(ctx.destination);
   // iOS: play a silent buffer inside the gesture to unlock output
   const b = ctx.createBuffer(1, 1, 22050), s = ctx.createBufferSource(); s.buffer = b; s.connect(ctx.destination); s.start(0);
+  loadClips();
   return ctx;
 }
 function outLevel() {
@@ -501,7 +502,29 @@ function crunch(n = 4) {
   return wait(n * 260 + 200);
 }
 
-/* Spoken answers use the device voice, pitched down to sound grumpy. */
+/* Recorded voice clips. They play through Web Audio like the meows, so they
+   work while the mic is open (iOS mutes speechSynthesis then) and the mouth
+   moves with the real voice. */
+const CLIPS = ['yes', 'no', 'nope', 'maybe', 'laugh', 'ugh', 'mmm'];
+const clipBuf = {};
+function loadClips() {
+  for (const n of CLIPS) {
+    fetch('voice/' + n + '.mp3')
+      .then(r => r.arrayBuffer())
+      .then(ab => new Promise((ok, bad) => ctx.decodeAudioData(ab, ok, bad)))  // callback form for older Safari
+      .then(b => { clipBuf[n] = b; })
+      .catch(err => console.warn('clip', n, err));
+  }
+}
+function playClip(name, fallbackText) {
+  const b = clipBuf[name];
+  if (!b) return say(fallbackText || name);
+  const src = ctx.createBufferSource(); src.buffer = b;
+  src.connect(outBus); src.start();
+  return wait(b.duration * 1000 + 60);
+}
+
+/* Fallback if a clip hasn't loaded: the device voice, pitched down to sound grumpy. */
 let voice = null;
 function pickVoice() {
   if (!('speechSynthesis' in window)) return;
@@ -649,7 +672,7 @@ function onMicChunk(e) {
    ------------------------------------------------------------------ */
 let mode = 'ask';
 const ANSWERS = [
-  { w: 30, kind: 'yes' }, { w: 30, kind: 'no' }, { w: 14, kind: 'laugh' },
+  { w: 26, kind: 'yes' }, { w: 22, kind: 'no' }, { w: 8, kind: 'nope' }, { w: 6, kind: 'maybe' }, { w: 14, kind: 'laugh' },
   { w: 12, kind: 'ugh' }, { w: 9, kind: 'meow' }, { w: 5, kind: 'hiss' },
 ];
 function pick(list) {
@@ -690,10 +713,12 @@ async function answer() {
   if (lastAnswer && a.kind === lastAnswer && Math.random() < 0.5) a = pick(ANSWERS); // less repetition
   lastAnswer = a.kind;
   switch (a.kind) {
-    case 'yes': showBubble('Yes.'); await say('Yes.', { pitch: 0.5, rate: 0.8 }); break;
-    case 'no': showBubble('No.'); await say('No.', { pitch: 0.5, rate: 0.8 }); break;
-    case 'laugh': showBubble('Heh heh heh'); await say('Heh heh heh heh.', { pitch: 0.45, rate: 0.95 }); break;
-    case 'ugh': showBubble('Ugh.'); await say('Uuugh.', { pitch: 0.4, rate: 0.7 }); break;
+    case 'yes': showBubble('Yes.'); await playClip('yes', 'Yes.'); break;
+    case 'no': showBubble('No.'); await playClip('no', 'No.'); break;
+    case 'nope': showBubble('Nope.'); await playClip('nope', 'Nope.'); break;
+    case 'maybe': showBubble('Hmm… maybe.'); await playClip('maybe', 'Hmm, maybe.'); break;
+    case 'laugh': showBubble('Ho ho ho'); await playClip('laugh', 'Ho ho ho.'); break;
+    case 'ugh': showBubble('Ugh.'); await playClip('ugh', 'Ugh.'); break;
     case 'meow': showBubble('Meow.'); await meow({ pitch: 0.9 }); break;
     case 'hiss': showBubble('Hssss!'); S.shake = 0.6; await hiss(0.9); break;
   }
@@ -757,8 +782,8 @@ async function treat() {
     const chomp = setInterval(() => { S.mouth = S.mouth > 0.4 ? 0.1 : 0.85; }, 130);
     await crunch(4);
     clearInterval(chomp);
-    showBubble('Mmm!');
-    await say('Mmmm.', { pitch: 0.6, rate: 0.8 });
+    showBubble('Mmm, yum!');
+    await playClip('mmm', 'Mmm.');
     hideBubble(300);
   }, 'Munching…');
 }
