@@ -62,6 +62,19 @@
   }
   .modes button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 
+  /* cat picker */
+  .cats {
+    position: fixed; z-index: 6; left: 16px; top: calc(env(safe-area-inset-top) + 62px);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .cats button {
+    width: 52px; height: 52px; border-radius: 50%; border: 3px solid rgba(255,255,255,.35); padding: 0; cursor: pointer;
+    background-color: #333; background-repeat: no-repeat; box-shadow: 0 4px 14px rgba(0,0,0,.35);
+    transition: transform .15s, border-color .15s;
+  }
+  .cats button:active { transform: scale(.92); }
+  .cats button[aria-pressed="true"] { border-color: var(--green); transform: scale(1.06); }
+
   /* speech bubble */
   #bubble {
     position: fixed; z-index: 4; left: 50%; top: calc(env(safe-area-inset-top) + 70px);
@@ -151,6 +164,8 @@
   </div>
 </div>
 
+<div class="cats" id="cats" role="group" aria-label="Choose a cat"></div>
+
 <div id="bubble"></div>
 
 <div class="bottom">
@@ -183,19 +198,40 @@
 'use strict';
 
 /* ------------------------------------------------------------------
-   Photo geometry (pixels in cat.jpg, 1200×1600)
+   The cats. Geometry is in photo pixels (every photo is 1200×1600).
    ------------------------------------------------------------------ */
 const IMG_W = 1200, IMG_H = 1600;
-const FACE = {
-  focus: { x: 560, y: 760 },               // what we keep centred on screen
-  mouthY: 582,                             // line under the nose where the jaw splits
-  mouthX: 537,
-  chin: { x: 537, y: 603, rx: 58, ry: 27 },// the patch that drops when talking
-  eyes: [ { x: 485, y: 465, rx: 27, ry: 23 }, { x: 637, y: 462, rx: 27, ry: 23 } ],
-  head: { x: 560, y: 470, r: 210 },        // tap zone for poking
-  body: { x1: 330, y1: 700, x2: 900, y2: 1350 } // tap zone for petting
-};
-const JAW_MAX = 26;
+const CATS = [
+  {
+    id: 'grey', label: 'Grey cat in the green costume', src: 'cat.jpg', thumb: { x: 537, y: 520, r: 150 },
+    voice: 1, meow: 1,                       // clip playback rate, meow pitch
+    face: {
+      focus: { x: 560, y: 760 },               // what we keep centred on screen
+      mouthY: 582,                             // line under the nose where the jaw splits
+      mouthX: 537,
+      chin: { x: 537, y: 603, rx: 58, ry: 27 },// the patch that drops when talking
+      eyes: [ { x: 485, y: 465, rx: 27, ry: 23 }, { x: 637, y: 462, rx: 27, ry: 23 } ],
+      head: { x: 560, y: 470, r: 210 },        // tap zone for poking
+      body: { x1: 330, y1: 700, x2: 900, y2: 1350 }, // tap zone for petting
+      k: 1,                                    // face size relative to the first cat
+    },
+  },
+  {
+    id: 'calico', label: 'Calico cat on the pillow', src: 'cat2.jpg', thumb: { x: 580, y: 820, r: 240 },
+    voice: 1.12, meow: 1.15,
+    face: {
+      focus: { x: 590, y: 900 },
+      mouthY: 937,
+      mouthX: 560,
+      chin: { x: 560, y: 963, rx: 66, ry: 31 },
+      eyes: [ { x: 475, y: 732, rx: 40, ry: 26 }, { x: 692, y: 757, rx: 40, ry: 26 } ],
+      head: { x: 585, y: 760, r: 300 },
+      body: { x1: 120, y1: 1020, x2: 1080, y2: 1520 },
+      k: 1.35,
+    },
+  },
+];
+let cat = CATS[0], FACE = cat.face;
 
 /* ------------------------------------------------------------------
    DOM
@@ -204,14 +240,19 @@ const $ = id => document.getElementById(id);
 const cv = $('cv'), g = cv.getContext('2d');
 const statusEl = $('status'), dot = $('dot'), bubble = $('bubble'), mic = $('mic'), ring = $('ring'), hint = $('hint'), toastEl = $('toast');
 
-const img = new Image();
-img.src = 'cat.jpg';
-let chinPatch = null;
-img.onload = () => { chinPatch = makeChinPatch(); };
+// load every photo up front so switching is instant
+for (const c of CATS) {
+  c.img = new Image();
+  c.img.onload = () => { c.chin = makeChinPatch(c); };
+  c.img.src = c.src;
+}
+let img = cat.img;
+const lidCv = document.createElement('canvas'), lg = lidCv.getContext('2d');
 
 /* Pre-cut the chin with a feathered edge so the jaw drop blends into the fur. */
-function makeChinPatch() {
-  const { x, y, rx, ry } = FACE.chin;
+function makeChinPatch(theCat) {
+  const img = theCat.img;
+  const { x, y, rx, ry } = theCat.face.chin;
   const pad = 6, w = rx * 2 + pad * 2, h = ry * 2 + pad * 2;
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
@@ -244,7 +285,8 @@ const S = {
   blink: 0,          // 0 open .. 1 closed
   nextBlink: performance.now() + 2500,
   asleep: false,
-  content: false,    // half-closed happy eyes while purring
+  content: false,
+  fade: 1,           // cross-fade when switching cats    // half-closed happy eyes while purring
   lastActivity: performance.now(),
 };
 
@@ -292,6 +334,7 @@ function frame(t) {
   S.tilt += (S.tiltTarget - S.tilt) * Math.min(1, 6 * dt);
   S.shake = Math.max(0, S.shake - dt * 2.2);
   S.squash = Math.max(0, S.squash - dt * 3);
+  S.fade = Math.min(1, S.fade + dt * 4);
 
   // blinking (or sleeping)
   if (S.asleep) S.blink += (1 - S.blink) * Math.min(1, 4 * dt);
@@ -319,6 +362,7 @@ function draw(time) {
   g.fillStyle = '#1d1b22';
   g.fillRect(0, 0, W, H);
   if (!img.complete || !img.naturalWidth) return;
+  g.globalAlpha = S.fade;
 
   g.save();
   g.translate(view.ox, view.oy);
@@ -337,10 +381,11 @@ function draw(time) {
   g.drawImage(img, 0, 0, IMG_W, IMG_H);
 
   // ---- mouth: dark opening + dropped chin
-  const d = S.mouth * JAW_MAX;
+  const fk = FACE.k, chinPatch = cat.chin;
+  const d = S.mouth * 26 * fk;
   if (d > 0.6 && chinPatch) {
     const mx = FACE.mouthX, my = FACE.mouthY;
-    const rx = 24 + d * 0.5, ry = d * 0.62 + 3;
+    const rx = 24 * fk + d * 0.5, ry = d * 0.62 + 3 * fk;
     const cy = my + d * 0.55;
     const grd = g.createLinearGradient(0, my, 0, my + d * 1.3 + 4);
     grd.addColorStop(0, '#160709');
@@ -362,31 +407,50 @@ function draw(time) {
     g.drawImage(chinPatch.canvas, chinPatch.ox, chinPatch.oy + d);
   }
 
-  // ---- eyelids: slide the real fur from above each eye down over it
+  // ---- eyelids: slide the real fur from above each eye down over it,
+  // drawn off-screen first so the edge can be feathered into the face
   if (S.blink > 0.02) {
     for (const e of FACE.eyes) {
-      const rx = e.rx + 3, ry = e.ry + 3;
+      const rx = e.rx + 4, ry = e.ry + 4, pad = 8;
       const h = ry * 2 * S.blink;           // how far the lid has come down
-      const top = e.y - ry;
-      g.save();
-      ellipsePath(g, e.x, e.y, rx, ry); g.clip();
-      // fur strip taken from just above the eye, shifted down to the lid edge
-      g.drawImage(img, e.x - rx, top - ry * 2 + 4, rx * 2, ry * 2, e.x - rx, top + h - ry * 2, rx * 2, ry * 2);
-      // lid edge: soft shadow + dark lash line
-      const edge = top + h;
-      const sh = g.createLinearGradient(0, edge - 6, 0, edge + 4);
-      sh.addColorStop(0, 'rgba(20,14,12,0)'); sh.addColorStop(0.7, 'rgba(20,14,12,.45)'); sh.addColorStop(1, 'rgba(20,14,12,0)');
-      g.fillStyle = sh; g.fillRect(e.x - rx, edge - 6, rx * 2, 10);
-      g.restore();
+      const top = e.y - ry, edge = top + h;
+      const W = Math.ceil(rx * 2 + pad * 2), H = Math.ceil(ry * 2 + pad * 2);
+      const ox = e.x - rx - pad, oy = e.y - ry - pad;
+      if (lidCv.width !== W || lidCv.height !== H) { lidCv.width = W; lidCv.height = H; }
+      lg.globalCompositeOperation = 'source-over';
+      lg.clearRect(0, 0, W, H);
+      lg.save();
+      lg.translate(-ox, -oy);
+      lg.beginPath(); lg.rect(e.x - rx - pad, top - pad, rx * 2 + pad * 2, h + pad); lg.clip();
+      // fur strip from just above the eye, shifted down to the lid edge
+      lg.drawImage(img, e.x - rx - pad, top - ry * 2 - pad + 4, rx * 2 + pad * 2, ry * 2 + pad,
+                        e.x - rx - pad, top + h - ry * 2 - pad, rx * 2 + pad * 2, ry * 2 + pad);
+      lg.fillStyle = 'rgba(30,22,20,.18)';   // lids sit in a little shadow
+      lg.fillRect(e.x - rx - pad, top - pad, rx * 2 + pad * 2, h + pad);
+      const sh = lg.createLinearGradient(0, edge - 7 * FACE.k, 0, edge + 2);
+      sh.addColorStop(0, 'rgba(20,14,12,0)'); sh.addColorStop(1, 'rgba(20,14,12,.5)');
+      lg.fillStyle = sh; lg.fillRect(e.x - rx - pad, edge - 7 * FACE.k, rx * 2 + pad * 2, 7 * FACE.k + 2);
+      lg.restore();
+      // feathered oval mask
+      lg.globalCompositeOperation = 'destination-in';
+      lg.save();
+      lg.translate(W / 2, H / 2); lg.scale(1, (ry + pad * .5) / (rx + pad * .5));
+      const R = rx + pad * 0.5;
+      const m = lg.createRadialGradient(0, 0, R * 0.7, 0, 0, R);
+      m.addColorStop(0, 'rgba(0,0,0,1)'); m.addColorStop(1, 'rgba(0,0,0,0)');
+      lg.fillStyle = m; lg.fillRect(-W, -H, W * 2, H * 2);
+      lg.restore();
+      g.drawImage(lidCv, ox, oy);
       if (S.blink > 0.4) {
         g.strokeStyle = `rgba(22,16,14,${Math.min(.85, (S.blink - .4) * 1.6)})`;
-        g.lineWidth = 3; g.lineCap = 'round';
-        const ey = Math.min(edge, e.y + ry * 0.55);
-        g.beginPath(); g.moveTo(e.x - rx * 0.85, ey - 3); g.quadraticCurveTo(e.x, ey + 5, e.x + rx * 0.85, ey - 3); g.stroke();
+        g.lineWidth = 3 * FACE.k; g.lineCap = 'round';
+        const ey = Math.min(edge, e.y + ry * 0.5);
+        g.beginPath(); g.moveTo(e.x - rx * 0.8, ey - 3 * FACE.k); g.quadraticCurveTo(e.x, ey + 5 * FACE.k, e.x + rx * 0.8, ey - 3 * FACE.k); g.stroke();
       }
     }
   }
   g.restore();
+  g.globalAlpha = 1;
 }
 
 /* ------------------------------------------------------------------
@@ -428,7 +492,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 function meow({ dur = 0.75, pitch = 1, angry = false } = {}) {
   const t0 = ctx.currentTime + 0.01;
   const osc = ctx.createOscillator(); osc.type = 'sawtooth';
-  const f0 = 430 * pitch;
+  const f0 = 430 * pitch * cat.meow;
   osc.frequency.setValueAtTime(f0 * 0.85, t0);
   osc.frequency.linearRampToValueAtTime(f0 * 1.35, t0 + dur * 0.35);
   osc.frequency.linearRampToValueAtTime(f0 * 0.75, t0 + dur);
@@ -520,8 +584,9 @@ function playClip(name, fallbackText) {
   const b = clipBuf[name];
   if (!b) return say(fallbackText || name);
   const src = ctx.createBufferSource(); src.buffer = b;
+  src.playbackRate.value = cat.voice;      // each cat gets its own voice
   src.connect(outBus); src.start();
-  return wait(b.duration * 1000 + 60);
+  return wait(b.duration / cat.voice * 1000 + 60);
 }
 
 /* Fallback if a clip hasn't loaded: the device voice, pitched down to sound grumpy. */
@@ -844,6 +909,47 @@ function setMode(m) {
 }
 try { const m = localStorage.getItem('talkingcat.mode'); if (m === 'copy' || m === 'ask') mode = m; } catch {}
 setMode(mode);
+
+/* ------------------------------------------------------------------
+   Switching cats
+   ------------------------------------------------------------------ */
+const catsEl = $('cats');
+const THUMB = 52;
+CATS.forEach((c, i) => {
+  const b = document.createElement('button');
+  b.setAttribute('aria-label', c.label);
+  const z = THUMB / (c.thumb.r * 2);             // zoom so the face fills the circle
+  b.style.backgroundImage = `url(${c.src})`;
+  b.style.backgroundSize = `${IMG_W * z}px ${IMG_H * z}px`;
+  b.style.backgroundPosition = `${-(c.thumb.x - c.thumb.r) * z - 3}px ${-(c.thumb.y - c.thumb.r) * z - 3}px`;
+  b.addEventListener('click', () => switchCat(i, true));
+  catsEl.appendChild(b);
+  c.btn = b;
+});
+
+function switchCat(i, greet) {
+  const next = CATS[i];
+  const changed = next !== cat;
+  cat = next; FACE = cat.face; img = cat.img;
+  CATS.forEach(c => c.btn.setAttribute('aria-pressed', c === cat));
+  try { localStorage.setItem('talkingcat.cat', cat.id); } catch {}
+  if (!changed) return;
+  resize();
+  S.fade = 0; S.mouth = 0; S.blink = 0; S.tilt = 0;
+  if (S.asleep) wake();
+  activity();
+  if (greet && ctx && !busy) {
+    respond(async () => { showBubble('Mrrp?'); await meow({ dur: 0.5, pitch: 1.1 }); hideBubble(400); }, 'Hello!');
+  }
+}
+(() => {
+  let saved = null;
+  try { saved = localStorage.getItem('talkingcat.cat'); } catch {}
+  const i = Math.max(0, CATS.findIndex(c => c.id === saved));
+  cat = null;                 // force the first switch to apply
+  switchCat(i, false);
+  S.fade = 1;
+})();
 
 /* ------------------------------------------------------------------
    Wiring
